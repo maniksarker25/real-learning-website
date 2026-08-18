@@ -44,7 +44,7 @@ export default function ExploreCareers() {
         <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
           <motion.div
             initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-orange-500/10 border border-orange-400/30 backdrop-blur text-xs text-orange-300 font-medium mb-4"
           >
@@ -54,7 +54,7 @@ export default function ExploreCareers() {
 
           <motion.h2
             initial={{ opacity: 0, y: 12 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.08 }}
             className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-tight uppercase"
@@ -67,7 +67,7 @@ export default function ExploreCareers() {
 
           <motion.p
             initial={{ opacity: 0, y: 12 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.15 }}
             className="mt-4 text-base sm:text-lg text-white/70 font-normal leading-relaxed max-w-2xl mx-auto"
@@ -81,8 +81,8 @@ export default function ExploreCareers() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
           {/* C1: Customer Service (Span 1) */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
             className="lg:col-span-1 bg-[#0f0f15]/90 rounded-3xl p-6 border border-white/10 hover:border-white/20 shadow-xl backdrop-blur-md flex flex-col justify-between group transition-all duration-300"
@@ -120,8 +120,8 @@ export default function ExploreCareers() {
 
           {/* C2: Tech Support (Span 2 - Featured Card with macOS Terminal) */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.1 }}
             className="lg:col-span-2 bg-[#0f0f15]/90 rounded-3xl p-6 sm:p-8 border border-white/10 hover:border-white/20 shadow-2xl backdrop-blur-md flex flex-col justify-between group transition-all duration-300"
@@ -186,8 +186,8 @@ export default function ExploreCareers() {
 
           {/* C3: IT Specialist (Span 2 - Featured Card with macOS Server Console) */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.15 }}
             className="lg:col-span-2 bg-[#0f0f15]/90 rounded-3xl p-6 sm:p-8 border border-white/10 hover:border-white/20 shadow-2xl backdrop-blur-md flex flex-col justify-between group transition-all duration-300"
@@ -253,8 +253,8 @@ export default function ExploreCareers() {
 
           {/* C4: Healthcare Support (Span 1) */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.2 }}
             className="lg:col-span-1 bg-[#0f0f15]/90 rounded-3xl p-6 border border-white/10 hover:border-white/20 shadow-xl backdrop-blur-md flex flex-col justify-between group transition-all duration-300"

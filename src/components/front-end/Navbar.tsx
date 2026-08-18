@@ -27,16 +27,16 @@ export default function Navbar() {
         {/* Desktop Navigation Links */}
         <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-white/70">
           <a
-            href="#explore-careers"
-            className="hover:text-white transition-colors"
-          >
-            Careers
-          </a>
-          <a
             href="#how-it-works"
             className="hover:text-white transition-colors"
           >
             How It Works
+          </a>
+          <a
+            href="#explore-careers"
+            className="hover:text-white transition-colors"
+          >
+            Careers
           </a>
           <a
             href="#feedback-section"

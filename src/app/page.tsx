@@ -23,7 +23,10 @@ export default function Home() {
       <Navbar />
 
       {/* 2. Hero Section */}
-      <section id="start-simulation" className="relative px-6 md:px-12 pt-16 pb-20 bg-black overflow-hidden border-b border-white/10">
+      <section
+        id="start-simulation"
+        className="relative px-6 md:px-12 pt-16 pb-20 bg-black overflow-hidden border-b border-white/10"
+      >
         {/* Background Dot Grid Matrix */}
         <div
           className="absolute inset-0 pointer-events-none overflow-hidden"
@@ -57,13 +60,12 @@ export default function Home() {
 
           {/* Hero Heading (Exact User Prompt Text) */}
           <motion.h1
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
             className="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight leading-[1.08] text-white uppercase"
           >
-            EXPERIENCE YOUR CAREER{" "}
-            <br className="hidden sm:inline" />
+            EXPERIENCE YOUR CAREER <br className="hidden sm:inline" />
             <span className="bg-gradient-to-r from-orange-400 via-rose-400 to-pink-400 bg-clip-text text-transparent font-accent">
               BEFORE YOU ENTER IT.
             </span>
@@ -71,17 +73,18 @@ export default function Home() {
 
           {/* Hero Subtitle */}
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
             className="mt-6 text-base sm:text-lg md:text-xl text-white/70 max-w-2xl mx-auto leading-relaxed font-normal"
           >
-            Practice realistic workplace situations through AI-powered career simulations.
+            Practice realistic workplace situations through AI-powered career
+            simulations.
           </motion.p>
 
           {/* Hero CTA Buttons */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
             className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3"

@@ -29,10 +29,30 @@ export default function VideoShowcase({
   }, []);
 
   const evaluationScores = [
-    { label: "Communication", score: 92, color: "bg-orange-400", textColor: "text-orange-300" },
-    { label: "Empathy", score: 88, color: "bg-rose-400", textColor: "text-rose-300" },
-    { label: "Problem Solving", score: 84, color: "bg-pink-400", textColor: "text-pink-300" },
-    { label: "Professionalism", score: 95, color: "bg-emerald-400", textColor: "text-emerald-300" },
+    {
+      label: "Communication",
+      score: 92,
+      color: "bg-orange-400",
+      textColor: "text-orange-300",
+    },
+    {
+      label: "Empathy",
+      score: 88,
+      color: "bg-rose-400",
+      textColor: "text-rose-300",
+    },
+    {
+      label: "Problem Solving",
+      score: 84,
+      color: "bg-pink-400",
+      textColor: "text-pink-300",
+    },
+    {
+      label: "Professionalism",
+      score: 95,
+      color: "bg-emerald-400",
+      textColor: "text-emerald-300",
+    },
   ];
 
   return (
@@ -90,7 +110,8 @@ export default function VideoShowcase({
             transition={{ delay: 0.15 }}
             className="mt-4 text-base sm:text-lg text-white/70 font-normal leading-relaxed max-w-2xl mx-auto"
           >
-            Every simulation puts you into a workplace situation where your responses matter.
+            Every simulation puts you into a workplace situation where your
+            responses matter.
           </motion.p>
         </div>
 
@@ -98,7 +119,7 @@ export default function VideoShowcase({
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
           {/* BENTO ITEM 1: macOS Video Window (Spans 2 Columns) */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
@@ -158,7 +179,8 @@ export default function VideoShowcase({
                 <div className="flex items-center gap-2.5 min-w-0">
                   <span className="w-2 h-2 rounded-full bg-orange-400 animate-pulse shrink-0" />
                   <span className="text-white/80 font-medium text-xs truncate">
-                    AI Character: “I&apos;ve already contacted support twice. Why hasn&apos;t anyone fixed this?”
+                    AI Character: “I&apos;ve already contacted support twice.
+                    Why hasn&apos;t anyone fixed this?”
                   </span>
                 </div>
                 <span className="text-[10px] font-mono text-white/50 uppercase tracking-wider shrink-0 bg-white/5 px-2 py-0.5 rounded border border-white/10">
@@ -170,7 +192,7 @@ export default function VideoShowcase({
 
           {/* BENTO ITEM 2: Real Conversations Card */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.1 }}
@@ -188,7 +210,8 @@ export default function VideoShowcase({
                 Real Conversations
               </h3>
               <p className="text-xs text-white/70 leading-relaxed font-normal mb-5">
-                Stepping into challenging workplace interactions with adaptive AI characters that push back realistically.
+                Stepping into challenging workplace interactions with adaptive
+                AI characters that push back realistically.
               </p>
             </div>
 
@@ -199,14 +222,15 @@ export default function VideoShowcase({
                 <span>00:14</span>
               </div>
               <p className="text-xs text-white/90 font-medium italic leading-snug">
-                “I&apos;ve already contacted support twice. Why hasn&apos;t anyone fixed this?”
+                “I&apos;ve already contacted support twice. Why hasn&apos;t
+                anyone fixed this?”
               </p>
             </div>
           </motion.div>
 
           {/* BENTO ITEM 3: Real Decisions Card */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.15 }}
@@ -224,25 +248,29 @@ export default function VideoShowcase({
                 Real Decisions
               </h3>
               <p className="text-xs text-white/70 leading-relaxed font-normal mb-5">
-                Formulate your response under real pressure. Every word choice directly alters the scenario outcome.
+                Formulate your response under real pressure. Every word choice
+                directly alters the scenario outcome.
               </p>
             </div>
 
             {/* User Response Speech Bubble Mockup */}
             <div className="bg-black/80 p-4 rounded-2xl border border-white/10 space-y-2">
               <div className="flex items-center justify-between text-[11px] font-mono text-white/50">
-                <span className="text-emerald-400 font-bold">Your Response</span>
+                <span className="text-emerald-400 font-bold">
+                  Your Response
+                </span>
                 <span className="text-emerald-400">Submitted</span>
               </div>
               <p className="text-xs text-white/90 font-medium leading-snug">
-                “I&apos;m sorry you&apos;ve had to contact us multiple times. Let me review your order and resolve this immediately.”
+                “I&apos;m sorry you&apos;ve had to contact us multiple times.
+                Let me review your order and resolve this immediately.”
               </p>
             </div>
           </motion.div>
 
           {/* BENTO ITEM 4: Real Feedback & AI Evaluation Scores Card */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.2 }}
@@ -260,7 +288,8 @@ export default function VideoShowcase({
                 AI Evaluation
               </h3>
               <p className="text-xs text-white/70 leading-relaxed font-normal mb-4">
-                Instant multi-dimensional scoring evaluating communication clarity, empathy, problem-solving, and professionalism.
+                Instant multi-dimensional scoring evaluating communication
+                clarity, empathy, problem-solving, and professionalism.
               </p>
             </div>
 
@@ -269,13 +298,18 @@ export default function VideoShowcase({
               {evaluationScores.map((score, i) => (
                 <div key={i}>
                   <div className="flex justify-between text-xs mb-1">
-                    <span className="text-white/80 text-[11px] font-medium">{score.label}</span>
+                    <span className="text-white/80 text-[11px] font-medium">
+                      {score.label}
+                    </span>
                     <span className={cn("font-bold text-xs", score.textColor)}>
                       {score.score}%
                     </span>
                   </div>
                   <div className="h-1.5 bg-white/5 rounded-full overflow-hidden">
-                    <div className={cn("h-full rounded-full", score.color)} style={{ width: `${score.score}%` }} />
+                    <div
+                      className={cn("h-full rounded-full", score.color)}
+                      style={{ width: `${score.score}%` }}
+                    />
                   </div>
                 </div>
               ))}
@@ -284,7 +318,7 @@ export default function VideoShowcase({
 
           {/* BENTO ITEM 5: Visual Centerpiece Summary Card */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.25 }}
@@ -302,14 +336,18 @@ export default function VideoShowcase({
                 Ready Before Day One
               </h3>
               <p className="text-xs text-white/70 leading-relaxed font-normal mb-5">
-                Practice complex workplace scenarios without risk. Build confidence, refine tone, and master soft skills through continuous doing.
+                Practice complex workplace scenarios without risk. Build
+                confidence, refine tone, and master soft skills through
+                continuous doing.
               </p>
             </div>
 
             <div className="flex items-center justify-between p-4 rounded-2xl bg-black/80 border border-white/10">
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                <span className="text-xs font-bold text-white">Job-Ready Competency</span>
+                <span className="text-xs font-bold text-white">
+                  Job-Ready Competency
+                </span>
               </div>
               <span className="text-[10px] font-mono font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/30">
                 VERIFIED
