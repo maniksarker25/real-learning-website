@@ -11,11 +11,19 @@ import VideoShowcase from "@/components/front-end/VideoShowcase";
 import FeedbackSection from "@/components/front-end/FeedbackSection";
 import TrackProgress from "@/components/front-end/TrackProgress";
 import OrganizationDashboard from "@/components/front-end/OrganizationDashboard";
+import OrgDashboardLayout from "@/components/organization-dashboard/OrgDashboardLayout";
 import FooterCTA from "@/components/front-end/FooterCTA";
 import { useRouter } from "next/navigation";
+import { useAccount } from "@/context/AccountContext";
 
 export default function Home() {
   const navigate = useRouter();
+  const { session } = useAccount();
+
+  // If logged in as Organization, display dedicated Organization Admin Dashboard Application
+  if (session.accountType === "organization") {
+    return <OrgDashboardLayout />;
+  }
 
   return (
     <main className="bg-black text-slate-100 min-h-screen font-sans selection:bg-orange-500 selection:text-white">

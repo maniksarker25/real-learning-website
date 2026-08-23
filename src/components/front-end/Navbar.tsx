@@ -1,75 +1,150 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useCallback, useMemo, memo } from "react";
 import { motion } from "framer-motion";
-import { Zap, Menu, X, ArrowRight } from "lucide-react";
+import { Zap, Menu, X, ArrowRight, User, Building2, LogOut } from "lucide-react";
 import Link from "next/link";
+import { useAccount } from "@/context/AccountContext";
 
-export default function Navbar() {
+export default memo(function Navbar() {
+  const { session, logout } = useAccount();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const toggleMobileMenu = useCallback(() => {
+    setMobileMenuOpen((prev) => !prev);
+  }, []);
+
+  const closeMobileMenu = useCallback(() => {
+    setMobileMenuOpen(false);
+  }, []);
+
+  const handleLogout = useCallback(() => {
+    logout();
+    closeMobileMenu();
+  }, [logout, closeMobileMenu]);
+
+  // Dynamic Navigation Links based on active Account Session
+  const navLinks = useMemo(() => {
+    if (session.accountType === "individual") {
+      return [
+        { label: "My Goal", href: "/#start-simulation" },
+        { label: "Classes", href: "/#how-it-works" },
+        { label: "Simulations", href: "/#explore-careers" },
+        { label: "Feedback", href: "/#feedback-section" },
+        { label: "My Progress", href: "/#track-progress" },
+      ];
+    }
+    if (session.accountType === "organization") {
+      return [
+        { label: "Pilot Plan", href: "/#organizations" },
+        { label: "Admin", href: "/#organizations" },
+        { label: "Team Users", href: "/#organizations" },
+        { label: "Classes & Sims", href: "/#how-it-works" },
+        { label: "Results", href: "/#organizations" },
+      ];
+    }
+    return [
+      { label: "How It Works", href: "/#how-it-works" },
+      { label: "Careers", href: "/#explore-careers" },
+      { label: "Feedback & Growth", href: "/#feedback-section" },
+      { label: "Organizations", href: "/#organizations" },
+    ];
+  }, [session.accountType]);
 
   return (
     <header className="sticky top-0 z-50 bg-black/80 backdrop-blur-md border-b border-white/10">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-        {/* Brand Logo */}
-        <Link href="/" className="flex items-center gap-2.5 group">
-          <div className="w-9 h-9 rounded-xl bg-orange-500/10 border border-orange-400/30 flex items-center justify-center group-hover:border-orange-400/60 transition-colors">
-            <Zap className="w-5 h-5 text-orange-400" />
-          </div>
-          <span className="text-lg font-extrabold tracking-wider text-white uppercase font-sans">
-            REAL{" "}
-            <span className="bg-gradient-to-r from-orange-400 to-rose-400 bg-clip-text text-transparent">
-              LEARNING
+        {/* Brand Logo & Active Session Type Indicator */}
+        <div className="flex items-center gap-3">
+          <Link href="/" className="flex items-center gap-2.5 group">
+            <div className="w-9 h-9 rounded-xl bg-orange-500/10 border border-orange-400/30 flex items-center justify-center group-hover:border-orange-400/60 transition-colors">
+              <Zap className="w-5 h-5 text-orange-400" />
+            </div>
+            <span className="text-lg font-extrabold tracking-wider text-white uppercase font-sans">
+              REAL{" "}
+              <span className="bg-gradient-to-r from-orange-400 to-rose-400 bg-clip-text text-transparent">
+                LEARNING
+              </span>
             </span>
-          </span>
-        </Link>
+          </Link>
+
+          {session.accountType === "individual" && (
+            <span className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-semibold bg-orange-500/10 border border-orange-400/30 text-orange-300">
+              <User className="w-3 h-3 text-orange-400" />
+              <span>Individual</span>
+            </span>
+          )}
+
+          {session.accountType === "organization" && (
+            <span className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-semibold bg-orange-500/10 border border-orange-400/30 text-orange-300">
+              <Building2 className="w-3 h-3 text-orange-400" />
+              <span>Org Workspace</span>
+            </span>
+          )}
+        </div>
 
         {/* Desktop Navigation Links */}
-        <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-white/70">
-          <a
-            href="#how-it-works"
-            className="hover:text-white transition-colors"
-          >
-            How It Works
-          </a>
-          <a
-            href="#explore-careers"
-            className="hover:text-white transition-colors"
-          >
-            Careers
-          </a>
-          <a
-            href="#feedback-section"
-            className="hover:text-white transition-colors"
-          >
-            Feedback & Growth
-          </a>
-          <a
-            href="#organizations"
-            className="hover:text-white transition-colors"
-          >
-            Organizations
-          </a>
+        <nav className="hidden md:flex items-center gap-7 text-sm font-medium text-white/70">
+          {navLinks.map((link) => (
+            <a
+              key={link.label}
+              href={link.href}
+              className="hover:text-white transition-colors"
+            >
+              {link.label}
+            </a>
+          ))}
         </nav>
 
         {/* Action Buttons */}
-        <div className="hidden md:flex items-center gap-4">
-          <button className="text-sm font-semibold text-white/80 hover:text-white transition-colors px-4 py-2 cursor-pointer">
-            Login
-          </button>
-          <a
-            href="#start-simulation"
-            className="inline-flex items-center gap-2 bg-white text-black hover:bg-white/90 rounded-full px-5 py-2.5 text-xs font-bold transition-all shadow-md cursor-pointer group"
-          >
-            <span>Get Started</span>
-            <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
-          </a>
+        <div className="hidden md:flex items-center gap-3">
+          {session.accountType ? (
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs text-white">
+                {session.accountType === "individual" ? (
+                  <User className="w-3.5 h-3.5 text-orange-400" />
+                ) : (
+                  <Building2 className="w-3.5 h-3.5 text-orange-400" />
+                )}
+                <span className="font-semibold max-w-[130px] truncate">
+                  {session.accountType === "individual"
+                    ? session.name || "Individual"
+                    : session.orgName || "Organization"}
+                </span>
+              </div>
+              <button
+                onClick={handleLogout}
+                className="inline-flex items-center gap-1.5 text-xs text-white/60 hover:text-white bg-white/5 hover:bg-white/10 px-3 py-2 rounded-full border border-white/10 transition-colors cursor-pointer"
+                title="Logout / Switch Account"
+              >
+                <LogOut className="w-3.5 h-3.5 text-rose-400" />
+                <span>Logout</span>
+              </button>
+            </div>
+          ) : (
+            <>
+              <Link
+                href="/get-started"
+                className="text-sm font-semibold text-white/80 hover:text-white transition-colors px-4 py-2 cursor-pointer"
+              >
+                Login
+              </Link>
+              <Link
+                href="/get-started"
+                className="inline-flex items-center gap-2 bg-white text-black hover:bg-white/90 rounded-full px-5 py-2.5 text-xs font-bold transition-colors shadow-md cursor-pointer"
+              >
+                <span>Get Started</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </>
+          )}
         </div>
 
         {/* Mobile Menu Button */}
         <button
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="md:hidden p-2 rounded-xl bg-white/5 border border-white/10 text-white/80"
+          onClick={toggleMobileMenu}
+          className="md:hidden p-2 rounded-xl bg-white/5 border border-white/10 text-white/80 hover:text-white transition-colors cursor-pointer"
+          aria-label="Toggle Navigation Menu"
         >
           {mobileMenuOpen ? (
             <X className="w-6 h-6" />
@@ -87,48 +162,67 @@ export default function Navbar() {
           exit={{ opacity: 0, height: 0 }}
           className="md:hidden bg-black/95 border-b border-white/10 px-6 py-6 space-y-4"
         >
-          <a
-            href="#explore-careers"
-            onClick={() => setMobileMenuOpen(false)}
-            className="block text-sm font-medium text-white/80 hover:text-white py-2"
-          >
-            Careers
-          </a>
-          <a
-            href="#how-it-works"
-            onClick={() => setMobileMenuOpen(false)}
-            className="block text-sm font-medium text-white/80 hover:text-white py-2"
-          >
-            How It Works
-          </a>
-          <a
-            href="#feedback-section"
-            onClick={() => setMobileMenuOpen(false)}
-            className="block text-sm font-medium text-white/80 hover:text-white py-2"
-          >
-            Feedback & Growth
-          </a>
-          <a
-            href="#organizations"
-            onClick={() => setMobileMenuOpen(false)}
-            className="block text-sm font-medium text-white/80 hover:text-white py-2"
-          >
-            Organizations
-          </a>
-          <div className="pt-4 border-t border-white/10 flex flex-col gap-3">
-            <button className="w-full text-center py-2.5 text-sm font-semibold text-white bg-white/5 border border-white/10 rounded-full">
-              Login
-            </button>
+          {session.accountType && (
+            <div className="p-3 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-between text-xs text-white mb-2">
+              <div className="flex items-center gap-2">
+                {session.accountType === "individual" ? (
+                  <User className="w-4 h-4 text-orange-400" />
+                ) : (
+                  <Building2 className="w-4 h-4 text-orange-400" />
+                )}
+                <span className="font-bold">
+                  {session.accountType === "individual"
+                    ? session.name || "Individual Account"
+                    : session.orgName || "Organization Workspace"}
+                </span>
+              </div>
+              <span className="px-2 py-0.5 rounded text-[10px] uppercase font-semibold bg-orange-500/20 text-orange-300">
+                {session.accountType}
+              </span>
+            </div>
+          )}
+
+          {navLinks.map((link) => (
             <a
-              href="#start-simulation"
-              onClick={() => setMobileMenuOpen(false)}
-              className="w-full text-center py-2.5 text-xs font-bold text-black bg-white rounded-full"
+              key={link.label}
+              href={link.href}
+              onClick={closeMobileMenu}
+              className="block text-sm font-medium text-white/80 hover:text-white py-2"
             >
-              Get Started
+              {link.label}
             </a>
+          ))}
+
+          <div className="pt-4 border-t border-white/10 flex flex-col gap-3">
+            {session.accountType ? (
+              <button
+                onClick={handleLogout}
+                className="w-full text-center py-2.5 text-xs font-bold text-rose-300 bg-rose-500/10 border border-rose-500/30 rounded-full hover:bg-rose-500/20 transition-colors flex items-center justify-center gap-2 cursor-pointer"
+              >
+                <LogOut className="w-3.5 h-3.5" />
+                <span>Logout / Switch Account</span>
+              </button>
+            ) : (
+              <>
+                <Link
+                  href="/get-started"
+                  onClick={closeMobileMenu}
+                  className="w-full text-center py-2.5 text-sm font-semibold text-white bg-white/5 border border-white/10 rounded-full hover:bg-white/10 transition-colors"
+                >
+                  Login
+                </Link>
+                <Link
+                  href="/get-started"
+                  onClick={closeMobileMenu}
+                  className="w-full text-center py-2.5 text-xs font-bold text-black bg-white rounded-full hover:bg-white/90 transition-colors block"
+                >
+                  Get Started
+                </Link>
+              </>
+            )}
           </div>
         </motion.div>
       )}
     </header>
   );
-}
+});

@@ -23,9 +23,19 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export default function OrganizationDashboard() {
+interface OrganizationDashboardProps {
+  isInteractive?: boolean;
+  orgName?: string;
+  seats?: string;
+}
+
+export default function OrganizationDashboard({
+  isInteractive = false,
+  orgName,
+  seats,
+}: OrganizationDashboardProps = {}) {
   const [selectedTimeframe] = useState<"month" | "quarter" | "year">("month");
-  const [activeNav] = useState("overview");
+  const [activeNav, setActiveNav] = useState("overview");
 
   // 3 Primary KPI Stat Cards (Compact non-selectable preview format)
   const metrics = [
@@ -230,7 +240,10 @@ export default function OrganizationDashboard() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="bg-[#0b0c10] rounded-xl sm:rounded-2xl border border-white/15 shadow-2xl overflow-hidden backdrop-blur-xl ring-1 ring-white/10 select-none pointer-events-none"
+          className={cn(
+            "bg-[#0b0c10] rounded-xl sm:rounded-2xl border border-white/15 shadow-2xl overflow-hidden backdrop-blur-xl ring-1 ring-white/10",
+            !isInteractive && "select-none pointer-events-none"
+          )}
         >
           {/* macOS Top Bar */}
           <div className="flex items-center justify-between px-3 py-2 bg-[#13141c]/90 border-b border-white/10 text-[11px]">
@@ -269,7 +282,7 @@ export default function OrganizationDashboard() {
                   </div>
                   <div className="truncate">
                     <div className="text-[11px] font-bold text-white leading-none">
-                      Acme Corp
+                      {orgName || "Acme Corp"}
                     </div>
                     <div className="text-[9px] text-white/40 leading-tight">
                       Enterprise Ops
@@ -289,13 +302,16 @@ export default function OrganizationDashboard() {
                     const Icon = item.icon;
                     const isActive = activeNav === item.id;
                     return (
-                      <div
+                      <button
+                        type="button"
                         key={item.id}
+                        onClick={() => isInteractive && setActiveNav(item.id)}
                         className={cn(
-                          "flex items-center justify-between px-2.5 py-1.5 rounded-lg text-[11px] font-medium shrink-0 whitespace-nowrap",
+                          "flex items-center justify-between px-2.5 py-1.5 rounded-lg text-[11px] font-medium shrink-0 whitespace-nowrap text-left transition-colors",
+                          isInteractive ? "cursor-pointer" : "cursor-default",
                           isActive
                             ? "bg-gradient-to-r from-orange-500/20 to-rose-500/20 text-orange-300 border border-orange-500/30"
-                            : "text-white/60"
+                            : "text-white/60 hover:text-white hover:bg-white/5"
                         )}
                       >
                         <div className="flex items-center gap-2">
@@ -312,7 +328,7 @@ export default function OrganizationDashboard() {
                             {item.count}
                           </span>
                         )}
-                      </div>
+                      </button>
                     );
                   })}
                 </div>
@@ -322,7 +338,9 @@ export default function OrganizationDashboard() {
               <div className="hidden md:block bg-black/60 rounded-lg p-2 border border-white/10 mt-auto text-[10px]">
                 <div className="flex items-center justify-between text-white/60 mb-1">
                   <span>Seats</span>
-                  <span className="text-orange-400 font-mono font-bold">1,248 / 1.5k</span>
+                  <span className="text-orange-400 font-mono font-bold">
+                    1,248 / {seats ? `${seats}` : "1.5k"}
+                  </span>
                 </div>
                 <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
                   <div className="h-full bg-gradient-to-r from-orange-500 to-rose-500 rounded-full w-[83%]" />

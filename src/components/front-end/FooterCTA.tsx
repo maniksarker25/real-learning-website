@@ -10,6 +10,7 @@ import {
   Info,
   CheckCircle2,
 } from "lucide-react";
+import Link from "next/link";
 import { ContactModal } from "./footer/ContactModal";
 import { AboutModal } from "./footer/AboutModal";
 import { OrgAccessModal } from "./footer/OrgAccessModal";
@@ -103,13 +104,13 @@ export default memo(function FooterCTA() {
           className="mt-10 flex flex-wrap items-center justify-center gap-3 sm:gap-4"
         >
           {/* 1. Primary Get Started Button */}
-          <a
-            href="#start-simulation"
-            className="group bg-white text-black hover:bg-white/90 rounded-full px-8 h-12 text-sm font-extrabold inline-flex items-center justify-center gap-2 transition-all shadow-xl cursor-pointer"
+          <Link
+            href="/get-started"
+            className="group bg-white text-black hover:bg-white/90 rounded-full px-8 h-12 text-sm font-extrabold inline-flex items-center justify-center gap-2 transition-colors shadow-xl cursor-pointer"
           >
             <span>Get Started</span>
-            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-          </a>
+            <ArrowRight className="w-4 h-4" />
+          </Link>
 
           {/* 2. Get Access for Organization Button */}
           <button
