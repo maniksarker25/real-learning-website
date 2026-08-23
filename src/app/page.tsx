@@ -12,17 +12,30 @@ import FeedbackSection from "@/components/front-end/FeedbackSection";
 import TrackProgress from "@/components/front-end/TrackProgress";
 import OrganizationDashboard from "@/components/front-end/OrganizationDashboard";
 import OrgDashboardLayout from "@/components/organization-dashboard/OrgDashboardLayout";
+import IndDashboardLayout from "@/components/individual-dashboard/IndDashboardLayout";
 import FooterCTA from "@/components/front-end/FooterCTA";
 import { useRouter } from "next/navigation";
 import { useAccount } from "@/context/AccountContext";
+import React, { useEffect } from "react";
 
 export default function Home() {
-  const navigate = useRouter();
+  const router = useRouter();
   const { session } = useAccount();
 
-  // If logged in as Organization, display dedicated Organization Admin Dashboard Application
-  if (session.accountType === "organization") {
-    return <OrgDashboardLayout />;
+  useEffect(() => {
+    if (session.accountType === "organization") {
+      router.replace("/organization-dashboard");
+    } else if (session.accountType === "individual") {
+      router.replace("/user-dashboard");
+    }
+  }, [session.accountType, router]);
+
+  if (session.accountType) {
+    return (
+      <main className="bg-black text-slate-100 min-h-screen font-sans flex items-center justify-center p-8 text-center text-xs text-white/50">
+        Redirecting to dashboard...
+      </main>
+    );
   }
 
   return (

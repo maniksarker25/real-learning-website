@@ -27,20 +27,20 @@ export default memo(function Navbar() {
   const navLinks = useMemo(() => {
     if (session.accountType === "individual") {
       return [
-        { label: "My Goal", href: "/#start-simulation" },
-        { label: "Classes", href: "/#how-it-works" },
-        { label: "Simulations", href: "/#explore-careers" },
-        { label: "Feedback", href: "/#feedback-section" },
-        { label: "My Progress", href: "/#track-progress" },
+        { label: "Dashboard", href: "/user-dashboard" },
+        { label: "Classes", href: "/user-dashboard/classes" },
+        { label: "Simulations", href: "/user-dashboard/simulations" },
+        { label: "Feedback", href: "/user-dashboard/feedback" },
+        { label: "Progress", href: "/user-dashboard/progress" },
+        { label: "Goals", href: "/user-dashboard/goals" },
       ];
     }
     if (session.accountType === "organization") {
       return [
-        { label: "Pilot Plan", href: "/#organizations" },
-        { label: "Admin", href: "/#organizations" },
-        { label: "Team Users", href: "/#organizations" },
-        { label: "Classes & Sims", href: "/#how-it-works" },
-        { label: "Results", href: "/#organizations" },
+        { label: "Overview", href: "/organization-dashboard" },
+        { label: "Participants", href: "/organization-dashboard/participants" },
+        { label: "Simulation", href: "/organization-dashboard/classes" },
+        { label: "Settings", href: "/organization-dashboard/settings" },
       ];
     }
     return [

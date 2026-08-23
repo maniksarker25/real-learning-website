@@ -8,9 +8,15 @@ import {
   Filter,
   CheckCircle2,
   Mail,
-  MoreVertical,
   BookOpen,
   X,
+  Eye,
+  Sparkles,
+  ShieldCheck,
+  Award,
+  Zap,
+  Clock,
+  TrendingUp,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -25,12 +31,20 @@ interface UserItem {
   progress: number;
   score: string;
   status: "Active" | "Pending";
+  skillsBreakdown?: {
+    communication: number;
+    deEscalation: number;
+    diagnostics: number;
+    empathy: number;
+  };
+  completedClassesHistory?: { title: string; score: string; date: string }[];
 }
 
 export const OrgUsersScreen = memo(function OrgUsersScreen() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedTrack, setSelectedTrack] = useState("all");
   const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
+  const [selectedUserDetails, setSelectedUserDetails] = useState<UserItem | null>(null);
 
   // Invite Modal Form State
   const [inviteName, setInviteName] = useState("");
@@ -50,6 +64,17 @@ export const OrgUsersScreen = memo(function OrgUsersScreen() {
       progress: 94,
       score: "96%",
       status: "Active",
+      skillsBreakdown: {
+        communication: 98,
+        deEscalation: 96,
+        diagnostics: 90,
+        empathy: 97,
+      },
+      completedClassesHistory: [
+        { title: "De-escalating High-Pressure Customer Complaints", score: "96%", date: "Aug 21, 2026" },
+        { title: "Active Listening & Echo Statements", score: "95%", date: "Aug 18, 2026" },
+        { title: "Omnichannel Chat & Support Protocol", score: "94%", date: "Aug 14, 2026" },
+      ],
     },
     {
       id: "u2",
@@ -62,6 +87,16 @@ export const OrgUsersScreen = memo(function OrgUsersScreen() {
       progress: 78,
       score: "88%",
       status: "Active",
+      skillsBreakdown: {
+        communication: 86,
+        deEscalation: 84,
+        diagnostics: 92,
+        empathy: 88,
+      },
+      completedClassesHistory: [
+        { title: "L1 Technical Troubleshooting & Diagnostics", score: "88%", date: "Aug 20, 2026" },
+        { title: "Remote Desktop SLA Management", score: "87%", date: "Aug 15, 2026" },
+      ],
     },
     {
       id: "u3",
@@ -74,6 +109,15 @@ export const OrgUsersScreen = memo(function OrgUsersScreen() {
       progress: 64,
       score: "85%",
       status: "Active",
+      skillsBreakdown: {
+        communication: 82,
+        deEscalation: 80,
+        diagnostics: 90,
+        empathy: 85,
+      },
+      completedClassesHistory: [
+        { title: "Enterprise Network Security & Incident Response", score: "85%", date: "Aug 19, 2026" },
+      ],
     },
     {
       id: "u4",
@@ -86,6 +130,15 @@ export const OrgUsersScreen = memo(function OrgUsersScreen() {
       progress: 45,
       score: "79%",
       status: "Active",
+      skillsBreakdown: {
+        communication: 78,
+        deEscalation: 75,
+        diagnostics: 80,
+        empathy: 84,
+      },
+      completedClassesHistory: [
+        { title: "Patient Triage & Empathetic Clinical Intake", score: "79%", date: "Aug 17, 2026" },
+      ],
     },
     {
       id: "u5",
@@ -98,18 +151,16 @@ export const OrgUsersScreen = memo(function OrgUsersScreen() {
       progress: 98,
       score: "94%",
       status: "Active",
-    },
-    {
-      id: "u6",
-      name: "Liam O'Connor",
-      email: "liam.o@acmecorp.com",
-      avatar: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&auto=format&fit=crop&q=80",
-      track: "Tech Support",
-      trackColor: "bg-emerald-500/10 text-emerald-300 border-emerald-500/30",
-      enrolledClasses: 1,
-      progress: 12,
-      score: "Pending",
-      status: "Pending",
+      skillsBreakdown: {
+        communication: 95,
+        deEscalation: 94,
+        diagnostics: 92,
+        empathy: 96,
+      },
+      completedClassesHistory: [
+        { title: "De-escalating High-Pressure Customer Complaints", score: "94%", date: "Aug 22, 2026" },
+        { title: "Active Listening & Echo Statements", score: "95%", date: "Aug 19, 2026" },
+      ],
     },
   ]);
 
@@ -167,10 +218,10 @@ export const OrgUsersScreen = memo(function OrgUsersScreen() {
         <div>
           <h2 className="text-xl font-bold text-white flex items-center gap-2">
             <Users className="w-5 h-5 text-orange-400" />
-            <span>Manage Team Users & Participants</span>
+            <span>Manage Team Users & Participant Performance</span>
           </h2>
           <p className="text-xs text-white/60 mt-0.5">
-            Invite team members, assign learning tracks, and monitor individual simulation scores.
+            View full participant details, AI simulation scores, and manage learning progress.
           </p>
         </div>
 
@@ -212,7 +263,7 @@ export const OrgUsersScreen = memo(function OrgUsersScreen() {
         </div>
       </div>
 
-      {/* User Table */}
+      {/* User Table with Interactive Action Button Column */}
       <div className="bg-[#12131c]/90 rounded-2xl border border-white/10 shadow-lg overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs border-collapse">
@@ -293,9 +344,15 @@ export const OrgUsersScreen = memo(function OrgUsersScreen() {
                       {user.status}
                     </span>
                   </td>
+
+                  {/* Action Column: View Details Button */}
                   <td className="py-3.5 px-4 text-right whitespace-nowrap">
-                    <button className="text-xs text-orange-400 hover:text-orange-300 font-semibold px-2 py-1 rounded bg-orange-500/10 border border-orange-400/20 hover:border-orange-400/40 transition-colors cursor-pointer mr-2">
-                      Assign Class
+                    <button
+                      onClick={() => setSelectedUserDetails(user)}
+                      className="inline-flex items-center gap-1.5 text-xs text-orange-400 hover:text-white bg-orange-500/10 hover:bg-orange-500/20 border border-orange-400/30 px-3 py-1.5 rounded-full font-bold transition-colors cursor-pointer"
+                    >
+                      <Eye className="w-3.5 h-3.5" />
+                      <span>View Details</span>
                     </button>
                   </td>
                 </tr>
@@ -304,6 +361,160 @@ export const OrgUsersScreen = memo(function OrgUsersScreen() {
           </table>
         </div>
       </div>
+
+      {/* FULL USER DETAILS MODAL / DRAWER */}
+      {selectedUserDetails && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md overflow-y-auto">
+          <div className="relative w-full max-w-2xl bg-[#0e0f17] border border-orange-400/40 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6 text-left max-h-[90vh] overflow-y-auto">
+            <button
+              onClick={() => setSelectedUserDetails(null)}
+              className="absolute top-5 right-5 p-2 rounded-full bg-white/5 hover:bg-white/10 text-white/60 hover:text-white cursor-pointer transition-colors"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            {/* Profile Header */}
+            <div className="flex items-center gap-4 border-b border-white/10 pb-5">
+              <img
+                src={selectedUserDetails.avatar}
+                alt={selectedUserDetails.name}
+                className="w-14 h-14 rounded-2xl object-cover border-2 border-orange-400/40 shadow-md shrink-0"
+              />
+              <div>
+                <div className="flex items-center gap-2">
+                  <h3 className="text-xl font-extrabold text-white">
+                    {selectedUserDetails.name}
+                  </h3>
+                  <span
+                    className={cn(
+                      "px-2.5 py-0.5 rounded-full text-[10px] font-bold border",
+                      selectedUserDetails.trackColor
+                    )}
+                  >
+                    {selectedUserDetails.track}
+                  </span>
+                </div>
+                <div className="text-xs text-white/60 font-mono mt-0.5">
+                  {selectedUserDetails.email}
+                </div>
+              </div>
+            </div>
+
+            {/* AI Score & Skill Breakdown Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-12 gap-4">
+              <div className="sm:col-span-4 bg-gradient-to-br from-orange-500/20 via-[#12131c] to-[#0d0e14] rounded-2xl p-4 border border-orange-400/30 text-center flex flex-col justify-center space-y-1">
+                <span className="text-[10px] font-mono uppercase text-white/50">
+                  OVERALL AI SCORE
+                </span>
+                <div className="text-4xl font-extrabold text-white font-mono">
+                  {selectedUserDetails.score}
+                </div>
+                <span className="text-[10px] text-emerald-400 font-bold">
+                  Top 5% Performance
+                </span>
+              </div>
+
+              <div className="sm:col-span-8 bg-[#12131c] rounded-2xl p-4 border border-white/10 space-y-2.5">
+                <span className="text-xs font-bold text-white flex items-center gap-1.5">
+                  <ShieldCheck className="w-4 h-4 text-orange-400" />
+                  <span>Evaluated Skill Competencies</span>
+                </span>
+
+                {selectedUserDetails.skillsBreakdown && (
+                  <div className="space-y-2 text-xs">
+                    <div>
+                      <div className="flex justify-between text-[11px] font-mono text-white/70">
+                        <span>Communication Tone</span>
+                        <span className="text-orange-400 font-bold">
+                          {selectedUserDetails.skillsBreakdown.communication}%
+                        </span>
+                      </div>
+                      <div className="w-full h-1.5 bg-black/60 rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-orange-400 rounded-full"
+                          style={{ width: `${selectedUserDetails.skillsBreakdown.communication}%` }}
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <div className="flex justify-between text-[11px] font-mono text-white/70">
+                        <span>De-escalation & Conflict</span>
+                        <span className="text-emerald-400 font-bold">
+                          {selectedUserDetails.skillsBreakdown.deEscalation}%
+                        </span>
+                      </div>
+                      <div className="w-full h-1.5 bg-black/60 rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-emerald-400 rounded-full"
+                          style={{ width: `${selectedUserDetails.skillsBreakdown.deEscalation}%` }}
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <div className="flex justify-between text-[11px] font-mono text-white/70">
+                        <span>Technical Triage & Logic</span>
+                        <span className="text-purple-400 font-bold">
+                          {selectedUserDetails.skillsBreakdown.diagnostics}%
+                        </span>
+                      </div>
+                      <div className="w-full h-1.5 bg-black/60 rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-purple-400 rounded-full"
+                          style={{ width: `${selectedUserDetails.skillsBreakdown.diagnostics}%` }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Completed Classes & Simulations History */}
+            <div className="space-y-3">
+              <h4 className="text-xs font-bold text-white flex items-center gap-1.5">
+                <BookOpen className="w-4 h-4 text-orange-400" />
+                <span>Completed Classes & Simulation History</span>
+              </h4>
+
+              <div className="space-y-2">
+                {selectedUserDetails.completedClassesHistory ? (
+                  selectedUserDetails.completedClassesHistory.map((item) => (
+                    <div
+                      key={item.title}
+                      className="p-3.5 rounded-xl bg-black/50 border border-white/10 flex items-center justify-between text-xs"
+                    >
+                      <div>
+                        <div className="font-bold text-white">{item.title}</div>
+                        <div className="text-[10px] text-white/40 font-mono mt-0.5">
+                          Completed: {item.date}
+                        </div>
+                      </div>
+                      <span className="font-mono font-bold text-xs text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded border border-emerald-500/20">
+                        Score: {item.score}
+                      </span>
+                    </div>
+                  ))
+                ) : (
+                  <div className="p-4 text-xs text-white/40 text-center bg-black/40 rounded-xl">
+                    No completed simulations yet.
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="pt-2 flex justify-end">
+              <button
+                onClick={() => setSelectedUserDetails(null)}
+                className="px-5 py-2.5 rounded-full bg-white text-black font-extrabold text-xs hover:bg-white/90 transition-colors cursor-pointer"
+              >
+                Close Profile Details
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Invite User Modal */}
       {isInviteModalOpen && (

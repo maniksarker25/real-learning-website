@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback, useMemo, memo } from "react";
+import React, { useCallback, useMemo, memo } from "react";
 import {
   LayoutDashboard,
   Users,
@@ -9,34 +9,35 @@ import {
   Settings,
   Search,
   Bell,
-  Lock,
   LogOut,
   Zap,
   Building2,
 } from "lucide-react";
 import { useAccount } from "@/context/AccountContext";
-import { OrgOverviewScreen } from "./screens/OrgOverviewScreen";
-import { OrgUsersScreen } from "./screens/OrgUsersScreen";
-import { OrgClassesScreen } from "./screens/OrgClassesScreen";
-import { OrgAnalyticsScreen } from "./screens/OrgAnalyticsScreen";
-import { OrgSettingsScreen } from "./screens/OrgSettingsScreen";
-import { cn } from "@/lib/utils";
+import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
 
-export default memo(function OrgDashboardLayout() {
+export default memo(function OrgDashboardLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const { session, logout } = useAccount();
-  const [activeTab, setActiveTab] = useState<"overview" | "users" | "classes" | "analytics" | "settings">("overview");
+  const pathname = usePathname();
+  const router = useRouter();
 
   const handleLogout = useCallback(() => {
     logout();
-  }, [logout]);
+    router.push("/get-started");
+  }, [logout, router]);
 
   const navItems = useMemo(
     () => [
-      { id: "overview" as const, label: "Overview", icon: LayoutDashboard },
-      { id: "users" as const, label: "Participants", icon: Users, count: "1.2k" },
-      { id: "classes" as const, label: "Simulation", icon: BookOpen, count: "6" },
-      { id: "settings" as const, label: "Settings", icon: Settings },
+      { href: "/organization-dashboard", label: "Overview", icon: LayoutDashboard },
+      { href: "/organization-dashboard/participants", label: "Participants", icon: Users, count: "1.2k" },
+      { href: "/organization-dashboard/classes", label: "Simulation", icon: BookOpen, count: "6" },
+      { href: "/organization-dashboard/settings", label: "Settings", icon: Settings },
     ],
     []
   );
@@ -117,11 +118,11 @@ export default memo(function OrgDashboardLayout() {
             <div className="flex flex-row md:flex-col gap-1 w-full overflow-x-auto">
               {navItems.map((item) => {
                 const Icon = item.icon;
-                const isActive = activeTab === item.id;
+                const isActive = pathname === item.href;
                 return (
-                  <button
-                    key={item.id}
-                    onClick={() => setActiveTab(item.id)}
+                  <Link
+                    key={item.href}
+                    href={item.href}
                     className={cn(
                       "flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold shrink-0 whitespace-nowrap transition-colors cursor-pointer w-full text-left",
                       isActive
@@ -143,7 +144,7 @@ export default memo(function OrgDashboardLayout() {
                         {item.count}
                       </span>
                     )}
-                  </button>
+                  </Link>
                 );
               })}
             </div>
@@ -168,13 +169,7 @@ export default memo(function OrgDashboardLayout() {
 
         {/* Main Content Workspace */}
         <main className="flex-1 p-4 sm:p-6 lg:p-8 bg-[#07080c] overflow-y-auto">
-          <div className="max-w-6xl mx-auto">
-            {activeTab === "overview" && <OrgOverviewScreen />}
-            {activeTab === "users" && <OrgUsersScreen />}
-            {activeTab === "classes" && <OrgClassesScreen />}
-            {activeTab === "analytics" && <OrgAnalyticsScreen />}
-            {activeTab === "settings" && <OrgSettingsScreen />}
-          </div>
+          <div className="max-w-6xl mx-auto">{children}</div>
         </main>
       </div>
     </div>

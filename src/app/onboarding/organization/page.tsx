@@ -120,10 +120,10 @@ export default memo(function OrganizationOnboardingPage() {
                 </p>
                 <div className="pt-4 flex justify-center">
                   <Link
-                    href="/#organizations"
+                    href="/organization-dashboard"
                     className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white text-black font-extrabold text-xs hover:bg-white/90 transition-colors shadow-lg cursor-pointer"
                   >
-                    <span>View Organization Dashboard Preview</span>
+                    <span>Enter Organization Workspace</span>
                     <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>

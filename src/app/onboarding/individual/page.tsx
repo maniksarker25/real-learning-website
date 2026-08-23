@@ -149,10 +149,10 @@ export default memo(function IndividualOnboardingPage() {
                 </p>
                 <div className="pt-4 flex justify-center">
                   <Link
-                    href="/#explore-careers"
+                    href="/user-dashboard"
                     className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white text-black font-extrabold text-xs hover:bg-white/90 transition-colors shadow-lg cursor-pointer"
                   >
-                    <span>Launch First Simulation</span>
+                    <span>Enter Learner Dashboard</span>
                     <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
