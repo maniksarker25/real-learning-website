@@ -30,27 +30,41 @@ import { cn } from "@/lib/utils";
 import { OrgRole } from "@/types/account";
 import Link from "next/link";
 
+export type OrgTabType =
+  | "overview"
+  | "admins"
+  | "members"
+  | "classes"
+  | "analytics"
+  | "settings";
+
+interface OrgNavItem {
+  id: OrgTabType;
+  label: string;
+  icon: React.ComponentType<{ className?: string }>;
+  count?: string;
+  badge?: string;
+}
+
 export default memo(function OrgDashboardLayout() {
   const { session, logout } = useAccount();
   const isOwner = session.orgRole !== "admin";
 
-  const [activeTab, setActiveTab] = useState<
-    "overview" | "admins" | "members" | "classes" | "analytics" | "settings"
-  >("overview");
+  const [activeTab, setActiveTab] = useState<OrgTabType>("overview");
 
   const handleLogout = useCallback(() => {
     logout();
   }, [logout]);
 
   const navItems = useMemo(() => {
-    const items = [
-      { id: "overview" as const, label: "Overview", icon: LayoutDashboard },
+    const items: OrgNavItem[] = [
+      { id: "overview", label: "Overview", icon: LayoutDashboard },
     ];
 
     // Only Owner can see and manage Admins
     if (isOwner) {
       items.push({
-        id: "admins" as const,
+        id: "admins",
         label: "Admins",
         icon: Shield,
         count: "3",
@@ -60,19 +74,19 @@ export default memo(function OrgDashboardLayout() {
 
     items.push(
       {
-        id: "members" as const,
+        id: "members",
         label: "Members",
         icon: Users,
         count: "1.2k",
       },
       {
-        id: "classes" as const,
+        id: "classes",
         label: "Simulations",
         icon: BookOpen,
         count: "6",
       },
       {
-        id: "settings" as const,
+        id: "settings",
         label: "Settings",
         icon: Settings,
         badge: isOwner ? "Owner" : "Admin View",

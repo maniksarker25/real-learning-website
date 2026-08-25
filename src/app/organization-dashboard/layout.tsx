@@ -38,8 +38,16 @@ export default memo(function OrgDashboardLayout({
     router.push("/get-started");
   }, [logout, router]);
 
+  interface OrgNavItem {
+    href: string;
+    label: string;
+    icon: React.ComponentType<{ className?: string }>;
+    count?: string;
+    badge?: string;
+  }
+
   const navItems = useMemo(() => {
-    const items = [
+    const items: OrgNavItem[] = [
       { href: "/organization-dashboard", label: "Overview", icon: LayoutDashboard },
     ];
 
