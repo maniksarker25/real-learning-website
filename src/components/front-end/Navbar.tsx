@@ -30,7 +30,6 @@ export default memo(function Navbar() {
         { label: "Dashboard", href: "/user-dashboard" },
         { label: "Classes", href: "/user-dashboard/classes" },
         { label: "Simulations", href: "/user-dashboard/simulations" },
-        { label: "Feedback", href: "/user-dashboard/feedback" },
         { label: "Progress", href: "/user-dashboard/progress" },
         { label: "Goals", href: "/user-dashboard/goals" },
       ];

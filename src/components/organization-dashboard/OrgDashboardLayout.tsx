@@ -32,7 +32,7 @@ import Link from "next/link";
 
 export default memo(function OrgDashboardLayout() {
   const { session, logout } = useAccount();
-  const isOwner = true;
+  const isOwner = session.orgRole !== "admin";
 
   const [activeTab, setActiveTab] = useState<
     "overview" | "admins" | "members" | "classes" | "analytics" | "settings"
@@ -42,16 +42,23 @@ export default memo(function OrgDashboardLayout() {
     logout();
   }, [logout]);
 
-  const navItems = useMemo(
-    () => [
+  const navItems = useMemo(() => {
+    const items = [
       { id: "overview" as const, label: "Overview", icon: LayoutDashboard },
-      {
+    ];
+
+    // Only Owner can see and manage Admins
+    if (isOwner) {
+      items.push({
         id: "admins" as const,
         label: "Admins",
         icon: Shield,
         count: "3",
-        badge: isOwner ? "Leadership" : "Staff",
-      },
+        badge: "Leadership",
+      });
+    }
+
+    items.push(
       {
         id: "members" as const,
         label: "Members",
@@ -69,10 +76,11 @@ export default memo(function OrgDashboardLayout() {
         label: "Settings",
         icon: Settings,
         badge: isOwner ? "Owner" : "Admin View",
-      },
-    ],
-    [isOwner]
-  );
+      }
+    );
+
+    return items;
+  }, [isOwner]);
 
   return (
     <div className="min-h-screen bg-[#07080c] text-slate-100 font-sans flex flex-col selection:bg-orange-500 selection:text-white">

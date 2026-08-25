@@ -136,6 +136,30 @@ export const OrgAdminsScreen = memo(function OrgAdminsScreen() {
     [inviteName, inviteEmail, inviteDepartment, showToast]
   );
 
+  if (!isOwner) {
+    return (
+      <div className="bg-[#12131c]/90 rounded-3xl p-8 sm:p-10 border border-white/10 text-center space-y-4 max-w-lg mx-auto my-12 shadow-2xl">
+        <div className="w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-400/30 flex items-center justify-center text-amber-400 mx-auto">
+          <Crown className="w-7 h-7" />
+        </div>
+        <div className="space-y-1">
+          <h3 className="text-lg font-bold text-white">Owner Managed Section</h3>
+          <p className="text-xs text-white/60 leading-relaxed max-w-sm mx-auto">
+            Only the Organization Owner can manage Administrator accounts. As an Organization Admin, you have full access to manage team Members, view completed Simulations, and monitor Progress.
+          </p>
+        </div>
+        <div className="pt-2">
+          <a
+            href="/organization-dashboard/members"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white text-black font-bold text-xs hover:bg-white/90 transition-colors shadow-md"
+          >
+            <span>Go to Members Management &rarr;</span>
+          </a>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       {/* Toast Notification */}

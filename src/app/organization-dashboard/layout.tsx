@@ -26,8 +26,8 @@ export default memo(function OrgDashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { session, logout } = useAccount();
-  const isOwner = true;
+  const { session, logout, switchWorkspace } = useAccount();
+  const isOwner = session.orgRole !== "admin";
 
   const pathname = usePathname();
   const router = useRouter();
@@ -37,16 +37,23 @@ export default memo(function OrgDashboardLayout({
     router.push("/get-started");
   }, [logout, router]);
 
-  const navItems = useMemo(
-    () => [
+  const navItems = useMemo(() => {
+    const items = [
       { href: "/organization-dashboard", label: "Overview", icon: LayoutDashboard },
-      {
+    ];
+
+    // Only Owner can see and manage Admins
+    if (isOwner) {
+      items.push({
         href: "/organization-dashboard/admins",
         label: "Admins",
         icon: Shield,
         count: "3",
-        badge: isOwner ? "Leadership" : "Staff",
-      },
+        badge: "Leadership",
+      });
+    }
+
+    items.push(
       {
         href: "/organization-dashboard/members",
         label: "Members",
@@ -64,10 +71,11 @@ export default memo(function OrgDashboardLayout({
         label: "Settings",
         icon: Settings,
         badge: isOwner ? "Owner" : "Admin View",
-      },
-    ],
-    [isOwner]
-  );
+      }
+    );
+
+    return items;
+  }, [isOwner]);
 
   return (
     <div className="min-h-screen bg-[#07080c] text-slate-100 font-sans flex flex-col selection:bg-orange-500 selection:text-white">
@@ -95,10 +103,30 @@ export default memo(function OrgDashboardLayout({
 
         {/* Right Header: Role Indicator & Logout */}
         <div className="flex items-center gap-3">
-          <div className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-400/30 text-amber-300 text-xs font-bold">
-            <Crown className="w-3.5 h-3.5 text-amber-400" />
-            <span>Organization Owner</span>
-          </div>
+          {isOwner ? (
+            <div className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-400/30 text-amber-300 text-xs font-bold">
+              <Crown className="w-3.5 h-3.5 text-amber-400" />
+              <span>Organization Owner</span>
+            </div>
+          ) : (
+            <div className="flex items-center gap-2">
+              <div className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-400/30 text-blue-300 text-xs font-bold">
+                <Shield className="w-3.5 h-3.5 text-blue-400" />
+                <span>Organization Admin</span>
+              </div>
+              <button
+                onClick={() => {
+                  switchWorkspace("personal");
+                  router.push("/user-dashboard");
+                }}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 hover:bg-orange-500/20 text-orange-300 hover:text-white border border-orange-400/30 text-xs font-bold transition-colors cursor-pointer"
+                title="Return to your personal learning dashboard"
+              >
+                <User className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">Personal Learning</span>
+              </button>
+            </div>
+          )}
 
           <div className="flex items-center gap-2 border-l border-white/10 pl-3">
             <button

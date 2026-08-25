@@ -157,15 +157,36 @@ export function AccountProvider({ children }: { children: React.ReactNode }) {
 
   const switchWorkspace = useCallback((workspaceId: string) => {
     setSession((prev) => {
+      if (workspaceId === "personal") {
+        return {
+          ...prev,
+          accountType: "individual",
+          orgRole: undefined,
+          orgName: undefined,
+          activeWorkspaceId: "personal",
+        };
+      }
       const target = prev.memberships?.find((m) => m.id === workspaceId);
       if (!target) return prev;
-      return {
-        ...prev,
-        orgName: target.orgName,
-        orgRole: target.role,
-        seats: String(target.seatsTotal || 25),
-        activeWorkspaceId: workspaceId,
-      };
+      
+      if (target.role === "admin") {
+        return {
+          ...prev,
+          accountType: "organization",
+          orgName: target.orgName,
+          orgRole: "admin",
+          seats: String(target.seatsTotal || 50),
+          activeWorkspaceId: workspaceId,
+        };
+      } else {
+        return {
+          ...prev,
+          accountType: "individual",
+          orgName: target.orgName,
+          orgRole: "member",
+          activeWorkspaceId: workspaceId,
+        };
+      }
     });
   }, []);
 
