@@ -28,7 +28,7 @@ export const IndSettingsScreen = memo(function IndSettingsScreen() {
           <span>Learner Profile & Account Settings</span>
         </h2>
         <p className="text-xs text-white/60">
-          Manage your display name, personal learning email, and view earned skill badges.
+          Manage your display name, personal learning email, and goal settings.
         </p>
       </div>
 

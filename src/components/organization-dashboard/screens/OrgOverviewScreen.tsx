@@ -31,10 +31,10 @@ export const OrgOverviewScreen = memo(function OrgOverviewScreen() {
       },
     },
     {
-      id: "active-participants",
-      label: "ACTIVE PARTICIPANTS",
-      value: "894",
-      change: "71.6% active",
+      id: "total-simulations-completed",
+      label: "TOTAL SIMULATIONS COMPLETED",
+      value: "3,842",
+      change: "+342 this week",
       icon: Zap,
       accent: {
         text: "text-emerald-400",
@@ -44,9 +44,9 @@ export const OrgOverviewScreen = memo(function OrgOverviewScreen() {
     },
     {
       id: "simulation-completion",
-      label: "SIMULATION COMPLETION",
+      label: "SIMULATION COMPLETION RATE",
       value: "88.5%",
-      change: "+342 this week",
+      change: "+5.2% mastery",
       icon: CheckCircle2,
       accent: {
         text: "text-rose-400",

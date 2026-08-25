@@ -60,11 +60,11 @@ export const IndProgressScreen = memo(function IndProgressScreen() {
 
         <div className="bg-[#12131c]/90 rounded-2xl p-4 border border-white/10 space-y-1">
           <div className="flex items-center gap-1.5 text-purple-400 text-xs font-bold">
-            <Award className="w-4 h-4" />
-            <span>SKILL BADGES</span>
+            <TrendingUp className="w-4 h-4" />
+            <span>OVERALL ACCURACY</span>
           </div>
-          <div className="text-2xl font-extrabold text-white font-mono">4 Badges</div>
-          <span className="text-[10px] text-white/40">Verified skill levels</span>
+          <div className="text-2xl font-extrabold text-white font-mono">92.8%</div>
+          <span className="text-[10px] text-emerald-400 font-bold">+14.2% this month</span>
         </div>
       </div>
 

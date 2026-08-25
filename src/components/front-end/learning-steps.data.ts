@@ -56,14 +56,15 @@ export const LEARNING_STEPS: LearningStepData[] = [
       nodeGlow: "rgba(59, 130, 246, 0.6)",
     },
     preview: {
-      tagline: "Customized Learning Paths",
+      tagline: "4 Specialized Career Simulation Tracks",
       highlights: [
-        "Product Manager & Technical Lead",
-        "Senior Frontend Developer",
-        "Strategic Sales & Customer Success",
+        "Customer Service & De-escalation",
+        "Tech Support & Troubleshooting",
+        "IT Specialist & Security Infrastructure",
+        "Healthcare Support & Clinical Triage",
       ],
       metrics: [
-        { label: "Role Tracks", value: "14+" },
+        { label: "Career Tracks", value: "4 Tracks" },
         { label: "Skill Maps", value: "100% Tailored" },
       ],
     },

@@ -52,10 +52,10 @@ export default function OrganizationDashboard({
       },
     },
     {
-      id: "active-participants",
-      label: "Active Participants",
-      value: "894",
-      change: "71.6% active",
+      id: "total-simulations-completed",
+      label: "Total Simulations Completed",
+      value: "3,842",
+      change: "+342 this week",
       icon: Zap,
       accent: {
         text: "text-emerald-400",
@@ -65,9 +65,9 @@ export default function OrganizationDashboard({
     },
     {
       id: "simulation-completion",
-      label: "Simulation Completion",
+      label: "Simulation Completion Rate",
       value: "88.5%",
-      change: "+342 this week",
+      change: "+5.2% mastery",
       icon: CheckCircle2,
       accent: {
         text: "text-rose-400",

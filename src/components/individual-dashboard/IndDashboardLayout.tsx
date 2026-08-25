@@ -31,7 +31,6 @@ export type IndTabType =
   | "dashboard"
   | "classes"
   | "simulations"
-  | "feedback"
   | "progress"
   | "goals"
   | "settings";
@@ -58,7 +57,6 @@ export default memo(function IndDashboardLayout() {
       { id: "dashboard" as const, label: "Dashboard", icon: LayoutDashboard },
       { id: "classes" as const, label: "Classes", icon: BookOpen, count: "3" },
       { id: "simulations" as const, label: "Simulations", icon: Zap, count: "3" },
-      { id: "feedback" as const, label: "Feedback", icon: MessageSquare },
       { id: "progress" as const, label: "Progress", icon: BarChart3 },
       { id: "goals" as const, label: "Goals", icon: Target },
       { id: "settings" as const, label: "Profile / Settings", icon: Settings },

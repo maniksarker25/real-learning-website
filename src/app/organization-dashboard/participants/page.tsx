@@ -1,8 +1,9 @@
 "use client";
 
 import React from "react";
-import { OrgUsersScreen } from "@/components/organization-dashboard/screens/OrgUsersScreen";
+import { OrgMembersScreen } from "@/components/organization-dashboard/screens/OrgMembersScreen";
 
 export default function OrganizationParticipantsPage() {
-  return <OrgUsersScreen />;
+  return <OrgMembersScreen />;
 }
+
