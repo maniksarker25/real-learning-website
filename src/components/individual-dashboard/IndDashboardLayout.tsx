@@ -20,7 +20,6 @@ import { useAccount } from "@/context/AccountContext";
 import { IndHomeScreen } from "./screens/IndHomeScreen";
 import { IndClassesScreen } from "./screens/IndClassesScreen";
 import { IndSimulationsScreen } from "./screens/IndSimulationsScreen";
-import { IndFeedbackScreen } from "./screens/IndFeedbackScreen";
 import { IndProgressScreen } from "./screens/IndProgressScreen";
 import { IndGoalsScreen } from "./screens/IndGoalsScreen";
 import { IndSettingsScreen } from "./screens/IndSettingsScreen";
@@ -205,9 +204,6 @@ export default memo(function IndDashboardLayout() {
                 onNavigateToTab={handleNavigateToTab}
                 activeScenarioTitle={activeSimTitle}
               />
-            )}
-            {activeTab === "feedback" && (
-              <IndFeedbackScreen onNavigateToTab={handleNavigateToTab} />
             )}
             {activeTab === "progress" && <IndProgressScreen />}
             {activeTab === "goals" && <IndGoalsScreen />}
