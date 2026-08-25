@@ -97,6 +97,17 @@ export default function GetStartedPage() {
             ))}
           </div>
 
+          {/* Already have an account? Log In */}
+          <div className="text-center text-xs text-white/60">
+            <span>Already have an account? </span>
+            <a
+              href="/login"
+              className="font-bold text-orange-400 hover:text-orange-300 hover:underline"
+            >
+              Sign In to Your Account &rarr;
+            </a>
+          </div>
+
           {/* Bottom Trust & Vision Footer */}
           <div className="pt-4 text-center border-t border-white/10 max-w-2xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-white/50">
             <div className="flex items-center gap-2">

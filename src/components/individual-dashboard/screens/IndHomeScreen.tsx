@@ -16,6 +16,8 @@ import {
 import { useAccount } from "@/context/AccountContext";
 import { cn } from "@/lib/utils";
 
+import { RecentSimulationsTable } from "../RecentSimulationsTable";
+
 interface IndHomeScreenProps {
   onNavigateToTab: (tabId: string) => void;
   onLaunchSimulation?: (scenarioTitle: string) => void;
@@ -55,7 +57,7 @@ export const IndHomeScreen = memo(function IndHomeScreen({
             <span className="text-orange-300 font-semibold">
               {session.goal || "Customer Service"}
             </span>
-            : Learn in Classes → Practice in Simulations → Get AI Feedback.
+            : Learn in Classes → Practice in Simulations → Inspect AI Feedback.
           </p>
         </div>
 
@@ -154,6 +156,9 @@ export const IndHomeScreen = memo(function IndHomeScreen({
         </div>
       </div>
 
+      {/* RECENT COMPLETED SIMULATIONS TABLE WITH IN-DEPTH FEEDBACK MODAL */}
+      <RecentSimulationsTable onLaunchSimulation={onLaunchSimulation} />
+
       {/* Progress Summary High-Level Metrics */}
       <div className="bg-[#12131c]/90 rounded-2xl p-5 border border-white/10 shadow-lg space-y-4">
         <div className="flex items-center justify-between border-b border-white/10 pb-3">
@@ -202,52 +207,7 @@ export const IndHomeScreen = memo(function IndHomeScreen({
           </div>
         </div>
       </div>
-
-      {/* Recommended For You Section */}
-      <div className="bg-[#12131c]/90 rounded-2xl p-5 border border-white/10 shadow-lg space-y-4">
-        <h3 className="text-sm font-bold text-white flex items-center gap-2">
-          <Sparkles className="w-4 h-4 text-orange-400" />
-          <span>Recommended Next Steps For You</span>
-        </h3>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div className="p-4 rounded-xl bg-black/50 border border-white/10 flex items-center justify-between gap-3">
-            <div>
-              <span className="text-[10px] font-mono text-orange-300 uppercase">
-                Recommended Lesson
-              </span>
-              <div className="text-xs font-bold text-white mt-0.5">
-                Lesson 4: Non-Confrontational Phrasing
-              </div>
-              <span className="text-[10px] text-white/50">12 min reading & exercises</span>
-            </div>
-            <button
-              onClick={() => onNavigateToTab("classes")}
-              className="px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition-colors cursor-pointer shrink-0"
-            >
-              Start Lesson
-            </button>
-          </div>
-
-          <div className="p-4 rounded-xl bg-black/50 border border-white/10 flex items-center justify-between gap-3">
-            <div>
-              <span className="text-[10px] font-mono text-rose-300 uppercase">
-                Recommended Quiz
-              </span>
-              <div className="text-xs font-bold text-white mt-0.5">
-                Check Understanding: Conflict Protocol
-              </div>
-              <span className="text-[10px] text-white/50">5 Questions • Understanding Check</span>
-            </div>
-            <button
-              onClick={() => onNavigateToTab("classes")}
-              className="px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition-colors cursor-pointer shrink-0"
-            >
-              Take Quiz
-            </button>
-          </div>
-        </div>
-      </div>
     </div>
   );
 });
+
