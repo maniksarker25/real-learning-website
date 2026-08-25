@@ -20,6 +20,7 @@ import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { OrgRole } from "@/types/account";
+import { NotificationDropdown } from "@/components/notifications/NotificationDropdown";
 
 export default memo(function OrgDashboardLayout({
   children,
@@ -129,6 +130,8 @@ export default memo(function OrgDashboardLayout({
           )}
 
           <div className="flex items-center gap-2 border-l border-white/10 pl-3">
+            <NotificationDropdown />
+
             <button
               onClick={handleLogout}
               className="inline-flex items-center gap-1.5 text-xs text-white/70 hover:text-white bg-white/5 hover:bg-white/10 px-3 py-1.5 rounded-full border border-white/10 transition-colors cursor-pointer"

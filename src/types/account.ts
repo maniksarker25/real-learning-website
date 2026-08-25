@@ -54,4 +54,19 @@ export interface WorkspaceMembership {
   avatar?: string;
   seatsTotal?: number;
   seatsUsed?: number;
+  careerTrack?: string;
 }
+
+export interface OrgInvitationNotification {
+  id: string;
+  type: "org_invite_admin" | "org_invite_member" | "simulation_result" | "system";
+  orgName: string;
+  invitedRole: "admin" | "member";
+  careerTrack?: "Customer Service" | "Tech Support" | "IT Specialist" | "Healthcare Support";
+  inviterName: string;
+  message: string;
+  timestamp: string;
+  read: boolean;
+  status: "pending" | "accepted" | "declined";
+}
+

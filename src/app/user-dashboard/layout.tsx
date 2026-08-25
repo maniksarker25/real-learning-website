@@ -25,6 +25,7 @@ import { useAccount } from "@/context/AccountContext";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { NotificationDropdown } from "@/components/notifications/NotificationDropdown";
 
 export default memo(function UserDashboardLayout({
   children,
@@ -213,9 +214,7 @@ export default memo(function UserDashboardLayout({
           </div>
 
           <div className="flex items-center gap-2 border-l border-white/10 pl-3">
-            <div className="p-2 rounded-full bg-white/5 border border-white/10 text-white/70">
-              <Bell className="w-4 h-4" />
-            </div>
+            <NotificationDropdown />
 
             <button
               onClick={handleLogout}
