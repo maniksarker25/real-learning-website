@@ -124,7 +124,7 @@ export default memo(function Navbar() {
           ) : (
             <>
               <Link
-                href="/get-started"
+                href="/login"
                 className="text-sm font-semibold text-white/80 hover:text-white transition-colors px-4 py-2 cursor-pointer"
               >
                 Login
@@ -205,7 +205,7 @@ export default memo(function Navbar() {
             ) : (
               <>
                 <Link
-                  href="/get-started"
+                  href="/login"
                   onClick={closeMobileMenu}
                   className="w-full text-center py-2.5 text-sm font-semibold text-white bg-white/5 border border-white/10 rounded-full hover:bg-white/10 transition-colors"
                 >

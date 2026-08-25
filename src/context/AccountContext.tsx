@@ -8,15 +8,18 @@ import React, {
   useCallback,
   useMemo,
 } from "react";
-import { AccountType } from "@/types/account";
+import { AccountType, OrgRole, WorkspaceMembership } from "@/types/account";
 
 export interface UserSession {
   accountType: AccountType | null;
+  orgRole?: OrgRole;
   name?: string;
   goal?: string;
   orgName?: string;
   email?: string;
   seats?: string;
+  activeWorkspaceId?: string;
+  memberships?: WorkspaceMembership[];
 }
 
 interface AccountContextType {
@@ -27,14 +30,43 @@ interface AccountContextType {
     orgName: string;
     email: string;
     seats: string;
+    orgRole?: OrgRole;
   }) => void;
+  switchOrgRole: (role: OrgRole) => void;
+  switchWorkspace: (workspaceId: string) => void;
   logout: () => void;
 }
 
 const STORAGE_KEY = "real_learning_user_session";
 
+const defaultMemberships: WorkspaceMembership[] = [
+  {
+    id: "ws-acme-owner",
+    orgName: "Acme Corp",
+    role: "owner",
+    seatsTotal: 25,
+    seatsUsed: 18,
+  },
+  {
+    id: "ws-globex-admin",
+    orgName: "Globex Global",
+    role: "admin",
+    seatsTotal: 50,
+    seatsUsed: 42,
+  },
+  {
+    id: "ws-initech-member",
+    orgName: "Initech Learning",
+    role: "member",
+    seatsTotal: 10,
+    seatsUsed: 6,
+  },
+];
+
 const defaultSession: UserSession = {
   accountType: null,
+  orgRole: "owner",
+  memberships: defaultMemberships,
 };
 
 const AccountContext = createContext<AccountContextType | undefined>(
@@ -50,7 +82,13 @@ export function AccountProvider({ children }: { children: React.ReactNode }) {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
-        setSession(JSON.parse(saved));
+        const parsed = JSON.parse(saved);
+        setSession({
+          ...defaultSession,
+          ...parsed,
+          memberships: parsed.memberships || defaultMemberships,
+          orgRole: parsed.orgRole || "owner",
+        });
       }
     } catch {
       // Ignore storage errors
@@ -75,11 +113,12 @@ export function AccountProvider({ children }: { children: React.ReactNode }) {
 
   const loginAsIndividual = useCallback(
     ({ name, goal }: { name: string; goal?: string }) => {
-      setSession({
+      setSession((prev) => ({
+        ...prev,
         accountType: "individual",
-        name,
-        goal,
-      });
+        name: name || "Hosain Ali",
+        goal: goal || "Customer Service",
+      }));
     },
     []
   );
@@ -89,20 +128,46 @@ export function AccountProvider({ children }: { children: React.ReactNode }) {
       orgName,
       email,
       seats,
+      orgRole = "owner",
     }: {
       orgName: string;
       email: string;
       seats: string;
+      orgRole?: OrgRole;
     }) => {
-      setSession({
+      setSession((prev) => ({
+        ...prev,
         accountType: "organization",
-        orgName,
-        email,
-        seats,
-      });
+        orgRole,
+        orgName: orgName || "Acme Corp",
+        email: email || "admin@acmecorp.com",
+        seats: seats || "25",
+        activeWorkspaceId: prev.activeWorkspaceId || "ws-acme-owner",
+      }));
     },
     []
   );
+
+  const switchOrgRole = useCallback((role: OrgRole) => {
+    setSession((prev) => ({
+      ...prev,
+      orgRole: role,
+    }));
+  }, []);
+
+  const switchWorkspace = useCallback((workspaceId: string) => {
+    setSession((prev) => {
+      const target = prev.memberships?.find((m) => m.id === workspaceId);
+      if (!target) return prev;
+      return {
+        ...prev,
+        orgName: target.orgName,
+        orgRole: target.role,
+        seats: String(target.seatsTotal || 25),
+        activeWorkspaceId: workspaceId,
+      };
+    });
+  }, []);
 
   const logout = useCallback(() => {
     setSession(defaultSession);
@@ -114,9 +179,18 @@ export function AccountProvider({ children }: { children: React.ReactNode }) {
       setSession,
       loginAsIndividual,
       loginAsOrganization,
+      switchOrgRole,
+      switchWorkspace,
       logout,
     }),
-    [session, loginAsIndividual, loginAsOrganization, logout]
+    [
+      session,
+      loginAsIndividual,
+      loginAsOrganization,
+      switchOrgRole,
+      switchWorkspace,
+      logout,
+    ]
   );
 
   return (
@@ -131,3 +205,4 @@ export function useAccount() {
   }
   return context;
 }
+

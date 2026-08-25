@@ -13,19 +13,30 @@ import {
   LogOut,
   Zap,
   Building2,
+  Crown,
+  Shield,
+  User,
+  ChevronDown,
+  Sparkles,
 } from "lucide-react";
 import { useAccount } from "@/context/AccountContext";
 import { OrgOverviewScreen } from "./screens/OrgOverviewScreen";
-import { OrgUsersScreen } from "./screens/OrgUsersScreen";
-import { OrgClassesScreen } from "./screens/OrgClassesScreen";
+import { OrgAdminsScreen } from "./screens/OrgAdminsScreen";
+import { OrgMembersScreen } from "./screens/OrgMembersScreen";
+import { OrgSimulationsScreen } from "./screens/OrgSimulationsScreen";
 import { OrgAnalyticsScreen } from "./screens/OrgAnalyticsScreen";
 import { OrgSettingsScreen } from "./screens/OrgSettingsScreen";
 import { cn } from "@/lib/utils";
+import { OrgRole } from "@/types/account";
 import Link from "next/link";
 
 export default memo(function OrgDashboardLayout() {
   const { session, logout } = useAccount();
-  const [activeTab, setActiveTab] = useState<"overview" | "users" | "classes" | "analytics" | "settings">("overview");
+  const isOwner = true;
+
+  const [activeTab, setActiveTab] = useState<
+    "overview" | "admins" | "members" | "classes" | "analytics" | "settings"
+  >("overview");
 
   const handleLogout = useCallback(() => {
     logout();
@@ -34,11 +45,33 @@ export default memo(function OrgDashboardLayout() {
   const navItems = useMemo(
     () => [
       { id: "overview" as const, label: "Overview", icon: LayoutDashboard },
-      { id: "users" as const, label: "Participants", icon: Users, count: "1.2k" },
-      { id: "classes" as const, label: "Simulation", icon: BookOpen, count: "6" },
-      { id: "settings" as const, label: "Settings", icon: Settings },
+      {
+        id: "admins" as const,
+        label: "Admins",
+        icon: Shield,
+        count: "3",
+        badge: isOwner ? "Leadership" : "Staff",
+      },
+      {
+        id: "members" as const,
+        label: "Members",
+        icon: Users,
+        count: "1.2k",
+      },
+      {
+        id: "classes" as const,
+        label: "Simulations",
+        icon: BookOpen,
+        count: "6",
+      },
+      {
+        id: "settings" as const,
+        label: "Settings",
+        icon: Settings,
+        badge: isOwner ? "Owner" : "Admin View",
+      },
     ],
-    []
+    [isOwner]
   );
 
   return (
@@ -59,28 +92,20 @@ export default memo(function OrgDashboardLayout() {
             </span>
           </Link>
 
-          <span className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-orange-500/10 border border-orange-400/30 text-orange-300">
+          <span className="hidden lg:inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-orange-500/10 border border-orange-400/30 text-orange-300">
             <Building2 className="w-3 h-3 text-orange-400" />
             <span>{session.orgName || "Acme Corp"} Workspace</span>
           </span>
         </div>
 
-        {/* Search & Actions */}
+        {/* Right Header: Role Indicator & Logout */}
         <div className="flex items-center gap-3">
-          <div className="relative max-w-xs w-36 sm:w-64">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-white/40" />
-            <input
-              type="text"
-              placeholder="Quick search dashboard..."
-              className="w-full bg-black/60 border border-white/10 rounded-full pl-9 pr-3 py-1.5 text-xs text-white placeholder-white/40 focus:outline-none focus:border-orange-400 transition-colors"
-            />
+          <div className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-400/30 text-amber-300 text-xs font-bold">
+            <Crown className="w-3.5 h-3.5 text-amber-400" />
+            <span>Organization Owner</span>
           </div>
 
           <div className="flex items-center gap-2 border-l border-white/10 pl-3">
-            <div className="p-2 rounded-full bg-white/5 border border-white/10 text-white/70">
-              <Bell className="w-4 h-4" />
-            </div>
-
             <button
               onClick={handleLogout}
               className="inline-flex items-center gap-1.5 text-xs text-white/70 hover:text-white bg-white/5 hover:bg-white/10 px-3 py-1.5 rounded-full border border-white/10 transition-colors cursor-pointer"
@@ -96,19 +121,28 @@ export default memo(function OrgDashboardLayout() {
       {/* Main Full-Bleed Layout */}
       <div className="flex-1 flex flex-col md:flex-row min-h-[calc(100vh-4rem)]">
         {/* Left Sidebar Navigation */}
-        <aside className="w-full md:w-60 bg-[#0d0e14]/95 border-b md:border-b-0 md:border-r border-white/10 p-4 flex flex-row md:flex-col justify-between shrink-0 gap-4">
+        <aside className="w-full md:w-64 bg-[#0d0e14]/95 border-b md:border-b-0 md:border-r border-white/10 p-4 flex flex-row md:flex-col justify-between shrink-0 gap-4">
           <div className="w-full space-y-4">
-            {/* Workspace Card Header */}
-            <div className="flex items-center gap-3 p-3 rounded-2xl bg-white/[0.03] border border-white/10">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-orange-500 to-rose-500 flex items-center justify-center text-white font-black text-xs shrink-0 shadow-md">
-                RL
+            {/* Organization Workspace Card */}
+            <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-white/[0.03] border border-white/10">
+              <div
+                className={cn(
+                  "w-10 h-10 rounded-xl flex items-center justify-center text-xs shrink-0 shadow-md font-black",
+                  isOwner
+                    ? "bg-gradient-to-br from-amber-500 to-orange-500 text-black"
+                    : "bg-gradient-to-br from-blue-500 to-indigo-500 text-white"
+                )}
+              >
+                {isOwner ? "👑" : "🛡️"}
               </div>
               <div className="truncate">
                 <div className="text-xs font-bold text-white leading-none truncate">
                   {session.orgName || "Acme Corp"}
                 </div>
-                <div className="text-[10px] text-white/40 font-mono leading-tight mt-1">
-                  Enterprise Ops
+                <div className="text-[10px] text-white/50 font-mono leading-tight mt-1 flex items-center gap-1">
+                  <span className={cn(isOwner ? "text-amber-400 font-semibold" : "text-blue-400 font-semibold")}>
+                    {isOwner ? "Organization Owner" : "Invited Org Admin"}
+                  </span>
                 </div>
               </div>
             </div>
@@ -130,17 +164,36 @@ export default memo(function OrgDashboardLayout() {
                     )}
                   >
                     <div className="flex items-center gap-2.5">
-                      <Icon className={cn("w-4 h-4", isActive ? "text-orange-400" : "text-white/40")} />
+                      <Icon
+                        className={cn(
+                          "w-4 h-4",
+                          isActive ? "text-orange-400" : "text-white/40"
+                        )}
+                      />
                       <span>{item.label}</span>
                     </div>
                     {item.count && (
                       <span
                         className={cn(
                           "text-[10px] font-mono px-2 py-0.5 rounded-full hidden md:inline-block",
-                          isActive ? "bg-orange-500/30 text-orange-200" : "bg-white/5 text-white/40"
+                          isActive
+                            ? "bg-orange-500/30 text-orange-200"
+                            : "bg-white/5 text-white/40"
                         )}
                       >
                         {item.count}
+                      </span>
+                    )}
+                    {item.badge && !item.count && (
+                      <span
+                        className={cn(
+                          "text-[9px] font-mono px-1.5 py-0.5 rounded hidden md:inline-block",
+                          isOwner
+                            ? "bg-amber-500/10 text-amber-300 border border-amber-400/30"
+                            : "bg-blue-500/10 text-blue-300 border border-blue-400/30"
+                        )}
+                      >
+                        {item.badge}
                       </span>
                     )}
                   </button>
@@ -154,14 +207,15 @@ export default memo(function OrgDashboardLayout() {
             <div className="flex items-center justify-between text-white/60">
               <span>Allocated Seats</span>
               <span className="text-orange-400 font-mono font-bold">
-                1,248 / {session.seats || "1.5k"}
+                18 / {session.seats || "25"}
               </span>
             </div>
             <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
-              <div className="h-full bg-gradient-to-r from-orange-500 to-rose-500 rounded-full w-[83%]" />
+              <div className="h-full bg-gradient-to-r from-orange-500 to-rose-500 rounded-full w-[72%]" />
             </div>
-            <div className="text-[10px] text-white/40 font-mono text-center">
-              Active Pilot License
+            <div className="text-[10px] text-white/40 font-mono text-center flex items-center justify-center gap-1">
+              <Sparkles className="w-3 h-3 text-orange-400" />
+              <span>{isOwner ? "Owner Managed" : "Admin Pilot View"}</span>
             </div>
           </div>
         </aside>
@@ -170,8 +224,9 @@ export default memo(function OrgDashboardLayout() {
         <main className="flex-1 p-4 sm:p-6 lg:p-8 bg-[#07080c] overflow-y-auto">
           <div className="max-w-6xl mx-auto">
             {activeTab === "overview" && <OrgOverviewScreen />}
-            {activeTab === "users" && <OrgUsersScreen />}
-            {activeTab === "classes" && <OrgClassesScreen />}
+            {activeTab === "admins" && <OrgAdminsScreen />}
+            {activeTab === "members" && <OrgMembersScreen />}
+            {activeTab === "classes" && <OrgSimulationsScreen />}
             {activeTab === "analytics" && <OrgAnalyticsScreen />}
             {activeTab === "settings" && <OrgSettingsScreen />}
           </div>
@@ -180,3 +235,4 @@ export default memo(function OrgDashboardLayout() {
     </div>
   );
 });
+
