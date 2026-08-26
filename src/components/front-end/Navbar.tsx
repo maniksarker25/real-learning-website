@@ -2,9 +2,19 @@
 
 import React, { useState, useCallback, useMemo, memo } from "react";
 import { motion } from "framer-motion";
-import { Zap, Menu, X, ArrowRight, User, Building2, LogOut } from "lucide-react";
+import {
+  Zap,
+  Menu,
+  X,
+  ArrowRight,
+  User,
+  Building2,
+  LogOut,
+} from "lucide-react";
 import Link from "next/link";
 import { useAccount } from "@/context/AccountContext";
+import Image from "next/image";
+import { ImageConstants } from "@/constant/image.index";
 
 export default memo(function Navbar() {
   const { session, logout } = useAccount();
@@ -56,8 +66,14 @@ export default memo(function Navbar() {
         {/* Brand Logo & Active Session Type Indicator */}
         <div className="flex items-center gap-3">
           <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="w-9 h-9 rounded-xl bg-orange-500/10 border border-orange-400/30 flex items-center justify-center group-hover:border-orange-400/60 transition-colors">
-              <Zap className="w-5 h-5 text-orange-400" />
+            <div className="w-9 h-9 rounded-xl bg-white border border-white/20 p-1 flex items-center justify-center group-hover:scale-105 transition-all overflow-hidden shadow-sm">
+              <Image
+                src={ImageConstants.brandLogo.src}
+                alt="Brand Logo"
+                width={100}
+                height={100}
+                className="object-contain cursor-pointer"
+              />
             </div>
             <span className="text-lg font-extrabold tracking-wider text-white uppercase font-sans">
               REAL{" "}
