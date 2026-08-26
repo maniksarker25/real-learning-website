@@ -113,7 +113,7 @@ export default function Home() {
             <motion.div whileTap={{ scale: 0.97 }}>
               <Button
                 size="lg"
-                onClick={() => {}}
+                onClick={() => router.push("/get-started")}
                 className="group bg-white text-black hover:bg-white/90 rounded-full px-8 h-12 text-base font-semibold"
               >
                 Start Simulation

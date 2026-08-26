@@ -29,6 +29,8 @@ import { OrgSettingsScreen } from "./screens/OrgSettingsScreen";
 import { cn } from "@/lib/utils";
 import { OrgRole } from "@/types/account";
 import Link from "next/link";
+import Image from "next/image";
+import { ImageConstants } from "@/constant/image.index";
 
 export type OrgTabType =
   | "overview"
@@ -90,7 +92,7 @@ export default memo(function OrgDashboardLayout() {
         label: "Settings",
         icon: Settings,
         badge: isOwner ? "Owner" : "Admin View",
-      }
+      },
     );
 
     return items;
@@ -103,8 +105,14 @@ export default memo(function OrgDashboardLayout() {
         {/* Brand Logo & Org Badge */}
         <div className="flex items-center gap-3">
           <Link href="/" className="flex items-center gap-2 group">
-            <div className="w-8 h-8 rounded-xl bg-orange-500/10 border border-orange-400/30 flex items-center justify-center group-hover:border-orange-400/60 transition-colors">
-              <Zap className="w-4 h-4 text-orange-400" />
+            <div className="w-9 h-9 rounded-xl bg-white border border-white/20 p-1 flex items-center justify-center group-hover:scale-105 transition-all overflow-hidden shadow-sm">
+              <Image
+                src={ImageConstants.brandLogo.src}
+                alt="Brand Logo"
+                width={100}
+                height={100}
+                className="object-contain cursor-pointer"
+              />
             </div>
             <span className="text-base font-extrabold tracking-wider text-white uppercase font-sans">
               REAL{" "}
@@ -152,7 +160,7 @@ export default memo(function OrgDashboardLayout() {
                   "w-10 h-10 rounded-xl flex items-center justify-center text-xs shrink-0 shadow-md font-black",
                   isOwner
                     ? "bg-gradient-to-br from-amber-500 to-orange-500 text-black"
-                    : "bg-gradient-to-br from-blue-500 to-indigo-500 text-white"
+                    : "bg-gradient-to-br from-blue-500 to-indigo-500 text-white",
                 )}
               >
                 {isOwner ? "👑" : "🛡️"}
@@ -162,7 +170,13 @@ export default memo(function OrgDashboardLayout() {
                   {session.orgName || "Acme Corp"}
                 </div>
                 <div className="text-[10px] text-white/50 font-mono leading-tight mt-1 flex items-center gap-1">
-                  <span className={cn(isOwner ? "text-amber-400 font-semibold" : "text-blue-400 font-semibold")}>
+                  <span
+                    className={cn(
+                      isOwner
+                        ? "text-amber-400 font-semibold"
+                        : "text-blue-400 font-semibold",
+                    )}
+                  >
                     {isOwner ? "Organization Owner" : "Invited Org Admin"}
                   </span>
                 </div>
@@ -182,14 +196,14 @@ export default memo(function OrgDashboardLayout() {
                       "flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold shrink-0 whitespace-nowrap transition-colors cursor-pointer w-full text-left",
                       isActive
                         ? "bg-gradient-to-r from-orange-500/20 to-rose-500/20 text-orange-300 border border-orange-500/30"
-                        : "text-white/60 hover:text-white hover:bg-white/5 border border-transparent"
+                        : "text-white/60 hover:text-white hover:bg-white/5 border border-transparent",
                     )}
                   >
                     <div className="flex items-center gap-2.5">
                       <Icon
                         className={cn(
                           "w-4 h-4",
-                          isActive ? "text-orange-400" : "text-white/40"
+                          isActive ? "text-orange-400" : "text-white/40",
                         )}
                       />
                       <span>{item.label}</span>
@@ -200,7 +214,7 @@ export default memo(function OrgDashboardLayout() {
                           "text-[10px] font-mono px-2 py-0.5 rounded-full hidden md:inline-block",
                           isActive
                             ? "bg-orange-500/30 text-orange-200"
-                            : "bg-white/5 text-white/40"
+                            : "bg-white/5 text-white/40",
                         )}
                       >
                         {item.count}
@@ -212,7 +226,7 @@ export default memo(function OrgDashboardLayout() {
                           "text-[9px] font-mono px-1.5 py-0.5 rounded hidden md:inline-block",
                           isOwner
                             ? "bg-amber-500/10 text-amber-300 border border-amber-400/30"
-                            : "bg-blue-500/10 text-blue-300 border border-blue-400/30"
+                            : "bg-blue-500/10 text-blue-300 border border-blue-400/30",
                         )}
                       >
                         {item.badge}
@@ -257,4 +271,3 @@ export default memo(function OrgDashboardLayout() {
     </div>
   );
 });
-
