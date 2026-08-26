@@ -25,6 +25,8 @@ import { IndGoalsScreen } from "./screens/IndGoalsScreen";
 import { IndSettingsScreen } from "./screens/IndSettingsScreen";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import Image from "next/image";
+import { ImageConstants } from "@/constant/image.index";
 
 export type IndTabType =
   | "dashboard"
@@ -70,8 +72,14 @@ export default memo(function IndDashboardLayout() {
         {/* Brand Logo & Active Session Indicator */}
         <div className="flex items-center gap-3">
           <Link href="/" className="flex items-center gap-2 group">
-            <div className="w-8 h-8 rounded-xl bg-orange-500/10 border border-orange-400/30 flex items-center justify-center group-hover:border-orange-400/60 transition-colors">
-              <Zap className="w-4 h-4 text-orange-400" />
+            <div className="w-9 h-9 rounded-xl bg-white border border-white/20 p-1 flex items-center justify-center group-hover:scale-105 transition-all overflow-hidden shadow-sm">
+              <Image
+                src={ImageConstants.brandLogo.src}
+                alt="Brand Logo"
+                width={100}
+                height={100}
+                className="object-contain cursor-pointer"
+              />
             </div>
             <span className="text-base font-extrabold tracking-wider text-white uppercase font-sans">
               REAL{" "}
