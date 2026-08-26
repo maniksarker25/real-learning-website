@@ -35,7 +35,9 @@ export const IndHomeScreen = memo(function IndHomeScreen({
 
   const handleStartSim = useCallback(() => {
     if (onLaunchSimulation) {
-      onLaunchSimulation("Handling an Upset Customer Requesting Immediate Refund");
+      onLaunchSimulation(
+        "Handling an Upset Customer Requesting Immediate Refund",
+      );
     }
     onNavigateToTab("simulations");
   }, [onNavigateToTab, onLaunchSimulation]);
@@ -67,6 +69,68 @@ export const IndHomeScreen = memo(function IndHomeScreen({
         >
           View Goal Roadmap
         </button>
+      </div>
+      {/* Progress Summary High-Level Metrics */}
+      <div className="bg-[#12131c]/90 rounded-2xl p-5 border border-white/10 shadow-lg space-y-4">
+        <div className="flex items-center justify-between border-b border-white/10 pb-3">
+          <div className="flex items-center gap-2">
+            <TrendingUp className="w-4 h-4 text-orange-400" />
+            <h3 className="text-sm font-bold text-white">
+              Progress Summary & Metrics
+            </h3>
+          </div>
+          <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+            +14.2% Growth This Month
+          </span>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div className="bg-black/50 p-4 rounded-xl border border-white/10 space-y-1">
+            <span className="text-[10px] font-mono text-white/50 uppercase">
+              CLASSES COMPLETED
+            </span>
+            <div className="text-2xl font-extrabold text-white font-mono">
+              3
+            </div>
+            <span className="text-[10px] text-white/40">1 in progress</span>
+          </div>
+
+          <div className="bg-black/50 p-4 rounded-xl border border-white/10 space-y-1">
+            <span className="text-[10px] font-mono text-white/50 uppercase">
+              SIMULATIONS PASSED
+            </span>
+            <div className="text-2xl font-extrabold text-white font-mono">
+              5
+            </div>
+            <span className="text-[10px] text-white/40">
+              3 practice sessions
+            </span>
+          </div>
+
+          <div className="bg-black/50 p-4 rounded-xl border border-white/10 space-y-1">
+            <span className="text-[10px] font-mono text-white/50 uppercase">
+              AVG QUIZ SCORE
+            </span>
+            <div className="text-2xl font-extrabold text-white font-mono">
+              92.5%
+            </div>
+            <span className="text-[10px] text-emerald-400">
+              High understanding
+            </span>
+          </div>
+
+          <div className="bg-black/50 p-4 rounded-xl border border-white/10 space-y-1">
+            <span className="text-[10px] font-mono text-white/50 uppercase">
+              AVG SIMULATION SCORE
+            </span>
+            <div className="text-2xl font-extrabold text-white font-mono">
+              89.0%
+            </div>
+            <span className="text-[10px] text-orange-400">
+              High performance
+            </span>
+          </div>
+        </div>
       </div>
 
       {/* 2 Primary Action Focus Cards: Continue Learning & Practice Your Skills */}
@@ -132,7 +196,8 @@ export const IndHomeScreen = memo(function IndHomeScreen({
                 Handling an Upset Customer Requesting Refund
               </h2>
               <p className="text-xs text-white/60 mt-1">
-                Practice conflict resolution & empathy with a dynamic AI scenario character.
+                Practice conflict resolution & empathy with a dynamic AI
+                scenario character.
               </p>
             </div>
 
@@ -158,56 +223,6 @@ export const IndHomeScreen = memo(function IndHomeScreen({
 
       {/* RECENT COMPLETED SIMULATIONS TABLE WITH IN-DEPTH FEEDBACK MODAL */}
       <RecentSimulationsTable onLaunchSimulation={onLaunchSimulation} />
-
-      {/* Progress Summary High-Level Metrics */}
-      <div className="bg-[#12131c]/90 rounded-2xl p-5 border border-white/10 shadow-lg space-y-4">
-        <div className="flex items-center justify-between border-b border-white/10 pb-3">
-          <div className="flex items-center gap-2">
-            <TrendingUp className="w-4 h-4 text-orange-400" />
-            <h3 className="text-sm font-bold text-white">
-              Progress Summary & Metrics
-            </h3>
-          </div>
-          <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
-            +14.2% Growth This Month
-          </span>
-        </div>
-
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <div className="bg-black/50 p-4 rounded-xl border border-white/10 space-y-1">
-            <span className="text-[10px] font-mono text-white/50 uppercase">
-              CLASSES COMPLETED
-            </span>
-            <div className="text-2xl font-extrabold text-white font-mono">3</div>
-            <span className="text-[10px] text-white/40">1 in progress</span>
-          </div>
-
-          <div className="bg-black/50 p-4 rounded-xl border border-white/10 space-y-1">
-            <span className="text-[10px] font-mono text-white/50 uppercase">
-              SIMULATIONS PASSED
-            </span>
-            <div className="text-2xl font-extrabold text-white font-mono">5</div>
-            <span className="text-[10px] text-white/40">3 practice sessions</span>
-          </div>
-
-          <div className="bg-black/50 p-4 rounded-xl border border-white/10 space-y-1">
-            <span className="text-[10px] font-mono text-white/50 uppercase">
-              AVG QUIZ SCORE
-            </span>
-            <div className="text-2xl font-extrabold text-white font-mono">92.5%</div>
-            <span className="text-[10px] text-emerald-400">High understanding</span>
-          </div>
-
-          <div className="bg-black/50 p-4 rounded-xl border border-white/10 space-y-1">
-            <span className="text-[10px] font-mono text-white/50 uppercase">
-              AVG SIMULATION SCORE
-            </span>
-            <div className="text-2xl font-extrabold text-white font-mono">89.0%</div>
-            <span className="text-[10px] text-orange-400">High performance</span>
-          </div>
-        </div>
-      </div>
     </div>
   );
 });
-

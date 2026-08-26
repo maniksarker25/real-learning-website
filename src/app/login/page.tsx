@@ -20,6 +20,8 @@ import {
   Building2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
+import { ImageConstants } from "@/constant/image.index";
 
 export default function LoginPage() {
   const { loginAsIndividual, loginAsOrganization } = useAccount();
@@ -121,11 +123,22 @@ export default function LoginPage() {
               <Zap className="w-3.5 h-3.5 text-orange-400" />
               <span>WELCOME BACK</span>
             </div>
-            <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white uppercase font-sans">
-              Sign in to{" "}
-              <span className="bg-gradient-to-r from-orange-400 to-rose-400 bg-clip-text text-transparent">
-                Real Learning
-              </span>
+            <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white uppercase font-sans flex items-center justify-center gap-2.5 flex-wrap">
+              <span>Sign in to</span>
+              <div className="inline-flex items-center gap-2">
+                <div className="w-9 h-9 rounded-xl bg-white border border-white/20 p-1 flex items-center justify-center overflow-hidden shadow-sm">
+                  <Image
+                    src={ImageConstants.brandLogo.src}
+                    alt="Brand Logo"
+                    width={100}
+                    height={100}
+                    className="object-contain cursor-pointer"
+                  />
+                </div>
+                <span className="bg-gradient-to-r from-orange-400 to-rose-400 bg-clip-text text-transparent">
+                  Real Learning
+                </span>
+              </div>
             </h1>
             <p className="text-xs sm:text-sm text-white/60">
               Enter your credentials to access your dashboard.

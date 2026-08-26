@@ -3,6 +3,8 @@
 import React, { useMemo, memo } from "react";
 import Link from "next/link";
 import { Zap, Building2, Mail, Info, ChevronRight } from "lucide-react";
+import Image from "next/image";
+import { ImageConstants } from "@/constant/image.index";
 
 interface FooterNavGridProps {
   onOpenContact: () => void;
@@ -35,8 +37,14 @@ export const FooterNavGrid = memo(function FooterNavGrid({
           {/* Col 1: Brand Info */}
           <div className="space-y-4">
             <Link href="/" className="flex items-center gap-2.5 group">
-              <div className="w-8 h-8 rounded-xl bg-orange-500/10 border border-orange-400/30 flex items-center justify-center">
-                <Zap className="w-4 h-4 text-orange-400" />
+              <div className="w-8 h-8 rounded-xl bg-white border border-white/20 p-1 flex items-center justify-center overflow-hidden shadow-sm">
+                <Image
+                  src={ImageConstants.brandLogo.src}
+                  alt="Brand Logo"
+                  width={100}
+                  height={100}
+                  className="object-contain cursor-pointer"
+                />
               </div>
               <span className="text-base font-extrabold tracking-wider text-white uppercase font-sans">
                 REAL{" "}
@@ -146,7 +154,15 @@ export const FooterNavGrid = memo(function FooterNavGrid({
       <div className="border-t border-white/10 py-6 relative z-10 bg-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-white/50">
           <div className="flex items-center gap-2">
-            <Zap className="w-4 h-4 text-orange-400" />
+            <div className="w-5 h-5 rounded bg-white border border-white/20 p-0.5 flex items-center justify-center overflow-hidden shadow-sm">
+              <Image
+                src={ImageConstants.brandLogo.src}
+                alt="Brand Logo"
+                width={100}
+                height={100}
+                className="object-contain cursor-pointer"
+              />
+            </div>
             <span className="font-bold text-white tracking-wider uppercase">
               REAL LEARNING
             </span>

@@ -26,6 +26,8 @@ import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { NotificationDropdown } from "@/components/notifications/NotificationDropdown";
+import Image from "next/image";
+import { ImageConstants } from "@/constant/image.index";
 
 export default memo(function UserDashboardLayout({
   children,
@@ -55,19 +57,33 @@ export default memo(function UserDashboardLayout({
         router.push("/user-dashboard");
       }
     },
-    [switchWorkspace, router]
+    [switchWorkspace, router],
   );
 
   const navItems = useMemo(
     () => [
       { href: "/user-dashboard", label: "Dashboard", icon: LayoutDashboard },
-      { href: "/user-dashboard/classes", label: "Classes", icon: BookOpen, count: "3" },
-      { href: "/user-dashboard/simulations", label: "Simulations", icon: Zap, count: "3" },
+      {
+        href: "/user-dashboard/classes",
+        label: "Classes",
+        icon: BookOpen,
+        count: "3",
+      },
+      {
+        href: "/user-dashboard/simulations",
+        label: "Simulations",
+        icon: Zap,
+        count: "3",
+      },
       { href: "/user-dashboard/progress", label: "Progress", icon: BarChart3 },
       { href: "/user-dashboard/goals", label: "Goals", icon: Target },
-      { href: "/user-dashboard/settings", label: "Profile / Settings", icon: Settings },
+      {
+        href: "/user-dashboard/settings",
+        label: "Profile / Settings",
+        icon: Settings,
+      },
     ],
-    []
+    [],
   );
 
   return (
@@ -77,8 +93,14 @@ export default memo(function UserDashboardLayout({
         {/* Brand Logo & Active Session Indicator */}
         <div className="flex items-center gap-3">
           <Link href="/" className="flex items-center gap-2 group">
-            <div className="w-8 h-8 rounded-xl bg-orange-500/10 border border-orange-400/30 flex items-center justify-center group-hover:border-orange-400/60 transition-colors">
-              <Zap className="w-4 h-4 text-orange-400" />
+            <div className="w-9 h-9 rounded-xl bg-white border border-white/20 p-1 flex items-center justify-center group-hover:scale-105 transition-all overflow-hidden shadow-sm">
+              <Image
+                src={ImageConstants.brandLogo.src}
+                alt="Brand Logo"
+                width={100}
+                height={100}
+                className="object-contain cursor-pointer"
+              />
             </div>
             <span className="text-base font-extrabold tracking-wider text-white uppercase font-sans">
               REAL{" "}
@@ -125,7 +147,7 @@ export default memo(function UserDashboardLayout({
                     "w-full flex items-center justify-between p-2.5 rounded-xl text-xs transition-colors text-left cursor-pointer",
                     !isEnrolledInOrg
                       ? "bg-orange-500/15 border border-orange-400/40 text-white font-bold"
-                      : "text-white/70 hover:bg-white/5 hover:text-white"
+                      : "text-white/70 hover:bg-white/5 hover:text-white",
                   )}
                 >
                   <div className="flex items-center gap-2.5">
@@ -133,11 +155,17 @@ export default memo(function UserDashboardLayout({
                       <User className="w-4 h-4" />
                     </div>
                     <div>
-                      <div className="font-bold text-white text-xs">Personal Learning Space</div>
-                      <div className="text-[10px] text-white/40 font-mono">Independent Practice</div>
+                      <div className="font-bold text-white text-xs">
+                        Personal Learning Space
+                      </div>
+                      <div className="text-[10px] text-white/40 font-mono">
+                        Independent Practice
+                      </div>
                     </div>
                   </div>
-                  {!isEnrolledInOrg && <CheckCircle2 className="w-3.5 h-3.5 text-orange-400" />}
+                  {!isEnrolledInOrg && (
+                    <CheckCircle2 className="w-3.5 h-3.5 text-orange-400" />
+                  )}
                 </button>
 
                 {/* Organization Memberships (Admin or Member) */}
@@ -148,7 +176,9 @@ export default memo(function UserDashboardLayout({
 
                   {/* Organization where user is Admin */}
                   <button
-                    onClick={() => handleSelectWorkspace("ws-globex-admin", "admin")}
+                    onClick={() =>
+                      handleSelectWorkspace("ws-globex-admin", "admin")
+                    }
                     className="w-full flex items-center justify-between p-2.5 rounded-xl text-xs text-white/70 hover:bg-blue-500/10 hover:text-white border border-transparent hover:border-blue-400/30 transition-colors text-left cursor-pointer group"
                   >
                     <div className="flex items-center gap-2.5">
@@ -162,7 +192,9 @@ export default memo(function UserDashboardLayout({
                             Admin
                           </span>
                         </div>
-                        <div className="text-[10px] text-white/40 font-mono">Manage Workspace & Members</div>
+                        <div className="text-[10px] text-white/40 font-mono">
+                          Manage Workspace & Members
+                        </div>
                       </div>
                     </div>
                     <ArrowRight className="w-3.5 h-3.5 text-white/40 group-hover:text-blue-400 transition-colors" />
@@ -170,12 +202,14 @@ export default memo(function UserDashboardLayout({
 
                   {/* Organization where user is Member */}
                   <button
-                    onClick={() => handleSelectWorkspace("ws-initech-member", "member")}
+                    onClick={() =>
+                      handleSelectWorkspace("ws-initech-member", "member")
+                    }
                     className={cn(
                       "w-full flex items-center justify-between p-2.5 rounded-xl text-xs transition-colors text-left cursor-pointer",
                       session.orgName === "Initech Learning"
                         ? "bg-purple-500/15 border border-purple-400/40 text-white font-bold"
-                        : "text-white/70 hover:bg-purple-500/10 hover:text-white"
+                        : "text-white/70 hover:bg-purple-500/10 hover:text-white",
                     )}
                   >
                     <div className="flex items-center gap-2.5">
@@ -189,7 +223,9 @@ export default memo(function UserDashboardLayout({
                             Member
                           </span>
                         </div>
-                        <div className="text-[10px] text-white/40 font-mono">Assigned Simulations Track</div>
+                        <div className="text-[10px] text-white/40 font-mono">
+                          Assigned Simulations Track
+                        </div>
                       </div>
                     </div>
                     {session.orgName === "Initech Learning" && (
@@ -263,18 +299,25 @@ export default memo(function UserDashboardLayout({
                       "flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold shrink-0 whitespace-nowrap transition-colors cursor-pointer w-full text-left",
                       isActive
                         ? "bg-gradient-to-r from-orange-500/20 to-rose-500/20 text-orange-300 border border-orange-500/30"
-                        : "text-white/60 hover:text-white hover:bg-white/5 border border-transparent"
+                        : "text-white/60 hover:text-white hover:bg-white/5 border border-transparent",
                     )}
                   >
                     <div className="flex items-center gap-2.5">
-                      <Icon className={cn("w-4 h-4", isActive ? "text-orange-400" : "text-white/40")} />
+                      <Icon
+                        className={cn(
+                          "w-4 h-4",
+                          isActive ? "text-orange-400" : "text-white/40",
+                        )}
+                      />
                       <span>{item.label}</span>
                     </div>
                     {item.count && (
                       <span
                         className={cn(
                           "text-[10px] font-mono px-2 py-0.5 rounded-full hidden md:inline-block",
-                          isActive ? "bg-orange-500/30 text-orange-200" : "bg-white/5 text-white/40"
+                          isActive
+                            ? "bg-orange-500/30 text-orange-200"
+                            : "bg-white/5 text-white/40",
                         )}
                       >
                         {item.count}
@@ -306,7 +349,7 @@ export default memo(function UserDashboardLayout({
 
         {/* Main Content Workspace */}
         <main className="flex-1 p-4 sm:p-6 lg:p-8 bg-[#07080c] overflow-y-auto">
-          <div className="max-w-5xl mx-auto space-y-5">
+          <div className="space-y-5">
             {/* Organization Member Banner if in Member mode */}
             {isEnrolledInOrg && (
               <div className="p-4 rounded-2xl bg-gradient-to-r from-purple-500/10 via-purple-500/5 to-transparent border border-purple-400/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
@@ -322,7 +365,8 @@ export default memo(function UserDashboardLayout({
                       </span>
                     </div>
                     <p className="text-[11px] text-white/60">
-                      Your completed simulations and progress are tracked and submitted directly to your organization.
+                      Your completed simulations and progress are tracked and
+                      submitted directly to your organization.
                     </p>
                   </div>
                 </div>

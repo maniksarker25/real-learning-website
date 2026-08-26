@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import {
   Headphones,
@@ -108,13 +109,13 @@ export default function ExploreCareers() {
             </div>
 
             <div className="pt-4 border-t border-white/10">
-              <a
-                href="#start-simulation"
+              <Link
+                href="/get-started"
                 className="w-full inline-flex items-center justify-between px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-bold text-white transition-all group-hover:border-orange-400/40 group-hover:text-orange-300 cursor-pointer"
               >
                 <span>Start Training</span>
                 <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-              </a>
+              </Link>
             </div>
           </motion.div>
 
@@ -174,13 +175,13 @@ export default function ExploreCareers() {
             </div>
 
             <div className="pt-4 border-t border-white/10">
-              <a
-                href="#start-simulation"
+              <Link
+                href="/get-started"
                 className="inline-flex items-center gap-2 bg-white text-black hover:bg-white/90 rounded-full px-6 py-2.5 text-xs font-bold transition-all shadow-md cursor-pointer group-hover:bg-orange-400 group-hover:text-black"
               >
                 <span>Start Training</span>
                 <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
-              </a>
+              </Link>
             </div>
           </motion.div>
 
@@ -241,13 +242,13 @@ export default function ExploreCareers() {
             </div>
 
             <div className="pt-4 border-t border-white/10">
-              <a
-                href="#start-simulation"
+              <Link
+                href="/get-started"
                 className="inline-flex items-center gap-2 bg-white text-black hover:bg-white/90 rounded-full px-6 py-2.5 text-xs font-bold transition-all shadow-md cursor-pointer group-hover:bg-orange-400 group-hover:text-black"
               >
                 <span>Start Training</span>
                 <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
-              </a>
+              </Link>
             </div>
           </motion.div>
 
@@ -280,13 +281,13 @@ export default function ExploreCareers() {
             </div>
 
             <div className="pt-4 border-t border-white/10">
-              <a
-                href="#start-simulation"
+              <Link
+                href="/get-started"
                 className="w-full inline-flex items-center justify-between px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-bold text-white transition-all group-hover:border-orange-400/40 group-hover:text-orange-300 cursor-pointer"
               >
                 <span>Start Training</span>
                 <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-              </a>
+              </Link>
             </div>
           </motion.div>
         </div>

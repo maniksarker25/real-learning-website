@@ -22,7 +22,12 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Real Learning",
-  description: "Real Learning",
+  description: "Real Learning - Practice in Realistic Workplace Situations",
+  icons: {
+    icon: "/icons/brand-logo.png",
+    shortcut: "/icons/brand-logo.png",
+    apple: "/icons/brand-logo.png",
+  },
 };
 
 import { AccountProvider } from "@/context/AccountContext";

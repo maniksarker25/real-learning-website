@@ -10,6 +10,7 @@ export default memo(function OrganizationOnboardingPage() {
   const { loginAsOrganization } = useAccount();
   const [orgName, setOrgName] = useState("");
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [seats, setSeats] = useState("25");
   const [submitted, setSubmitted] = useState(false);
 
@@ -37,7 +38,7 @@ export default memo(function OrganizationOnboardingPage() {
   const handleSubmit = useCallback(
     (e: React.FormEvent) => {
       e.preventDefault();
-      loginAsOrganization({ orgName, email, seats });
+      loginAsOrganization({ orgName: orgName || "Organization", email, seats });
       setSubmitted(true);
     },
     [loginAsOrganization, orgName, email, seats]
@@ -73,16 +74,16 @@ export default memo(function OrganizationOnboardingPage() {
           <div className="text-center space-y-3">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-orange-500/10 border border-orange-400/30 backdrop-blur text-xs text-orange-300 font-medium">
               <Building2 className="h-3.5 w-3.5 text-orange-400" />
-              <span>ORGANIZATION PILOT ONBOARDING</span>
+              <span>ORGANIZATION LOGIN</span>
             </div>
             <h1 className="text-3xl sm:text-4xl font-extrabold text-white uppercase tracking-tight font-sans">
-              Organization Program{" "}
+              Organization{" "}
               <span className="bg-gradient-to-r from-orange-400 to-rose-400 bg-clip-text text-transparent">
-                Setup
+                Login
               </span>
             </h1>
             <p className="text-sm text-white/70 max-w-lg mx-auto">
-              Launch learning programs for your team. Start with a fixed seat pilot to assign classes, workplace simulations, and monitor progress.
+              Sign in with your email and password to access your organization workspace.
             </p>
           </div>
 
@@ -116,7 +117,7 @@ export default memo(function OrganizationOnboardingPage() {
                   Organization Workspace Initialized!
                 </h3>
                 <p className="text-xs text-white/70 max-w-md mx-auto">
-                  Pilot reserved for <span className="text-orange-300 font-semibold">{orgName}</span> with <span className="text-orange-300 font-semibold">{seats} Seats</span>. Confirmation & onboarding keys sent to <span className="text-white font-mono">{email}</span>.
+                  Logged in as <span className="text-white font-mono">{email}</span>.
                 </p>
                 <div className="pt-4 flex justify-center">
                   <Link
@@ -133,21 +134,7 @@ export default memo(function OrganizationOnboardingPage() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-xs font-semibold text-white/80 mb-2">
-                      Organization / Team Name
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      value={orgName}
-                      onChange={(e) => setOrgName(e.target.value)}
-                      placeholder="e.g. Acme Corp / Learning Team"
-                      className="w-full bg-black/60 border border-white/10 rounded-xl px-4 py-3 text-xs text-white placeholder-white/40 focus:outline-none focus:border-orange-400 transition-colors"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-semibold text-white/80 mb-2">
-                      Admin Work Email
+                      Work Email
                     </label>
                     <input
                       type="email"
@@ -158,8 +145,24 @@ export default memo(function OrganizationOnboardingPage() {
                       className="w-full bg-black/60 border border-white/10 rounded-xl px-4 py-3 text-xs text-white placeholder-white/40 focus:outline-none focus:border-orange-400 transition-colors"
                     />
                   </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-white/80 mb-2">
+                      Password
+                    </label>
+                    <input
+                      type="password"
+                      required
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder="••••••••"
+                      className="w-full bg-black/60 border border-white/10 rounded-xl px-4 py-3 text-xs text-white placeholder-white/40 focus:outline-none focus:border-orange-400 transition-colors"
+                    />
+                  </div>
                 </div>
 
+                {/* Pilot Seat Allocation commented out as requested */}
+                {/* 
                 <div>
                   <label className="block text-xs font-semibold text-white/80 mb-2">
                     Pilot Seat Allocation
@@ -184,13 +187,14 @@ export default memo(function OrganizationOnboardingPage() {
                     ))}
                   </div>
                 </div>
+                */}
 
                 <div className="pt-2">
                   <button
                     type="submit"
                     className="w-full py-3.5 rounded-full bg-white text-black hover:bg-white/90 font-extrabold text-xs sm:text-sm flex items-center justify-center gap-2 transition-colors shadow-lg cursor-pointer"
                   >
-                    <span>Create Organization Pilot & Continue</span>
+                    <span>Log In & Continue</span>
                     <ArrowRight className="w-4 h-4" />
                   </button>
                 </div>
