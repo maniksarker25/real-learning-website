@@ -1,0 +1,189 @@
+"use client";
+
+import React, { memo } from "react";
+import {
+  Compass,
+  BookOpen,
+  Zap,
+  MessageSquare,
+  BarChart3,
+  ArrowRight,
+  CheckCircle2,
+  Sparkles,
+} from "lucide-react";
+import { LearningLoopStep } from "@/types/individual";
+import { cn } from "@/lib/utils";
+
+interface LearningLoopStepperProps {
+  currentStep: LearningLoopStep;
+  onSelectStep: (step: LearningLoopStep) => void;
+  activePathTitle?: string;
+}
+
+const STEPS: {
+  id: LearningLoopStep;
+  label: string;
+  subLabel: string;
+  icon: React.ElementType;
+}[] = [
+  {
+    id: "pathfinder",
+    label: "Pathfinder",
+    subLabel: "Where Am I? & Path",
+    icon: Compass,
+  },
+  {
+    id: "class",
+    label: "Class",
+    subLabel: "Learn Fundamentals",
+    icon: BookOpen,
+  },
+  {
+    id: "simulator",
+    label: "Simulator",
+    subLabel: "Practice Layer",
+    icon: Zap,
+  },
+  {
+    id: "feedback",
+    label: "AI Feedback",
+    subLabel: "Evaluate Performance",
+    icon: MessageSquare,
+  },
+  {
+    id: "skill_progress",
+    label: "Skill Progress",
+    subLabel: "Demonstrated Growth",
+    icon: BarChart3,
+  },
+  {
+    id: "next_step",
+    label: "Next Step",
+    subLabel: "GPS Guidance",
+    icon: ArrowRight,
+  },
+];
+
+export const LearningLoopStepper = memo(function LearningLoopStepper({
+  currentStep,
+  onSelectStep,
+  activePathTitle = "Technical Support Specialist",
+}: LearningLoopStepperProps) {
+  const currentStepIndex = STEPS.findIndex((s) => s.id === currentStep);
+
+  return (
+    <div className="bg-[#0f1019]/90 border border-white/10 rounded-2xl p-4 shadow-xl space-y-3">
+      {/* Top Banner Context */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-b border-white/10 pb-3">
+        <div className="flex items-center gap-2">
+          <div className="w-7 h-7 rounded-lg bg-orange-500/20 border border-orange-400/40 flex items-center justify-center text-orange-400">
+            <Sparkles className="w-4 h-4" />
+          </div>
+          <div>
+            <h4 className="text-xs font-black uppercase tracking-wider text-white flex items-center gap-2">
+              RL LEARNING GPS LOOP
+              <span className="text-[10px] font-mono font-normal text-orange-300 bg-orange-500/10 px-2 py-0.5 rounded-full border border-orange-400/20">
+                ACTIVE PATH: {activePathTitle}
+              </span>
+            </h4>
+          </div>
+        </div>
+
+        <div className="text-[10px] font-mono text-white/50 flex items-center gap-2">
+          <span>Step {currentStepIndex + 1} of 6</span>
+          <div className="w-16 h-1.5 bg-black/60 rounded-full overflow-hidden border border-white/10">
+            <div
+              className="h-full bg-gradient-to-r from-orange-500 to-rose-500 transition-all duration-300"
+              style={{
+                width: `${Math.min(100, ((currentStepIndex + 1) / STEPS.length) * 100)}%`,
+              }}
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Stepper Flow Cards */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
+        {STEPS.map((step, idx) => {
+          const Icon = step.icon;
+          const isActive = currentStep === step.id;
+          const isCompleted = idx < currentStepIndex;
+
+          return (
+            <button
+              key={step.id}
+              onClick={() => onSelectStep(step.id)}
+              className={cn(
+                "relative p-3 rounded-xl border text-left transition-all duration-200 cursor-pointer flex flex-col justify-between space-y-2 group",
+                isActive
+                  ? "bg-gradient-to-br from-orange-500/20 via-[#161826] to-[#0d0e15] border-orange-400/60 shadow-lg shadow-orange-500/10 scale-[1.02]"
+                  : isCompleted
+                  ? "bg-[#12131d]/80 border-emerald-500/30 hover:border-emerald-500/50 hover:bg-[#161726]"
+                  : "bg-black/40 border-white/10 hover:border-white/20 hover:bg-[#12131d]"
+              )}
+            >
+              {/* Header Icon + Status Badge */}
+              <div className="flex items-center justify-between">
+                <div
+                  className={cn(
+                    "w-7 h-7 rounded-lg flex items-center justify-center transition-colors",
+                    isActive
+                      ? "bg-gradient-to-r from-orange-500 to-rose-500 text-white shadow-md"
+                      : isCompleted
+                      ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
+                      : "bg-white/5 text-white/40 group-hover:text-white/70"
+                  )}
+                >
+                  {isCompleted ? (
+                    <CheckCircle2 className="w-4 h-4" />
+                  ) : (
+                    <Icon className="w-3.5 h-3.5" />
+                  )}
+                </div>
+
+                <span
+                  className={cn(
+                    "text-[9px] font-mono font-bold px-1.5 py-0.5 rounded",
+                    isActive
+                      ? "bg-orange-400/20 text-orange-300 border border-orange-400/30"
+                      : isCompleted
+                      ? "bg-emerald-500/10 text-emerald-300"
+                      : "text-white/30"
+                  )}
+                >
+                  #{idx + 1}
+                </span>
+              </div>
+
+              {/* Step Labels */}
+              <div>
+                <div
+                  className={cn(
+                    "text-xs font-extrabold leading-tight",
+                    isActive
+                      ? "text-white"
+                      : isCompleted
+                      ? "text-emerald-300"
+                      : "text-white/70 group-hover:text-white"
+                  )}
+                >
+                  {step.label}
+                </div>
+                <div className="text-[10px] text-white/50 truncate mt-0.5 font-sans">
+                  {step.subLabel}
+                </div>
+              </div>
+
+              {/* Step Connection Indicator */}
+              {idx < STEPS.length - 1 && (
+                <div className="hidden lg:block absolute -right-2.5 top-1/2 -translate-y-1/2 z-10 text-white/20">
+                  ➔
+                </div>
+              )}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+});
