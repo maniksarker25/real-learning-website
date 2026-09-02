@@ -15,14 +15,19 @@ import {
   User,
   Flame,
   Sparkles,
+  Compass,
 } from "lucide-react";
 import { useAccount } from "@/context/AccountContext";
 import { IndHomeScreen } from "./screens/IndHomeScreen";
+import { IndPathfinderScreen } from "./screens/IndPathfinderScreen";
 import { IndClassesScreen } from "./screens/IndClassesScreen";
 import { IndSimulationsScreen } from "./screens/IndSimulationsScreen";
+import { IndFeedbackScreen } from "./screens/IndFeedbackScreen";
 import { IndProgressScreen } from "./screens/IndProgressScreen";
 import { IndGoalsScreen } from "./screens/IndGoalsScreen";
 import { IndSettingsScreen } from "./screens/IndSettingsScreen";
+import { LearningLoopStepper } from "./LearningLoopStepper";
+import { LearningLoopStep, CareerPath } from "@/types/individual";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import Image from "next/image";
@@ -30,15 +35,19 @@ import { ImageConstants } from "@/constant/image.index";
 
 export type IndTabType =
   | "dashboard"
+  | "pathfinder"
   | "classes"
   | "simulations"
+  | "feedback"
   | "progress"
   | "goals"
   | "settings";
 
 export default memo(function IndDashboardLayout() {
   const { session, logout } = useAccount();
-  const [activeTab, setActiveTab] = useState<IndTabType>("dashboard");
+  const [activeTab, setActiveTab] = useState<IndTabType>("pathfinder");
+  const [currentLoopStep, setCurrentLoopStep] = useState<LearningLoopStep>("pathfinder");
+  const [activePath, setActivePath] = useState<CareerPath | null>(null);
   const [activeSimTitle, setActiveSimTitle] = useState<string | undefined>(undefined);
 
   const handleLogout = useCallback(() => {
@@ -46,21 +55,54 @@ export default memo(function IndDashboardLayout() {
   }, [logout]);
 
   const handleNavigateToTab = useCallback((tabId: string) => {
-    setActiveTab(tabId as IndTabType);
+    const tab = tabId as IndTabType;
+    setActiveTab(tab);
+    if (tab === "pathfinder") setCurrentLoopStep("pathfinder");
+    if (tab === "classes") setCurrentLoopStep("class");
+    if (tab === "simulations") setCurrentLoopStep("simulator");
+    if (tab === "feedback" || tab === "progress") setCurrentLoopStep("feedback");
+  }, []);
+
+  const handleSelectLoopStep = useCallback((step: LearningLoopStep) => {
+    setCurrentLoopStep(step);
+    if (step === "pathfinder") setActiveTab("pathfinder");
+    if (step === "class") setActiveTab("classes");
+    if (step === "simulator") setActiveTab("simulations");
+    if (step === "feedback" || step === "skill_progress" || step === "next_step") {
+      setActiveTab("feedback");
+    }
+  }, []);
+
+  const handleSelectCareerPath = useCallback((path: CareerPath) => {
+    setActivePath(path);
+  }, []);
+
+  const handleStartClassFromPathfinder = useCallback((classId: string) => {
+    setCurrentLoopStep("class");
+    setActiveTab("classes");
+  }, []);
+
+  const handleLaunchPracticeSimulator = useCallback((scenarioId?: string) => {
+    setCurrentLoopStep("simulator");
+    setActiveTab("simulations");
   }, []);
 
   const handleLaunchSimulationFromHome = useCallback((scenarioTitle: string) => {
     setActiveSimTitle(scenarioTitle);
+    setCurrentLoopStep("simulator");
+    setActiveTab("simulations");
   }, []);
 
   const navItems = useMemo(
     () => [
-      { id: "dashboard" as const, label: "Dashboard", icon: LayoutDashboard },
-      { id: "classes" as const, label: "Classes", icon: BookOpen, count: "3" },
-      { id: "simulations" as const, label: "Simulations", icon: Zap, count: "3" },
-      { id: "progress" as const, label: "Progress", icon: BarChart3 },
+      { id: "pathfinder" as const, label: "Pathfinder (GPS)", icon: Compass },
+      { id: "classes" as const, label: "1. Class", icon: BookOpen, count: "3" },
+      { id: "simulations" as const, label: "2. Simulator", icon: Zap, count: "3" },
+      { id: "feedback" as const, label: "3. Feedback & GPS", icon: MessageSquare },
+      { id: "progress" as const, label: "Skills Radar", icon: BarChart3 },
+      { id: "dashboard" as const, label: "Overview", icon: LayoutDashboard },
       { id: "goals" as const, label: "Goals", icon: Target },
-      { id: "settings" as const, label: "Profile / Settings", icon: Settings },
+      { id: "settings" as const, label: "Profile", icon: Settings },
     ],
     []
   );
@@ -198,19 +240,40 @@ export default memo(function IndDashboardLayout() {
         </aside>
 
         {/* Main Content Workspace */}
-        <main className="flex-1 p-4 sm:p-6 lg:p-8 bg-[#07080c] overflow-y-auto">
-          <div className="max-w-5xl mx-auto">
-            {activeTab === "dashboard" && (
-              <IndHomeScreen
-                onNavigateToTab={handleNavigateToTab}
-                onLaunchSimulation={handleLaunchSimulationFromHome}
+        <main className="flex-1 p-4 sm:p-6 lg:p-8 bg-[#07080c] overflow-y-auto space-y-6">
+          <div className="max-w-5xl mx-auto space-y-6">
+            {/* Top Stepper displaying active step in 6-stage GPS journey */}
+            <LearningLoopStepper
+              currentStep={currentLoopStep}
+              onSelectStep={handleSelectLoopStep}
+              activePathTitle={activePath?.title || "Technical Support Specialist"}
+            />
+
+            {/* Main Screen Router */}
+            {activeTab === "pathfinder" && (
+              <IndPathfinderScreen
+                onSelectPath={handleSelectCareerPath}
+                onStartClass={handleStartClassFromPathfinder}
               />
             )}
-            {activeTab === "classes" && <IndClassesScreen />}
+            {activeTab === "classes" && (
+              <IndClassesScreen
+                onLaunchPracticeSimulator={handleLaunchPracticeSimulator}
+              />
+            )}
             {activeTab === "simulations" && (
               <IndSimulationsScreen
                 onNavigateToTab={handleNavigateToTab}
                 activeScenarioTitle={activeSimTitle}
+              />
+            )}
+            {activeTab === "feedback" && (
+              <IndFeedbackScreen onNavigateToTab={handleNavigateToTab} />
+            )}
+            {activeTab === "dashboard" && (
+              <IndHomeScreen
+                onNavigateToTab={handleNavigateToTab}
+                onLaunchSimulation={handleLaunchSimulationFromHome}
               />
             )}
             {activeTab === "progress" && <IndProgressScreen />}

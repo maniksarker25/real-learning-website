@@ -18,7 +18,13 @@ import { useAccount } from "@/context/AccountContext";
 import { ClassModule, QuizQuestion } from "@/types/individual";
 import { cn } from "@/lib/utils";
 
-export const IndClassesScreen = memo(function IndClassesScreen() {
+interface IndClassesScreenProps {
+  onLaunchPracticeSimulator?: (scenarioId?: string) => void;
+}
+
+export const IndClassesScreen = memo(function IndClassesScreen({
+  onLaunchPracticeSimulator,
+}: IndClassesScreenProps) {
   const { session } = useAccount();
   const activeGoal = session.goal || "Customer Service";
 
@@ -402,7 +408,7 @@ export const IndClassesScreen = memo(function IndClassesScreen() {
             </div>
 
             {/* Submit Quiz Button */}
-            {!quizSubmitted && (
+            {!quizSubmitted ? (
               <div className="pt-2">
                 <button
                   onClick={handleQuizSubmit}
@@ -412,10 +418,58 @@ export const IndClassesScreen = memo(function IndClassesScreen() {
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
+            ) : (
+              /* Practice Layer Banner after Quiz Submission */
+              <div className="bg-gradient-to-br from-rose-500/20 via-[#161726] to-[#0e0f18] rounded-2xl p-6 border border-rose-400/50 shadow-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mt-6">
+                <div>
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-500/20 text-rose-300 border border-rose-400/30 text-xs font-mono font-bold uppercase mb-2">
+                    <Zap className="w-3.5 h-3.5 text-rose-400" />
+                    <span>STEP 3: PRACTICE LAYER (SIMULATOR)</span>
+                  </div>
+                  <h4 className="text-lg font-extrabold text-white">
+                    Apply What You Learned in the Simulator
+                  </h4>
+                  <p className="text-xs text-white/70 mt-1 max-w-xl">
+                    The simulator is NOT a separate feature—it is your practice layer for what you just learned. Enter the realistic tech-support scenario now to demonstrate your skills.
+                  </p>
+                </div>
+                <button
+                  onClick={() => onLaunchPracticeSimulator && onLaunchPracticeSimulator("sim-1")}
+                  className="px-6 py-3.5 rounded-full bg-gradient-to-r from-rose-500 to-orange-500 hover:from-rose-600 hover:to-orange-600 text-white text-xs font-black transition-all shadow-lg hover:shadow-rose-500/20 cursor-pointer flex items-center gap-2 shrink-0"
+                >
+                  <span>Launch Practice Simulator</span>
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              </div>
             )}
           </div>
         )}
       </div>
+
+      {/* Practice Layer Card visible on Lessons tab as well */}
+      {activeTab === "lessons" && (
+        <div className="bg-gradient-to-br from-orange-500/10 via-[#12131c] to-[#0d0e14] rounded-2xl p-5 border border-orange-400/30 shadow-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div>
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-orange-500/20 text-orange-300 border border-orange-400/30 text-[10px] font-mono font-bold uppercase mb-1">
+              <Zap className="w-3 h-3 text-orange-400" />
+              <span>PRACTICE LAYER TIED TO CLASS</span>
+            </div>
+            <h4 className="text-base font-extrabold text-white">
+              Ready to test your active listening in a realistic situation?
+            </h4>
+            <p className="text-xs text-white/60 mt-0.5">
+              Jump straight into the practice simulator for this class.
+            </p>
+          </div>
+          <button
+            onClick={() => onLaunchPracticeSimulator && onLaunchPracticeSimulator("sim-1")}
+            className="px-5 py-2.5 rounded-full bg-white text-black hover:bg-white/90 text-xs font-extrabold transition-colors shadow-md cursor-pointer flex items-center gap-2 shrink-0"
+          >
+            <span>Practice Simulator Layer</span>
+            <ArrowRight className="w-4 h-4 text-orange-500" />
+          </button>
+        </div>
+      )}
     </div>
   );
 });
