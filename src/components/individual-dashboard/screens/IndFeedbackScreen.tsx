@@ -220,33 +220,152 @@ export const IndFeedbackScreen = memo(function IndFeedbackScreen({
         </div>
       </div>
 
-      {/* Specific Recommendations & Next Actions */}
-      <div className="bg-[#12131c]/90 rounded-2xl p-5 border border-white/10 shadow-lg space-y-4">
-        <h3 className="text-sm font-bold text-white flex items-center gap-2">
-          <BookOpen className="w-4 h-4 text-orange-400" />
-          <span>Recommended Next Actions to Improve</span>
-        </h3>
+      {/* Demonstrated Skill Progress Growth Banner */}
+      <div className="bg-gradient-to-br from-emerald-500/15 via-[#12131c] to-[#0d0e14] rounded-2xl p-6 border border-emerald-500/30 shadow-xl space-y-4">
+        <div className="flex items-center justify-between border-b border-white/10 pb-3">
+          <div className="flex items-center gap-2">
+            <TrendingUp className="w-5 h-5 text-emerald-400" />
+            <div>
+              <h3 className="text-sm font-bold text-white uppercase tracking-wider">
+                Demonstrated Skill Level Progress
+              </h3>
+              <p className="text-xs text-white/60">
+                RL AI updated your demonstrated workplace skills based on your Class + Simulator performance.
+              </p>
+            </div>
+          </div>
+          <span className="text-xs font-mono font-bold text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/30">
+            +15.4% Skill Level Gain
+          </span>
+        </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {feedbackData.recommendedLessons.map((lesson) => (
-            <div
-              key={lesson}
-              className="p-4 rounded-xl bg-black/50 border border-white/10 flex items-center justify-between gap-3 text-xs"
-            >
-              <div>
-                <span className="text-[10px] font-mono text-orange-400 uppercase font-bold">
-                  Recommended Class Lesson
-                </span>
-                <div className="font-bold text-white mt-0.5">{lesson}</div>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          {[
+            { skill: "Active Listening", oldScore: 74, newScore: 92, delta: "+18%" },
+            { skill: "De-escalation", oldScore: 78, newScore: 94, delta: "+16%" },
+            { skill: "Positive Framing", oldScore: 70, newScore: 95, delta: "+25%" },
+            { skill: "Action Agreements", oldScore: 65, newScore: 89, delta: "+24%" },
+          ].map((item) => (
+            <div key={item.skill} className="bg-black/50 p-4 rounded-xl border border-white/10 space-y-1">
+              <span className="text-[10px] font-mono text-white/50 uppercase">
+                {item.skill}
+              </span>
+              <div className="flex items-baseline justify-between">
+                <span className="text-xl font-black text-white font-mono">{item.newScore}%</span>
+                <span className="text-xs font-mono font-bold text-emerald-400">{item.delta}</span>
               </div>
-              <button
-                onClick={handleGoToLesson}
-                className="px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white font-bold text-xs transition-colors cursor-pointer shrink-0"
-              >
-                Review Lesson
-              </button>
+              <div className="w-full h-1 bg-black/60 rounded-full overflow-hidden border border-white/10 mt-1">
+                <div
+                  className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 rounded-full"
+                  style={{ width: `${item.newScore}%` }}
+                />
+              </div>
             </div>
           ))}
+        </div>
+      </div>
+
+      {/* CORE STEP 6: WHAT SHOULD I DO NEXT? (RL AI Decision Engine) */}
+      <div className="bg-gradient-to-br from-orange-500/20 via-[#161726] to-[#0e0f18] rounded-2xl p-6 border border-orange-400/50 shadow-2xl space-y-5">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-white/10 pb-4">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-xl bg-orange-500/20 border border-orange-400/40 flex items-center justify-center text-orange-400 shadow">
+              <Sparkles className="w-4 h-4" />
+            </div>
+            <div>
+              <span className="text-[10px] font-mono font-bold uppercase text-orange-300 tracking-wider">
+                RL LEARNING GPS • AUTOMATED GUIDANCE
+              </span>
+              <h3 className="text-lg font-black text-white">
+                WHAT SHOULD I DO NEXT?
+              </h3>
+            </div>
+          </div>
+          <span className="text-xs font-mono font-bold text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">
+            Decision: Pathway Mastery Approved (Score: 92%)
+          </span>
+        </div>
+
+        <p className="text-xs text-white/70 leading-relaxed">
+          Based on your high demonstrated score in <span className="text-white font-bold">{feedbackData.scenarioTitle}</span>, RL AI has updated your learning roadmap:
+        </p>
+
+        {/* 3 AI Next Step Decision Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {/* Card A: Next Class (Recommended) */}
+          <div className="bg-gradient-to-br from-orange-500/20 via-[#18192a] to-[#0f101b] p-5 rounded-2xl border border-orange-400 shadow-lg flex flex-col justify-between space-y-4">
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-mono font-bold text-orange-300 bg-orange-500/20 px-2 py-0.5 rounded border border-orange-400/30">
+                  RECOMMENDED
+                </span>
+                <span className="text-[10px] font-mono text-emerald-400 font-bold">Option 1</span>
+              </div>
+              <h4 className="text-base font-extrabold text-white">
+                Advance to Next Class
+              </h4>
+              <p className="text-xs text-white/60">
+                Class: Advanced Technical Diagnostics & Incident Escalations
+              </p>
+            </div>
+            <button
+              onClick={handleGoToLesson}
+              className="w-full py-3 rounded-full bg-white text-black hover:bg-white/90 text-xs font-extrabold transition-colors shadow-md cursor-pointer flex items-center justify-center gap-2"
+            >
+              <span>Take Next Class</span>
+              <ArrowRight className="w-4 h-4 text-orange-500" />
+            </button>
+          </div>
+
+          {/* Card B: Try Harder Simulation */}
+          <div className="bg-black/50 p-5 rounded-2xl border border-white/10 hover:border-white/20 transition-all flex flex-col justify-between space-y-4">
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-mono font-bold text-rose-300 bg-rose-500/20 px-2 py-0.5 rounded border border-rose-400/30">
+                  CHALLENGE
+                </span>
+                <span className="text-[10px] font-mono text-white/40">Option 2</span>
+              </div>
+              <h4 className="text-base font-extrabold text-white">
+                Try Harder Simulation
+              </h4>
+              <p className="text-xs text-white/60">
+                Simulation: L1 Network Diagnostics under High SLA Pressure
+              </p>
+            </div>
+            <button
+              onClick={handlePracticeAgain}
+              className="w-full py-3 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition-colors cursor-pointer flex items-center justify-center gap-2"
+            >
+              <span>Try Harder Simulation</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
+
+          {/* Card C: Practice / Repeat Skill */}
+          <div className="bg-black/50 p-5 rounded-2xl border border-white/10 hover:border-white/20 transition-all flex flex-col justify-between space-y-4">
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-mono font-bold text-amber-300 bg-amber-500/20 px-2 py-0.5 rounded border border-amber-400/30">
+                  REFINE
+                </span>
+                <span className="text-[10px] font-mono text-white/40">Option 3</span>
+              </div>
+              <h4 className="text-base font-extrabold text-white">
+                Repeat & Perfect Skill
+              </h4>
+              <p className="text-xs text-white/60">
+                Re-take current simulator scenario with AI real-time hints enabled
+              </p>
+            </div>
+            <button
+              onClick={handlePracticeAgain}
+              className="w-full py-3 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition-colors cursor-pointer flex items-center justify-center gap-2"
+            >
+              <span>Repeat Simulation</span>
+              <RotateCcw className="w-3.5 h-3.5" />
+            </button>
+          </div>
         </div>
       </div>
     </div>
