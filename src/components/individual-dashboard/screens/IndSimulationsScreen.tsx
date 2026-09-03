@@ -39,6 +39,7 @@ import {
 } from "@/types/individual";
 import { cn } from "@/lib/utils";
 import { RecentSimulationsTable } from "../RecentSimulationsTable";
+import { useLearningLoop } from "@/context/LearningLoopContext";
 
 interface IndSimulationsScreenProps {
   onNavigateToTab?: (tabId: string) => void;
@@ -50,6 +51,14 @@ export const IndSimulationsScreen = memo(function IndSimulationsScreen({
   activeScenarioTitle,
 }: IndSimulationsScreenProps) {
   const { session } = useAccount();
+
+  let contextValue: ReturnType<typeof useLearningLoop> | null = null;
+  try {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    contextValue = useLearningLoop();
+  } catch {
+    contextValue = null;
+  }
 
   const scenarios: SimulationScenario[] = useMemo(
     () => [
@@ -109,6 +118,27 @@ export const IndSimulationsScreen = memo(function IndSimulationsScreen({
           "Hi, I want to change my shipping address before the item dispatches today.",
         attemptsCount: 0,
       },
+      {
+        id: "sim-4",
+        title: "Emergency Clinical Intake & Anxious Patient Support",
+        category: "Healthcare Support & Patient Care",
+        difficulty: "Intermediate",
+        estimatedTime: "10 mins",
+        objective:
+          "Validate an anxious family member's distress, collect urgent intake details calmly, and ensure clear clinical care triage.",
+        characterName: "Maria Santos",
+        characterRole: "Anxious Patient Relative",
+        expectedSkills: [
+          "Patient Empathy",
+          "Compassionate De-escalation",
+          "HIPAA Protocols",
+          "Calm Phrasing",
+        ],
+        initialAiMessage:
+          "Please, my father has been waiting in room 4 for over 45 minutes with severe chest discomfort! Nobody is telling us what's happening! We need a doctor immediately!",
+        attemptsCount: 1,
+        bestScore: "94%",
+      },
     ],
     [],
   );
@@ -131,20 +161,69 @@ export const IndSimulationsScreen = memo(function IndSimulationsScreen({
         "I have updated your dispatch address. A confirmation email is on its way.",
         "Is there anything else I can adjust for your order before it ships today?",
       ],
+      "sim-4": [
+        "I hear how terrifying this is, Maria. I am notifying the attending triage nurse right now.",
+        "Your father's safety is our top priority. Let me check his vitals chart immediately.",
+        "The physician is reviewing his ECG results right now. I will stay with you until she walks in.",
+      ],
     }),
     [],
   );
 
-  // Active Simulation State
+  // Derive matching scenario based on user's choice from Step 1 & Class
+  const targetScenarioId = useMemo(() => {
+    if (contextValue?.activeScenarioId) return contextValue.activeScenarioId;
+    if (contextValue?.activePath?.id === "path-healthcare-support") return "sim-4";
+    if (contextValue?.activePath?.id === "path-it-specialist") return "sim-2";
+    if (contextValue?.activePath?.id === "path-tech-support") return "sim-1";
+    return contextValue?.activePath?.startingScenarioId || "sim-1";
+  }, [contextValue?.activeScenarioId, contextValue?.activePath]);
+
+  const targetScenario = useMemo(() => {
+    return scenarios.find((s) => s.id === targetScenarioId) || scenarios[0];
+  }, [scenarios, targetScenarioId]);
+
+  // Active Simulation State — directly initialized to ACTIVE with the user's chosen scenario!
   const [selectedScenario, setSelectedScenario] = useState<SimulationScenario>(
-    scenarios[0],
+    () => targetScenario,
   );
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [messages, setMessages] = useState<ChatMessage[]>(() => [
+    {
+      id: `m-1`,
+      sender: "ai",
+      text: targetScenario.initialAiMessage,
+      timestamp: new Date().toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+    },
+  ]);
   const [inputText, setInputText] = useState("");
-  const [isSimActive, setIsSimActive] = useState(false);
+  const [isSimActive, setIsSimActive] = useState(true);
   const [isSimCompleted, setIsSimCompleted] = useState(false);
   const [isAiTyping, setIsAiTyping] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
+
+  // Update scenario if targetScenario changes based on career path selection
+  useEffect(() => {
+    if (targetScenario.id !== selectedScenario.id) {
+      setSelectedScenario(targetScenario);
+      setMessages([
+        {
+          id: `m-1`,
+          sender: "ai",
+          text: targetScenario.initialAiMessage,
+          timestamp: new Date().toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
+        },
+      ]);
+      setIsSimActive(true);
+      setIsSimCompleted(false);
+      setShowCompletedFeedback(false);
+    }
+  }, [targetScenario, selectedScenario.id]);
 
   // AI Feedback Generation Loading & Finished State
   const [isGeneratingFeedback, setIsGeneratingFeedback] = useState(false);
@@ -289,9 +368,16 @@ export const IndSimulationsScreen = memo(function IndSimulationsScreen({
 
     setTimeout(() => {
       setIsGeneratingFeedback(false);
-      setShowCompletedFeedback(true);
+      setShowCompletedFeedback(false);
+      setIsSimActive(true);
+      if (contextValue) {
+        contextValue.completeSimulation(94);
+      }
+      if (onNavigateToTab) {
+        onNavigateToTab("feedback");
+      }
     }, 2400);
-  }, []);
+  }, [contextValue, onNavigateToTab]);
 
   const handleCloseFeedbackAndGoHome = useCallback(() => {
     setShowCompletedFeedback(false);
@@ -301,18 +387,29 @@ export const IndSimulationsScreen = memo(function IndSimulationsScreen({
 
   return (
     <div className={cn("space-y-6", isFullscreen && "space-y-0")}>
-      {/* Top Banner (Only shown when not in active simulation or feedback) */}
-      {!isSimActive && !isGeneratingFeedback && !showCompletedFeedback && (
-        <div className="bg-[#12131c]/90 rounded-2xl p-5 border border-white/10 shadow-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      {/* Simulation Active Context Banner */}
+      {!isGeneratingFeedback && !showCompletedFeedback && isSimActive && (
+        <div className="bg-[#12131c]/90 rounded-2xl p-4 border border-white/10 shadow-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
-            <h2 className="text-xl font-bold text-white flex items-center gap-2">
-              <Zap className="w-5 h-5 text-orange-400" />
-              <span>Simulations = Practice in Realistic Situations</span>
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-400/30 text-xs text-orange-300 font-medium mb-1">
+              <Zap className="w-3.5 h-3.5 text-orange-400" />
+              <span>STEP 3: PRACTICE LAYER (APPLY WHAT YOU LEARNED)</span>
+            </div>
+            <h2 className="text-lg font-bold text-white flex items-center gap-2">
+              <span>{selectedScenario.title}</span>
             </h2>
             <p className="text-xs text-white/60 mt-0.5">
-              Interact with AI characters in realistic workplace scenarios to
-              apply your skills in real-time.
+              Practice scenario for <span className="text-orange-300 font-semibold">{contextValue?.activePath?.title || "Your Career Track"}</span>. Apply your skills in real time.
             </p>
+          </div>
+
+          <div className="flex items-center gap-2 shrink-0">
+            <button
+              onClick={() => onNavigateToTab && onNavigateToTab("classes")}
+              className="px-3.5 py-1.5 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold text-white/80 hover:text-white transition-colors cursor-pointer"
+            >
+              Review Class Theory
+            </button>
           </div>
         </div>
       )}
@@ -641,20 +738,27 @@ export const IndSimulationsScreen = memo(function IndSimulationsScreen({
           </div>
 
           {/* Bottom Actions */}
-          <div className="pt-2 flex items-center justify-between gap-3 border-t border-white/10">
+          <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-white/10">
             <button
               onClick={() => handleStartSimulation(selectedScenario)}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-orange-500 to-rose-500 text-white font-extrabold text-xs hover:opacity-90 transition-opacity cursor-pointer shadow-md"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-orange-500 to-rose-500 text-white font-extrabold text-xs hover:opacity-90 transition-opacity cursor-pointer shadow-md"
             >
               <RotateCcw className="w-3.5 h-3.5" />
               <span>Practice Scenario Again</span>
             </button>
 
             <button
-              onClick={handleCloseFeedbackAndGoHome}
-              className="px-6 py-2.5 rounded-full bg-white text-black font-extrabold text-xs hover:bg-white/90 transition-colors cursor-pointer shadow-md"
+              onClick={() => {
+                if (onNavigateToTab) {
+                  onNavigateToTab("feedback");
+                } else {
+                  handleCloseFeedbackAndGoHome();
+                }
+              }}
+              className="w-full sm:w-auto px-6 py-2.5 rounded-full bg-white text-black font-extrabold text-xs hover:bg-white/90 transition-colors cursor-pointer shadow-md flex items-center justify-center gap-2"
             >
-              Done & View Recent Simulations Table &rarr;
+              <span>View Demonstrated Skills & Next Steps</span>
+              <ArrowRight className="w-4 h-4 text-orange-500" />
             </button>
           </div>
         </div>
@@ -929,66 +1033,24 @@ export const IndSimulationsScreen = memo(function IndSimulationsScreen({
           </div>
         )}
 
-      {/* 4. SCENARIOS BROWSER GRID & RECENT SIMULATIONS TABLE (Default state when not in live sim) */}
+      {/* Fallback state when not in live sim: Resume active scenario */}
       {!isGeneratingFeedback && !showCompletedFeedback && !isSimActive && (
-        <div className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {scenarios.map((sc) => (
-              <div
-                key={sc.id}
-                className="bg-[#12131c]/90 rounded-2xl p-5 border border-white/10 shadow-lg flex flex-col justify-between space-y-4 hover:border-orange-400/40 transition-colors"
-              >
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-orange-500/10 text-orange-300 border border-orange-400/20">
-                      {sc.difficulty}
-                    </span>
-                    {sc.bestScore && (
-                      <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
-                        Best: {sc.bestScore}
-                      </span>
-                    )}
-                  </div>
-
-                  <h3 className="text-base font-bold text-white leading-snug">
-                    {sc.title}
-                  </h3>
-
-                  <p className="text-xs text-white/60 leading-relaxed min-h-[48px]">
-                    {sc.objective}
-                  </p>
-
-                  <div className="flex items-center gap-3 text-xs text-white/50 font-mono pt-1">
-                    <div className="flex items-center gap-1">
-                      <Clock className="w-3.5 h-3.5 text-orange-400" />
-                      <span>{sc.estimatedTime}</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <MessageSquare className="w-3.5 h-3.5 text-rose-400" />
-                      <span>{sc.characterRole}</span>
-                    </div>
-                  </div>
-                </div>
-
-                <button
-                  onClick={() => handleStartSimulation(sc)}
-                  className="w-full py-3 rounded-full bg-gradient-to-r from-orange-500 to-rose-500 hover:opacity-95 text-white text-xs font-extrabold transition-colors shadow-md cursor-pointer flex items-center justify-center gap-2"
-                >
-                  <Play className="w-4 h-4 fill-current" />
-                  <span>Start Simulation Scenario</span>
-                </button>
-              </div>
-            ))}
+        <div className="bg-[#12131c]/90 rounded-2xl p-8 border border-orange-400/30 shadow-xl text-center space-y-4 max-w-lg mx-auto">
+          <div className="w-12 h-12 rounded-2xl bg-orange-500/20 border border-orange-400/40 flex items-center justify-center text-orange-400 mx-auto">
+            <Zap className="w-6 h-6" />
           </div>
-
-          {/* RECENT COMPLETED SIMULATIONS TABLE */}
-          <RecentSimulationsTable
-            onLaunchSimulation={(title) => {
-              const found =
-                scenarios.find((s) => s.title === title) || scenarios[0];
-              handleStartSimulation(found);
-            }}
-          />
+          <div className="space-y-1">
+            <h3 className="text-lg font-bold text-white">Practice Simulation Ready</h3>
+            <p className="text-xs text-white/60 max-w-sm mx-auto">
+              Ready to practice for <span className="text-orange-300 font-semibold">{selectedScenario.title}</span>?
+            </p>
+          </div>
+          <button
+            onClick={() => handleStartSimulation(selectedScenario)}
+            className="px-6 py-2.5 rounded-full bg-gradient-to-r from-orange-500 to-rose-500 hover:opacity-95 text-white text-xs font-bold transition-all shadow-md cursor-pointer"
+          >
+            Start Live Simulation
+          </button>
         </div>
       )}
     </div>
