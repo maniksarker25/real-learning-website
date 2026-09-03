@@ -17,101 +17,59 @@ import {
 } from "lucide-react";
 import { CareerPath } from "@/types/individual";
 import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
+import { useLearningLoop, DEFAULT_CAREER_PATHS } from "@/context/LearningLoopContext";
 
 interface IndPathfinderScreenProps {
-  onSelectPath: (path: CareerPath) => void;
-  onStartClass: (classId: string) => void;
+  onSelectPath?: (path: CareerPath) => void;
+  onStartClass?: (classId: string) => void;
 }
 
 export const IndPathfinderScreen = memo(function IndPathfinderScreen({
   onSelectPath,
   onStartClass,
 }: IndPathfinderScreenProps) {
-  const careerPaths: CareerPath[] = useMemo(
-    () => [
-      {
-        id: "path-tech-support",
-        title: "Technical Support Specialist",
-        category: "Tech & Helpdesk Operations",
-        description:
-          "Master L1/L2 diagnostic workflows, active customer de-escalation, network triage, and incident ticket resolution.",
-        matchScore: 96,
-        startingClassId: "class-1",
-        startingScenarioId: "sim-1",
-        targetJobRoles: [
-          "Technical Support Specialist",
-          "Help Desk Analyst",
-          "IT Support Associate",
-        ],
-        coreSkills: [
-          "Troubleshooting",
-          "Customer Empathy",
-          "Active Listening",
-          "SLA Management",
-        ],
-        avgSalaryRange: "$52,000 - $74,000/yr",
-      },
-      {
-        id: "path-cust-success",
-        title: "Customer Success & Escalations",
-        category: "Client Relationship & Retention",
-        description:
-          "Learn key account retention techniques, high-stakes conflict resolution, non-confrontational phrasing, and action agreements.",
-        matchScore: 92,
-        startingClassId: "class-1",
-        startingScenarioId: "sim-3",
-        targetJobRoles: [
-          "Customer Success Specialist",
-          "Client Care Representative",
-          "Retention Lead",
-        ],
-        coreSkills: [
-          "De-escalation",
-          "Positive Framing",
-          "Communication",
-          "Account Recovery",
-        ],
-        avgSalaryRange: "$55,000 - $80,000/yr",
-      },
-      {
-        id: "path-network-triage",
-        title: "L1 Network & Systems Triage",
-        category: "Infrastructure Support",
-        description:
-          "Focus on rapid network diagnostic steps, escalation protocols under high SLA pressure, and clear status updates.",
-        matchScore: 88,
-        startingClassId: "class-2",
-        startingScenarioId: "sim-2",
-        targetJobRoles: [
-          "NOC L1 Analyst",
-          "Network Support Tech",
-          "Systems Operator",
-        ],
-        coreSkills: [
-          "Network Triage",
-          "System Diagnostics",
-          "Escalation Protocols",
-        ],
-        avgSalaryRange: "$58,000 - $82,000/yr",
-      },
-    ],
-    []
-  );
+  const router = useRouter();
+
+  let contextValue: ReturnType<typeof useLearningLoop> | null = null;
+  try {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    contextValue = useLearningLoop();
+  } catch {
+    contextValue = null;
+  }
+  const careerPaths: CareerPath[] = DEFAULT_CAREER_PATHS;
 
   const [selectedPath, setSelectedPath] = useState<CareerPath>(careerPaths[0]);
 
   const handleChoosePath = useCallback(
     (path: CareerPath) => {
       setSelectedPath(path);
-      onSelectPath(path);
+      if (onSelectPath) {
+        onSelectPath(path);
+      } else if (contextValue) {
+        contextValue.selectCareerPath(path);
+      }
     },
-    [onSelectPath]
+    [onSelectPath, contextValue]
   );
 
   const handleLaunchPath = useCallback(() => {
-    onSelectPath(selectedPath);
-    onStartClass(selectedPath.startingClassId);
-  }, [onSelectPath, onStartClass, selectedPath]);
+    if (onSelectPath) {
+      onSelectPath(selectedPath);
+    } else if (contextValue) {
+      contextValue.selectCareerPath(selectedPath);
+    }
+
+    if (onStartClass) {
+      onStartClass(selectedPath.startingClassId);
+    } else if (contextValue) {
+      contextValue.startClass(selectedPath.startingClassId);
+      router.push("/user-dashboard/classes");
+    } else {
+      router.push("/user-dashboard/classes");
+    }
+  }, [onSelectPath, onStartClass, selectedPath, contextValue, router]);
 
   return (
     <div className="space-y-6">

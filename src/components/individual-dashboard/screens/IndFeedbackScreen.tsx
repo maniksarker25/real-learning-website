@@ -14,6 +14,9 @@ import {
 } from "lucide-react";
 import { SimulationFeedback } from "@/types/individual";
 import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
+import { useLearningLoop } from "@/context/LearningLoopContext";
+import { RecentSimulationsTable } from "../RecentSimulationsTable";
 
 interface IndFeedbackScreenProps {
   onNavigateToTab?: (tabId: string) => void;
@@ -22,7 +25,16 @@ interface IndFeedbackScreenProps {
 export const IndFeedbackScreen = memo(function IndFeedbackScreen({
   onNavigateToTab,
 }: IndFeedbackScreenProps) {
-  const feedbackData: SimulationFeedback = {
+  const router = useRouter();
+
+  let contextValue: ReturnType<typeof useLearningLoop> | null = null;
+  try {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    contextValue = useLearningLoop();
+  } catch {
+    contextValue = null;
+  }
+  const fallbackFeedback: SimulationFeedback = {
     scenarioId: "sim-1",
     scenarioTitle: "Handling an Upset Customer Requesting Immediate Refund",
     overallScore: 92,
@@ -69,17 +81,40 @@ export const IndFeedbackScreen = memo(function IndFeedbackScreen({
     ],
   };
 
+  const feedbackData: SimulationFeedback = contextValue?.feedback || fallbackFeedback;
+
   const handlePracticeAgain = useCallback(() => {
+    if (contextValue) {
+      contextValue.chooseNextStep("repeat_skill");
+    }
     if (onNavigateToTab) {
       onNavigateToTab("simulations");
+    } else {
+      router.push("/user-dashboard/simulations");
     }
-  }, [onNavigateToTab]);
+  }, [contextValue, onNavigateToTab, router]);
 
   const handleGoToLesson = useCallback(() => {
+    if (contextValue) {
+      contextValue.chooseNextStep("next_class");
+    }
     if (onNavigateToTab) {
       onNavigateToTab("classes");
+    } else {
+      router.push("/user-dashboard/classes");
     }
-  }, [onNavigateToTab]);
+  }, [contextValue, onNavigateToTab, router]);
+
+  const handleTryHarderSimulation = useCallback(() => {
+    if (contextValue) {
+      contextValue.chooseNextStep("harder_simulation");
+    }
+    if (onNavigateToTab) {
+      onNavigateToTab("simulations");
+    } else {
+      router.push("/user-dashboard/simulations");
+    }
+  }, [contextValue, onNavigateToTab, router]);
 
   return (
     <div className="space-y-6">
@@ -334,7 +369,7 @@ export const IndFeedbackScreen = memo(function IndFeedbackScreen({
               </p>
             </div>
             <button
-              onClick={handlePracticeAgain}
+              onClick={handleTryHarderSimulation}
               className="w-full py-3 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition-colors cursor-pointer flex items-center justify-center gap-2"
             >
               <span>Try Harder Simulation</span>
@@ -367,6 +402,13 @@ export const IndFeedbackScreen = memo(function IndFeedbackScreen({
             </button>
           </div>
         </div>
+      </div>
+
+      {/* Historical Simulation Records Table */}
+      <div className="pt-2">
+        <RecentSimulationsTable
+          onLaunchSimulation={() => router.push("/user-dashboard/simulations")}
+        />
       </div>
     </div>
   );

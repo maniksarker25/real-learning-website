@@ -12,8 +12,10 @@ import {
   Clock,
   Play,
   RotateCcw,
+  Compass,
 } from "lucide-react";
 import { useAccount } from "@/context/AccountContext";
+import { useLearningLoop } from "@/context/LearningLoopContext";
 import { cn } from "@/lib/utils";
 
 import { RecentSimulationsTable } from "../RecentSimulationsTable";
@@ -28,6 +30,36 @@ export const IndHomeScreen = memo(function IndHomeScreen({
   onLaunchSimulation,
 }: IndHomeScreenProps) {
   const { session } = useAccount();
+
+  let contextValue: ReturnType<typeof useLearningLoop> | null = null;
+  try {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    contextValue = useLearningLoop();
+  } catch {
+    contextValue = null;
+  }
+
+  const activePathTitle =
+    contextValue?.activePath?.title || "Technical Support Specialist";
+  const currentStep = contextValue?.currentStep || "class";
+
+  const currentStepTab =
+    currentStep === "pathfinder"
+      ? "pathfinder"
+      : currentStep === "class"
+      ? "classes"
+      : currentStep === "simulator"
+      ? "simulations"
+      : "feedback";
+
+  const currentStepLabel =
+    currentStep === "pathfinder"
+      ? "1. Discovery & Baseline"
+      : currentStep === "class"
+      ? "2. Class (Theory & Fundamentals)"
+      : currentStep === "simulator"
+      ? "3. Simulator (Practice Layer)"
+      : "4-6. AI Feedback & Demonstrated Skills";
 
   const handleContinueClass = useCallback(() => {
     onNavigateToTab("classes");
@@ -69,6 +101,44 @@ export const IndHomeScreen = memo(function IndHomeScreen({
         >
           View Goal Roadmap
         </button>
+      </div>
+
+      {/* AI Pathfinder GPS Status Banner */}
+      <div className="bg-gradient-to-r from-orange-500/15 via-[#161726] to-[#0e0f18] rounded-2xl p-5 border border-orange-400/40 shadow-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div className="flex items-start gap-3">
+          <div className="w-10 h-10 rounded-xl bg-orange-500/20 border border-orange-400/30 flex items-center justify-center text-orange-400 shrink-0">
+            <Compass className="w-5 h-5" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="text-[10px] font-mono font-bold uppercase text-orange-300 bg-orange-500/20 px-2 py-0.5 rounded">
+                RL LEARNING GPS
+              </span>
+              <span className="text-xs font-bold text-white">
+                PATH: {activePathTitle}
+              </span>
+            </div>
+            <p className="text-xs text-white/70 mt-1 max-w-xl">
+              Active Stage: <span className="text-white font-bold">{currentStepLabel}</span>. Complete your class, enter the connected practice simulator, and evaluate your demonstrated skills.
+            </p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2 shrink-0">
+          <button
+            onClick={() => onNavigateToTab("pathfinder")}
+            className="px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition-colors cursor-pointer"
+          >
+            Change Path
+          </button>
+          <button
+            onClick={() => onNavigateToTab(currentStepTab)}
+            className="px-5 py-2 rounded-full bg-white text-black hover:bg-white/90 text-xs font-black transition-colors shadow cursor-pointer flex items-center gap-1.5"
+          >
+            <span>Resume Loop</span>
+            <ArrowRight className="w-3.5 h-3.5 text-orange-500" />
+          </button>
+        </div>
       </div>
       {/* Progress Summary High-Level Metrics */}
       <div className="bg-[#12131c]/90 rounded-2xl p-5 border border-white/10 shadow-lg space-y-4">

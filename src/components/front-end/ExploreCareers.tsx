@@ -100,7 +100,7 @@ export default function ExploreCareers() {
               </div>
 
               <h3 className="text-xl font-bold text-white tracking-tight mb-2 group-hover:text-orange-300 transition-colors">
-                Customer Service
+                Customer service and communication
               </h3>
 
               <p className="text-xs sm:text-sm text-white/70 leading-relaxed font-normal mb-6">
@@ -272,7 +272,7 @@ export default function ExploreCareers() {
               </div>
 
               <h3 className="text-xl font-bold text-white tracking-tight mb-2 group-hover:text-orange-300 transition-colors">
-                Healthcare Support
+                Healthcare suport & patient supprot
               </h3>
 
               <p className="text-xs sm:text-sm text-white/70 leading-relaxed font-normal mb-6">
