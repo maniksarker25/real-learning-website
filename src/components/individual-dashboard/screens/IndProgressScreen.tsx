@@ -4,6 +4,7 @@ import React, { memo } from "react";
 import { BarChart3, TrendingUp, Award, CheckCircle2, Flame, Trophy, ShieldCheck } from "lucide-react";
 import { useAccount } from "@/context/AccountContext";
 import { cn } from "@/lib/utils";
+import { RecentSimulationsTable } from "../RecentSimulationsTable";
 
 export const IndProgressScreen = memo(function IndProgressScreen() {
   const { session } = useAccount();
@@ -94,6 +95,11 @@ export const IndProgressScreen = memo(function IndProgressScreen() {
             </div>
           ))}
         </div>
+      </div>
+
+      {/* Recent Practice Simulations & Feedback History */}
+      <div className="space-y-3 pt-2">
+        <RecentSimulationsTable />
       </div>
     </div>
   );

@@ -1,19 +1,21 @@
 "use client";
 
-import React, { useCallback } from "react";
-import { IndSimulationsScreen } from "@/components/individual-dashboard/screens/IndSimulationsScreen";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useLearningLoop } from "@/context/LearningLoopContext";
 
 export default function UserSimulationsPage() {
   const router = useRouter();
+  const { setStep } = useLearningLoop();
 
-  const handleNavigateToTab = useCallback(
-    (tabId: string) => {
-      if (tabId === "dashboard") router.push("/user-dashboard");
-      else router.push(`/user-dashboard/${tabId}`);
-    },
-    [router]
+  useEffect(() => {
+    setStep("simulator");
+    router.replace("/user-dashboard");
+  }, [setStep, router]);
+
+  return (
+    <div className="p-8 text-center text-xs text-white/50">
+      Loading Learning GPS Simulator...
+    </div>
   );
-
-  return <IndSimulationsScreen onNavigateToTab={handleNavigateToTab} />;
 }

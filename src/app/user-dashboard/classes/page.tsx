@@ -1,8 +1,21 @@
 "use client";
 
-import React from "react";
-import { IndClassesScreen } from "@/components/individual-dashboard/screens/IndClassesScreen";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useLearningLoop } from "@/context/LearningLoopContext";
 
 export default function UserClassesPage() {
-  return <IndClassesScreen />;
+  const router = useRouter();
+  const { setStep } = useLearningLoop();
+
+  useEffect(() => {
+    setStep("class");
+    router.replace("/user-dashboard");
+  }, [setStep, router]);
+
+  return (
+    <div className="p-8 text-center text-xs text-white/50">
+      Loading Learning GPS Class...
+    </div>
+  );
 }

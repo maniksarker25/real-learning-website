@@ -123,29 +123,27 @@ const AccountContext = createContext<AccountContextType | undefined>(
 );
 
 export function AccountProvider({ children }: { children: React.ReactNode }) {
-  const [session, setSession] = useState<UserSession>(defaultSession);
-  const [isInitialized, setIsInitialized] = useState(false);
-
-  // Read saved session on mount
-  useEffect(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        setSession({
-          ...defaultSession,
-          ...parsed,
-          memberships: parsed.memberships || defaultMemberships,
-          notifications: parsed.notifications || defaultNotifications,
-          orgRole: parsed.orgRole || "owner",
-        });
+  const [session, setSession] = useState<UserSession>(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          return {
+            ...defaultSession,
+            ...parsed,
+            memberships: parsed.memberships || defaultMemberships,
+            notifications: parsed.notifications || defaultNotifications,
+            orgRole: parsed.orgRole || "owner",
+          };
+        }
+      } catch {
+        // Ignore storage errors
       }
-    } catch {
-      // Ignore storage errors
-    } finally {
-      setIsInitialized(true);
     }
-  }, []);
+    return defaultSession;
+  });
+  const [isInitialized, setIsInitialized] = useState(true);
 
   // Sync state changes to localStorage
   useEffect(() => {
