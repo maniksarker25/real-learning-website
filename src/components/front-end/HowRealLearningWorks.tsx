@@ -1,9 +1,20 @@
 "use client";
 
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef, useCallback, useSyncExternalStore } from "react";
+const emptySubscribe = () => () => {};
 import { motion, AnimatePresence } from "framer-motion";
 import { LEARNING_STEPS } from "./learning-steps.data";
-import { Zap, ArrowRight, CheckCircle2, Play, Pause } from "lucide-react";
+import {
+  Zap,
+  ArrowRight,
+  CheckCircle2,
+  Play,
+  Pause,
+  Compass,
+  BookOpen,
+  MessageSquare,
+  BarChart3,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface PathSegment {
@@ -25,7 +36,7 @@ export default function HowRealLearningWorks() {
   const [isAutoPlaying, setIsAutoPlaying] = useState<boolean>(true);
   const [pathSegments, setPathSegments] = useState<PathSegment[]>([]);
   const [isDesktop, setIsDesktop] = useState<boolean>(false);
-  const [mounted, setMounted] = useState<boolean>(false);
+  const mounted = useSyncExternalStore(emptySubscribe, () => true, () => false);
 
   const setCardRef = (id: string, el: HTMLDivElement | null) => {
     if (el) {
@@ -112,8 +123,9 @@ export default function HowRealLearningWorks() {
   }, []);
 
   useEffect(() => {
-    setMounted(true);
-    calculatePaths();
+    const rafId = requestAnimationFrame(() => {
+      calculatePaths();
+    });
 
     const handleResize = () => calculatePaths();
     window.addEventListener("resize", handleResize);
@@ -122,6 +134,7 @@ export default function HowRealLearningWorks() {
     if (containerRef.current) observer.observe(containerRef.current);
 
     return () => {
+      cancelAnimationFrame(rafId);
       window.removeEventListener("resize", handleResize);
       observer.disconnect();
     };
@@ -210,6 +223,84 @@ export default function HowRealLearningWorks() {
           >
             Build real-world skills through realistic scenarios, AI conversations, and actionable feedback.
           </motion.p>
+        </div>
+
+        {/* RL LEARNING GPS LOOP Interactive Demonstration */}
+        <div className="mb-12 bg-[#0f1019]/90 border border-white/10 rounded-2xl p-5 shadow-2xl backdrop-blur-md space-y-3 max-w-5xl mx-auto">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-b border-white/10 pb-3">
+            <div className="flex items-center gap-2">
+              <div className="w-7 h-7 rounded-lg bg-orange-500/20 border border-orange-400/40 flex items-center justify-center text-orange-400">
+                <Zap className="w-4 h-4" />
+              </div>
+              <div>
+                <h4 className="text-xs font-black uppercase tracking-wider text-white flex items-center gap-2 flex-wrap">
+                  <span>RL LEARNING GPS LOOP</span>
+                  <span className="text-[10px] font-mono font-normal text-orange-300 bg-orange-500/10 px-2.5 py-0.5 rounded-full border border-orange-400/20">
+                    ACTIVE PATH: Tech Support
+                  </span>
+                </h4>
+              </div>
+            </div>
+
+            <div className="text-[10px] font-mono text-white/50 flex items-center gap-2">
+              <span>Step 3 of 6</span>
+              <div className="w-16 h-1.5 bg-black/60 rounded-full overflow-hidden border border-white/10">
+                <div className="h-full bg-gradient-to-r from-orange-500 to-rose-500 rounded-full w-[50%]" />
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
+            {[
+              { num: "#1", label: "Pathfinder", sub: "Where Am I? & Paths", icon: Compass, active: false, done: true },
+              { num: "#2", label: "Class", sub: "Learn Fundamentals", icon: BookOpen, active: false, done: true },
+              { num: "#3", label: "Simulator", sub: "Practice Layer", icon: Zap, active: true, done: false },
+              { num: "#4", label: "AI Feedback", sub: "Performance Breakdown", icon: MessageSquare, active: false, done: false },
+              { num: "#5", label: "Skill Progress", sub: "Demonstrated Gains", icon: BarChart3, active: false, done: false },
+              { num: "#6", label: "Next Step", sub: "GPS Guidance", icon: ArrowRight, active: false, done: false },
+            ].map((st, i) => (
+              <div
+                key={st.num}
+                className={cn(
+                  "relative p-3 rounded-xl border flex flex-col justify-between space-y-2 transition-all",
+                  st.active
+                    ? "bg-gradient-to-br from-orange-500/20 via-[#161826] to-[#0d0e15] border-orange-400/60 shadow-lg scale-[1.02]"
+                    : st.done
+                    ? "bg-[#12131d]/80 border-emerald-500/30 text-emerald-300"
+                    : "bg-black/40 border-white/10 text-white/60"
+                )}
+              >
+                <div className="flex items-center justify-between">
+                  <div
+                    className={cn(
+                      "w-6 h-6 rounded-lg flex items-center justify-center text-xs",
+                      st.active
+                        ? "bg-orange-500 text-white"
+                        : st.done
+                        ? "bg-emerald-500/20 text-emerald-400"
+                        : "bg-white/5 text-white/40"
+                    )}
+                  >
+                    {st.done ? (
+                      <CheckCircle2 className="w-3.5 h-3.5" />
+                    ) : (
+                      <st.icon className="w-3 h-3" />
+                    )}
+                  </div>
+                  <span className="text-[9px] font-mono font-bold text-white/40">{st.num}</span>
+                </div>
+                <div>
+                  <div className="text-xs font-extrabold text-white">{st.label}</div>
+                  <div className="text-[9px] text-white/50 truncate font-sans">{st.sub}</div>
+                </div>
+                {i < 5 && (
+                  <div className="hidden lg:block absolute -right-2 top-1/2 -translate-y-1/2 text-white/20 text-[10px]">
+                    ➔
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Workflow Diagram Container */}

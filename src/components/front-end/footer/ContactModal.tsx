@@ -48,7 +48,7 @@ export const ContactModal = memo(function ContactModal({
               <div>
                 <h3 className="text-xl font-bold text-white">Contact Us</h3>
                 <p className="text-xs text-white/60">
-                  We'd love to hear from you. Send us a message below.
+                  We&apos;d love to hear from you. Send us a message below.
                 </p>
               </div>
             </div>

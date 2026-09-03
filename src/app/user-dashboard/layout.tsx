@@ -20,6 +20,7 @@ import {
   CheckCircle2,
   Sparkles,
   ArrowRight,
+  Compass,
 } from "lucide-react";
 import { useAccount } from "@/context/AccountContext";
 import { usePathname, useRouter } from "next/navigation";
@@ -28,6 +29,8 @@ import { cn } from "@/lib/utils";
 import { NotificationDropdown } from "@/components/notifications/NotificationDropdown";
 import Image from "next/image";
 import { ImageConstants } from "@/constant/image.index";
+import { LearningLoopProvider } from "@/context/LearningLoopContext";
+import { LearningLoopStepper } from "@/components/individual-dashboard/LearningLoopStepper";
 
 export default memo(function UserDashboardLayout({
   children,
@@ -60,23 +63,26 @@ export default memo(function UserDashboardLayout({
     [switchWorkspace, router],
   );
 
-  const navItems = useMemo(
+  interface NavItem {
+    href: string;
+    label: string;
+    icon: React.ElementType;
+    count?: string;
+  }
+
+  const navItems: NavItem[] = useMemo(
     () => [
-      { href: "/user-dashboard", label: "Dashboard", icon: LayoutDashboard },
       {
-        href: "/user-dashboard/classes",
-        label: "Classes",
-        icon: BookOpen,
-        count: "3",
+        href: "/user-dashboard",
+        label: "Learning GPS (Practice)",
+        icon: Compass,
       },
       {
-        href: "/user-dashboard/simulations",
-        label: "Simulations",
-        icon: Zap,
-        count: "3",
+        href: "/user-dashboard/progress",
+        label: "Recent Practice & Growth",
+        icon: BarChart3,
       },
-      { href: "/user-dashboard/progress", label: "Progress", icon: BarChart3 },
-      { href: "/user-dashboard/goals", label: "Goals", icon: Target },
+      { href: "/user-dashboard/goals", label: "Goals & Careers", icon: Target },
       {
         href: "/user-dashboard/settings",
         label: "Profile / Settings",
@@ -86,7 +92,7 @@ export default memo(function UserDashboardLayout({
     [],
   );
 
-  return (
+  const content = (
     <div className="min-h-screen bg-[#07080c] text-slate-100 font-sans flex flex-col selection:bg-orange-500 selection:text-white">
       {/* Top Application Header */}
       <header className="sticky top-0 z-50 bg-[#0d0e15]/95 backdrop-blur-md border-b border-white/10 px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
@@ -380,10 +386,15 @@ export default memo(function UserDashboardLayout({
               </div>
             )}
 
+            {/* Learning Loop GPS Stepper pinned across all user dashboard views */}
+            <LearningLoopStepper />
+
             {children}
           </div>
         </main>
       </div>
     </div>
   );
+
+  return <LearningLoopProvider>{content}</LearningLoopProvider>;
 });

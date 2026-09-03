@@ -1,6 +1,6 @@
 "use client";
 
-import React, { memo } from "react";
+import React, { memo, useCallback } from "react";
 import {
   Compass,
   BookOpen,
@@ -13,10 +13,12 @@ import {
 } from "lucide-react";
 import { LearningLoopStep } from "@/types/individual";
 import { cn } from "@/lib/utils";
+import { useLearningLoop } from "@/context/LearningLoopContext";
+import { usePathname, useRouter } from "next/navigation";
 
 interface LearningLoopStepperProps {
-  currentStep: LearningLoopStep;
-  onSelectStep: (step: LearningLoopStep) => void;
+  currentStep?: LearningLoopStep;
+  onSelectStep?: (step: LearningLoopStep) => void;
   activePathTitle?: string;
 }
 
@@ -24,52 +26,109 @@ const STEPS: {
   id: LearningLoopStep;
   label: string;
   subLabel: string;
+  route: string;
   icon: React.ElementType;
 }[] = [
   {
     id: "pathfinder",
     label: "Pathfinder",
-    subLabel: "Where Am I? & Path",
+    subLabel: "Where Am I? & Paths",
+    route: "/user-dashboard/pathfinder",
     icon: Compass,
   },
   {
     id: "class",
     label: "Class",
     subLabel: "Learn Fundamentals",
+    route: "/user-dashboard/classes",
     icon: BookOpen,
   },
   {
     id: "simulator",
     label: "Simulator",
     subLabel: "Practice Layer",
+    route: "/user-dashboard/simulations",
     icon: Zap,
   },
   {
     id: "feedback",
     label: "AI Feedback",
-    subLabel: "Evaluate Performance",
+    subLabel: "Performance Breakdown",
+    route: "/user-dashboard/feedback",
     icon: MessageSquare,
   },
   {
     id: "skill_progress",
     label: "Skill Progress",
-    subLabel: "Demonstrated Growth",
+    subLabel: "Demonstrated Gains",
+    route: "/user-dashboard/feedback#skills",
     icon: BarChart3,
   },
   {
     id: "next_step",
     label: "Next Step",
     subLabel: "GPS Guidance",
+    route: "/user-dashboard/feedback#next-step",
     icon: ArrowRight,
   },
 ];
 
 export const LearningLoopStepper = memo(function LearningLoopStepper({
-  currentStep,
-  onSelectStep,
-  activePathTitle = "Technical Support Specialist",
+  currentStep: propCurrentStep,
+  onSelectStep: propOnSelectStep,
+  activePathTitle: propActivePathTitle,
 }: LearningLoopStepperProps) {
-  const currentStepIndex = STEPS.findIndex((s) => s.id === currentStep);
+  const router = useRouter();
+  const pathname = usePathname();
+
+  // Try consuming LearningLoopContext if available
+  let contextValue: ReturnType<typeof useLearningLoop> | null = null;
+  try {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    contextValue = useLearningLoop();
+  } catch {
+    contextValue = null;
+  }
+
+  // Derive active step from contextValue or route
+  const derivedStepFromRoute: LearningLoopStep | null = React.useMemo(() => {
+    if (pathname.includes("/user-dashboard/pathfinder")) return "pathfinder";
+    if (pathname.includes("/user-dashboard/classes")) return "class";
+    if (pathname.includes("/user-dashboard/simulations")) return "simulator";
+    if (pathname.includes("/user-dashboard/feedback")) return "feedback";
+    return null;
+  }, [pathname]);
+
+  const activeStep: LearningLoopStep =
+    propCurrentStep ||
+    (pathname === "/user-dashboard"
+      ? contextValue?.currentStep || "pathfinder"
+      : derivedStepFromRoute || contextValue?.currentStep || "pathfinder");
+
+  const activePathTitle =
+    propActivePathTitle ||
+    contextValue?.activePath?.title ||
+    "Customer service and communication";
+
+  const currentStepIndex = STEPS.findIndex((s) => s.id === activeStep);
+
+  const handleStepClick = useCallback(
+    (step: (typeof STEPS)[number]) => {
+      if (propOnSelectStep) {
+        propOnSelectStep(step.id);
+        return;
+      }
+
+      if (contextValue) {
+        contextValue.setStep(step.id);
+      }
+
+      if (pathname !== "/user-dashboard") {
+        router.push("/user-dashboard");
+      }
+    },
+    [propOnSelectStep, contextValue, pathname, router]
+  );
 
   return (
     <div className="bg-[#0f1019]/90 border border-white/10 rounded-2xl p-4 shadow-xl space-y-3">
@@ -80,8 +139,8 @@ export const LearningLoopStepper = memo(function LearningLoopStepper({
             <Sparkles className="w-4 h-4" />
           </div>
           <div>
-            <h4 className="text-xs font-black uppercase tracking-wider text-white flex items-center gap-2">
-              RL LEARNING GPS LOOP
+            <h4 className="text-xs font-black uppercase tracking-wider text-white flex items-center gap-2 flex-wrap">
+              <span>RL LEARNING GPS LOOP</span>
               <span className="text-[10px] font-mono font-normal text-orange-300 bg-orange-500/10 px-2 py-0.5 rounded-full border border-orange-400/20">
                 ACTIVE PATH: {activePathTitle}
               </span>
@@ -90,12 +149,15 @@ export const LearningLoopStepper = memo(function LearningLoopStepper({
         </div>
 
         <div className="text-[10px] font-mono text-white/50 flex items-center gap-2">
-          <span>Step {currentStepIndex + 1} of 6</span>
+          <span>Step {Math.max(1, currentStepIndex + 1)} of 6</span>
           <div className="w-16 h-1.5 bg-black/60 rounded-full overflow-hidden border border-white/10">
             <div
               className="h-full bg-gradient-to-r from-orange-500 to-rose-500 transition-all duration-300"
               style={{
-                width: `${Math.min(100, ((currentStepIndex + 1) / STEPS.length) * 100)}%`,
+                width: `${Math.min(
+                  100,
+                  ((Math.max(0, currentStepIndex) + 1) / STEPS.length) * 100
+                )}%`,
               }}
             />
           </div>
@@ -106,13 +168,13 @@ export const LearningLoopStepper = memo(function LearningLoopStepper({
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
         {STEPS.map((step, idx) => {
           const Icon = step.icon;
-          const isActive = currentStep === step.id;
+          const isActive = activeStep === step.id;
           const isCompleted = idx < currentStepIndex;
 
           return (
             <button
               key={step.id}
-              onClick={() => onSelectStep(step.id)}
+              onClick={() => handleStepClick(step)}
               className={cn(
                 "relative p-3 rounded-xl border text-left transition-all duration-200 cursor-pointer flex flex-col justify-between space-y-2 group",
                 isActive

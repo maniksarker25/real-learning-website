@@ -183,13 +183,27 @@ export const IndClassesScreen = memo(function IndClassesScreen({
       {/* Header Banner */}
       <div className="bg-[#12131c]/90 rounded-2xl p-5 border border-white/10 shadow-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-400/30 text-xs text-orange-300 font-medium mb-1.5">
+            <BookOpen className="w-3.5 h-3.5 text-orange-400" />
+            <span>STEP 2: CLASS (LEARN FUNDAMENTALS)</span>
+          </div>
           <h2 className="text-xl font-bold text-white flex items-center gap-2">
-            <BookOpen className="w-5 h-5 text-orange-400" />
-            <span>Classes & Knowledge Checks</span>
+            <span>Class Fundamentals & Knowledge Checks</span>
           </h2>
-          <p className="text-xs text-white/60 mt-0.5">
-            Learn core concepts, complete interactive lessons, and take quizzes to check your understanding.
+          <p className="text-xs text-white/60 mt-0.5 max-w-xl">
+            Study key principles and take the quiz before entering the simulator, or skip directly to the practice layer.
           </p>
+        </div>
+
+        {/* Quick Action Buttons: Skip Class or Jump to Simulator */}
+        <div className="flex items-center gap-2 shrink-0 flex-wrap">
+          <button
+            onClick={() => onLaunchPracticeSimulator && onLaunchPracticeSimulator("sim-1")}
+            className="px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 text-white text-xs font-bold transition-colors cursor-pointer flex items-center gap-1.5"
+          >
+            <Zap className="w-3.5 h-3.5 text-orange-400" />
+            <span>Skip Class & Start Simulation</span>
+          </button>
         </div>
       </div>
 

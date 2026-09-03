@@ -58,10 +58,10 @@ export const LEARNING_STEPS: LearningStepData[] = [
     preview: {
       tagline: "4 Specialized Career Simulation Tracks",
       highlights: [
-        "Customer Service & De-escalation",
-        "Tech Support & Troubleshooting",
-        "IT Specialist & Security Infrastructure",
-        "Healthcare Support & Clinical Triage",
+        "Customer service and communication",
+        "Tech Support",
+        "It Specialist",
+        "Healthcare suport & patient supprot",
       ],
       metrics: [
         { label: "Career Tracks", value: "4 Tracks" },
