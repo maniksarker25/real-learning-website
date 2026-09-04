@@ -43,6 +43,7 @@ export const IndPathfinderScreen = memo(function IndPathfinderScreen({
 
   const [selectedPath, setSelectedPath] = useState<CareerPath>(careerPaths[0]);
   const [isStarting, setIsStarting] = useState(false);
+  const [startingPathId, setStartingPathId] = useState<string | null>(null);
 
   const handleSelectCard = useCallback((path: CareerPath) => {
     setSelectedPath(path);
@@ -51,6 +52,7 @@ export const IndPathfinderScreen = memo(function IndPathfinderScreen({
   const handleLaunchPath = useCallback(
     (targetPath?: CareerPath) => {
       const pathToStart = targetPath || selectedPath;
+      setStartingPathId(pathToStart.id);
       setIsStarting(true);
 
       setTimeout(() => {
@@ -68,7 +70,7 @@ export const IndPathfinderScreen = memo(function IndPathfinderScreen({
         } else {
           router.push("/user-dashboard/classes");
         }
-      }, 550);
+      }, 600);
     },
     [onSelectPath, onStartClass, selectedPath, contextValue, router]
   );
@@ -168,10 +170,19 @@ export const IndPathfinderScreen = memo(function IndPathfinderScreen({
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {careerPaths.map((path) => {
             const isSelected = selectedPath.id === path.id;
+            const isThisPathStarting =
+              isStarting && (startingPathId === path.id || isSelected);
+
             return (
               <div
                 key={path.id}
-                onClick={() => handleSelectCard(path)}
+                onClick={() => {
+                  if (isSelected) {
+                    handleLaunchPath(path);
+                  } else {
+                    handleSelectCard(path);
+                  }
+                }}
                 className={cn(
                   "p-5 rounded-2xl border transition-colors duration-200 cursor-pointer flex flex-col justify-between space-y-4 group relative",
                   isSelected
@@ -251,7 +262,7 @@ export const IndPathfinderScreen = memo(function IndPathfinderScreen({
                         : "bg-white/5 hover:bg-white/10 text-white/70 hover:text-white border-white/10"
                     )}
                   >
-                    {isSelected && isStarting ? (
+                    {isThisPathStarting ? (
                       <>
                         <span>Starting Track...</span>
                         <Loader2 className="w-3.5 h-3.5 text-white animate-spin" />
