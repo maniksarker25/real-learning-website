@@ -168,6 +168,15 @@ export const DEFAULT_FEEDBACK: SimulationFeedback = {
   },
 };
 
+export const STEP_ORDER: LearningLoopStep[] = [
+  "pathfinder",
+  "class",
+  "simulator",
+  "feedback",
+  "skill_progress",
+  "next_step",
+];
+
 interface LearningLoopContextType {
   currentStep: LearningLoopStep;
   activePath: CareerPath;
@@ -176,6 +185,11 @@ interface LearningLoopContextType {
   demonstratedSkills: SkillLevel[];
   feedback: SimulationFeedback;
   simulationAttemptCount: number;
+  maxUnlockedStepIndex: number;
+  completedSteps: LearningLoopStep[];
+  isStepUnlocked: (step: LearningLoopStep) => boolean;
+  isStepCompleted: (step: LearningLoopStep) => boolean;
+  completeStep: (step: LearningLoopStep) => void;
   setStep: (step: LearningLoopStep) => void;
   selectCareerPath: (path: CareerPath) => void;
   startClass: (classId?: string) => void;
@@ -212,6 +226,15 @@ export function LearningLoopProvider({ children }: { children: React.ReactNode }
   const [currentStep, setCurrentStep] = useState<LearningLoopStep>(
     () => initialData.currentStep || "pathfinder"
   );
+  const [maxUnlockedStepIndex, setMaxUnlockedStepIndex] = useState<number>(
+    () =>
+      typeof initialData.maxUnlockedStepIndex === "number"
+        ? initialData.maxUnlockedStepIndex
+        : 0
+  );
+  const [completedSteps, setCompletedSteps] = useState<LearningLoopStep[]>(
+    () => (Array.isArray(initialData.completedSteps) ? initialData.completedSteps : [])
+  );
   const [activePath, setActivePath] = useState<CareerPath>(
     () => initialData.activePath || DEFAULT_CAREER_PATHS[0]
   );
@@ -235,6 +258,8 @@ export function LearningLoopProvider({ children }: { children: React.ReactNode }
   const persist = useCallback(
     (newState: Partial<{
       currentStep: LearningLoopStep;
+      maxUnlockedStepIndex: number;
+      completedSteps: LearningLoopStep[];
       activePath: CareerPath;
       activeClassId: string;
       activeScenarioId: string;
@@ -256,12 +281,52 @@ export function LearningLoopProvider({ children }: { children: React.ReactNode }
     []
   );
 
+  const isStepUnlocked = useCallback(
+    (step: LearningLoopStep) => {
+      const idx = STEP_ORDER.indexOf(step);
+      if (idx === -1) return true;
+      return idx <= maxUnlockedStepIndex;
+    },
+    [maxUnlockedStepIndex]
+  );
+
+  const isStepCompleted = useCallback(
+    (step: LearningLoopStep) => {
+      return completedSteps.includes(step);
+    },
+    [completedSteps]
+  );
+
+  const completeStep = useCallback(
+    (step: LearningLoopStep) => {
+      const stepIdx = STEP_ORDER.indexOf(step);
+      const nextMax = Math.max(maxUnlockedStepIndex, stepIdx + 1);
+      
+      setMaxUnlockedStepIndex(nextMax);
+      setCompletedSteps((prev) => {
+        if (!prev.includes(step)) {
+          const nextCompleted = [...prev, step];
+          persist({ completedSteps: nextCompleted, maxUnlockedStepIndex: nextMax });
+          return nextCompleted;
+        }
+        persist({ maxUnlockedStepIndex: nextMax });
+        return prev;
+      });
+    },
+    [maxUnlockedStepIndex, persist]
+  );
+
   const setStep = useCallback(
     (step: LearningLoopStep) => {
+      const idx = STEP_ORDER.indexOf(step);
+      if (idx !== -1 && idx > maxUnlockedStepIndex) {
+        // Step is locked - do not navigate
+        return;
+      }
       setCurrentStep(step);
       persist({ currentStep: step });
     },
-    [persist]
+    [maxUnlockedStepIndex, persist]
   );
 
   const selectCareerPath = useCallback(
@@ -269,39 +334,74 @@ export function LearningLoopProvider({ children }: { children: React.ReactNode }
       setActivePath(path);
       setActiveClassId(path.startingClassId);
       setActiveScenarioId(path.startingScenarioId);
-      setCurrentStep("class");
-      persist({
-        activePath: path,
-        activeClassId: path.startingClassId,
-        activeScenarioId: path.startingScenarioId,
-        currentStep: "class",
+      
+      // Complete pathfinder & unlock class (index 1)
+      const nextMax = Math.max(maxUnlockedStepIndex, 1);
+      setMaxUnlockedStepIndex(nextMax);
+      setCompletedSteps((prev) => {
+        const updated: LearningLoopStep[] = prev.includes("pathfinder") ? prev : [...prev, "pathfinder"];
+        persist({
+          activePath: path,
+          activeClassId: path.startingClassId,
+          activeScenarioId: path.startingScenarioId,
+          currentStep: "class",
+          maxUnlockedStepIndex: nextMax,
+          completedSteps: updated,
+        });
+        return updated;
       });
+      setCurrentStep("class");
     },
-    [persist]
+    [maxUnlockedStepIndex, persist]
   );
 
   const startClass = useCallback(
     (classId?: string) => {
       if (classId) {
         setActiveClassId(classId);
-        persist({ activeClassId: classId });
       }
+      
+      // Complete pathfinder & unlock class (index 1)
+      const nextMax = Math.max(maxUnlockedStepIndex, 1);
+      setMaxUnlockedStepIndex(nextMax);
+      setCompletedSteps((prev) => {
+        const updated: LearningLoopStep[] = prev.includes("pathfinder") ? prev : [...prev, "pathfinder"];
+        persist({
+          activeClassId: classId || activeClassId,
+          currentStep: "class",
+          maxUnlockedStepIndex: nextMax,
+          completedSteps: updated,
+        });
+        return updated;
+      });
       setCurrentStep("class");
-      persist({ currentStep: "class" });
     },
-    [persist]
+    [activeClassId, maxUnlockedStepIndex, persist]
   );
 
   const launchPracticeSimulator = useCallback(
     (scenarioId?: string) => {
       if (scenarioId) {
         setActiveScenarioId(scenarioId);
-        persist({ activeScenarioId: scenarioId });
       }
+      
+      // Complete class & unlock simulator (index 2)
+      const nextMax = Math.max(maxUnlockedStepIndex, 2);
+      setMaxUnlockedStepIndex(nextMax);
+      setCompletedSteps((prev) => {
+        let updated: LearningLoopStep[] = prev.includes("pathfinder") ? prev : [...prev, "pathfinder"];
+        if (!updated.includes("class")) updated = [...updated, "class"];
+        persist({
+          activeScenarioId: scenarioId || activeScenarioId,
+          currentStep: "simulator",
+          maxUnlockedStepIndex: nextMax,
+          completedSteps: updated,
+        });
+        return updated;
+      });
       setCurrentStep("simulator");
-      persist({ currentStep: "simulator" });
     },
-    [persist]
+    [activeScenarioId, maxUnlockedStepIndex, persist]
   );
 
   const completeSimulation = useCallback(
@@ -327,13 +427,29 @@ export function LearningLoopProvider({ children }: { children: React.ReactNode }
         }))
       );
 
-      setCurrentStep("feedback");
-      persist({
-        feedback: updatedFeedback,
-        currentStep: "feedback",
+      // Complete simulator & unlock feedback, skill_progress, next_step (unlock index 5)
+      const nextMax = Math.max(maxUnlockedStepIndex, 5);
+      setMaxUnlockedStepIndex(nextMax);
+      setCompletedSteps((prev) => {
+        let updated: LearningLoopStep[] = [...prev];
+        if (!updated.includes("pathfinder")) updated.push("pathfinder");
+        if (!updated.includes("class")) updated.push("class");
+        if (!updated.includes("simulator")) updated.push("simulator");
+        if (!updated.includes("feedback")) updated.push("feedback");
+        if (!updated.includes("skill_progress")) updated.push("skill_progress");
+        
+        persist({
+          feedback: updatedFeedback,
+          currentStep: "feedback",
+          maxUnlockedStepIndex: nextMax,
+          completedSteps: updated,
+        });
+        return updated;
       });
+
+      setCurrentStep("feedback");
     },
-    [persist]
+    [maxUnlockedStepIndex, persist]
   );
 
   const chooseNextStep = useCallback(
@@ -367,6 +483,8 @@ export function LearningLoopProvider({ children }: { children: React.ReactNode }
 
   const resetLoop = useCallback(() => {
     setCurrentStep("pathfinder");
+    setMaxUnlockedStepIndex(0);
+    setCompletedSteps([]);
     setActivePath(DEFAULT_CAREER_PATHS[0]);
     setActiveClassId("class-1");
     setActiveScenarioId("sim-1");
@@ -374,6 +492,8 @@ export function LearningLoopProvider({ children }: { children: React.ReactNode }
     setFeedback(DEFAULT_FEEDBACK);
     persist({
       currentStep: "pathfinder",
+      maxUnlockedStepIndex: 0,
+      completedSteps: [],
       activePath: DEFAULT_CAREER_PATHS[0],
       activeClassId: "class-1",
       activeScenarioId: "sim-1",
@@ -391,6 +511,11 @@ export function LearningLoopProvider({ children }: { children: React.ReactNode }
       demonstratedSkills,
       feedback,
       simulationAttemptCount,
+      maxUnlockedStepIndex,
+      completedSteps,
+      isStepUnlocked,
+      isStepCompleted,
+      completeStep,
       setStep,
       selectCareerPath,
       startClass,
@@ -407,6 +532,11 @@ export function LearningLoopProvider({ children }: { children: React.ReactNode }
       demonstratedSkills,
       feedback,
       simulationAttemptCount,
+      maxUnlockedStepIndex,
+      completedSteps,
+      isStepUnlocked,
+      isStepCompleted,
+      completeStep,
       setStep,
       selectCareerPath,
       startClass,

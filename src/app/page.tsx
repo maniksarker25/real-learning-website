@@ -11,8 +11,6 @@ import VideoShowcase from "@/components/front-end/VideoShowcase";
 import FeedbackSection from "@/components/front-end/FeedbackSection";
 import TrackProgress from "@/components/front-end/TrackProgress";
 import OrganizationDashboard from "@/components/front-end/OrganizationDashboard";
-import OrgDashboardLayout from "@/components/organization-dashboard/OrgDashboardLayout";
-import IndDashboardLayout from "@/components/individual-dashboard/IndDashboardLayout";
 import FooterCTA from "@/components/front-end/FooterCTA";
 import { useRouter } from "next/navigation";
 import { useAccount } from "@/context/AccountContext";
