@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback, useMemo, memo } from "react";
+import React, { useState, useCallback, useMemo, memo, useEffect } from "react";
 import {
   BookOpen,
   Clock,
@@ -27,6 +27,42 @@ export const IndClassesScreen = memo(function IndClassesScreen({
 }: IndClassesScreenProps) {
   const { session } = useAccount();
   const activeGoal = session.goal || "Customer Service";
+
+  // Step 2 Loading Screen State
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadingProgress, setLoadingProgress] = useState(15);
+  const [loadingStage, setLoadingStage] = useState(0);
+
+  useEffect(() => {
+    setIsLoading(true);
+    setLoadingProgress(15);
+    setLoadingStage(0);
+
+    const timer1 = setTimeout(() => {
+      setLoadingProgress(55);
+      setLoadingStage(1);
+    }, 350);
+
+    const timer2 = setTimeout(() => {
+      setLoadingProgress(85);
+      setLoadingStage(2);
+    }, 750);
+
+    const timer3 = setTimeout(() => {
+      setLoadingProgress(100);
+    }, 1050);
+
+    const timer4 = setTimeout(() => {
+      setIsLoading(false);
+    }, 1300);
+
+    return () => {
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+      clearTimeout(timer3);
+      clearTimeout(timer4);
+    };
+  }, []);
 
   // Selected Class & Quiz State
   const [selectedClassId, setSelectedClassId] = useState<string>("class-1");
@@ -181,6 +217,108 @@ export const IndClassesScreen = memo(function IndClassesScreen({
     });
     return Math.round((correct / currentClass.quiz.length) * 100);
   }, [quizSubmitted, currentClass.quiz, quizAnswers]);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-[480px] bg-[#12131c]/90 rounded-2xl border border-white/10 p-8 sm:p-12 shadow-2xl flex flex-col items-center justify-center text-center relative overflow-hidden space-y-8 animate-in fade-in duration-300">
+        {/* Glowing background ambient lights */}
+        <div className="absolute -top-24 -left-24 w-72 h-72 bg-orange-500/15 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-24 -right-24 w-72 h-72 bg-rose-500/15 rounded-full blur-3xl pointer-events-none" />
+
+        {/* Step Badge */}
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-orange-500/10 border border-orange-400/30 text-orange-300 text-xs font-mono font-bold tracking-wide uppercase shadow-inner">
+          <Sparkles className="w-3.5 h-3.5 text-orange-400 animate-pulse" />
+          <span>Step 2 Loading: Class & Fundamentals</span>
+        </div>
+
+        {/* Visual Animated Orb & Icon */}
+        <div className="relative flex items-center justify-center">
+          <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-orange-500 to-rose-500 opacity-25 blur-xl animate-pulse" />
+          <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-3xl bg-black/70 border border-orange-400/30 flex items-center justify-center relative shadow-2xl backdrop-blur-md">
+            <BookOpen className="w-9 h-9 sm:w-10 sm:h-10 text-orange-400 animate-bounce" />
+            <div className="absolute -top-1 -right-1">
+              <span className="relative flex h-3.5 w-3.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-orange-500"></span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Heading & Subtext */}
+        <div className="max-w-md space-y-2">
+          <h3 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight">
+            Preparing Your Class Modules
+          </h3>
+          <p className="text-xs text-white/60 leading-relaxed">
+            AI is compiling interactive lessons, workplace case studies, and knowledge evaluation checks for <span className="text-orange-300 font-semibold">{activeGoal}</span>.
+          </p>
+        </div>
+
+        {/* Progress Bar */}
+        <div className="w-full max-w-md space-y-2">
+          <div className="flex items-center justify-between text-xs font-mono">
+            <span className="text-white/50">Curriculum Initialization</span>
+            <span className="text-orange-400 font-bold">{loadingProgress}%</span>
+          </div>
+          <div className="w-full h-2.5 bg-black/60 rounded-full border border-white/10 p-0.5 overflow-hidden">
+            <div
+              className="h-full bg-gradient-to-r from-orange-500 via-rose-500 to-amber-400 rounded-full transition-all duration-300 ease-out shadow-[0_0_12px_rgba(249,115,22,0.6)]"
+              style={{ width: `${loadingProgress}%` }}
+            />
+          </div>
+        </div>
+
+        {/* Checklist Steps */}
+        <div className="w-full max-w-md bg-black/40 rounded-xl p-4 border border-white/10 space-y-2.5 text-left text-xs font-mono">
+          <div className="flex items-center gap-2.5">
+            {loadingStage > 0 ? (
+              <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+            ) : (
+              <Zap className="w-4 h-4 text-orange-400 animate-spin shrink-0" />
+            )}
+            <span className={cn(loadingStage > 0 ? "text-white/90" : "text-orange-300 font-semibold")}>
+              1. Synthesizing De-escalation Core Principles
+            </span>
+          </div>
+
+          <div className="flex items-center gap-2.5">
+            {loadingStage > 1 ? (
+              <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+            ) : loadingStage === 1 ? (
+              <Zap className="w-4 h-4 text-orange-400 animate-spin shrink-0" />
+            ) : (
+              <Clock className="w-4 h-4 text-white/30 shrink-0" />
+            )}
+            <span className={cn(loadingStage > 1 ? "text-white/90" : loadingStage === 1 ? "text-orange-300 font-semibold" : "text-white/40")}>
+              2. Structuring Case Studies & Active Exercises
+            </span>
+          </div>
+
+          <div className="flex items-center gap-2.5">
+            {loadingProgress === 100 ? (
+              <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+            ) : loadingStage === 2 ? (
+              <Zap className="w-4 h-4 text-orange-400 animate-spin shrink-0" />
+            ) : (
+              <Clock className="w-4 h-4 text-white/30 shrink-0" />
+            )}
+            <span className={cn(loadingProgress === 100 ? "text-white/90" : loadingStage === 2 ? "text-orange-300 font-semibold" : "text-white/40")}>
+              3. Initializing Knowledge Check Quiz Engine
+            </span>
+          </div>
+        </div>
+
+        {/* Quick Skip Link */}
+        <button
+          onClick={() => setIsLoading(false)}
+          className="text-[11px] text-white/40 hover:text-white underline underline-offset-4 cursor-pointer transition-colors pt-1"
+        >
+          Skip loading screen & enter class immediately
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
