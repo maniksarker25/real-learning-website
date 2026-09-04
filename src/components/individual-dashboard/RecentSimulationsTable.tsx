@@ -276,14 +276,7 @@ export const RecentSimulationsTable = memo(function RecentSimulationsTable({
       {/* Section Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-[#12131c]/90 rounded-2xl p-5 border border-white/10 shadow-lg">
         <div>
-          <div className="flex items-center gap-2 mb-1">
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-orange-500/10 text-orange-300 border border-orange-400/30">
-              {/* <Sparkles className="w-3 h-3 text-orange-400" /> */}
-              <span>AI PRACTICE LOGS</span>
-            </span>
-          </div>
           <h2 className="text-xl font-bold text-white flex items-center gap-2">
-            <Zap className="w-5 h-5 text-orange-400" />
             <span>Recent Completed Simulations</span>
           </h2>
           <p className="text-xs text-white/60 mt-0.5">

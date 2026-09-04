@@ -204,7 +204,6 @@ export const IndClassesScreen = memo(function IndClassesScreen({
             }
             className="px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 text-white text-xs font-bold transition-colors cursor-pointer flex items-center gap-1.5"
           >
-            <Zap className="w-3.5 h-3.5 text-orange-400" />
             <span>Skip Class & Start Simulation</span>
           </button>
         </div>
@@ -451,7 +450,6 @@ export const IndClassesScreen = memo(function IndClassesScreen({
               <div className="bg-gradient-to-br from-rose-500/20 via-[#161726] to-[#0e0f18] rounded-2xl p-6 border border-rose-400/50 shadow-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mt-6">
                 <div>
                   <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-500/20 text-rose-300 border border-rose-400/30 text-xs font-mono font-bold uppercase mb-2">
-                    <Zap className="w-3.5 h-3.5 text-rose-400" />
                     <span>STEP 3: PRACTICE LAYER (SIMULATOR)</span>
                   </div>
                   <h4 className="text-lg font-extrabold text-white">

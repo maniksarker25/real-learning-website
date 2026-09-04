@@ -172,8 +172,17 @@ export default memo(function IndDashboardLayout() {
           <div className="w-full space-y-4">
             {/* Learner Profile Card Header */}
             <div className="flex items-center gap-3 p-3 rounded-2xl bg-white/[0.03] border border-white/10">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-orange-500 to-rose-500 flex items-center justify-center text-white font-black text-xs shrink-0 shadow-md">
-                <User className="w-5 h-5" />
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-orange-500 to-rose-500 flex items-center justify-center text-white font-black text-xs shrink-0 shadow-md overflow-hidden">
+                {session.avatarUrl ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={session.avatarUrl}
+                    alt={session.name || "User Avatar"}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <User className="w-5 h-5 text-white" />
+                )}
               </div>
               <div className="truncate">
                 <div className="text-xs font-bold text-white leading-none truncate">
@@ -225,7 +234,6 @@ export default memo(function IndDashboardLayout() {
           <div className="hidden md:block bg-black/60 rounded-2xl p-3.5 border border-white/10 mt-auto text-xs space-y-2">
             <div className="flex items-center justify-between text-white/60">
               <span className="flex items-center gap-1.5 text-orange-400">
-                <Flame className="w-3.5 h-3.5" />
                 <span>Streak</span>
               </span>
               <span className="text-white font-mono font-bold">7 Days 🔥</span>

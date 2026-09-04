@@ -14,6 +14,7 @@ import {
   BookOpen,
   UserCheck,
   Award,
+  Loader2,
 } from "lucide-react";
 import { CareerPath } from "@/types/individual";
 import { cn } from "@/lib/utils";
@@ -41,27 +42,36 @@ export const IndPathfinderScreen = memo(function IndPathfinderScreen({
   const careerPaths: CareerPath[] = DEFAULT_CAREER_PATHS;
 
   const [selectedPath, setSelectedPath] = useState<CareerPath>(careerPaths[0]);
+  const [isStarting, setIsStarting] = useState(false);
 
   const handleSelectCard = useCallback((path: CareerPath) => {
     setSelectedPath(path);
   }, []);
 
-  const handleLaunchPath = useCallback(() => {
-    if (onSelectPath) {
-      onSelectPath(selectedPath);
-    } else if (contextValue) {
-      contextValue.selectCareerPath(selectedPath);
-    }
+  const handleLaunchPath = useCallback(
+    (targetPath?: CareerPath) => {
+      const pathToStart = targetPath || selectedPath;
+      setIsStarting(true);
 
-    if (onStartClass) {
-      onStartClass(selectedPath.startingClassId);
-    } else if (contextValue) {
-      contextValue.startClass(selectedPath.startingClassId);
-      router.push("/user-dashboard/classes");
-    } else {
-      router.push("/user-dashboard/classes");
-    }
-  }, [onSelectPath, onStartClass, selectedPath, contextValue, router]);
+      setTimeout(() => {
+        if (onSelectPath) {
+          onSelectPath(pathToStart);
+        } else if (contextValue) {
+          contextValue.selectCareerPath(pathToStart);
+        }
+
+        if (onStartClass) {
+          onStartClass(pathToStart.startingClassId);
+        } else if (contextValue) {
+          contextValue.startClass(pathToStart.startingClassId);
+          router.push("/user-dashboard/classes");
+        } else {
+          router.push("/user-dashboard/classes");
+        }
+      }, 550);
+    },
+    [onSelectPath, onStartClass, selectedPath, contextValue, router]
+  );
 
   return (
     <div className="space-y-6">
@@ -77,11 +87,16 @@ export const IndPathfinderScreen = memo(function IndPathfinderScreen({
         </div>
 
         <button
-          onClick={handleLaunchPath}
-          className="px-6 py-3 rounded-full bg-gradient-to-r from-orange-500 to-rose-500 hover:from-orange-600 hover:to-rose-600 text-white text-xs font-black transition-all shadow-lg hover:shadow-orange-500/20 cursor-pointer flex items-center gap-2 shrink-0"
+          onClick={() => handleLaunchPath()}
+          disabled={isStarting}
+          className="px-6 py-3 rounded-full bg-gradient-to-r from-orange-500 to-rose-500 hover:from-orange-600 hover:to-rose-600 text-white text-xs font-black transition-all shadow-lg hover:shadow-orange-500/20 cursor-pointer flex items-center gap-2 shrink-0 disabled:opacity-80"
         >
-          <span>Start Selected Pathway</span>
-          <ArrowRight className="w-4 h-4" />
+          <span>{isStarting ? "Starting Pathway..." : "Start Selected Pathway"}</span>
+          {isStarting ? (
+            <Loader2 className="w-4 h-4 text-white animate-spin" />
+          ) : (
+            <ArrowRight className="w-4 h-4" />
+          )}
         </button>
       </div>
 
@@ -223,20 +238,30 @@ export const IndPathfinderScreen = memo(function IndPathfinderScreen({
                     onClick={(e) => {
                       e.stopPropagation();
                       if (isSelected) {
-                        handleLaunchPath();
+                        handleLaunchPath(path);
                       } else {
                         handleSelectCard(path);
                       }
                     }}
+                    disabled={isStarting}
                     className={cn(
-                      "w-full h-9 px-3 rounded-full text-xs font-black border transition-all duration-200 cursor-pointer flex items-center justify-center gap-1.5 shrink-0",
+                      "w-full h-9 px-3 rounded-full text-xs font-black border transition-all duration-200 cursor-pointer flex items-center justify-center gap-1.5 shrink-0 disabled:opacity-80",
                       isSelected
                         ? "bg-gradient-to-r from-orange-500 to-rose-500 hover:from-orange-600 hover:to-rose-600 text-white border-transparent shadow-md shadow-orange-500/10"
                         : "bg-white/5 hover:bg-white/10 text-white/70 hover:text-white border-white/10"
                     )}
                   >
-                    <span>{isSelected ? "Start Track" : "Select Track"}</span>
-                    {isSelected && <ArrowRight className="w-3.5 h-3.5 text-white" />}
+                    {isSelected && isStarting ? (
+                      <>
+                        <span>Starting Track...</span>
+                        <Loader2 className="w-3.5 h-3.5 text-white animate-spin" />
+                      </>
+                    ) : (
+                      <>
+                        <span>{isSelected ? "Start Track" : "Select Track"}</span>
+                        {isSelected && <ArrowRight className="w-3.5 h-3.5 text-white" />}
+                      </>
+                    )}
                   </button>
                 </div>
               </div>
@@ -291,11 +316,16 @@ export const IndPathfinderScreen = memo(function IndPathfinderScreen({
             Ready to begin? Click below to enter your first Class and start the learning loop.
           </div>
           <button
-            onClick={handleLaunchPath}
-            className="w-full sm:w-auto px-6 py-3 rounded-full bg-white text-black hover:bg-white/90 text-xs font-black transition-colors shadow-lg cursor-pointer flex items-center justify-center gap-2"
+            onClick={() => handleLaunchPath()}
+            disabled={isStarting}
+            className="w-full sm:w-auto px-6 py-3 rounded-full bg-white text-black hover:bg-white/90 text-xs font-black transition-colors shadow-lg cursor-pointer flex items-center justify-center gap-2 disabled:opacity-80"
           >
-            <span>Enter Class & Begin Pathway</span>
-            <ArrowRight className="w-4 h-4 text-orange-500" />
+            <span>{isStarting ? "Starting Pathway..." : "Enter Class & Begin Pathway"}</span>
+            {isStarting ? (
+              <Loader2 className="w-4 h-4 text-orange-500 animate-spin" />
+            ) : (
+              <ArrowRight className="w-4 h-4 text-orange-500" />
+            )}
           </button>
         </div>
       </div>
