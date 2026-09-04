@@ -22,6 +22,7 @@ export interface UserSession {
   goal?: string;
   orgName?: string;
   email?: string;
+  avatarUrl?: string;
   seats?: string;
   activeWorkspaceId?: string;
   memberships?: WorkspaceMembership[];
@@ -31,7 +32,7 @@ export interface UserSession {
 interface AccountContextType {
   session: UserSession;
   setSession: React.Dispatch<React.SetStateAction<UserSession>>;
-  loginAsIndividual: (data: { name: string; goal?: string }) => void;
+  loginAsIndividual: (data: { name: string; goal?: string; email?: string; avatarUrl?: string }) => void;
   loginAsOrganization: (data: {
     orgName: string;
     email: string;
@@ -157,12 +158,14 @@ export function AccountProvider({ children }: { children: React.ReactNode }) {
   }, [session, isInitialized]);
 
   const loginAsIndividual = useCallback(
-    ({ name, goal }: { name: string; goal?: string }) => {
+    ({ name, goal, email, avatarUrl }: { name: string; goal?: string; email?: string; avatarUrl?: string }) => {
       setSession((prev) => ({
         ...prev,
         accountType: "individual",
         name: name || "Hosain Ali",
         goal: goal || "Customer Service",
+        email: email || prev.email || "hosain@reallearning.ai",
+        avatarUrl: avatarUrl !== undefined ? avatarUrl : prev.avatarUrl,
       }));
     },
     []

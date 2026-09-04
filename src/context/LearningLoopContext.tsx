@@ -173,8 +173,8 @@ export const STEP_ORDER: LearningLoopStep[] = [
   "class",
   "simulator",
   "feedback",
-  "skill_progress",
-  "next_step",
+  // "skill_progress",
+  // "next_step",
 ];
 
 interface LearningLoopContextType {
@@ -427,8 +427,8 @@ export function LearningLoopProvider({ children }: { children: React.ReactNode }
         }))
       );
 
-      // Complete simulator & unlock feedback, skill_progress, next_step (unlock index 5)
-      const nextMax = Math.max(maxUnlockedStepIndex, 5);
+      // Complete simulator & unlock feedback (unlock index 3)
+      const nextMax = Math.max(maxUnlockedStepIndex, 3);
       setMaxUnlockedStepIndex(nextMax);
       setCompletedSteps((prev) => {
         let updated: LearningLoopStep[] = [...prev];
@@ -436,7 +436,6 @@ export function LearningLoopProvider({ children }: { children: React.ReactNode }
         if (!updated.includes("class")) updated.push("class");
         if (!updated.includes("simulator")) updated.push("simulator");
         if (!updated.includes("feedback")) updated.push("feedback");
-        if (!updated.includes("skill_progress")) updated.push("skill_progress");
         
         persist({
           feedback: updatedFeedback,
