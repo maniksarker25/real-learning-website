@@ -278,7 +278,7 @@ export const RecentSimulationsTable = memo(function RecentSimulationsTable({
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-orange-500/10 text-orange-300 border border-orange-400/30">
-              <Sparkles className="w-3 h-3 text-orange-400" />
+              {/* <Sparkles className="w-3 h-3 text-orange-400" /> */}
               <span>AI PRACTICE LOGS</span>
             </span>
           </div>
@@ -427,7 +427,7 @@ export const RecentSimulationsTable = memo(function RecentSimulationsTable({
             <div className="bg-[#12131c]/90 rounded-2xl p-5 border border-white/10 shadow-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div>
                 <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-400/30 text-xs text-orange-300 font-medium mb-1.5">
-                  <Sparkles className="w-3.5 h-3.5 text-orange-400" />
+                  {/* <Sparkles className="w-3.5 h-3.5 text-orange-400" /> */}
                   <span>FEEDBACK = UNDERSTAND YOUR PERFORMANCE</span>
                 </div>
                 <h2 className="text-xl font-bold text-white">

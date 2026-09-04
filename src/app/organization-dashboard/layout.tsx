@@ -271,7 +271,7 @@ export default memo(function OrgDashboardLayout({
               <div className="h-full bg-gradient-to-r from-orange-500 to-rose-500 rounded-full w-[72%]" />
             </div>
             <div className="text-[10px] text-white/40 font-mono text-center flex items-center justify-center gap-1">
-              <Sparkles className="w-3 h-3 text-orange-400" />
+              {/* <Sparkles className="w-3 h-3 text-orange-400" /> */}
               <span>{isOwner ? "Owner Managed" : "Admin Pilot View"}</span>
             </div>
           </div>

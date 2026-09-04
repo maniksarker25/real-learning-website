@@ -50,7 +50,7 @@ export const AboutModal = memo(function AboutModal({
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
                 <div className="bg-black/50 p-3.5 rounded-xl border border-white/10 space-y-1">
                   <div className="flex items-center gap-1.5 font-bold text-orange-300">
-                    <Sparkles className="w-3.5 h-3.5 text-orange-400" />
+                    {/* <Sparkles className="w-3.5 h-3.5 text-orange-400" /> */}
                     <span>Realistic Scenarios</span>
                   </div>
                   <p className="text-[11px] text-white/60">
