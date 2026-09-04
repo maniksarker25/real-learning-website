@@ -481,7 +481,7 @@ export const IndClassesScreen = memo(function IndClassesScreen({
 
       {/* Practice Layer Card visible on Lessons tab as well */}
       {activeTab === "lessons" && (
-        <div className="bg-gradient-to-br from-orange-500/10 via-[#12131c] to-[#0d0e14] rounded-2xl p-5 border border-orange-400/30 shadow-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div className="bg-gradient-to-br from-orange-500/10 via-[#12131c] to-[#0git config --local --listd0e14] rounded-2xl p-5 border border-orange-400/30 shadow-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
             <h4 className="text-base font-extrabold text-white">
               Ready to test your active listening in a realistic situation?
