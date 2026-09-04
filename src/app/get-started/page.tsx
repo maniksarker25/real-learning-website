@@ -115,7 +115,7 @@ export default function GetStartedPage() {
               <span>No organization required for individual learners</span>
             </div>
             <div className="flex items-center gap-2 text-orange-300">
-              <Sparkles className="w-4 h-4 text-orange-400" />
+              {/* <Sparkles className="w-4 h-4 text-orange-400" /> */}
               <span>Instant Setup & Free to Start</span>
             </div>
           </div>

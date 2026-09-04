@@ -42,17 +42,9 @@ export const IndPathfinderScreen = memo(function IndPathfinderScreen({
 
   const [selectedPath, setSelectedPath] = useState<CareerPath>(careerPaths[0]);
 
-  const handleChoosePath = useCallback(
-    (path: CareerPath) => {
-      setSelectedPath(path);
-      if (onSelectPath) {
-        onSelectPath(path);
-      } else if (contextValue) {
-        contextValue.selectCareerPath(path);
-      }
-    },
-    [onSelectPath, contextValue]
-  );
+  const handleSelectCard = useCallback((path: CareerPath) => {
+    setSelectedPath(path);
+  }, []);
 
   const handleLaunchPath = useCallback(() => {
     if (onSelectPath) {
@@ -76,10 +68,6 @@ export const IndPathfinderScreen = memo(function IndPathfinderScreen({
       {/* Top GPS Header Banner */}
       <div className="bg-[#12131c]/90 rounded-2xl p-6 border border-white/10 shadow-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-400/30 text-xs text-orange-300 font-medium mb-2">
-            <Compass className="w-3.5 h-3.5 text-orange-400" />
-            <span>AI PATHFINDER • YOUR LEARNING GPS</span>
-          </div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-white">
             Discover Your Career Pathway
           </h1>
@@ -101,7 +89,6 @@ export const IndPathfinderScreen = memo(function IndPathfinderScreen({
       <div className="bg-[#12131c]/90 rounded-2xl p-6 border border-white/10 shadow-xl space-y-4">
         <div className="flex items-center justify-between border-b border-white/10 pb-3">
           <div className="flex items-center gap-2">
-            <MapPin className="w-4 h-4 text-orange-400" />
             <h3 className="text-sm font-bold text-white uppercase tracking-wider">
               1. WHERE AM I? (Baseline Skill Profile)
             </h3>
@@ -152,30 +139,41 @@ export const IndPathfinderScreen = memo(function IndPathfinderScreen({
 
       {/* Core Question 2: WHAT PATHS CAN I TAKE? */}
       <div className="space-y-3">
-        <div className="flex items-center gap-2">
-          <Target className="w-4 h-4 text-orange-400" />
-          <h3 className="text-sm font-bold text-white uppercase tracking-wider">
-            2. WHAT PATHS CAN I TAKE? (Select Your Career Track)
-          </h3>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <h3 className="text-sm font-bold text-white uppercase tracking-wider">
+              2. WHAT PATHS CAN I TAKE? (Select Your Career Track)
+            </h3>
+          </div>
+          <span className="text-[10px] font-mono text-white/50">
+            Click a card to select, then click Start
+          </span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {careerPaths.map((path) => {
             const isSelected = selectedPath.id === path.id;
             return (
               <div
                 key={path.id}
-                onClick={() => handleChoosePath(path)}
+                onClick={() => handleSelectCard(path)}
                 className={cn(
-                  "p-5 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between space-y-4 group",
+                  "p-5 rounded-2xl border transition-colors duration-200 cursor-pointer flex flex-col justify-between space-y-4 group relative",
                   isSelected
-                    ? "bg-gradient-to-br from-orange-500/15 via-[#141522] to-[#0e0f17] border-orange-400 shadow-xl scale-[1.01]"
+                    ? "bg-gradient-to-br from-orange-500/25 via-[#1a1c2e] to-[#0e0f17] border-orange-500/60 shadow-lg shadow-orange-500/5"
                     : "bg-[#12131c]/90 border-white/10 hover:border-white/20 hover:bg-[#161725]"
                 )}
               >
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-mono text-orange-300 bg-orange-500/10 px-2 py-0.5 rounded border border-orange-400/20">
+                    <span
+                      className={cn(
+                        "text-[10px] font-mono px-2 py-0.5 rounded border",
+                        isSelected
+                          ? "text-orange-200 bg-orange-500/20 border-orange-400/40 font-bold"
+                          : "text-orange-300 bg-orange-500/10 border-orange-400/20"
+                      )}
+                    >
                       {path.category}
                     </span>
                     <span className="text-xs font-mono font-black text-emerald-400 flex items-center gap-1">
@@ -185,7 +183,12 @@ export const IndPathfinderScreen = memo(function IndPathfinderScreen({
                   </div>
 
                   <div>
-                    <h4 className="text-base font-extrabold text-white group-hover:text-orange-300 transition-colors">
+                    <h4
+                      className={cn(
+                        "text-base font-extrabold transition-colors",
+                        isSelected ? "text-orange-300" : "text-white group-hover:text-orange-300"
+                      )}
+                    >
                       {path.title}
                     </h4>
                     <p className="text-xs text-white/60 mt-1 leading-relaxed">
@@ -210,23 +213,30 @@ export const IndPathfinderScreen = memo(function IndPathfinderScreen({
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between pt-3 border-t border-white/10">
-                  <span className="text-[10px] font-mono text-white/40">
-                    Est. Salary: {path.avgSalaryRange}
-                  </span>
+                <div className="flex flex-col gap-2.5 pt-3 border-t border-white/10">
+                  <div className="flex items-center justify-between text-[10px] font-mono text-white/40">
+                    <span>Est. Salary:</span>
+                    <span className="text-white/70 font-semibold">{path.avgSalaryRange}</span>
+                  </div>
+
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
-                      handleChoosePath(path);
+                      if (isSelected) {
+                        handleLaunchPath();
+                      } else {
+                        handleSelectCard(path);
+                      }
                     }}
                     className={cn(
-                      "px-3 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer",
+                      "w-full h-9 px-3 rounded-full text-xs font-black border transition-all duration-200 cursor-pointer flex items-center justify-center gap-1.5 shrink-0",
                       isSelected
-                        ? "bg-orange-500 text-white shadow"
-                        : "bg-white/5 text-white/70 hover:bg-white/10 hover:text-white"
+                        ? "bg-gradient-to-r from-orange-500 to-rose-500 hover:from-orange-600 hover:to-rose-600 text-white border-transparent shadow-md shadow-orange-500/10"
+                        : "bg-white/5 hover:bg-white/10 text-white/70 hover:text-white border-white/10"
                     )}
                   >
-                    {isSelected ? "Selected" : "Select Path"}
+                    <span>{isSelected ? "Start Track" : "Select Track"}</span>
+                    {isSelected && <ArrowRight className="w-3.5 h-3.5 text-white" />}
                   </button>
                 </div>
               </div>
@@ -239,7 +249,6 @@ export const IndPathfinderScreen = memo(function IndPathfinderScreen({
       <div className="bg-gradient-to-br from-orange-500/10 via-[#12131c] to-[#0d0e14] rounded-2xl p-6 border border-orange-400/30 shadow-xl space-y-4">
         <div className="flex items-center justify-between border-b border-white/10 pb-3">
           <div className="flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-orange-400" />
             <h3 className="text-sm font-bold text-white uppercase tracking-wider">
               3. WHAT SHOULD I LEARN? (AI Pathfinder Recommendation)
             </h3>
@@ -253,7 +262,6 @@ export const IndPathfinderScreen = memo(function IndPathfinderScreen({
           {/* Class recommendation */}
           <div className="bg-black/50 p-4 rounded-xl border border-white/10 space-y-2">
             <div className="flex items-center gap-2 text-xs font-bold text-orange-300 uppercase tracking-wider">
-              <BookOpen className="w-4 h-4" />
               <span>Step 1: Class (Theory & Techniques)</span>
             </div>
             <h4 className="text-base font-extrabold text-white">
@@ -267,7 +275,6 @@ export const IndPathfinderScreen = memo(function IndPathfinderScreen({
           {/* Connected Simulator practice layer */}
           <div className="bg-black/50 p-4 rounded-xl border border-white/10 space-y-2">
             <div className="flex items-center gap-2 text-xs font-bold text-rose-300 uppercase tracking-wider">
-              <Zap className="w-4 h-4" />
               <span>Step 2: Simulator (Practice Layer)</span>
             </div>
             <h4 className="text-base font-extrabold text-white">
