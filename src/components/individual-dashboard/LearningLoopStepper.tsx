@@ -58,6 +58,7 @@ const STEPS: {
     route: "/user-dashboard/feedback",
     icon: MessageSquare,
   },
+  /*
   {
     id: "skill_progress",
     label: "Skill Progress",
@@ -72,6 +73,7 @@ const STEPS: {
     route: "/user-dashboard/feedback#next-step",
     icon: ArrowRight,
   },
+  */
 ];
 
 export const LearningLoopStepper = memo(function LearningLoopStepper({
@@ -111,7 +113,10 @@ export const LearningLoopStepper = memo(function LearningLoopStepper({
     contextValue?.activePath?.title ||
     "Customer service and communication";
 
-  const currentStepIndex = STEPS.findIndex((s) => s.id === activeStep);
+  const currentStepIndex = Math.max(
+    0,
+    STEPS.findIndex((s) => s.id === activeStep)
+  );
   const maxUnlockedStepIndex = contextValue?.maxUnlockedStepIndex ?? 0;
 
   const handleStepClick = useCallback(
@@ -157,7 +162,9 @@ export const LearningLoopStepper = memo(function LearningLoopStepper({
         </div>
 
         <div className="text-[10px] font-mono text-white/50 flex items-center gap-2">
-          <span>Step {Math.max(1, currentStepIndex + 1)} of 6</span>
+          <span>
+            Step {Math.max(1, currentStepIndex + 1)} of {STEPS.length}
+          </span>
           <div className="w-16 h-1.5 bg-black/60 rounded-full overflow-hidden border border-white/10">
             <div
               className="h-full bg-gradient-to-r from-orange-500 to-rose-500 transition-all duration-300"
@@ -173,7 +180,7 @@ export const LearningLoopStepper = memo(function LearningLoopStepper({
       </div>
 
       {/* Stepper Flow Cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
         {STEPS.map((step, idx) => {
           const Icon = step.icon;
           const isActive = activeStep === step.id;
