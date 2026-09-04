@@ -93,9 +93,9 @@ export default memo(function UserDashboardLayout({
   );
 
   const content = (
-    <div className="min-h-screen bg-[#07080c] text-slate-100 font-sans flex flex-col selection:bg-orange-500 selection:text-white">
+    <div className="h-screen bg-[#07080c] text-slate-100 font-sans flex flex-col overflow-hidden selection:bg-orange-500 selection:text-white">
       {/* Top Application Header */}
-      <header className="sticky top-0 z-50 bg-[#0d0e15]/95 backdrop-blur-md border-b border-white/10 px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
+      <header className="shrink-0 z-50 bg-[#0d0e15]/95 backdrop-blur-md border-b border-white/10 px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
         {/* Brand Logo & Active Session Indicator */}
         <div className="flex items-center gap-3">
           <Link href="/" className="flex items-center gap-2 group">
@@ -271,9 +271,9 @@ export default memo(function UserDashboardLayout({
       </header>
 
       {/* Main Full-Bleed Application Body */}
-      <div className="flex-1 flex flex-col md:flex-row min-h-[calc(100vh-4rem)]">
+      <div className="flex-1 flex flex-col md:flex-row h-[calc(100vh-4rem)] overflow-hidden">
         {/* Left Sidebar Navigation */}
-        <aside className="w-full md:w-60 bg-[#0d0e14]/95 border-b md:border-b-0 md:border-r border-white/10 p-4 flex flex-row md:flex-col justify-between shrink-0 gap-4">
+        <aside className="w-full md:w-60 h-auto md:h-full bg-[#0d0e14]/95 border-b md:border-b-0 md:border-r border-white/10 p-4 flex flex-row md:flex-col justify-between shrink-0 gap-4 overflow-y-auto">
           <div className="w-full space-y-4">
             {/* Learner Profile Card Header */}
             <div className="flex items-center gap-3 p-3 rounded-2xl bg-white/[0.03] border border-white/10">
