@@ -10,7 +10,7 @@ export default function UserPathfinderPage() {
 
   useEffect(() => {
     setStep("pathfinder");
-    router.replace("/user-dashboard");
+    router.replace("/user-dashboard/practice");
   }, [setStep, router]);
 
   return (

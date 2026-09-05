@@ -10,7 +10,7 @@ export default function UserSimulationsPage() {
 
   useEffect(() => {
     setStep("simulator");
-    router.replace("/user-dashboard");
+    router.replace("/user-dashboard/practice");
   }, [setStep, router]);
 
   return (
