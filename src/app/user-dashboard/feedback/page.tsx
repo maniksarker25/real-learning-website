@@ -10,7 +10,7 @@ export default function UserFeedbackPage() {
 
   useEffect(() => {
     setStep("feedback");
-    router.replace("/user-dashboard");
+    router.replace("/user-dashboard/practice");
   }, [setStep, router]);
 
   return (
