@@ -17,7 +17,6 @@ export const UnifiedLearningGPSView = memo(function UnifiedLearningGPSView() {
     selectCareerPath,
     startClass,
     launchPracticeSimulator,
-    chooseNextStep,
   } = useLearningLoop();
 
   const handleSelectPath = useCallback(
@@ -61,6 +60,13 @@ export const UnifiedLearningGPSView = memo(function UnifiedLearningGPSView() {
 
   return (
     <div className="space-y-6">
+      {/* Learning Loop GPS Stepper */}
+      <LearningLoopStepper
+        currentStep={currentStep}
+        onSelectStep={handleStepperSelect}
+        activePathTitle={activePath?.title}
+      />
+
       {/* Dynamic Step Container */}
       <div className="transition-all duration-300">
         {currentStep === "pathfinder" && (

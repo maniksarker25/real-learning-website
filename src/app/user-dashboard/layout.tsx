@@ -29,15 +29,15 @@ import { cn } from "@/lib/utils";
 import { NotificationDropdown } from "@/components/notifications/NotificationDropdown";
 import Image from "next/image";
 import { ImageConstants } from "@/constant/image.index";
-import { LearningLoopProvider } from "@/context/LearningLoopContext";
-import { LearningLoopStepper } from "@/components/individual-dashboard/LearningLoopStepper";
+import { LearningLoopProvider, useLearningLoop } from "@/context/LearningLoopContext";
 
-export default memo(function UserDashboardLayout({
+function UserDashboardLayoutInner({
   children,
 }: {
   children: React.ReactNode;
 }) {
   const { session, logout, switchWorkspace } = useAccount();
+  const { setStep } = useLearningLoop();
   const pathname = usePathname();
   const router = useRouter();
 
@@ -74,6 +74,11 @@ export default memo(function UserDashboardLayout({
     () => [
       {
         href: "/user-dashboard",
+        label: "Dashboard",
+        icon: LayoutDashboard,
+      },
+      {
+        href: "/user-dashboard/practice",
         label: "Learning GPS (Practice)",
         icon: Compass,
       },
@@ -276,8 +281,12 @@ export default memo(function UserDashboardLayout({
         <aside className="w-full md:w-60 h-auto md:h-full bg-[#0d0e14]/95 border-b md:border-b-0 md:border-r border-white/10 p-4 flex flex-row md:flex-col justify-between shrink-0 gap-4 overflow-y-auto">
           <div className="w-full space-y-4">
             {/* Learner Profile Card Header */}
-            <div className="flex items-center gap-3 p-3 rounded-2xl bg-white/[0.03] border border-white/10">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-orange-500 to-rose-500 flex items-center justify-center text-white font-black text-xs shrink-0 shadow-md overflow-hidden">
+            <Link
+              href="/user-dashboard/settings"
+              className="flex items-center gap-3 p-3 rounded-2xl bg-white/[0.03] hover:bg-white/[0.06] border border-white/10 hover:border-orange-500/30 transition-all cursor-pointer group"
+              title="View & Edit Profile / Subscription"
+            >
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-orange-500 to-rose-500 flex items-center justify-center text-white font-black text-xs shrink-0 shadow-md overflow-hidden group-hover:scale-105 transition-transform">
                 {session.avatarUrl ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
@@ -289,8 +298,8 @@ export default memo(function UserDashboardLayout({
                   <User className="w-5 h-5 text-white" />
                 )}
               </div>
-              <div className="truncate">
-                <div className="text-xs font-bold text-white leading-none truncate">
+              <div className="truncate flex-1">
+                <div className="text-xs font-bold text-white leading-none truncate group-hover:text-orange-300 transition-colors">
                   {session.name || "Hosain Ali"}
                 </div>
                 <div className="text-[10px] text-orange-300 font-mono leading-tight mt-1 truncate">
@@ -299,7 +308,7 @@ export default memo(function UserDashboardLayout({
                     : session.goal || "Customer Service"}
                 </div>
               </div>
-            </div>
+            </Link>
 
             {/* Sidebar Tab List */}
             <div className="flex flex-row md:flex-col gap-1 w-full overflow-x-auto">
@@ -310,6 +319,11 @@ export default memo(function UserDashboardLayout({
                   <Link
                     key={item.href}
                     href={item.href}
+                    onClick={() => {
+                      if (item.href === "/user-dashboard/practice") {
+                        setStep("pathfinder");
+                      }
+                    }}
                     className={cn(
                       "flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold shrink-0 whitespace-nowrap transition-colors cursor-pointer w-full text-left",
                       isActive
@@ -394,9 +408,6 @@ export default memo(function UserDashboardLayout({
               </div>
             )}
 
-            {/* Learning Loop GPS Stepper pinned across all user dashboard views */}
-            <LearningLoopStepper />
-
             {children}
           </div>
         </main>
@@ -404,5 +415,17 @@ export default memo(function UserDashboardLayout({
     </div>
   );
 
-  return <LearningLoopProvider>{content}</LearningLoopProvider>;
+  return content;
+}
+
+export default memo(function UserDashboardLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <LearningLoopProvider>
+      <UserDashboardLayoutInner>{children}</UserDashboardLayoutInner>
+    </LearningLoopProvider>
+  );
 });
