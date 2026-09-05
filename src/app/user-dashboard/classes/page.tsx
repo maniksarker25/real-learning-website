@@ -10,7 +10,7 @@ export default function UserClassesPage() {
 
   useEffect(() => {
     setStep("class");
-    router.replace("/user-dashboard");
+    router.replace("/user-dashboard/practice");
   }, [setStep, router]);
 
   return (

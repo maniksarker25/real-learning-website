@@ -104,7 +104,7 @@ export const LearningLoopStepper = memo(function LearningLoopStepper({
 
   const activeStep: LearningLoopStep =
     propCurrentStep ||
-    (pathname === "/user-dashboard"
+    (pathname === "/user-dashboard/practice" || pathname === "/user-dashboard"
       ? contextValue?.currentStep || "pathfinder"
       : derivedStepFromRoute || contextValue?.currentStep || "pathfinder");
 
@@ -139,8 +139,8 @@ export const LearningLoopStepper = memo(function LearningLoopStepper({
         contextValue.setStep(step.id);
       }
 
-      if (pathname !== "/user-dashboard") {
-        router.push("/user-dashboard");
+      if (pathname !== "/user-dashboard/practice") {
+        router.push("/user-dashboard/practice");
       }
     },
     [propOnSelectStep, contextValue, maxUnlockedStepIndex, pathname, router]
