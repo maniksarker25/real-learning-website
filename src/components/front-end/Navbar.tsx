@@ -38,8 +38,7 @@ export default memo(function Navbar() {
     if (session.accountType === "individual") {
       return [
         { label: "Dashboard", href: "/user-dashboard" },
-        { label: "Classes", href: "/user-dashboard/classes" },
-        { label: "Simulations", href: "/user-dashboard/simulations" },
+        { label: "Practice", href: "/user-dashboard/practice" },
         { label: "Progress", href: "/user-dashboard/progress" },
         { label: "Goals", href: "/user-dashboard/goals" },
       ];
