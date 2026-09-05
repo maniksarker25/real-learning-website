@@ -204,8 +204,7 @@ export const IndHomeScreen = memo(function IndHomeScreen({
       </div>
 
       {/* 2 Primary Action Focus Cards: Continue Learning & Practice Your Skills */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-        {/* 1. Continue Learning (Classes = Learn) */}
+      {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         <div className="bg-gradient-to-br from-orange-500/10 via-[#12131c] to-[#0d0e14] rounded-2xl p-6 border border-orange-400/30 shadow-xl flex flex-col justify-between space-y-4">
           <div className="space-y-3">
             <div className="flex items-center justify-between">
@@ -227,7 +226,6 @@ export const IndHomeScreen = memo(function IndHomeScreen({
               </p>
             </div>
 
-            {/* Progress bar */}
             <div className="space-y-1">
               <div className="w-full h-2 bg-black/60 rounded-full overflow-hidden border border-white/10">
                 <div className="h-full bg-gradient-to-r from-orange-500 to-amber-400 rounded-full w-[67%]" />
@@ -248,7 +246,6 @@ export const IndHomeScreen = memo(function IndHomeScreen({
           </button>
         </div>
 
-        {/* 2. Practice Your Skills (Simulations = Practice) */}
         <div className="bg-gradient-to-br from-rose-500/10 via-[#12131c] to-[#0d0e14] rounded-2xl p-6 border border-rose-400/30 shadow-xl flex flex-col justify-between space-y-4">
           <div className="space-y-3">
             <div className="flex items-center justify-between">
@@ -289,7 +286,7 @@ export const IndHomeScreen = memo(function IndHomeScreen({
             <span>Start AI Workplace Simulation</span>
           </button>
         </div>
-      </div>
+      </div> */}
 
       {/* RECENT COMPLETED SIMULATIONS TABLE WITH IN-DEPTH FEEDBACK MODAL */}
       <RecentSimulationsTable onLaunchSimulation={onLaunchSimulation} />
