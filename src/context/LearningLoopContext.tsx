@@ -431,7 +431,7 @@ export function LearningLoopProvider({ children }: { children: React.ReactNode }
       const nextMax = Math.max(maxUnlockedStepIndex, 3);
       setMaxUnlockedStepIndex(nextMax);
       setCompletedSteps((prev) => {
-        let updated: LearningLoopStep[] = [...prev];
+        const updated: LearningLoopStep[] = [...prev];
         if (!updated.includes("pathfinder")) updated.push("pathfinder");
         if (!updated.includes("class")) updated.push("class");
         if (!updated.includes("simulator")) updated.push("simulator");
