@@ -81,7 +81,7 @@ export default function Home() {
       </div>
 
       {/* 5. Section: Practice Real Workplace Situations */}
-      <VideoShowcase />
+      {/* <VideoShowcase /> */}
 
       {/* 6. Section: Feedback That Helps You Grow */}
       <div id="feedback-section">
