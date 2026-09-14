@@ -62,25 +62,11 @@ export default function TrackProgress() {
   ];
 
   return (
-    <section id="track-progress" className="relative w-full py-16 sm:py-20 bg-black text-slate-100 font-sans border-y border-white/10 overflow-hidden">
+    <section
+      id="track-progress"
+      className="relative w-full py-16 sm:py-20 bg-black text-slate-100 font-sans border-y border-white/10 overflow-hidden"
+    >
       {/* Background Grid */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div
-          className="absolute inset-0 opacity-40"
-          style={{
-            backgroundImage:
-              "radial-gradient(rgba(167,139,250,0.6) 1px, transparent 1px)",
-            backgroundSize: "16px 16px",
-          }}
-        />
-        <div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[850px] h-[550px] opacity-35 blur-3xl pointer-events-none"
-          style={{
-            background:
-              "radial-gradient(ellipse at center, rgba(249, 115, 22, 0.15) 0%, rgba(244, 63, 94, 0.1) 50%, transparent 70%)",
-          }}
-        />
-      </div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
@@ -115,7 +101,8 @@ export default function TrackProgress() {
             transition={{ delay: 0.15 }}
             className="mt-4 text-base sm:text-lg text-white/70 font-normal leading-relaxed max-w-2xl mx-auto"
           >
-            Monitor your skill growth, module completions, and overall career readiness.
+            Monitor your skill growth, module completions, and overall career
+            readiness.
           </motion.p>
         </div>
 
@@ -143,7 +130,7 @@ export default function TrackProgress() {
                         "w-9 h-9 rounded-xl flex items-center justify-center border",
                         stat.accent.bg,
                         stat.accent.text,
-                        stat.accent.border
+                        stat.accent.border,
                       )}
                     >
                       <Icon className="w-4.5 h-4.5 stroke-[2.2]" />

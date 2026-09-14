@@ -58,23 +58,6 @@ export default function VideoShowcase({
   return (
     <section className="relative w-full bg-black text-slate-100 font-sans overflow-hidden py-16 sm:py-20 border-y border-white/10">
       {/* Background Grid & Ambient Glow (Identical to page.tsx) */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div
-          className="absolute inset-0 opacity-40"
-          style={{
-            backgroundImage:
-              "radial-gradient(rgba(167,139,250,0.6) 1px, transparent 1px)",
-            backgroundSize: "16px 16px",
-          }}
-        />
-        <div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[850px] h-[550px] opacity-35 blur-3xl pointer-events-none"
-          style={{
-            background:
-              "radial-gradient(ellipse at center, rgba(249, 115, 22, 0.15) 0%, rgba(244, 63, 94, 0.1) 50%, transparent 70%)",
-          }}
-        />
-      </div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
