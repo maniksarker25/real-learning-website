@@ -62,7 +62,7 @@ export default function Home() {
       <div
         id="patricia-experience"
         ref={patriciaSectionRef}
-        className="pt-8 pb-16"
+        className="bg-orange-50"
       >
         <PatriciaChatExperience
           initialPrompt={initialPrompt}

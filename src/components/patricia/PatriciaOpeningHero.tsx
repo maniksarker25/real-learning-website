@@ -55,15 +55,15 @@ export const PatriciaOpeningHero = memo(function PatriciaOpeningHero({
 
   return (
     <motion.section
-      className="relative w-full bg-[#08090d] text-white overflow-hidden select-none py-8 sm:py-14 lg:py-16"
+      className="relative w-full bg-[#08090d] text-white overflow-hidden select-none py-8 sm:py-14 lg:py-24"
       onPanEnd={handlePanEnd}
     >
       {/* Outer framing wrapper matching the sleek modern design */}
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-10">
         <div className="relative ">
           {/* Subtle ambient lighting inside the container */}
-          <div className="absolute top-0 right-1/4 w-96 h-96 bg-orange-500/10 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute bottom-0 left-10 w-80 h-80 bg-rose-500/10 rounded-full blur-3xl pointer-events-none" />
+          {/* <div className="absolute top-0 right-1/4 w-96 h-96 bg-orange-500/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute bottom-0 left-10 w-80 h-80 bg-rose-500/10 rounded-full blur-3xl pointer-events-none" /> */}
 
           {/* Grid Layout: Left Content & Right 3D Globe with Floating Cards */}
           <div className="grid grid-cols-1 lg:grid-cols-12 items-center min-h-[580px] lg:min-h-[660px]">
@@ -98,8 +98,12 @@ export const PatriciaOpeningHero = memo(function PatriciaOpeningHero({
                   {selectedTextIndex === 0 && (
                     <motion.div
                       layoutId="activeTextSelectionMarquee"
-                      transition={{ type: "spring", stiffness: 360, damping: 28 }}
-                      className="absolute -inset-x-3 -inset-y-2 border-2 border-white bg-white/[0.05] backdrop-blur-[2px] pointer-events-none z-10"
+                      transition={{
+                        type: "spring",
+                        stiffness: 360,
+                        damping: 28,
+                      }}
+                      className="absolute -inset-x-3 -inset-y-2 border-2 border-white bg-white/[0.05] pointer-events-none z-10"
                     >
                       {/* 4 Corner Resize Anchor Squares */}
                       <div className="absolute -top-1.5 -left-1.5 w-2.5 h-2.5 bg-white border border-black/40 shadow-sm" />
@@ -110,7 +114,11 @@ export const PatriciaOpeningHero = memo(function PatriciaOpeningHero({
                       {/* White animated mouse cursor pointer positioned at the bottom-right corner */}
                       <motion.div
                         animate={{ x: [0, 2, 0], y: [0, 2, 0] }}
-                        transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+                        transition={{
+                          duration: 1.8,
+                          repeat: Infinity,
+                          ease: "easeInOut",
+                        }}
                         className="absolute top-[calc(100%-1px)] left-[calc(100%-1px)] z-30 pointer-events-none select-none flex items-start gap-1.5"
                       >
                         <svg
@@ -146,8 +154,12 @@ export const PatriciaOpeningHero = memo(function PatriciaOpeningHero({
                   {selectedTextIndex === 1 && (
                     <motion.div
                       layoutId="activeTextSelectionMarquee"
-                      transition={{ type: "spring", stiffness: 360, damping: 28 }}
-                      className="absolute -inset-x-3 -inset-y-2 border-2 border-white bg-white/[0.05] backdrop-blur-[2px] pointer-events-none z-10"
+                      transition={{
+                        type: "spring",
+                        stiffness: 360,
+                        damping: 28,
+                      }}
+                      className="absolute -inset-x-3 -inset-y-2 border-2 border-white bg-white/[0.05] pointer-events-none z-10"
                     >
                       {/* 4 Corner Resize Anchor Squares */}
                       <div className="absolute -top-1.5 -left-1.5 w-2.5 h-2.5 bg-white border border-black/40 shadow-sm" />
@@ -158,7 +170,11 @@ export const PatriciaOpeningHero = memo(function PatriciaOpeningHero({
                       {/* White animated mouse cursor pointer positioned at the bottom-right corner */}
                       <motion.div
                         animate={{ x: [0, 2, 0], y: [0, 2, 0] }}
-                        transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+                        transition={{
+                          duration: 1.8,
+                          repeat: Infinity,
+                          ease: "easeInOut",
+                        }}
                         className="absolute top-[calc(100%-1px)] left-[calc(100%-1px)] z-30 pointer-events-none select-none flex items-start gap-1.5"
                       >
                         <svg
@@ -199,7 +215,7 @@ export const PatriciaOpeningHero = memo(function PatriciaOpeningHero({
                   <motion.div
                     layoutId="activeTextSelectionMarquee"
                     transition={{ type: "spring", stiffness: 360, damping: 28 }}
-                    className="absolute -inset-x-3 -inset-y-2 border-2 border-white bg-white/[0.05] backdrop-blur-[2px] pointer-events-none z-10"
+                    className="absolute -inset-x-3 -inset-y-2 border-2 border-white bg-white/[0.05] pointer-events-none z-10"
                   >
                     {/* 4 Corner Resize Anchor Squares */}
                     <div className="absolute -top-1.5 -left-1.5 w-2.5 h-2.5 bg-white border border-black/40 shadow-sm" />
@@ -210,7 +226,11 @@ export const PatriciaOpeningHero = memo(function PatriciaOpeningHero({
                     {/* White animated mouse cursor pointer positioned at the bottom-right corner */}
                     <motion.div
                       animate={{ x: [0, 2, 0], y: [0, 2, 0] }}
-                      transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+                      transition={{
+                        duration: 1.8,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                      }}
                       className="absolute top-[calc(100%-1px)] left-[calc(100%-1px)] z-30 pointer-events-none select-none flex items-start gap-1.5"
                     >
                       <svg
@@ -233,8 +253,8 @@ export const PatriciaOpeningHero = memo(function PatriciaOpeningHero({
                   </motion.div>
                 )}
                 <p className="relative z-0 text-base sm:text-lg lg:text-xl text-zinc-300/90 leading-relaxed font-normal text-left">
-                  Real Learning is an AI Life GPS that helps you figure out where
-                  you are, where you want to go, and your next best step.
+                  Real Learning is an AI Life GPS that helps you figure out
+                  where you are, where you want to go, and your next best step.
                 </p>
               </motion.div>
 
@@ -288,7 +308,7 @@ export const PatriciaOpeningHero = memo(function PatriciaOpeningHero({
                 className="absolute top-2 sm:top-6 right-1 sm:right-6 z-20 w-[270px] sm:w-[310px] scale-[0.85] sm:scale-100 origin-top-right rounded-2xl bg-[#0e1118]/95 border border-white/10 p-4 sm:p-4.5 backdrop-blur-md shadow-2xl shadow-black/90"
               >
                 {/* Header row: CAREER TRACKS + 135+ Scenarios */}
-                <div className="flex items-center justify-between mb-3">
+                {/* <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-1.5">
                     <span className="relative flex h-2 w-2">
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
@@ -301,7 +321,7 @@ export const PatriciaOpeningHero = memo(function PatriciaOpeningHero({
                   <span className="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-orange-500/10 text-orange-400 border border-orange-500/30">
                     135+ Scenarios
                   </span>
-                </div>
+                </div> */}
 
                 {/* Status & Count */}
                 <div className="mb-3.5">
@@ -329,7 +349,7 @@ export const PatriciaOpeningHero = memo(function PatriciaOpeningHero({
                     </div>
                     <div className="h-1.5 w-full bg-zinc-800/80 rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-gradient-to-r from-orange-400 to-rose-400 rounded-full"
+                        className="h-full bg-white rounded-full"
                         style={{ width: "85%" }}
                       />
                     </div>
@@ -344,7 +364,7 @@ export const PatriciaOpeningHero = memo(function PatriciaOpeningHero({
                     </div>
                     <div className="h-1.5 w-full bg-zinc-800/80 rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-gradient-to-r from-blue-400 to-indigo-500 rounded-full"
+                        className="h-full bg-white rounded-full"
                         style={{ width: "70%" }}
                       />
                     </div>
@@ -359,7 +379,7 @@ export const PatriciaOpeningHero = memo(function PatriciaOpeningHero({
                     </div>
                     <div className="h-1.5 w-full bg-zinc-800/80 rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-gradient-to-r from-violet-400 to-purple-500 rounded-full"
+                        className="h-full bg-white rounded-full"
                         style={{ width: "60%" }}
                       />
                     </div>
@@ -391,9 +411,9 @@ export const PatriciaOpeningHero = memo(function PatriciaOpeningHero({
                       <Target className="w-3 h-3 text-zinc-400 shrink-0" />
                       <span className="truncate">Client Care</span>
                     </div>
-                    <span className="text-[9px] text-zinc-400 mt-0.5">
+                    {/* <span className="text-[9px] text-zinc-400 mt-0.5">
                       track
-                    </span>
+                    </span> */}
                   </div>
 
                   <div className="flex flex-col">
@@ -401,9 +421,9 @@ export const PatriciaOpeningHero = memo(function PatriciaOpeningHero({
                       <Compass className="w-3 h-3 text-zinc-400 shrink-0" />
                       <span>AI Practice</span>
                     </div>
-                    <span className="text-[9px] text-zinc-400 mt-0.5">
+                    {/* <span className="text-[9px] text-zinc-400 mt-0.5">
                       mode
-                    </span>
+                    </span> */}
                   </div>
 
                   <div className="flex flex-col">
@@ -411,9 +431,9 @@ export const PatriciaOpeningHero = memo(function PatriciaOpeningHero({
                       <Clock className="w-3 h-3 text-zinc-400 shrink-0" />
                       <span className="whitespace-nowrap">5 mins</span>
                     </div>
-                    <span className="text-[9px] text-zinc-400 mt-0.5">
+                    {/* <span className="text-[9px] text-zinc-400 mt-0.5">
                       duration
-                    </span>
+                    </span> */}
                   </div>
                 </div>
               </motion.div>
