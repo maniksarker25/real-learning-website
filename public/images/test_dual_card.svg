@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 510" width="540" height="510">
+  <defs>
+    <radialGradient id="neonGlow" cx="270" cy="250" r="140" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.8" />
+      <stop offset="40%" stop-color="#3b82f6" stop-opacity="0.4" />
+      <stop offset="80%" stop-color="#1d4ed8" stop-opacity="0.1" />
+      <stop offset="100%" stop-color="#121318" stop-opacity="0" />
+    </radialGradient>
+    <pattern id="dotMatrix" x="0" y="0" width="12" height="12" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="0.8" fill="#38bdf8" opacity="0.4" />
+    </pattern>
+    <clipPath id="shapeClip">
+      <path d="M 298 0 H 512 A 28 28 0 0 1 540 28 V 222 A 28 28 0 0 1 512 250 H 300 A 30 30 0 0 0 270 280 V 482 A 28 28 0 0 1 242 510 H 28 A 28 28 0 0 1 0 482 V 278 A 28 28 0 0 1 28 250 H 240 A 30 30 0 0 0 270 220 V 28 A 28 28 0 0 1 298 0 Z" />
+    </clipPath>
+  </defs>
+
+  <g clip-path="url(#shapeClip)">
+    <rect width="540" height="510" fill="#121318" />
+    <circle cx="270" cy="250" r="160" fill="url(#neonGlow)" />
+    <rect x="180" y="160" width="180" height="180" fill="url(#dotMatrix)" opacity="0.75" />
+  </g>
+
+  <path d="M 298 0 H 512 A 28 28 0 0 1 540 28 V 222 A 28 28 0 0 1 512 250 H 300 A 30 30 0 0 0 270 280 V 482 A 28 28 0 0 1 242 510 H 28 A 28 28 0 0 1 0 482 V 278 A 28 28 0 0 1 28 250 H 240 A 30 30 0 0 0 270 220 V 28 A 28 28 0 0 1 298 0 Z" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1.5" />
+</svg>
