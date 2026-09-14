@@ -4,3 +4,7 @@ export const ImageConstants = {
   // Indivudual dashboard images
   brandLogo: BrandLogo,
 } as const;
+
+export const videoConstants = {
+  waves: "/waves.mp4",
+} as const;
