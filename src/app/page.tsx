@@ -83,15 +83,12 @@ export default function Home() {
       {/* 5. Section: Practice Real Workplace Situations */}
       {/* <VideoShowcase /> */}
 
-      {/* 6. Section: Feedback That Helps You Grow */}
+      {/* 6. Section: Real-Time Feedback & Skill Progress Dashboard */}
       <div id="feedback-section">
         <FeedbackSection />
       </div>
 
-      {/* 7. Section: Track Your Progress */}
-      <TrackProgress />
-
-      {/* 8. Section: For Schools & Organizations */}
+      {/* 7. Section: For Schools & Organizations */}
       <div id="organizations">
         <OrganizationDashboard />
       </div>
