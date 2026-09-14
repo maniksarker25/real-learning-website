@@ -137,20 +137,20 @@ export const LifeGPSWidget = memo(function LifeGPSWidget({
           <div className="p-3.5 rounded-xl bg-black/40 border border-white/10 space-y-2.5">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2 text-xs font-semibold text-white/90">
-                {isTech ? (
+                {/* {isTech ? (
                   <Laptop className="w-3.5 h-3.5 text-blue-400" />
                 ) : (
                   <Headphones className="w-3.5 h-3.5 text-orange-400" />
-                )}
+                )} */}
                 <span>
                   {isTech
                     ? "Tech & Data Support Track"
                     : "Customer Service & Comms Track"}
                 </span>
               </div>
-              <span className="text-[10px] font-mono font-bold text-orange-300 bg-orange-500/10 px-2 py-0.5 rounded border border-orange-400/30">
+              {/* <span className="text-[10px] font-mono font-bold text-orange-300 bg-orange-500/10 px-2 py-0.5 rounded border border-orange-400/30">
                 {isTech ? "35 SCENARIOS" : "42 SCENARIOS"}
-              </span>
+              </span> */}
             </div>
 
             <p className="text-[11px] text-white/60 leading-relaxed">

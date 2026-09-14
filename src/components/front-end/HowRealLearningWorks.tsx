@@ -145,7 +145,7 @@ export default function HowRealLearningWorks() {
   return (
     <section className="relative w-full py-16 sm:py-20 bg-black text-slate-100 font-sans overflow-hidden">
       {/* Background Grid (Identical to page.tsx) */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+      {/* <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div
           className="absolute inset-0 opacity-40"
           style={{
@@ -161,7 +161,7 @@ export default function HowRealLearningWorks() {
               "radial-gradient(ellipse at center, rgba(249, 115, 22, 0.15) 0%, rgba(244, 63, 94, 0.1) 50%, transparent 70%)",
           }}
         />
-      </div>
+      </div> */}
 
       <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header & Flow Controls (Synchronized with page.tsx theme) */}
