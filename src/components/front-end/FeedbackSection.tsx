@@ -10,7 +10,8 @@ export default function FeedbackSection() {
     {
       label: "Communication",
       score: 92,
-      description: "Clarity of message, active listening, and structured response.",
+      description:
+        "Clarity of message, active listening, and structured response.",
       color: "bg-orange-400",
       textColor: "text-orange-300",
       borderColor: "border-orange-400/30",
@@ -18,7 +19,8 @@ export default function FeedbackSection() {
     {
       label: "Empathy",
       score: 88,
-      description: "Validation of stakeholder concerns and emotional awareness.",
+      description:
+        "Validation of stakeholder concerns and emotional awareness.",
       color: "bg-rose-400",
       textColor: "text-rose-300",
       borderColor: "border-rose-400/30",
@@ -42,25 +44,11 @@ export default function FeedbackSection() {
   ];
 
   return (
-    <section id="feedback-section" className="relative w-full py-16 sm:py-20 bg-black text-slate-100 font-sans border-y border-white/10 overflow-hidden">
+    <section
+      id="feedback-section"
+      className="relative w-full py-16 sm:py-20 bg-black text-slate-100 font-sans border-y border-white/10 overflow-hidden"
+    >
       {/* Background Grid */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div
-          className="absolute inset-0 opacity-40"
-          style={{
-            backgroundImage:
-              "radial-gradient(rgba(167,139,250,0.6) 1px, transparent 1px)",
-            backgroundSize: "16px 16px",
-          }}
-        />
-        <div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[850px] h-[550px] opacity-35 blur-3xl pointer-events-none"
-          style={{
-            background:
-              "radial-gradient(ellipse at center, rgba(249, 115, 22, 0.15) 0%, rgba(244, 63, 94, 0.1) 50%, transparent 70%)",
-          }}
-        />
-      </div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
@@ -95,7 +83,8 @@ export default function FeedbackSection() {
             transition={{ delay: 0.15 }}
             className="mt-4 text-base sm:text-lg text-white/70 font-normal leading-relaxed max-w-2xl mx-auto"
           >
-            Receive instant multi-dimensional evaluation on every conversation so you understand your exact strengths.
+            Receive instant multi-dimensional evaluation on every conversation
+            so you understand your exact strengths.
           </motion.p>
         </div>
 
@@ -115,7 +104,12 @@ export default function FeedbackSection() {
                   <span className="text-xs font-mono font-bold text-white/50">
                     METRIC 0{idx + 1}
                   </span>
-                  <span className={cn("text-2xl font-extrabold font-mono", item.textColor)}>
+                  <span
+                    className={cn(
+                      "text-2xl font-extrabold font-mono",
+                      item.textColor,
+                    )}
+                  >
                     {item.score}%
                   </span>
                 </div>
