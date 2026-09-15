@@ -71,20 +71,21 @@ export default memo(function UserStoriesShowcase() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12 sm:mb-16">
         <div className="flex flex-col items-center text-center space-y-4">
           {/* Badge */}
-          <div className="inline-flex items-center px-4 py-1 rounded-full bg-white/80 border border-blue-200/90 text-xs font-semibold text-blue-600 uppercase tracking-wider shadow-sm">
+          <div className="inline-flex items-center px-4 py-1 rounded-full bg-white/80 border border-orange-200/90 text-xs font-semibold text-orange-400 uppercase tracking-wider shadow-sm">
             <span>CUSTOMER STORIES</span>
           </div>
 
           {/* Heading */}
           <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-[46px] font-extrabold tracking-tight text-neutral-900 leading-[1.18] max-w-3xl">
             Why do training, marketing and sales leaders{" "}
-            <span className="text-[#3b52f5]">trust Real Learning?</span>
+            <span className="text-orange-400">trust Real Learning?</span>
           </h2>
 
           {/* Subtitle */}
           <p className="text-sm sm:text-base md:text-lg text-neutral-600 font-normal max-w-2xl leading-relaxed">
             Discover how forward-thinking organizations use AI workplace
-            simulations to build verified skills and accelerate career readiness.
+            simulations to build verified skills and accelerate career
+            readiness.
           </p>
         </div>
       </div>
