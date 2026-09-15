@@ -10,6 +10,7 @@ import HowRealLearningWorks from "@/components/front-end/HowRealLearningWorks";
 import ExploreCareers from "@/components/front-end/ExploreCareers";
 import VideoShowcase from "@/components/front-end/VideoShowcase";
 import FeedbackSection from "@/components/front-end/FeedbackSection";
+import UserStoriesShowcase from "@/components/front-end/UserStoriesShowcase";
 import TrackProgress from "@/components/front-end/TrackProgress";
 import OrganizationDashboard from "@/components/front-end/OrganizationDashboard";
 import FooterCTA from "@/components/front-end/FooterCTA";
@@ -51,9 +52,11 @@ export default function Home() {
   }
 
   return (
-    <main className="bg-black text-slate-100 min-h-screen font-sans selection:bg-orange-500 selection:text-white overflow-x-hidden">
+    <div className="bg-orange-50 text-stone-900 min-h-screen w-full overflow-x-clip font-sans selection:bg-orange-500 selection:text-white">
       {/* Top Navbar */}
       <Navbar />
+
+      <main className="overflow-x-clip">
 
       {/* 1. Patricia Front Door Opening Hero */}
       <PatriciaOpeningHero onSlideUp={handleSlideUpToPatricia} />
@@ -88,13 +91,19 @@ export default function Home() {
         <FeedbackSection />
       </div>
 
-      {/* 7. Section: For Schools & Organizations */}
-      <div id="organizations">
-        <OrganizationDashboard />
+      {/* 7. Section: Customer & Learner Stories Showcase */}
+      <div id="customer-stories">
+        <UserStoriesShowcase />
       </div>
+
+      {/* 8. Section: For Schools & Organizations */}
+      {/* <div id="organizations">
+        <OrganizationDashboard />
+      </div> */}
 
       {/* 9. Section: Ready to Practice Your Future & Footer */}
       <FooterCTA />
     </main>
-  );
+  </div>
+);
 }
