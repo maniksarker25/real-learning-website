@@ -49,7 +49,7 @@ export default function ExploreCareers() {
               href="/get-started"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-stone-950 hover:bg-stone-800 text-white text-xs font-bold transition-all shadow-xl hover:shadow-2xl active:scale-95"
             >
-              <span>Explore All 135+ Scenarios</span>
+              <span>Explore All Scenarios</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
