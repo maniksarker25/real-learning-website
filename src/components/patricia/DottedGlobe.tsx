@@ -49,7 +49,10 @@ export const DottedGlobe = memo(function DottedGlobe({
   const handlePointerDown = useCallback(
     (e: React.PointerEvent<HTMLCanvasElement>) => {
       // Mobile-first focus: ignore touch/thumb events so the user can scroll naturally without hijacking
-      if (e.pointerType === "touch" || (typeof window !== "undefined" && window.innerWidth < 1024)) {
+      if (
+        e.pointerType === "touch" ||
+        (typeof window !== "undefined" && window.innerWidth < 1024)
+      ) {
         return;
       }
       isDraggingRef.current = true;
@@ -163,14 +166,14 @@ export const DottedGlobe = memo(function DottedGlobe({
       const haloGrad = ctx.createRadialGradient(
         cx,
         cy,
-        radius * 0.5,
+        radius * 0.6,
         cx,
         cy,
         radius * 1.35,
       );
-      haloGrad.addColorStop(0, "rgba(251, 146, 60, 0.20)");
-      haloGrad.addColorStop(0.5, "rgba(244, 63, 94, 0.08)");
-      haloGrad.addColorStop(1, "rgba(255, 247, 237, 0)");
+      haloGrad.addColorStop(0, "rgba(30, 58, 138, 0.22)");
+      haloGrad.addColorStop(0.5, "rgba(14, 165, 233, 0.07)");
+      haloGrad.addColorStop(1, "rgba(0, 0, 0, 0)");
       ctx.fillStyle = haloGrad;
       ctx.beginPath();
       ctx.arc(cx, cy, radius * 1.35, 0, Math.PI * 2);
@@ -179,13 +182,13 @@ export const DottedGlobe = memo(function DottedGlobe({
       // Subtle sphere rim edge
       ctx.beginPath();
       ctx.arc(cx, cy, radius, 0, Math.PI * 2);
-      ctx.strokeStyle = "rgba(28, 25, 23, 0.12)";
+      ctx.strokeStyle = "rgba(56, 189, 248, 0.12)";
       ctx.lineWidth = 1.2;
       ctx.stroke();
 
       // 2. Render dots
       // First pass: Back hemisphere dots (z <= 0)
-      ctx.fillStyle = "rgba(120, 113, 108, 0.16)";
+      ctx.fillStyle = "rgba(148, 163, 184, 0.08)";
       for (let i = 0; i < GLOBE_LAND_POINTS.length; i++) {
         const pt = GLOBE_LAND_POINTS[i];
         // Rotate Y
@@ -208,6 +211,7 @@ export const DottedGlobe = memo(function DottedGlobe({
       }
 
       // Second pass: Front hemisphere dots (z > 0)
+      // Group by approximate opacity/size for batch performance
       for (let i = 0; i < GLOBE_LAND_POINTS.length; i++) {
         const pt = GLOBE_LAND_POINTS[i];
         const rx = pt[0] * cosY + pt[2] * sinY;
@@ -221,10 +225,10 @@ export const DottedGlobe = memo(function DottedGlobe({
           const sx = cx + rx * radius;
           const sy = cy - y * radius;
 
-          const alpha = 0.25 + 0.75 * (z * z);
+          const alpha = 0.2 + 0.8 * (z * z);
           const dotRadius = 0.9 + 1.2 * z;
 
-          ctx.fillStyle = `rgba(28, 25, 23, ${alpha.toFixed(2)})`;
+          ctx.fillStyle = `rgba(240, 246, 255, ${alpha.toFixed(2)})`;
           ctx.beginPath();
           ctx.arc(sx, sy, dotRadius, 0, Math.PI * 2);
           ctx.fill();
@@ -253,7 +257,7 @@ export const DottedGlobe = memo(function DottedGlobe({
           const visibility = Math.max(0, Math.min(1, (bFinalZ + 0.05) * 3));
 
           if (beacon.isPrimary) {
-            // Bangladesh Primary Beacon: Intense Orange / Rose pulse with radar rings
+            // Bangladesh Primary Beacon: Intense cyan/blue glow with pulsing radar rings
             const glowSize = 36 * visibility;
             const beaconGlow = ctx.createRadialGradient(
               bsx,
@@ -265,13 +269,13 @@ export const DottedGlobe = memo(function DottedGlobe({
             );
             beaconGlow.addColorStop(
               0,
-              `rgba(234, 88, 12, ${0.95 * visibility})`,
+              `rgba(56, 189, 248, ${0.95 * visibility})`,
             );
             beaconGlow.addColorStop(
               0.35,
-              `rgba(249, 115, 22, ${0.5 * visibility})`,
+              `rgba(14, 165, 233, ${0.5 * visibility})`,
             );
-            beaconGlow.addColorStop(1, "rgba(249, 115, 22, 0)");
+            beaconGlow.addColorStop(1, "rgba(14, 165, 233, 0)");
 
             ctx.fillStyle = beaconGlow;
             ctx.beginPath();
@@ -285,7 +289,7 @@ export const DottedGlobe = memo(function DottedGlobe({
 
             ctx.beginPath();
             ctx.arc(bsx, bsy, pulseRadius1, 0, Math.PI * 2);
-            ctx.strokeStyle = `rgba(234, 88, 12, ${pulseAlpha1.toFixed(2)})`;
+            ctx.strokeStyle = `rgba(56, 189, 248, ${pulseAlpha1.toFixed(2)})`;
             ctx.lineWidth = 1.6;
             ctx.stroke();
 
@@ -295,14 +299,14 @@ export const DottedGlobe = memo(function DottedGlobe({
 
             ctx.beginPath();
             ctx.arc(bsx, bsy, pulseRadius2, 0, Math.PI * 2);
-            ctx.strokeStyle = `rgba(234, 88, 12, ${pulseAlpha2.toFixed(2)})`;
+            ctx.strokeStyle = `rgba(56, 189, 248, ${pulseAlpha2.toFixed(2)})`;
             ctx.lineWidth = 1.4;
             ctx.stroke();
 
-            // Inner vibrant beacon disc
+            // Inner cyan beacon disc
             ctx.beginPath();
             ctx.arc(bsx, bsy, 5.5 * visibility, 0, Math.PI * 2);
-            ctx.fillStyle = "#ea580c";
+            ctx.fillStyle = "#38bdf8";
             ctx.fill();
 
             // Brilliant white hot core
@@ -321,12 +325,12 @@ export const DottedGlobe = memo(function DottedGlobe({
               bsy,
               secGlowSize,
             );
-            secGlow.addColorStop(0, `rgba(234, 88, 12, ${0.8 * visibility})`);
+            secGlow.addColorStop(0, `rgba(56, 189, 248, ${0.8 * visibility})`);
             secGlow.addColorStop(
               0.4,
-              `rgba(249, 115, 22, ${0.35 * visibility})`,
+              `rgba(14, 165, 233, ${0.35 * visibility})`,
             );
-            secGlow.addColorStop(1, "rgba(249, 115, 22, 0)");
+            secGlow.addColorStop(1, "rgba(14, 165, 233, 0)");
 
             ctx.fillStyle = secGlow;
             ctx.beginPath();
@@ -335,7 +339,7 @@ export const DottedGlobe = memo(function DottedGlobe({
 
             ctx.beginPath();
             ctx.arc(bsx, bsy, 3.5 * visibility, 0, Math.PI * 2);
-            ctx.fillStyle = "#ea580c";
+            ctx.fillStyle = "#38bdf8";
             ctx.fill();
 
             ctx.beginPath();

@@ -52,58 +52,57 @@ export default function Home() {
   }
 
   return (
-    <div className="bg-orange-50 text-stone-900 min-h-screen w-full overflow-x-clip font-sans selection:bg-orange-500 selection:text-white">
+    <div className="bg-black text-slate-100 min-h-screen w-full overflow-x-clip font-sans selection:bg-orange-500 selection:text-white">
       {/* Top Navbar */}
       <Navbar />
 
       <main className="overflow-x-clip">
+        {/* 1. Patricia Front Door Opening Hero */}
+        <PatriciaOpeningHero onSlideUp={handleSlideUpToPatricia} />
 
-      {/* 1. Patricia Front Door Opening Hero */}
-      <PatriciaOpeningHero onSlideUp={handleSlideUpToPatricia} />
+        {/* 2. Patricia Chatbot & Live Life GPS Experience */}
+        <div
+          id="patricia-experience"
+          ref={patriciaSectionRef}
+          className="bg-orange-50"
+        >
+          <PatriciaChatExperience
+            initialPrompt={initialPrompt}
+            onClearInitialPrompt={handleClearInitialPrompt}
+          />
+        </div>
 
-      {/* 2. Patricia Chatbot & Live Life GPS Experience */}
-      <div
-        id="patricia-experience"
-        ref={patriciaSectionRef}
-        className="bg-orange-50"
-      >
-        <PatriciaChatExperience
-          initialPrompt={initialPrompt}
-          onClearInitialPrompt={handleClearInitialPrompt}
-        />
-      </div>
+        {/* 3. Section: How Real Learning Works */}
+        <div id="how-it-works">
+          <HowRealLearningWorks />
+        </div>
 
-      {/* 3. Section: How Real Learning Works */}
-      <div id="how-it-works">
-        <HowRealLearningWorks />
-      </div>
+        {/* 4. Section: Explore Your Career */}
+        <div id="explore-careers">
+          <ExploreCareers />
+        </div>
 
-      {/* 4. Section: Explore Your Career */}
-      <div id="explore-careers">
-        <ExploreCareers />
-      </div>
+        {/* 5. Section: Practice Real Workplace Situations */}
+        {/* <VideoShowcase /> */}
 
-      {/* 5. Section: Practice Real Workplace Situations */}
-      {/* <VideoShowcase /> */}
+        {/* 6. Section: Real-Time Feedback & Skill Progress Dashboard */}
+        <div id="feedback-section">
+          <FeedbackSection />
+        </div>
 
-      {/* 6. Section: Real-Time Feedback & Skill Progress Dashboard */}
-      <div id="feedback-section">
-        <FeedbackSection />
-      </div>
+        {/* 7. Section: Customer & Learner Stories Showcase */}
+        <div id="customer-stories">
+          <UserStoriesShowcase />
+        </div>
 
-      {/* 7. Section: Customer & Learner Stories Showcase */}
-      <div id="customer-stories">
-        <UserStoriesShowcase />
-      </div>
-
-      {/* 8. Section: For Schools & Organizations */}
-      {/* <div id="organizations">
+        {/* 8. Section: For Schools & Organizations */}
+        {/* <div id="organizations">
         <OrganizationDashboard />
       </div> */}
 
-      {/* 9. Section: Ready to Practice Your Future & Footer */}
-      <FooterCTA />
-    </main>
-  </div>
-);
+        {/* 9. Section: Ready to Practice Your Future & Footer */}
+        <FooterCTA />
+      </main>
+    </div>
+  );
 }
