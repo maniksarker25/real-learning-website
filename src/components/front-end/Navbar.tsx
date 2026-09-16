@@ -33,35 +33,50 @@ export default memo(function Navbar() {
     closeMobileMenu();
   }, [logout, closeMobileMenu]);
 
-  // Dynamic Navigation Links based on active Account Session
-  const navLinks = useMemo(() => {
-    if (session.accountType === "individual") {
-      return [
-        { label: "Dashboard", href: "/user-dashboard" },
-        { label: "Practice", href: "/user-dashboard/practice" },
-        { label: "Progress", href: "/user-dashboard/progress" },
-        { label: "Goals", href: "/user-dashboard/goals" },
-      ];
-    }
-    if (session.accountType === "organization") {
-      return [
-        { label: "Overview", href: "/organization-dashboard" },
-        { label: "Participants", href: "/organization-dashboard/participants" },
-        { label: "Simulation", href: "/organization-dashboard/classes" },
-        { label: "Settings", href: "/organization-dashboard/settings" },
-      ];
-    }
-    return [
+  // Navigation Links for public showcase
+  const navLinks = useMemo(
+    () => [
+      { label: "Home", href: "/" },
       { label: "How It Works", href: "/#how-it-works" },
       { label: "Careers", href: "/#explore-careers" },
       { label: "Feedback & Growth", href: "/#feedback-section" },
-      { label: "Organizations", href: "/#organizations" },
-    ];
-  }, [session.accountType]);
+      { label: "About", href: "/about" },
+      { label: "Contact", href: "/contact" },
+    ],
+    []
+  );
+
+  const handleNavClick = useCallback(
+    (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+      if (href.startsWith("/#") || href.startsWith("#")) {
+        const targetId = href.replace(/^\/?#/, "");
+        if (typeof window !== "undefined" && window.location.pathname === "/") {
+          const elem = document.getElementById(targetId);
+          if (elem) {
+            e.preventDefault();
+            closeMobileMenu();
+            elem.scrollIntoView({ behavior: "smooth", block: "start" });
+            window.history.pushState(null, "", `#${targetId}`);
+          }
+        }
+      } else if (href === "/") {
+        if (typeof window !== "undefined" && window.location.pathname === "/") {
+          e.preventDefault();
+          closeMobileMenu();
+          window.scrollTo({
+            top: 0,
+            behavior: "smooth",
+          });
+          window.history.pushState(null, "", "/");
+        }
+      }
+    },
+    [closeMobileMenu],
+  );
 
   return (
     <header className="sticky top-0 z-50 w-full bg-black/80 backdrop-blur-md border-b border-white/10">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
         {/* Brand Logo & Active Session Type Indicator */}
         <div className="flex items-center gap-3">
           <Link href="/" className="flex items-center gap-2.5 group">
@@ -103,7 +118,8 @@ export default memo(function Navbar() {
             <a
               key={link.label}
               href={link.href}
-              className="hover:text-white transition-colors"
+              onClick={(e) => handleNavClick(e, link.href)}
+              className="hover:text-white transition-colors cursor-pointer"
             >
               {link.label}
             </a>
@@ -200,8 +216,8 @@ export default memo(function Navbar() {
             <a
               key={link.label}
               href={link.href}
-              onClick={closeMobileMenu}
-              className="block text-sm font-medium text-white/80 hover:text-white py-2"
+              onClick={(e) => handleNavClick(e, link.href)}
+              className="block text-sm font-medium text-white/80 hover:text-white py-2 cursor-pointer"
             >
               {link.label}
             </a>

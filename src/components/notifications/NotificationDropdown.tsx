@@ -80,11 +80,7 @@ export function NotificationDropdown() {
       const generatedId = `ws-${orgName.toLowerCase().replace(/[^a-z0-9]/g, "-")}-${role}`;
       switchWorkspace(generatedId);
       setIsOpen(false);
-      if (role === "admin") {
-        router.push("/organization-dashboard");
-      } else {
-        router.push("/user-dashboard");
-      }
+      router.push("/");
     },
     [switchWorkspace, router]
   );

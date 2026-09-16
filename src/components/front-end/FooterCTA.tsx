@@ -1,32 +1,14 @@
 "use client";
 
-import React, { useState, useCallback, memo } from "react";
+import React, { memo } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, Building2 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { ImageConstants } from "@/constant/image.index";
-import { ContactModal } from "./footer/ContactModal";
-import { AboutModal } from "./footer/AboutModal";
-import { OrgAccessModal } from "./footer/OrgAccessModal";
 import { FooterNavGrid } from "./footer/FooterNavGrid";
 
 export default memo(function FooterCTA() {
-  // Modal states for footer actions
-  const [isContactOpen, setIsContactOpen] = useState(false);
-  const [isAboutOpen, setIsAboutOpen] = useState(false);
-  const [isOrgAccessOpen, setIsOrgAccessOpen] = useState(false);
-
-  // useCallback handlers for performance optimization
-  const handleOpenContact = useCallback(() => setIsContactOpen(true), []);
-  const handleCloseContact = useCallback(() => setIsContactOpen(false), []);
-
-  const handleOpenAbout = useCallback(() => setIsAboutOpen(true), []);
-  const handleCloseAbout = useCallback(() => setIsAboutOpen(false), []);
-
-  const handleOpenOrgAccess = useCallback(() => setIsOrgAccessOpen(true), []);
-  const handleCloseOrgAccess = useCallback(() => setIsOrgAccessOpen(false), []);
-
   return (
     <footer className="relative w-full bg-orange-50 text-slate-100 font-sans select-none">
       {/* Outer Banner Wrapper */}
@@ -84,29 +66,20 @@ export default memo(function FooterCTA() {
               </Link>
 
               {/* Secondary Clean Pill Button */}
-              <button
-                onClick={handleOpenOrgAccess}
+              <Link
+                href="/onboarding/organization"
                 className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full bg-white/70 backdrop-blur-sm text-neutral-700 text-sm font-semibold border border-neutral-300/80 hover:bg-white hover:text-neutral-900 shadow-sm transition-all duration-200 cursor-pointer"
               >
                 <Building2 className="w-4 h-4 text-neutral-500" />
                 <span>For Organizations</span>
-              </button>
+              </Link>
             </motion.div>
           </div>
         </div>
       </div>
 
-      {/* Footer Navigation Grid */}
-      <FooterNavGrid
-        onOpenContact={handleOpenContact}
-        onOpenAbout={handleOpenAbout}
-        onOpenOrgAccess={handleOpenOrgAccess}
-      />
-
-      {/* Interactive Modals */}
-      <ContactModal isOpen={isContactOpen} onClose={handleCloseContact} />
-      <AboutModal isOpen={isAboutOpen} onClose={handleCloseAbout} />
-      <OrgAccessModal isOpen={isOrgAccessOpen} onClose={handleCloseOrgAccess} />
+      {/* Footer Navigation Grid with Agency Aesthetic */}
+      <FooterNavGrid />
     </footer>
   );
 });

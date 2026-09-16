@@ -216,10 +216,10 @@ export default function OrganizationOnboardingPage() {
                 </p>
                 <div className="pt-2">
                   <Link
-                    href="/organization-dashboard"
+                    href="/contact"
                     className="w-full py-2.5 px-4 rounded-xl bg-orange-600 hover:bg-orange-700 text-white font-medium text-xs transition-colors flex items-center justify-center gap-2 shadow-[0_2px_10px_-2px_rgba(234,88,12,0.3)]"
                   >
-                    <span>Enter Organization Dashboard</span>
+                    <span>Connect with Enterprise Specialist</span>
                     <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
