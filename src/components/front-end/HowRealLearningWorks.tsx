@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, memo, useCallback } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { SHOWCASE_STEPS, StepShowcaseCard } from "./learning-steps";
 
-export default function HowRealLearningWorks() {
+export default memo(function HowRealLearningWorks() {
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
@@ -179,4 +179,4 @@ export default function HowRealLearningWorks() {
       </div>
     </section>
   );
-}
+});
