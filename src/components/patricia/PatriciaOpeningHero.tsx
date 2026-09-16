@@ -52,7 +52,7 @@ export const PatriciaOpeningHero = memo(function PatriciaOpeningHero({
       onPanEnd={handlePanEnd}
     >
       {/* Outer framing wrapper matching the sleek modern design */}
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
         <div className="relative">
           {/* Grid Layout: Left Content & Right 3D Globe with Floating Cards */}
           <div className="grid grid-cols-1 lg:grid-cols-12 items-center gap-6 lg:gap-8">
@@ -320,7 +320,9 @@ export const PatriciaOpeningHero = memo(function PatriciaOpeningHero({
                 <div className="space-y-1.5">
                   <div>
                     <div className="flex justify-between text-[10px] font-medium mb-0.5">
-                      <span className="text-white/95 font-medium">Customer Service</span>
+                      <span className="text-white/95 font-medium">
+                        Customer Service
+                      </span>
                       <span className="text-white/70 font-mono text-[9px]">
                         42 scenarios
                       </span>
@@ -335,7 +337,9 @@ export const PatriciaOpeningHero = memo(function PatriciaOpeningHero({
 
                   <div>
                     <div className="flex justify-between text-[10px] font-medium mb-0.5">
-                      <span className="text-white/95 font-medium">Tech Support</span>
+                      <span className="text-white/95 font-medium">
+                        Tech Support
+                      </span>
                       <span className="text-white/70 font-mono text-[9px]">
                         35 scenarios
                       </span>
@@ -350,7 +354,9 @@ export const PatriciaOpeningHero = memo(function PatriciaOpeningHero({
 
                   <div>
                     <div className="flex justify-between text-[10px] font-medium mb-0.5">
-                      <span className="text-white/95 font-medium">IT Specialist</span>
+                      <span className="text-white/95 font-medium">
+                        IT Specialist
+                      </span>
                       <span className="text-white/70 font-mono text-[9px]">
                         30 scenarios
                       </span>
@@ -384,8 +390,12 @@ export const PatriciaOpeningHero = memo(function PatriciaOpeningHero({
 
                 <div className="grid grid-cols-3 gap-1.5 mt-2 pt-2 border-t border-white/15 text-[9px]">
                   <div className="flex flex-col">
-                    <span className="text-white font-medium truncate">Client Care</span>
-                    <span className="text-emerald-200/70 text-[8px]">Track</span>
+                    <span className="text-white font-medium truncate">
+                      Client Care
+                    </span>
+                    <span className="text-emerald-200/70 text-[8px]">
+                      Track
+                    </span>
                   </div>
 
                   <div className="flex flex-col">
@@ -394,8 +404,12 @@ export const PatriciaOpeningHero = memo(function PatriciaOpeningHero({
                   </div>
 
                   <div className="flex flex-col">
-                    <span className="text-white font-medium whitespace-nowrap">5 mins</span>
-                    <span className="text-emerald-200/70 text-[8px]">Duration</span>
+                    <span className="text-white font-medium whitespace-nowrap">
+                      5 mins
+                    </span>
+                    <span className="text-emerald-200/70 text-[8px]">
+                      Duration
+                    </span>
                   </div>
                 </div>
               </motion.div>

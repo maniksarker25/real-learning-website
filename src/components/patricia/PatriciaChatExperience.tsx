@@ -17,6 +17,7 @@ import {
   X,
   Minus,
   Sparkles,
+  MousePointerClick,
 } from "lucide-react";
 import {
   ChatMessage,
@@ -25,17 +26,14 @@ import {
   INITIAL_LIFE_GPS,
   getPatriciaResponse,
 } from "./patriciaDialogEngine";
+import { PatriciaGpsPanel } from "./PatriciaGpsPanel";
 
 interface PatriciaChatExperienceProps {
   initialPrompt?: string | null;
   onClearInitialPrompt?: () => void;
 }
 
-function PatriciaAvatar({
-  className = "w-8 h-8",
-}: {
-  className?: string;
-}) {
+function PatriciaAvatar({ className = "w-8 h-8" }: { className?: string }) {
   return (
     <div
       className={`relative rounded-xl flex items-center justify-center shadow-inner select-none transition-transform hover:scale-105 bg-[#c26d44] ${className}`}
@@ -77,7 +75,6 @@ export const PatriciaChatExperience = memo(function PatriciaChatExperience({
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [gpsState, setGpsState] = useState<LifeGPSState>(INITIAL_LIFE_GPS);
-  const [activeGpsStep, setActiveGpsStep] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
   const messagesContainerRef = useRef<HTMLDivElement>(null);
@@ -143,7 +140,6 @@ export const PatriciaChatExperience = memo(function PatriciaChatExperience({
             ...prev,
             ...reply.gpsUpdate,
           }));
-          setActiveGpsStep(2);
         }
 
         setMessages((prev) => [
@@ -183,38 +179,7 @@ export const PatriciaChatExperience = memo(function PatriciaChatExperience({
       },
     ]);
     setGpsState(INITIAL_LIFE_GPS);
-    setActiveGpsStep(0);
   }, []);
-
-  const stepsData = [
-    {
-      title: "1. Where you are right now",
-      subtitle: "Current position & baseline assessment",
-      value: gpsState.whereYouAre,
-      icon: MapPin,
-      badge: "Step 01",
-      color: "text-amber-400",
-    },
-    {
-      title: "2. Where you want to go",
-      subtitle: "Target career outcome & strengths alignment",
-      value: gpsState.whereYouWantToGo,
-      icon: Target,
-      badge: "Step 02",
-      color: "text-rose-400",
-    },
-    {
-      title: "3. Your next best step",
-      subtitle: "5-minute low-risk practice simulation",
-      value: gpsState.nextBestStep,
-      icon: ShieldCheck,
-      badge: "Step 03",
-      color: "text-emerald-400",
-    },
-  ];
-
-  const currentStep = stepsData[activeGpsStep];
-  const StepIcon = currentStep.icon;
 
   const renderMacChatWindow = (isModal: boolean) => (
     <div
@@ -266,10 +231,17 @@ export const PatriciaChatExperience = memo(function PatriciaChatExperience({
           <button
             type="button"
             onClick={() => setIsFullscreen((prev) => !prev)}
-            className="w-3.5 h-3.5 rounded-full bg-[#27c93f] border border-black/20 flex items-center justify-center shadow-sm cursor-pointer transition-transform hover:scale-115 active:scale-95 group-hover/macbtns:brightness-105"
-            title={isModal ? "Exit Fullscreen (Esc)" : "Expand to Fullscreen"}
+            className="relative w-3.5 h-3.5 rounded-full bg-[#27c93f] border border-black/20 flex items-center justify-center shadow-sm cursor-pointer transition-transform hover:scale-125 active:scale-95 group-hover/macbtns:brightness-105"
+            title={
+              isModal
+                ? "Exit Fullscreen (Esc)"
+                : "Click to Expand to Fullscreen"
+            }
             aria-label="Toggle Fullscreen"
           >
+            {!isModal && (
+              <span className="absolute -inset-1 rounded-full bg-emerald-400/40 animate-ping pointer-events-none" />
+            )}
             {isModal ? (
               <Minimize2 className="w-2 h-2 text-black/80 opacity-0 group-hover/macbtns:opacity-100 transition-opacity" />
             ) : (
@@ -280,11 +252,12 @@ export const PatriciaChatExperience = memo(function PatriciaChatExperience({
 
         {/* Window Title and Mode Info */}
         <div className="flex items-center gap-2 text-xs font-semibold text-white/85 tracking-wide">
-          <div className="flex items-center gap-1.5">
+          {/* <div className="flex items-center gap-1.5">
             <span>Inbox</span>
             <span className="text-white/30 font-normal">/</span>
             <span className="text-orange-50/90 font-medium">Patricia</span>
-          </div>
+          </div> */}
+
           {isModal && (
             <span className="hidden sm:inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-[10px] font-mono text-emerald-400 font-semibold uppercase tracking-wider">
               Fullscreen (ESC)
@@ -294,9 +267,9 @@ export const PatriciaChatExperience = memo(function PatriciaChatExperience({
 
         {/* Right Action Tools */}
         <div className="flex items-center gap-2">
-          <div className="hidden sm:block px-2.5 py-0.5 rounded-full bg-white/[0.05] border border-white/[0.1] text-[10px] font-mono text-white/60 tracking-wider">
+          {/* <div className="hidden sm:block px-2.5 py-0.5 rounded-full bg-white/[0.05] border border-white/[0.1] text-[10px] font-mono text-white/60 tracking-wider">
             in_10xPro92
-          </div>
+          </div> */}
 
           <button
             onClick={handleReset}
@@ -308,13 +281,13 @@ export const PatriciaChatExperience = memo(function PatriciaChatExperience({
 
           <button
             onClick={() => setIsFullscreen((prev) => !prev)}
-            className="p-1.5 rounded-md text-white/50 hover:text-white hover:bg-white/10 transition-colors cursor-pointer flex items-center gap-1 text-xs"
+            className="p-1.5 rounded-md text-white/70 hover:text-white hover:bg-white/10 transition-colors cursor-pointer flex items-center gap-1 text-xs"
             title={isModal ? "Exit Fullscreen (Esc)" : "Expand to Fullscreen"}
           >
             {isModal ? (
               <Minimize2 className="w-3.5 h-3.5 text-orange-400" />
             ) : (
-              <Maximize2 className="w-3.5 h-3.5 text-white/70" />
+              <Maximize2 className="w-3.5 h-3.5 text-orange-400" />
             )}
           </button>
         </div>
@@ -324,16 +297,24 @@ export const PatriciaChatExperience = memo(function PatriciaChatExperience({
       <div className="flex-1 flex flex-col min-w-0 bg-[#181816]/90 overflow-hidden">
         {/* Status / Patricia Header Banner */}
         <div
+          onClick={() => {
+            if (!isModal) setIsFullscreen(true);
+          }}
           className={`px-4 py-2.5 border-b border-white/[0.06] bg-white/[0.01] flex items-center justify-between gap-2 shrink-0 ${
-            isModal ? "px-6 py-3" : ""
+            isModal
+              ? "px-6 py-3"
+              : "cursor-pointer hover:bg-white/[0.04] transition-colors group/banner"
           }`}
+          title={!isModal ? "Click to expand to full screen" : undefined}
         >
           <div className="flex items-center gap-2.5 min-w-0">
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 shrink-0 animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.5)]" />
             <div className="min-w-0">
               <h4
                 className={`font-semibold text-white/95 truncate ${
-                  isModal ? "text-sm" : "text-xs"
+                  isModal
+                    ? "text-sm"
+                    : "text-xs group-hover/banner:text-orange-200 transition-colors"
                 }`}
               >
                 {gpsState.whereYouAre.length > 35 && !isModal
@@ -346,20 +327,32 @@ export const PatriciaChatExperience = memo(function PatriciaChatExperience({
             </div>
           </div>
 
-          <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-[#c26d44]/15 border border-[#c26d44]/30 shrink-0">
-            <PatriciaAvatar className="w-4 h-4 rounded-md" />
-            <span className="text-[11px] font-medium text-orange-200">
-              Patricia
-            </span>
+          <div className="flex items-center gap-2">
+            {!isModal && (
+              <span className="hidden sm:inline-flex items-center gap-1 text-[10px] font-mono text-orange-300/80 group-hover/banner:text-orange-200 transition-colors">
+                <Maximize2 className="w-2.5 h-2.5" />
+                <span>Expand</span>
+              </span>
+            )}
+            <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-[#c26d44]/15 border border-[#c26d44]/30 shrink-0">
+              <PatriciaAvatar className="w-4 h-4 rounded-md" />
+              <span className="text-[11px] font-medium text-orange-200">
+                Patricia
+              </span>
+            </div>
           </div>
         </div>
 
         {/* Messages Feed */}
         <div
           ref={messagesContainerRef}
-          className={`flex-1 overflow-y-auto space-y-4 ${
+          className={`flex-1 overflow-y-auto space-y-4 no-scrollbar [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden ${
             isModal ? "p-6 sm:p-8 space-y-6 text-sm" : "p-4 text-xs"
           }`}
+          style={{
+            scrollbarWidth: "none",
+            msOverflowStyle: "none",
+          }}
         >
           <AnimatePresence initial={false}>
             {messages.map((msg) => (
@@ -481,7 +474,7 @@ export const PatriciaChatExperience = memo(function PatriciaChatExperience({
             <input
               type="text"
               value={input}
-              disabled={isTyping}
+              disabled={true}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Ask Patricia..."
               className={`flex-1 bg-transparent px-3 py-2 text-white placeholder-white/35 focus:outline-none ${
@@ -543,7 +536,7 @@ export const PatriciaChatExperience = memo(function PatriciaChatExperience({
         )}
       </AnimatePresence>
 
-      <div className="w-full mx-auto">
+      <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-[1.12fr_0.88fr] gap-8 lg:gap-12 items-center">
           <div className="relative rounded-3xl overflow-hidden p-3 sm:p-7 md:p-9 shadow-2xl border border-stone-900/15 bg-stone-950 flex items-center justify-center min-h-[550px]">
             <div
@@ -563,7 +556,8 @@ export const PatriciaChatExperience = memo(function PatriciaChatExperience({
                   Chat expanded to Full Screen
                 </h4>
                 <p className="text-xs text-white/50 max-w-xs mt-1 mb-4">
-                  Enjoy an immersive experience with Patricia, your personal AI Life GPS.
+                  Enjoy an immersive experience with Patricia, your personal AI
+                  Life GPS.
                 </p>
                 <button
                   onClick={() => setIsFullscreen(false)}
@@ -574,112 +568,24 @@ export const PatriciaChatExperience = memo(function PatriciaChatExperience({
                 </button>
               </div>
             ) : (
-              /* Inline Chat Box */
-              <div className="relative z-20 w-full flex justify-center">
+              /* Inline Chat Box with Click to Expand Cue */
+              <div className="relative z-20 w-full flex flex-col items-center gap-2.5">
                 {renderMacChatWindow(false)}
+                <button
+                  type="button"
+                  onClick={() => setIsFullscreen(true)}
+                  className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-black/70 hover:bg-black/90 backdrop-blur-md border border-white/20 text-[11px] font-mono font-medium text-orange-200 hover:text-white transition-all cursor-pointer shadow-lg hover:scale-105 active:scale-95 group/expandcue"
+                >
+                  <MousePointerClick className="w-3.5 h-3.5 text-orange-400 animate-bounce group-hover/expandcue:text-white" />
+                  <span>Click to expand full interactive screen</span>
+                  <Maximize2 className="w-3 h-3 text-orange-400" />
+                </button>
               </div>
             )}
           </div>
 
-          <div className="flex flex-col justify-center space-y-7 lg:pl-2">
-            <div className="space-y-3">
-              <h2 className="text-3xl sm:text-4xl lg:text-[42px]  uppercase font-extrabold text-stone-950 tracking-tight leading-[1.15]">
-                Yes, you even have a{" "}
-                <span className="border-b-4  border-dashed border-orange-400">
-                  personal Life GPS.
-                </span>
-              </h2>
-              <p className="text-sm sm:text-base text-stone-900/80 font-medium leading-relaxed max-w-xl">
-                When you're trying to figure out what career to pursue or what
-                skill to practice next, vague advice isn't enough. That's where
-                Patricia maps your exact direction.
-              </p>
-            </div>
-
-            <div className="rounded-2xl bg-[#191917] border border-stone-800 shadow-2xl p-5 sm:p-6 transition-all">
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 rounded-xl bg-white/[0.06] border border-white/10 flex items-center justify-center shrink-0">
-                  <StepIcon className={`w-5 h-5 ${currentStep.color}`} />
-                </div>
-
-                <div className="space-y-1.5 min-w-0 flex-1">
-                  <div className="flex items-center justify-between gap-2">
-                    <h3 className="text-sm sm:text-base font-semibold text-white tracking-tight">
-                      {currentStep.title}
-                    </h3>
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-white/[0.08] text-orange-50 border border-white/10">
-                      {currentStep.badge}
-                    </span>
-                  </div>
-                  <p className="text-xs text-stone-400 leading-relaxed">
-                    {currentStep.subtitle}
-                  </p>
-                  <motion.div
-                    key={activeGpsStep}
-                    initial={{ opacity: 0, y: 4 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.2 }}
-                    className="pt-2 text-xs sm:text-sm font-medium text-orange-50/95 leading-relaxed bg-stone-800/80 p-3 rounded-xl border border-stone-700/60"
-                  >
-                    {currentStep.value}
-                  </motion.div>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-2 pl-1 select-none">
-              {stepsData.map((_, idx) => {
-                const isActive = activeGpsStep === idx;
-                return (
-                  <button
-                    key={idx}
-                    onClick={() => setActiveGpsStep(idx)}
-                    className={`transition-all duration-300 rounded-full cursor-pointer ${
-                      isActive
-                        ? "w-7 h-2.5 bg-stone-950 shadow-sm"
-                        : "w-2.5 h-2.5 bg-stone-900/25 hover:bg-stone-900/50"
-                    }`}
-                    title={`View ${stepsData[idx].title}`}
-                    aria-label={`Step ${idx + 1}`}
-                  />
-                );
-              })}
-            </div>
-
-            <div className="pt-2 border-t border-stone-900/15 space-y-4">
-              <div className="flex flex-wrap items-center gap-3">
-                <span className="text-xs text-stone-900/70 font-semibold">
-                  Alternative to:
-                </span>
-                <div className="flex items-center gap-2">
-                  <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/80 hover:bg-white text-xs text-stone-900 font-semibold border border-stone-900/10 shadow-sm backdrop-blur transition-all">
-                    <FileQuestion className="w-3.5 h-3.5 text-amber-600" />
-                    Generic Tests
-                  </span>
-                  <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/80 hover:bg-white text-xs text-stone-900 font-semibold border border-stone-900/10 shadow-sm backdrop-blur transition-all">
-                    <HelpCircle className="w-3.5 h-3.5 text-rose-600" />
-                    Vague Advice
-                  </span>
-                  <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/80 hover:bg-white text-xs text-stone-900 font-semibold border border-stone-900/10 shadow-sm backdrop-blur transition-all">
-                    <Compass className="w-3.5 h-3.5 text-emerald-700" />
-                    Guesswork
-                  </span>
-                </div>
-              </div>
-
-              <div className="pt-1">
-                <a
-                  href={gpsState.actionCta?.href || "#explore-careers"}
-                  className="inline-flex items-center gap-2.5 px-6 py-3 rounded-xl bg-stone-950 hover:bg-stone-900 text-white font-bold text-xs sm:text-sm transition-all shadow-xl hover:shadow-2xl active:scale-95 cursor-pointer"
-                >
-                  <span>
-                    {gpsState.actionCta?.label || "Explore 5-Min Simulations"}
-                  </span>
-                  <ArrowRight className="w-4 h-4" />
-                </a>
-              </div>
-            </div>
-          </div>
+          {/* Right Column: Modular Life GPS Panel with Auto-Rotating Steps */}
+          <PatriciaGpsPanel gpsState={gpsState} />
         </div>
       </div>
     </section>

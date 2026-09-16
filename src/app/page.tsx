@@ -1,8 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useCallback } from "react";
-import { useRouter } from "next/navigation";
-import { useAccount } from "@/context/AccountContext";
+import React, { useRef, useCallback } from "react";
 import Navbar from "@/components/front-end/Navbar";
 import { PatriciaOpeningHero } from "@/components/patricia/PatriciaOpeningHero";
 import { PatriciaChatExperience } from "@/components/patricia/PatriciaChatExperience";
@@ -16,18 +14,7 @@ import OrganizationDashboard from "@/components/front-end/OrganizationDashboard"
 import FooterCTA from "@/components/front-end/FooterCTA";
 
 export default function Home() {
-  const router = useRouter();
-  const { session } = useAccount();
   const patriciaSectionRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (session.accountType === "organization") {
-      router.replace("/organization-dashboard");
-    } else if (session.accountType === "individual") {
-      router.replace("/user-dashboard");
-    }
-  }, [session.accountType, router]);
-
   const [initialPrompt, setInitialPrompt] = React.useState<string | null>(null);
 
   const handleSlideUpToPatricia = useCallback((prompt?: string) => {
@@ -42,14 +29,6 @@ export default function Home() {
   const handleClearInitialPrompt = useCallback(() => {
     setInitialPrompt(null);
   }, []);
-
-  if (session.accountType) {
-    return (
-      <main className="bg-black text-slate-100 min-h-screen font-sans flex items-center justify-center p-8 text-center text-xs text-white/50">
-        Redirecting to dashboard...
-      </main>
-    );
-  }
 
   return (
     <div className="bg-black text-slate-100 min-h-screen w-full overflow-x-clip font-sans selection:bg-orange-500 selection:text-white">

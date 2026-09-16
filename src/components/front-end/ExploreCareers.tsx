@@ -10,7 +10,7 @@ export default memo(function ExploreCareers() {
   return (
     <section
       id="explore-careers"
-      className="relative w-full py-20 sm:py-28 bg-orange-50 text-stone-900 font-sans overflow-hidden select-none border-t border-stone-200/80"
+      className="relative  w-full py-20 sm:py-28 bg-orange-50 text-stone-900 font-sans overflow-hidden select-none border-t border-stone-200/80"
     >
       <div className="absolute inset-0 pointer-events-none opacity-40">
         <div
@@ -23,7 +23,7 @@ export default memo(function ExploreCareers() {
         />
       </div>
 
-      <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 max-w-[1400px]">
+      <div className="relative container mx-auto max-w-7xl">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 sm:mb-16">
           <div className="max-w-2xl space-y-3.5">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-stone-900/5 border border-stone-900/10 text-xs font-mono text-stone-800">
