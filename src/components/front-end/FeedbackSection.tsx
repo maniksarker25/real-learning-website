@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, memo, useCallback } from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import {
@@ -13,7 +13,7 @@ import {
   PerformanceMetricsEqualizer,
 } from "./feedback";
 
-export default function FeedbackSection() {
+export default memo(function FeedbackSection() {
   const [stepIdx, setStepIdx] = useState(0);
   const [typedText, setTypedText] = useState("");
   const [displayedSpeaker, setDisplayedSpeaker] = useState<"Customer" | "Learner">("Customer");
@@ -29,13 +29,34 @@ export default function FeedbackSection() {
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [isSendPressed, setIsSendPressed] = useState(false);
   const [isCustomerTyping, setIsCustomerTyping] = useState(false);
+  const [isInViewport, setIsInViewport] = useState(false);
 
+  const sectionRef = useRef<HTMLElement | null>(null);
   const cardRef = useRef<HTMLDivElement | null>(null);
   const inputContainerRef = useRef<HTMLDivElement | null>(null);
   const sendButtonRef = useRef<HTMLButtonElement | null>(null);
 
+  // IntersectionObserver to pause heavy simulation loop when offscreen
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const [entry] = entries;
+        setIsInViewport(entry.isIntersecting);
+      },
+      { threshold: 0.1 }
+    );
+    observer.observe(el);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
   // Dynamic coordinates relative to card container
-  const getTargetCoords = () => {
+  const getTargetCoords = useCallback(() => {
     if (!cardRef.current) {
       return {
         input: { x: 120, y: 155 },
@@ -69,10 +90,12 @@ export default function FeedbackSection() {
       send: { x: sendX, y: sendY },
       rest: { x: restX, y: restY },
     };
-  };
+  }, []);
 
-  // Automated human-like simulation runner
+  // Automated human-like simulation runner (Only active when in viewport)
   useEffect(() => {
+    if (!isInViewport) return;
+
     let isMounted = true;
 
     const runSimulationTurn = async (index: number) => {
@@ -104,7 +127,7 @@ export default function FeedbackSection() {
       await delay(800);
       if (!isMounted) return;
 
-      // 3. Cursor clicks inside the input (triggers focus ring & click pulse)
+      // 3. Cursor clicks inside the input
       setIsClicking(true);
       setIsInputFocused(true);
       await delay(200);
@@ -116,7 +139,6 @@ export default function FeedbackSection() {
       for (let i = 1; i <= textToType.length; i++) {
         if (!isMounted) return;
         setTypedText(textToType.slice(0, i));
-        // Snappy, realistic keystroke interval
         await delay(22);
       }
 
@@ -131,7 +153,7 @@ export default function FeedbackSection() {
       await delay(700);
       if (!isMounted) return;
 
-      // 6. Cursor clicks "Send" button (button depresses & triggers ripple)
+      // 6. Cursor clicks "Send" button
       setIsClicking(true);
       setIsSendPressed(true);
       await delay(180);
@@ -163,7 +185,9 @@ export default function FeedbackSection() {
       setIsCustomerTyping(false);
 
       // 9. Advance to next scenario in automated cycle
-      setStepIdx((prev) => (prev + 1) % SCENARIO_STEPS.length);
+      if (isMounted) {
+        setStepIdx((prev) => (prev + 1) % SCENARIO_STEPS.length);
+      }
     };
 
     runSimulationTurn(stepIdx);
@@ -171,7 +195,7 @@ export default function FeedbackSection() {
     return () => {
       isMounted = false;
     };
-  }, [stepIdx]);
+  }, [stepIdx, isInViewport, getTargetCoords]);
 
   // Live average score calculated across all 7 competencies
   const scoreValues = Object.values(currentScores);
@@ -182,9 +206,10 @@ export default function FeedbackSection() {
   return (
     <section
       id="feedback-section"
+      ref={sectionRef}
       className="relative w-full py-20 sm:py-28 bg-orange-50 text-stone-900 font-sans overflow-hidden select-none"
     >
-      {/* Precision Blueprint / Chart Grid Background */}
+      {/* Precision Blueprint Grid Background */}
       <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(to_right,#0000000c_1px,transparent_1px),linear-gradient(to_bottom,#0000000c_1px,transparent_1px)] bg-[size:32px_32px] [mask-image:radial-gradient(ellipse_80%_60%_at_50%_50%,#000_65%,transparent_100%)]" />
       <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(to_right,#00000006_2px,transparent_2px),linear-gradient(to_bottom,#00000006_2px,transparent_2px)] bg-[size:160px_160px]" />
 
@@ -259,4 +284,4 @@ export default function FeedbackSection() {
       </div>
     </section>
   );
-}
+});

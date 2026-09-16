@@ -18,6 +18,7 @@ export const PatriciaOpeningHero = memo(function PatriciaOpeningHero({
   // Automatically move selection through "Real Learning", "by Scorched Souls", and the description
   useEffect(() => {
     const timer = setInterval(() => {
+      if (typeof document !== "undefined" && document.hidden) return;
       setSelectedTextIndex((prev) => (prev + 1) % 3);
     }, 3200);
     return () => clearInterval(timer);

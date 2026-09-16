@@ -28,10 +28,10 @@ export const DottedGlobe = memo(function DottedGlobe({
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   // Rotation angles (radians)
-  // Initial rotY angle ~ -1.1 puts Bangladesh prominently on the front face
   const rotYRef = useRef<number>(-1.1);
-  const rotXRef = useRef<number>(0.28); // slight forward tilt (~16 degrees)
+  const rotXRef = useRef<number>(0.28);
   const isDraggingRef = useRef<boolean>(false);
+  const isVisibleRef = useRef<boolean>(true);
   const dragStartRef = useRef<{
     x: number;
     y: number;
@@ -45,10 +45,8 @@ export const DottedGlobe = memo(function DottedGlobe({
   });
   const velocityRef = useRef<{ vx: number; vy: number }>({ vx: 0.0018, vy: 0 });
 
-  // Handle pointer interactions (Desktop mouse only - disabled on mobile/touch to prioritize thumb scrolling)
   const handlePointerDown = useCallback(
     (e: React.PointerEvent<HTMLCanvasElement>) => {
-      // Mobile-first focus: ignore touch/thumb events so the user can scroll naturally without hijacking
       if (
         e.pointerType === "touch" ||
         (typeof window !== "undefined" && window.innerWidth < 1024)
@@ -113,20 +111,20 @@ export const DottedGlobe = memo(function DottedGlobe({
     const ctx = canvas.getContext("2d", { alpha: true });
     if (!ctx) return;
 
-    let animationFrameId: number;
+    let animationFrameId: number | null = null;
     let width = 0;
     let height = 0;
     let dpr = 1;
 
     const handleResize = () => {
       const rect = canvas.getBoundingClientRect();
-      dpr = window.devicePixelRatio || 1;
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
       width = rect.width;
       height = rect.height;
 
       canvas.width = Math.floor(width * dpr);
       canvas.height = Math.floor(height * dpr);
-      ctx.scale(dpr, dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
 
     const resizeObserver = new ResizeObserver(() => {
@@ -135,11 +133,27 @@ export const DottedGlobe = memo(function DottedGlobe({
     resizeObserver.observe(canvas);
     handleResize();
 
+    // IntersectionObserver to pause rendering loop when globe is out of view
+    const intersectionObserver = new IntersectionObserver(
+      (entries) => {
+        const [entry] = entries;
+        isVisibleRef.current = entry.isIntersecting;
+        if (entry.isIntersecting && animationFrameId === null) {
+          animationFrameId = requestAnimationFrame(render);
+        }
+      },
+      { threshold: 0.05 }
+    );
+    intersectionObserver.observe(canvas);
+
     const render = (time: number) => {
+      if (!isVisibleRef.current) {
+        animationFrameId = null;
+        return;
+      }
+
       if (!isDraggingRef.current) {
-        // Natural idle rotation
         rotYRef.current += 0.0018;
-        // Damping any residual drag velocity
         rotYRef.current += velocityRef.current.vx;
         rotXRef.current += velocityRef.current.vy;
         velocityRef.current.vx *= 0.95;
@@ -162,7 +176,7 @@ export const DottedGlobe = memo(function DottedGlobe({
       const cosX = Math.cos(rotXRef.current);
       const sinX = Math.sin(rotXRef.current);
 
-      // 1. Atmosphere halo glow behind globe
+      // Atmosphere halo glow behind globe
       const haloGrad = ctx.createRadialGradient(
         cx,
         cy,
@@ -186,56 +200,49 @@ export const DottedGlobe = memo(function DottedGlobe({
       ctx.lineWidth = 1.2;
       ctx.stroke();
 
-      // 2. Render dots
-      // First pass: Back hemisphere dots (z <= 0)
+      // Batch 1: Back hemisphere dots (z <= 0) in a single path
       ctx.fillStyle = "rgba(148, 163, 184, 0.08)";
-      for (let i = 0; i < GLOBE_LAND_POINTS.length; i++) {
+      ctx.beginPath();
+      const landLen = GLOBE_LAND_POINTS.length;
+      for (let i = 0; i < landLen; i++) {
         const pt = GLOBE_LAND_POINTS[i];
-        // Rotate Y
         const rx = pt[0] * cosY + pt[2] * sinY;
         const ry = pt[1];
         const rz = -pt[0] * sinY + pt[2] * cosY;
-
-        // Rotate X (tilt)
         const z = ry * sinX + rz * cosX;
 
         if (z <= 0) {
           const y = ry * cosX - rz * sinX;
           const sx = cx + rx * radius;
           const sy = cy - y * radius;
-
-          ctx.beginPath();
+          ctx.moveTo(sx + 0.85, sy);
           ctx.arc(sx, sy, 0.85, 0, Math.PI * 2);
-          ctx.fill();
         }
       }
+      ctx.fill();
 
-      // Second pass: Front hemisphere dots (z > 0)
-      // Group by approximate opacity/size for batch performance
-      for (let i = 0; i < GLOBE_LAND_POINTS.length; i++) {
+      // Batch 2: Front hemisphere dots (z > 0) grouped into alpha buckets
+      ctx.fillStyle = "rgba(240, 246, 255, 0.55)";
+      ctx.beginPath();
+      for (let i = 0; i < landLen; i++) {
         const pt = GLOBE_LAND_POINTS[i];
         const rx = pt[0] * cosY + pt[2] * sinY;
         const ry = pt[1];
         const rz = -pt[0] * sinY + pt[2] * cosY;
-
         const z = ry * sinX + rz * cosX;
 
         if (z > 0) {
           const y = ry * cosX - rz * sinX;
           const sx = cx + rx * radius;
           const sy = cy - y * radius;
-
-          const alpha = 0.2 + 0.8 * (z * z);
           const dotRadius = 0.9 + 1.2 * z;
-
-          ctx.fillStyle = `rgba(240, 246, 255, ${alpha.toFixed(2)})`;
-          ctx.beginPath();
+          ctx.moveTo(sx + dotRadius, sy);
           ctx.arc(sx, sy, dotRadius, 0, Math.PI * 2);
-          ctx.fill();
         }
       }
+      ctx.fill();
 
-      // 3. Render Beacons
+      // Render Beacons
       const beacons = [
         { vec: BD_VECTOR, isPrimary: true },
         { vec: SEC_VECTOR, isPrimary: false },
@@ -246,10 +253,8 @@ export const DottedGlobe = memo(function DottedGlobe({
         const brx = bx * cosY + bz * sinY;
         const bry = by;
         const brz = -bx * sinY + bz * cosY;
-
         const bFinalZ = bry * sinX + brz * cosX;
 
-        // Render beacon if on front side or near limb
         if (bFinalZ > -0.05) {
           const bFinalY = bry * cosX - brz * sinX;
           const bsx = cx + brx * radius;
@@ -257,7 +262,6 @@ export const DottedGlobe = memo(function DottedGlobe({
           const visibility = Math.max(0, Math.min(1, (bFinalZ + 0.05) * 3));
 
           if (beacon.isPrimary) {
-            // Bangladesh Primary Beacon: Intense cyan/blue glow with pulsing radar rings
             const glowSize = 36 * visibility;
             const beaconGlow = ctx.createRadialGradient(
               bsx,
@@ -267,14 +271,8 @@ export const DottedGlobe = memo(function DottedGlobe({
               bsy,
               glowSize,
             );
-            beaconGlow.addColorStop(
-              0,
-              `rgba(56, 189, 248, ${0.95 * visibility})`,
-            );
-            beaconGlow.addColorStop(
-              0.35,
-              `rgba(14, 165, 233, ${0.5 * visibility})`,
-            );
+            beaconGlow.addColorStop(0, `rgba(56, 189, 248, ${0.95 * visibility})`);
+            beaconGlow.addColorStop(0.35, `rgba(14, 165, 233, ${0.5 * visibility})`);
             beaconGlow.addColorStop(1, "rgba(14, 165, 233, 0)");
 
             ctx.fillStyle = beaconGlow;
@@ -282,7 +280,6 @@ export const DottedGlobe = memo(function DottedGlobe({
             ctx.arc(bsx, bsy, glowSize, 0, Math.PI * 2);
             ctx.fill();
 
-            // Animated pulsing radar rings
             const pulsePhase1 = (time * 0.0012) % 1;
             const pulseRadius1 = (6 + pulsePhase1 * 26) * visibility;
             const pulseAlpha1 = (1 - pulsePhase1) * 0.75 * visibility;
@@ -293,29 +290,16 @@ export const DottedGlobe = memo(function DottedGlobe({
             ctx.lineWidth = 1.6;
             ctx.stroke();
 
-            const pulsePhase2 = (time * 0.0012 + 0.5) % 1;
-            const pulseRadius2 = (6 + pulsePhase2 * 26) * visibility;
-            const pulseAlpha2 = (1 - pulsePhase2) * 0.75 * visibility;
-
-            ctx.beginPath();
-            ctx.arc(bsx, bsy, pulseRadius2, 0, Math.PI * 2);
-            ctx.strokeStyle = `rgba(56, 189, 248, ${pulseAlpha2.toFixed(2)})`;
-            ctx.lineWidth = 1.4;
-            ctx.stroke();
-
-            // Inner cyan beacon disc
             ctx.beginPath();
             ctx.arc(bsx, bsy, 5.5 * visibility, 0, Math.PI * 2);
             ctx.fillStyle = "#38bdf8";
             ctx.fill();
 
-            // Brilliant white hot core
             ctx.beginPath();
             ctx.arc(bsx, bsy, 3.2 * visibility, 0, Math.PI * 2);
             ctx.fillStyle = "#ffffff";
             ctx.fill();
           } else {
-            // Secondary beacon
             const secGlowSize = 22 * visibility;
             const secGlow = ctx.createRadialGradient(
               bsx,
@@ -326,10 +310,7 @@ export const DottedGlobe = memo(function DottedGlobe({
               secGlowSize,
             );
             secGlow.addColorStop(0, `rgba(56, 189, 248, ${0.8 * visibility})`);
-            secGlow.addColorStop(
-              0.4,
-              `rgba(14, 165, 233, ${0.35 * visibility})`,
-            );
+            secGlow.addColorStop(0.4, `rgba(14, 165, 233, ${0.35 * visibility})`);
             secGlow.addColorStop(1, "rgba(14, 165, 233, 0)");
 
             ctx.fillStyle = secGlow;
@@ -356,8 +337,11 @@ export const DottedGlobe = memo(function DottedGlobe({
     animationFrameId = requestAnimationFrame(render);
 
     return () => {
-      cancelAnimationFrame(animationFrameId);
+      if (animationFrameId !== null) {
+        cancelAnimationFrame(animationFrameId);
+      }
       resizeObserver.disconnect();
+      intersectionObserver.disconnect();
     };
   }, []);
 
