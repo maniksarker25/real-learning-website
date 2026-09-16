@@ -2,195 +2,162 @@
 
 import React, { useMemo, memo } from "react";
 import Link from "next/link";
-import { Zap, Building2, Mail, Info, ChevronRight } from "lucide-react";
+import { ArrowUpRight, ShieldCheck, Mail, MapPin } from "lucide-react";
 import Image from "next/image";
 import { ImageConstants } from "@/constant/image.index";
 
-interface FooterNavGridProps {
-  onOpenContact: () => void;
-  onOpenAbout: () => void;
-  onOpenOrgAccess: () => void;
-}
-
-export const FooterNavGrid = memo(function FooterNavGrid({
-  onOpenContact,
-  onOpenAbout,
-  onOpenOrgAccess,
-}: FooterNavGridProps) {
+export const FooterNavGrid = memo(function FooterNavGrid() {
   const currentYear = useMemo(() => new Date().getFullYear(), []);
 
-  const platformLinks = useMemo(
-    () => [
-      { label: "How It Works", href: "#how-it-works" },
-      { label: "Career Simulation Tracks", href: "#explore-careers" },
-      { label: "AI Feedback & Growth", href: "#feedback-section" },
-      { label: "Progress Analytics", href: "#track-progress" },
-    ],
-    []
-  );
+  const platformLinks = [
+    { label: "How It Works", href: "/#how-it-works" },
+    { label: "Career Simulation Tracks", href: "/#explore-careers" },
+    { label: "Patricia AI Life GPS", href: "/#patricia-experience" },
+    { label: "Feedback & Telemetry", href: "/#feedback-section" },
+    { label: "Try 5-Min Simulation", href: "/get-started" },
+  ];
+
+  const organizationLinks = [
+    { label: "Enterprise Workspace", href: "/onboarding/organization" },
+    { label: "University Curriculum Access", href: "/contact" },
+    { label: "Custom Scenario Authoring", href: "/contact" },
+    { label: "Leadership Diagnostics", href: "/contact" },
+    { label: "Enterprise Security & Privacy", href: "/contact" },
+  ];
+
+  const companyLinks = [
+    { label: "About Real Learning", href: "/about" },
+    { label: "Northstar Labs Hub", href: "/about" },
+    { label: "Contact & Direct Inquiries", href: "/contact" },
+    { label: "Learner Support Desk", href: "/contact" },
+    { label: "Research Collaborations", href: "/contact" },
+  ];
 
   return (
-    <>
-      {/* Structured Multi-Column Footer Grid */}
-      <div className="border-t border-white/10 bg-[#07080c] py-12 sm:py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8">
-          {/* Col 1: Brand Info */}
-          <div className="space-y-4">
-            <Link href="/" className="flex items-center gap-2.5 group">
-              <div className="w-8 h-8 rounded-xl bg-white border border-white/20 p-1 flex items-center justify-center overflow-hidden shadow-sm">
+    <div className="border-t border-stone-200/80 bg-[#faf9f6] text-stone-900">
+      {/* Top Main Navigation Grid */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-12">
+          
+          {/* Col 1: Brand & Studio Identity (lg:col-span-4) */}
+          <div className="lg:col-span-4 space-y-5">
+            <Link href="/" className="inline-flex items-center gap-3 group">
+              <div className="w-9 h-9 rounded-xl bg-white border border-stone-200 p-1 flex items-center justify-center overflow-hidden shadow-xs">
                 <Image
                   src={ImageConstants.brandLogo.src}
-                  alt="Brand Logo"
+                  alt="Real Learning Logo"
                   width={100}
                   height={100}
-                  className="object-contain cursor-pointer"
+                  className="object-contain"
                 />
               </div>
-              <span className="text-base font-extrabold tracking-wider text-white uppercase font-sans">
+              <span className="text-lg font-extrabold tracking-wider text-stone-950 uppercase font-sans">
                 REAL{" "}
-                <span className="bg-gradient-to-r from-orange-400 to-rose-400 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-orange-600 via-amber-600 to-rose-600 bg-clip-text text-transparent">
                   LEARNING
                 </span>
               </span>
             </Link>
 
-            <p className="text-xs text-white/60 leading-relaxed">
-              Empowering learners and organizations with AI-driven workplace
-              simulations to practice real career situations before day one.
+            <p className="text-xs sm:text-sm text-stone-600 leading-relaxed max-w-sm font-normal">
+              High-fidelity workplace simulations and personalized AI GPS guidance engineered to build job-ready confidence before day one.
             </p>
 
-            <div className="flex items-center gap-2 text-xs text-emerald-400 font-mono">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span>Platform Online • v2.4</span>
+            <div className="space-y-2 pt-1 text-xs font-mono">
+              <div className="flex items-center gap-2 text-stone-700">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="font-semibold">Northstar Labs · Systems Operational</span>
+              </div>
+              <div className="flex items-center gap-2 text-stone-500 text-[11px]">
+                <MapPin className="w-3.5 h-3.5 text-stone-400" />
+                <span>San Francisco, CA & Distributed Simulation Fleet</span>
+              </div>
             </div>
           </div>
 
-          {/* Col 2: Platform Links */}
-          <div className="space-y-3">
-            <h4 className="text-xs font-bold text-white uppercase tracking-wider">
-              Platform
+          {/* Col 2: Platform Links (lg:col-span-3) */}
+          <div className="lg:col-span-3 space-y-4">
+            <h4 className="text-xs font-mono font-bold text-stone-900 uppercase tracking-wider">
+              Simulation Platform
             </h4>
-            <ul className="space-y-2 text-xs text-white/60">
+            <ul className="space-y-2.5 text-xs sm:text-sm text-stone-600">
               {platformLinks.map((link) => (
                 <li key={link.label}>
-                  <a
+                  <Link
                     href={link.href}
-                    className="hover:text-white transition-colors"
+                    className="hover:text-stone-950 transition-colors inline-flex items-center gap-1 group"
                   >
-                    {link.label}
-                  </a>
+                    <span>{link.label}</span>
+                  </Link>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Col 3: Organizations & Access */}
-          <div className="space-y-3">
-            <h4 className="text-xs font-bold text-white uppercase tracking-wider">
+          {/* Col 3: For Organizations (lg:col-span-3) */}
+          <div className="lg:col-span-3 space-y-4">
+            <h4 className="text-xs font-mono font-bold text-stone-900 uppercase tracking-wider">
               For Organizations
             </h4>
-            <ul className="space-y-2 text-xs text-white/60">
-              <li>
-                <button
-                  onClick={onOpenOrgAccess}
-                  className="hover:text-orange-300 transition-colors flex items-center gap-1.5 text-orange-400 font-medium text-left cursor-pointer"
-                >
-                  <Building2 className="w-3.5 h-3.5" />
-                  <span>Get Access to Organization</span>
-                </button>
-              </li>
-              <li>
-                <a
-                  href="#organizations"
-                  className="hover:text-white transition-colors"
-                >
-                  Enterprise Dashboard Preview
-                </a>
-              </li>
-              <li>
-                <button
-                  onClick={onOpenOrgAccess}
-                  className="hover:text-white transition-colors text-left cursor-pointer"
-                >
-                  Request University Access
-                </button>
-              </li>
+            <ul className="space-y-2.5 text-xs sm:text-sm text-stone-600">
+              {organizationLinks.map((link) => (
+                <li key={link.label}>
+                  <Link
+                    href={link.href}
+                    className="hover:text-stone-950 transition-colors inline-flex items-center gap-1 group"
+                  >
+                    <span>{link.label}</span>
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
-          {/* Col 4: Quick Actions & Support */}
-          <div className="space-y-3">
-            <h4 className="text-xs font-bold text-white uppercase tracking-wider">
-              Quick Actions
+          {/* Col 4: Company & Inquiries (lg:col-span-2) */}
+          <div className="lg:col-span-2 space-y-4">
+            <h4 className="text-xs font-mono font-bold text-stone-900 uppercase tracking-wider">
+              Company
             </h4>
-            <div className="space-y-2 text-xs">
-              <button
-                onClick={onOpenContact}
-                className="w-full flex items-center justify-between px-3 py-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 text-white transition-all cursor-pointer"
-              >
-                <div className="flex items-center gap-2">
-                  <Mail className="w-3.5 h-3.5 text-rose-400" />
-                  <span>Contact Us</span>
-                </div>
-                <ChevronRight className="w-3.5 h-3.5 text-white/40" />
-              </button>
-
-              <button
-                onClick={onOpenAbout}
-                className="w-full flex items-center justify-between px-3 py-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 text-white transition-all cursor-pointer"
-              >
-                <div className="flex items-center gap-2">
-                  <Info className="w-3.5 h-3.5 text-orange-400" />
-                  <span>About Real Learning</span>
-                </div>
-                <ChevronRight className="w-3.5 h-3.5 text-white/40" />
-              </button>
-            </div>
+            <ul className="space-y-2.5 text-xs sm:text-sm text-stone-600">
+              {companyLinks.map((link) => (
+                <li key={link.label}>
+                  <Link
+                    href={link.href}
+                    className="hover:text-stone-950 transition-colors inline-flex items-center gap-1 group"
+                  >
+                    <span>{link.label}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
+
         </div>
       </div>
 
-      {/* Bottom Copyright Bar */}
-      <div className="border-t border-white/10 py-6 relative z-10 bg-black">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-white/50">
+      {/* Bottom Editorial Copyright Bar */}
+      <div className="border-t border-stone-200/80 bg-white py-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-stone-500 font-mono">
           <div className="flex items-center gap-2">
-            <div className="w-5 h-5 rounded bg-white border border-white/20 p-0.5 flex items-center justify-center overflow-hidden shadow-sm">
-              <Image
-                src={ImageConstants.brandLogo.src}
-                alt="Brand Logo"
-                width={100}
-                height={100}
-                className="object-contain cursor-pointer"
-              />
-            </div>
-            <span className="font-bold text-white tracking-wider uppercase">
-              REAL LEARNING
-            </span>
             <span>© {currentYear} Real Learning Inc. All rights reserved.</span>
           </div>
 
-          <div className="flex items-center gap-6 text-white/60">
-            <button
-              onClick={onOpenAbout}
-              className="hover:text-white transition-colors cursor-pointer"
-            >
-              About Us
-            </button>
-            <button
-              onClick={onOpenContact}
-              className="hover:text-white transition-colors cursor-pointer"
-            >
-              Contact Support
-            </button>
-            <button
-              onClick={onOpenOrgAccess}
-              className="hover:text-white transition-colors cursor-pointer"
-            >
-              Organization Access
-            </button>
+          <div className="flex flex-wrap items-center gap-6 text-stone-600">
+            <Link href="/about" className="hover:text-stone-950 transition-colors">
+              About
+            </Link>
+            <Link href="/contact" className="hover:text-stone-950 transition-colors">
+              Contact Us
+            </Link>
+            <Link href="/onboarding/organization" className="hover:text-stone-950 transition-colors">
+              Enterprise Access
+            </Link>
+            <Link href="/contact" className="hover:text-stone-950 transition-colors">
+              Privacy & Security
+            </Link>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 });

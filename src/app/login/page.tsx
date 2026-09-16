@@ -75,7 +75,7 @@ export default function LoginPage() {
             seats: "25",
             orgRole: "owner",
           });
-          router.push("/organization-dashboard");
+          router.push("/");
         } else {
           loginAsIndividual({
             name: email
@@ -87,7 +87,7 @@ export default function LoginPage() {
             goal: "Customer Service",
             email: email || "sarah.jenkins@reallearning.ai",
           });
-          router.push("/user-dashboard");
+          router.push("/");
         }
       }, 500);
     },

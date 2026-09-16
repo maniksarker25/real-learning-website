@@ -312,10 +312,10 @@ export default function IndividualOnboardingPage() {
               </div>
 
               <Link
-                href="/user-dashboard"
+                href="/demo"
                 className="w-full py-2.5 rounded-xl bg-orange-600 hover:bg-orange-700 text-white font-medium text-xs transition-colors shadow-[0_2px_10px_-2px_rgba(234,88,12,0.3)] flex items-center justify-center gap-2"
               >
-                <span>Enter Dashboard</span>
+                <span>Start Interactive Simulation</span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
