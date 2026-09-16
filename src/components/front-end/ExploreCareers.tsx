@@ -1,12 +1,12 @@
 "use client";
 
-import React from "react";
+import React, { memo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { Zap, Plus, ArrowRight } from "lucide-react";
 
-export default function ExploreCareers() {
+export default memo(function ExploreCareers() {
   return (
     <section
       id="explore-careers"
@@ -332,4 +332,4 @@ export default function ExploreCareers() {
       </div>
     </section>
   );
-}
+});
