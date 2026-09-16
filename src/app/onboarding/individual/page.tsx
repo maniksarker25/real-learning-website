@@ -1,217 +1,336 @@
 "use client";
 
-import React, { useState, useCallback, useMemo, memo } from "react";
-import Navbar from "@/components/front-end/Navbar";
-import {
-  User,
-  CheckCircle2,
-  ArrowRight,
-  Sparkles,
-  Target,
-  BookOpen,
-  PlayCircle,
-  BarChart3,
-} from "lucide-react";
-import Link from "next/link";
+import React, { useState, useCallback, useMemo } from "react";
 import { useAccount } from "@/context/AccountContext";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import Image from "next/image";
+import {
+  ArrowLeft,
+  ArrowRight,
+  CheckCircle2,
+  Check,
+} from "lucide-react";
+import { ImageConstants } from "@/constant/image.index";
 
-export default memo(function IndividualOnboardingPage() {
+interface TrackOption {
+  id: string;
+  title: string;
+  image: string;
+  description: string;
+}
+
+const CAREER_TRACKS: TrackOption[] = [
+  {
+    id: "customer-service",
+    title: "Customer Service",
+    image: "/images/specialist.jpg",
+    description: "De-escalation, conflict resolution, and customer empathy dialogues.",
+  },
+  {
+    id: "tech-support",
+    title: "Technical Support",
+    image: "/images/teck.jpg",
+    description: "System troubleshooting, outage incident calls, and diagnostic workflows.",
+  },
+  {
+    id: "it-specialist",
+    title: "IT Specialist",
+    image: "/images/step-career.jpg",
+    description: "Security access, cloud incidents, and internal stakeholder requests.",
+  },
+  {
+    id: "healthcare-support",
+    title: "Healthcare Support",
+    image: "/images/healthcare.jpg",
+    description: "Patient inquiries, clinical routing, and physician communication.",
+  },
+];
+
+const PRACTICE_PACING = [
+  { id: "casual", label: "Casual", time: "10 min/day" },
+  { id: "regular", label: "Regular", time: "20 min/day" },
+  { id: "intensive", label: "Accelerated", time: "45 min/day" },
+];
+
+export default function IndividualOnboardingPage() {
   const { loginAsIndividual } = useAccount();
-  const [name, setName] = useState("Hosain Ali");
-  const [selectedGoal, setSelectedGoal] = useState("customer-service");
-  const [submitted, setSubmitted] = useState(false);
+  const router = useRouter();
 
-  const goalOptions = useMemo(
-    () => [
-      { id: "customer-service", label: "Customer Service" },
-      { id: "tech-support", label: "Tech Support" },
-      { id: "it-specialist", label: "IT Specialist" },
-      { id: "healthcare-support", label: "Healthcare Support" },
-    ],
-    [],
+  const [currentStep, setCurrentStep] = useState<1 | 2 | 3>(1);
+  const [selectedTrackId, setSelectedTrackId] = useState<string>("customer-service");
+  const [name, setName] = useState("Sarah Jenkins");
+  const [email, setEmail] = useState("sarah.jenkins@reallearning.ai");
+  const [selectedPacing, setSelectedPacing] = useState("regular");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const selectedTrack = useMemo(
+    () => CAREER_TRACKS.find((t) => t.id === selectedTrackId) || CAREER_TRACKS[0],
+    [selectedTrackId]
   );
 
-  const flowSteps = useMemo(
-    () => [
-      { icon: Target, title: "1. Goal", desc: "Select your career target" },
-      {
-        icon: BookOpen,
-        title: "2. Classes",
-        desc: "Master essential concepts",
-      },
-      {
-        icon: PlayCircle,
-        title: "3. Simulations",
-        desc: "Apply skills in AI workplace",
-      },
-      {
-        icon: Sparkles,
-        title: "4. Feedback",
-        desc: "Receive real-time AI scoring",
-      },
-      {
-        icon: BarChart3,
-        title: "5. Progress",
-        desc: "Track performance growth",
-      },
-    ],
-    [],
-  );
-
-  const handleSubmit = useCallback((e: React.FormEvent) => {
-    e.preventDefault();
-    const selectedObj = goalOptions.find((g) => g.id === selectedGoal);
-    loginAsIndividual({ name, goal: selectedObj?.label || selectedGoal });
-    setSubmitted(true);
-  }, [loginAsIndividual, name, selectedGoal, goalOptions]);
+  const handleCompleteSetup = useCallback(() => {
+    setIsSubmitting(true);
+    setTimeout(() => {
+      loginAsIndividual({
+        name: name || "Sarah Jenkins",
+        goal: selectedTrack.title,
+        email: email || "sarah.jenkins@reallearning.ai",
+      });
+      setCurrentStep(3);
+      setIsSubmitting(false);
+    }, 450);
+  }, [loginAsIndividual, name, selectedTrack.title, email]);
 
   return (
-    <main className="bg-black text-slate-100 min-h-screen font-sans flex flex-col selection:bg-orange-500 selection:text-white">
-      <Navbar />
-
-      <section className="relative flex-1 px-4 sm:px-6 lg:px-8 py-12 overflow-hidden flex flex-col justify-center">
-        {/* Background Dot Matrix Grid */}
-        <div
-          className="absolute inset-0 pointer-events-none overflow-hidden"
-          style={{
-            WebkitMaskImage:
-              "radial-gradient(100vh at 50% 20%, #000 40%, transparent 85%)",
-            maskImage:
-              "radial-gradient(100vh at 50% 20%, #000 40%, transparent 85%)",
-          }}
+    <main className="min-h-screen bg-orange-50 text-slate-900 font-sans flex flex-col justify-between p-4 sm:p-6 lg:p-10 selection:bg-orange-500 selection:text-white">
+      {/* Header Bar */}
+      <header className="max-w-5xl w-full mx-auto flex items-center justify-between py-2 border-b border-stone-200/60">
+        <Link
+          href="/get-started"
+          className="inline-flex items-center gap-1.5 text-xs font-medium text-stone-500 hover:text-stone-900 transition-colors"
         >
-          <div
-            className="absolute inset-0 opacity-30"
-            style={{
-              backgroundImage:
-                "radial-gradient(rgba(249,115,22,0.5) 1px, transparent 1px)",
-              backgroundSize: "20px 20px",
-            }}
-          />
+          <ArrowLeft className="w-3.5 h-3.5" />
+          <span>Back</span>
+        </Link>
+
+        {/* Brand Logo & Name */}
+        <div className="inline-flex items-center gap-2">
+          <div className="w-7 h-7 rounded-lg bg-white border border-stone-200/80 p-0.5 flex items-center justify-center shadow-[0_1px_4px_rgba(0,0,0,0.02)]">
+            <Image
+              src={ImageConstants.brandLogo.src}
+              alt="Real Learning Logo"
+              width={60}
+              height={60}
+              className="object-contain"
+            />
+          </div>
+          <span className="font-bold text-sm tracking-tight text-stone-900">
+            Real Learning
+          </span>
         </div>
 
-        <div className="relative max-w-4xl mx-auto w-full space-y-8">
-          {/* Top Eyebrow & Header */}
-          <div className="text-center space-y-3">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-orange-500/10 border border-orange-400/30 backdrop-blur text-xs text-orange-300 font-medium">
-              <User className="h-3.5 w-3.5 text-orange-400" />
-              <span>INDIVIDUAL LEARNER ONBOARDING</span>
+        {/* Step Indicator */}
+        <div className="text-xs font-medium text-stone-500">
+          Step {currentStep} of 3
+        </div>
+      </header>
+
+      {/* Main Content Area */}
+      <div className="max-w-5xl w-full mx-auto my-auto py-8">
+        
+        {/* ============================================================ */}
+        {/* STEP 1: SELECT CAREER SIMULATION TRACK */}
+        {/* ============================================================ */}
+        {currentStep === 1 && (
+          <div className="space-y-6">
+            <div className="text-center max-w-xl mx-auto space-y-1.5">
+              <h1 className="text-2xl sm:text-3xl font-bold text-stone-950 tracking-tight">
+                Select your simulation track
+              </h1>
+              <p className="text-xs text-stone-500">
+                Choose a track to focus your initial workplace simulation scenarios.
+              </p>
             </div>
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-white uppercase tracking-tight font-sans">
-              Personal Learning{" "}
-              <span className="bg-linear-to-r from-orange-400 to-rose-400 bg-clip-text text-transparent">
-                Setup
-              </span>
-            </h1>
-            <p className="text-sm text-white/70 max-w-lg mx-auto">
-              Start at your own pace. Define your personal goal to jump directly
-              into classes and realistic AI simulations.
-            </p>
-          </div>
 
-          {/* Individual Core Experience Flow Cards */}
-          <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5">
-            {flowSteps.map((step) => {
-              const StepIcon = step.icon;
-              return (
-                <div
-                  key={step.title}
-                  className="p-3 rounded-2xl bg-[#0d0e15] border border-white/10 text-center space-y-1.5"
-                >
-                  <div className="w-8 h-8 rounded-xl bg-orange-500/10 border border-orange-400/30 flex items-center justify-center text-orange-400 mx-auto">
-                    <StepIcon className="w-4 h-4" />
-                  </div>
-                  <div className="text-xs font-bold text-white">
-                    {step.title}
-                  </div>
-                  <div className="text-[10px] text-white/50">{step.desc}</div>
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Form Card */}
-          <div className="bg-[#0d0e15] border border-white/10 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6">
-            {submitted ? (
-              <div className="text-center py-8 space-y-4">
-                <div className="w-14 h-14 rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 mx-auto">
-                  <CheckCircle2 className="w-8 h-8" />
-                </div>
-                <h3 className="text-2xl font-bold text-white">
-                  Welcome to Real Learning, {name || "Learner"}!
-                </h3>
-                <p className="text-xs text-white/70 max-w-md mx-auto">
-                  Your individual profile has been initialized for{" "}
-                  <span className="text-orange-300 font-semibold">
-                    {goalOptions.find((g) => g.id === selectedGoal)?.label}
-                  </span>
-                  .
-                </p>
-                <div className="pt-4 flex justify-center">
-                  <Link
-                    href="/user-dashboard"
-                    className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white text-black font-extrabold text-xs hover:bg-white/90 transition-colors shadow-lg cursor-pointer"
+            {/* 4 Clean Visual Track Cards (Silky Smooth Borders) */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-2">
+              {CAREER_TRACKS.map((track) => {
+                const isSelected = selectedTrackId === track.id;
+                return (
+                  <div
+                    key={track.id}
+                    onClick={() => setSelectedTrackId(track.id)}
+                    className={`relative rounded-2xl overflow-hidden border transition-all cursor-pointer flex flex-col justify-between bg-white text-left ${
+                      isSelected
+                        ? "border-orange-500 shadow-md ring-1 ring-orange-500"
+                        : "border-stone-200/80 hover:border-stone-300 shadow-[0_2px_8px_-2px_rgba(0,0,0,0.03)]"
+                    }`}
                   >
-                    <span>Enter Learner Dashboard</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </Link>
-                </div>
-              </div>
-            ) : (
-              <form onSubmit={handleSubmit} className="space-y-5">
-                <div>
-                  <label className="block text-xs font-semibold text-white/80 mb-2">
-                    Your Full Name
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder="Enter your name"
-                    className="w-full bg-black/60 border border-white/10 rounded-xl px-4 py-3 text-xs text-white placeholder-white/40 focus:outline-none focus:border-orange-400 transition-colors"
-                  />
-                </div>
+                    {/* Top Image Preview */}
+                    <div className="relative w-full h-36 bg-stone-900 overflow-hidden">
+                      <Image
+                        src={track.image}
+                        alt={track.title}
+                        fill
+                        className="object-cover"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-stone-950/70 via-transparent to-transparent" />
+                      
+                      <div className="absolute top-2.5 right-2.5">
+                        {isSelected && (
+                          <div className="w-5 h-5 rounded-full bg-orange-500 text-white flex items-center justify-center shadow-md">
+                            <Check className="w-3.5 h-3.5 stroke-[3]" />
+                          </div>
+                        )}
+                      </div>
+                    </div>
 
-                <div>
-                  <label className="block text-xs font-semibold text-white/80 mb-2">
-                    Select Your Primary Learning Goal
-                  </label>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                    {goalOptions.map((goal) => (
-                      <button
-                        type="button"
-                        key={goal.id}
-                        onClick={() => setSelectedGoal(goal.id)}
-                        className={`p-3.5 rounded-xl border text-left text-xs font-medium transition-colors cursor-pointer flex items-center justify-between ${
-                          selectedGoal === goal.id
-                            ? "bg-orange-500/10 border-orange-400 text-white"
-                            : "bg-black/40 border-white/10 text-white/70 hover:border-white/20 hover:text-white"
+                    {/* Card Body */}
+                    <div className="p-4 flex-1 flex flex-col justify-between space-y-2">
+                      <h3 className="text-sm font-semibold text-stone-900 leading-snug">
+                        {track.title}
+                      </h3>
+                      <p className="text-[11px] text-stone-500 line-clamp-2 leading-relaxed font-normal">
+                        {track.description}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Step 1 Actions */}
+            <div className="flex items-center justify-end pt-4 border-t border-stone-200/60">
+              <button
+                type="button"
+                onClick={() => setCurrentStep(2)}
+                className="px-6 py-2.5 rounded-xl bg-orange-600 hover:bg-orange-700 text-white font-medium text-xs transition-colors shadow-[0_2px_10px_-2px_rgba(234,88,12,0.3)] cursor-pointer flex items-center gap-2"
+              >
+                <span>Continue</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* ============================================================ */}
+        {/* STEP 2: PROFILE & PRACTICE PACING */}
+        {/* ============================================================ */}
+        {currentStep === 2 && (
+          <div className="max-w-md mx-auto space-y-6">
+            <div className="text-center space-y-1">
+              <h1 className="text-2xl font-bold text-stone-950 tracking-tight">
+                Learner Profile
+              </h1>
+              <p className="text-xs text-stone-500">
+                Set your name and daily practice commitment.
+              </p>
+            </div>
+
+            <div className="bg-white border border-stone-200/80 rounded-2xl p-6 sm:p-7 shadow-[0_2px_12px_-3px_rgba(0,0,0,0.04)] space-y-4 text-left">
+              {/* Name */}
+              <div className="space-y-1">
+                <label className="block text-xs font-medium text-stone-700">
+                  Full Name
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Enter your name"
+                  className="w-full bg-white border border-stone-200/90 rounded-xl px-3.5 py-2.5 text-xs text-stone-900 placeholder-stone-400 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/10 transition-all shadow-[0_1px_4px_rgba(0,0,0,0.02)]"
+                />
+              </div>
+
+              {/* Email */}
+              <div className="space-y-1">
+                <label className="block text-xs font-medium text-stone-700">
+                  Email Address
+                </label>
+                <input
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="name@company.com"
+                  className="w-full bg-white border border-stone-200/90 rounded-xl px-3.5 py-2.5 text-xs text-stone-900 placeholder-stone-400 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/10 transition-all shadow-[0_1px_4px_rgba(0,0,0,0.02)]"
+                />
+              </div>
+
+              {/* Pacing */}
+              <div className="space-y-1.5">
+                <label className="block text-xs font-medium text-stone-700">
+                  Daily Goal
+                </label>
+                <div className="grid grid-cols-3 gap-2">
+                  {PRACTICE_PACING.map((pace) => {
+                    const isSelected = selectedPacing === pace.id;
+                    return (
+                      <div
+                        key={pace.id}
+                        onClick={() => setSelectedPacing(pace.id)}
+                        className={`p-2.5 rounded-xl border text-center transition-all cursor-pointer ${
+                          isSelected
+                            ? "bg-orange-50/80 border-orange-500 ring-1 ring-orange-500"
+                            : "bg-white border-stone-200/80 hover:border-stone-300"
                         }`}
                       >
-                        <span>{goal.label}</span>
-                        {selectedGoal === goal.id && (
-                          <CheckCircle2 className="w-4 h-4 text-orange-400 shrink-0" />
-                        )}
-                      </button>
-                    ))}
-                  </div>
+                        <div className="text-xs font-semibold text-stone-900">
+                          {pace.label}
+                        </div>
+                        <div className="text-[10px] text-orange-600 font-medium mt-0.5">
+                          {pace.time}
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
+              </div>
 
-                <div className="pt-2">
-                  <button
-                    type="submit"
-                    className="w-full py-3.5 rounded-full bg-white text-black hover:bg-white/90 font-extrabold text-xs sm:text-sm flex items-center justify-center gap-2 transition-colors shadow-lg cursor-pointer"
-                  >
-                    <span>Create Individual Account & Continue</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </button>
-                </div>
-              </form>
-            )}
+              {/* Step 2 Actions */}
+              <div className="pt-2 flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => setCurrentStep(1)}
+                  className="w-1/3 py-2.5 rounded-xl bg-stone-100 hover:bg-stone-200/80 text-stone-700 font-medium text-xs transition-colors cursor-pointer"
+                >
+                  Back
+                </button>
+                <button
+                  type="button"
+                  onClick={handleCompleteSetup}
+                  disabled={isSubmitting}
+                  className="w-2/3 py-2.5 rounded-xl bg-orange-600 hover:bg-orange-700 text-white font-medium text-xs transition-colors shadow-[0_2px_10px_-2px_rgba(234,88,12,0.3)] cursor-pointer flex items-center justify-center gap-2 disabled:opacity-50"
+                >
+                  {isSubmitting ? "Setting up..." : "Complete Setup"}
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
           </div>
-        </div>
-      </section>
+        )}
+
+        {/* ============================================================ */}
+        {/* STEP 3: CONFIRMATION & LAUNCH */}
+        {/* ============================================================ */}
+        {currentStep === 3 && (
+          <div className="max-w-sm mx-auto space-y-6">
+            <div className="bg-white border border-stone-200/80 rounded-3xl p-6 text-center space-y-4 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)]">
+              <div className="w-12 h-12 rounded-full bg-emerald-100 border border-emerald-200/80 flex items-center justify-center text-emerald-600 mx-auto">
+                <CheckCircle2 className="w-6 h-6" />
+              </div>
+
+              <div className="space-y-1">
+                <h2 className="text-xl font-bold text-stone-950">
+                  Ready to Practice!
+                </h2>
+                <p className="text-xs text-stone-500 font-normal">
+                  Your simulation sandbox for <strong className="text-stone-900">{selectedTrack.title}</strong> is active.
+                </p>
+              </div>
+
+              <Link
+                href="/user-dashboard"
+                className="w-full py-2.5 rounded-xl bg-orange-600 hover:bg-orange-700 text-white font-medium text-xs transition-colors shadow-[0_2px_10px_-2px_rgba(234,88,12,0.3)] flex items-center justify-center gap-2"
+              >
+                <span>Enter Dashboard</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+          </div>
+        )}
+
+      </div>
+
+      {/* Footer */}
+      <footer className="max-w-5xl w-full mx-auto flex items-center justify-between py-2 border-t border-stone-200/60 text-xs text-stone-500">
+        <span>Real Learning &copy; 2026</span>
+        <Link href="/login" className="hover:text-stone-900 font-medium">
+          Sign in
+        </Link>
+      </footer>
     </main>
   );
-});
+}
