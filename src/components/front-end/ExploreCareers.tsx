@@ -87,10 +87,12 @@ export default memo(function ExploreCareers() {
             </div>
 
             <div className="w-[270px] h-[250px] shrink-0 relative flex flex-col justify-between p-6">
-              <img
+              <Image
                 src="/images/tasks-notes.png"
-                alt=""
-                className="pointer-events-none absolute -right-1 -top-1 w-[534px] h-[508px] max-w-none z-0 select-none"
+                alt="Tasks and Notes"
+                width={534}
+                height={508}
+                className="pointer-events-none absolute -right-1 -top-1 w-[534px] h-[508px] max-w-none z-0 select-none object-contain"
               />
 
               <div className="relative z-10 flex flex-col justify-center h-full">
@@ -128,16 +130,13 @@ export default memo(function ExploreCareers() {
                   32, 52, 22, 68, 42, 60, 26, 76, 38, 54, 28, 64, 46, 34, 58,
                   24,
                 ].map((h, i) => (
-                  <motion.span
+                  <span
                     key={i}
-                    className="w-1.5 rounded-full bg-gradient-to-t from-fuchsia-500 to-rose-400 shadow-sm origin-center transform-gpu"
-                    animate={{ scaleY: [0.35, 1, 0.35] }}
-                    transition={{
-                      repeat: Infinity,
-                      duration: 0.75 + (i % 4) * 0.18,
-                      ease: "easeInOut",
+                    className="w-1.5 rounded-full bg-gradient-to-t from-fuchsia-500 to-rose-400 shadow-sm origin-center transform-gpu animate-pulse"
+                    style={{
+                      height: `${h}px`,
+                      animationDuration: `${0.75 + (i % 4) * 0.18}s`,
                     }}
-                    style={{ height: `${h}px` }}
                   />
                 ))}
               </div>

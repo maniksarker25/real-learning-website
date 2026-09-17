@@ -1,6 +1,6 @@
 "use client";
 
-import React, { memo } from "react";
+import React, { memo, useRef, useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 
@@ -65,10 +65,33 @@ const USER_STORIES: UserStory[] = [
 const MARQUEE_STORIES = [...USER_STORIES, ...USER_STORIES];
 
 export default memo(function UserStoriesShowcase() {
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const [isInView, setIsInView] = useState(false);
+
+  // IntersectionObserver to pause continuous marquee loop when offscreen
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const [entry] = entries;
+        setIsInView(entry.isIntersecting);
+      },
+      { threshold: 0.05 }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section className="relative w-full py-20 sm:py-28 bg-orange-50 text-slate-900 font-sans overflow-hidden select-none">
+    <section
+      ref={sectionRef}
+      className="relative w-full py-20 sm:py-28 bg-orange-50 text-slate-900 font-sans overflow-hidden select-none"
+    >
       {/* Section Header */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12 sm:mb-16 ">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12 sm:mb-16">
         <div className="flex flex-col items-center text-center space-y-4">
           {/* Badge */}
           <div className="inline-flex items-center px-4 py-1 rounded-full bg-white/80 border border-orange-200/90 text-xs font-semibold text-orange-400 uppercase tracking-wider shadow-sm">
@@ -101,8 +124,9 @@ export default memo(function UserStoriesShowcase() {
         }}
       >
         <motion.div
-          className="flex items-center gap-5 sm:gap-6 w-max cursor-grab active:cursor-grabbing"
-          animate={{ x: ["0%", "-50%"] }}
+          className="flex items-center gap-5 sm:gap-6 w-max cursor-grab active:cursor-grabbing transform-gpu"
+          style={{ willChange: "transform" }}
+          animate={isInView ? { x: ["0%", "-50%"] } : undefined}
           transition={{
             duration: 32,
             repeat: Infinity,
@@ -114,12 +138,14 @@ export default memo(function UserStoriesShowcase() {
               key={`${story.id}-${index}`}
               className="shrink-0 w-[280px] sm:w-[320px] md:w-[350px] h-[450px] sm:h-[480px] md:h-[500px] rounded-[24px] sm:rounded-[28px] overflow-hidden relative shadow-md border border-black/[0.08] hover:border-black/20 hover:shadow-xl transition-all duration-200 select-none group"
             >
-              {/* Background Portrait Photo */}
+              {/* Background Portrait Photo with optimized decoding & memory footprint */}
               <Image
                 src={story.image}
                 alt={story.author}
                 fill
                 sizes="(max-width: 768px) 280px, 350px"
+                quality={80}
+                loading="lazy"
                 className="object-cover object-center pointer-events-none select-none"
               />
 
@@ -129,7 +155,7 @@ export default memo(function UserStoriesShowcase() {
               {/* Top Row: Career Category Pill Tag */}
               <div className="absolute top-5 left-5 z-10 pointer-events-none">
                 <span
-                  className={`px-3 py-1 rounded-full text-[10px] sm:text-[11px] font-bold uppercase tracking-wider backdrop-blur-md border ${story.tagColor}`}
+                  className={`px-3 py-1 rounded-full text-[10px] sm:text-[11px] font-bold uppercase tracking-wider bg-black/70 border ${story.tagColor}`}
                 >
                   {story.category}
                 </span>
@@ -142,7 +168,7 @@ export default memo(function UserStoriesShowcase() {
                   {story.customerMessage}
                 </h3>
 
-                {/* Author Info (Without Role) */}
+                {/* Author Info */}
                 <div className="text-xs text-white/80 font-medium">
                   <span>{story.author}</span>
                 </div>
@@ -154,3 +180,4 @@ export default memo(function UserStoriesShowcase() {
     </section>
   );
 });
+
