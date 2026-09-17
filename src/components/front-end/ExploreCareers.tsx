@@ -10,7 +10,7 @@ export default memo(function ExploreCareers() {
   return (
     <section
       id="explore-careers"
-      className="relative  w-full py-20 sm:py-28 bg-orange-50 text-stone-900 font-sans overflow-hidden select-none border-t border-stone-200/80"
+      className="relative w-full py-12 sm:py-20 lg:py-28 bg-orange-50 text-stone-900 font-sans overflow-hidden select-none border-t border-stone-200/80"
     >
       <div className="absolute inset-0 pointer-events-none opacity-40">
         <div
@@ -23,22 +23,22 @@ export default memo(function ExploreCareers() {
         />
       </div>
 
-      <div className="relative container mx-auto max-w-7xl px-2">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 sm:mb-16">
-          <div className="max-w-2xl space-y-3.5">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-stone-900/5 border border-stone-900/10 text-xs font-mono text-stone-800">
-              <Zap className="w-3.5 h-3.5 text-orange-600" />
+      <div className="relative container mx-auto max-w-7xl px-3 sm:px-6">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 sm:gap-6 mb-8 sm:mb-14">
+          <div className="max-w-2xl space-y-2.5 sm:space-y-3.5">
+            <div className="inline-flex items-center gap-2 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-stone-900/5 border border-stone-900/10 text-[11px] sm:text-xs font-mono text-stone-800">
+              <Zap className="w-3.5 h-3.5 text-orange-600 shrink-0" />
               <span>EXPLORE YOUR CAREER</span>
             </div>
 
-            <h2 className="text-3xl sm:text-4xl lg:text-[44px] font-extrabold tracking-tight text-stone-950 leading-[1.15] uppercase">
+            <h2 className="text-2xl sm:text-4xl lg:text-[44px] font-extrabold tracking-tight text-stone-950 leading-[1.15] uppercase">
               Explore Your{" "}
               <span className="border-b-4 border-dashed border-orange-400">
                 Career.
               </span>
             </h2>
 
-            <p className="text-sm sm:text-base text-stone-600 font-medium leading-relaxed max-w-xl">
+            <p className="text-xs sm:text-base text-stone-600 font-medium leading-relaxed max-w-xl">
               Select from 4 career simulation tracks tailored to your
               professional goals and start practicing real scenarios.
             </p>
@@ -47,7 +47,7 @@ export default memo(function ExploreCareers() {
           <div>
             <Link
               href="/get-started"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-stone-950 hover:bg-stone-800 text-white text-xs font-bold transition-all shadow-xl hover:shadow-2xl active:scale-95"
+              className="inline-flex items-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 rounded-full bg-stone-950 hover:bg-stone-800 text-white text-xs font-bold transition-all shadow-xl hover:shadow-2xl active:scale-95"
             >
               <span>Explore All Scenarios</span>
               <ArrowRight className="w-3.5 h-3.5" />
@@ -214,10 +214,10 @@ export default memo(function ExploreCareers() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 xl:hidden">
-          <div className="col-span-full rounded-[32px] bg-[#14151b] border border-white/15 p-6 shadow-xl flex items-center justify-between">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-6 xl:hidden">
+          <div className="col-span-full rounded-2xl sm:rounded-[32px] bg-[#14151b] border border-white/15 p-4 sm:p-6 shadow-xl flex items-center justify-between">
             <div>
-              <div className="text-3xl sm:text-4xl font-black font-mono text-white tracking-tighter">
+              <div className="text-2xl sm:text-4xl font-black font-mono text-white tracking-tighter">
                 135+
               </div>
               <div className="text-[10px] sm:text-xs text-white/60 uppercase tracking-wider mt-0.5">
@@ -226,31 +226,31 @@ export default memo(function ExploreCareers() {
             </div>
             <Link
               href="/get-started"
-              className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white text-black flex items-center justify-center font-bold hover:bg-orange-500 hover:text-white transition-all shadow-md active:scale-95"
+              className="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white text-black flex items-center justify-center font-bold hover:bg-orange-500 hover:text-white transition-all shadow-md active:scale-95 shrink-0"
               title="Explore All Scenarios"
             >
               <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
             </Link>
           </div>
 
-          <div className="rounded-[32px] bg-[#121318] text-white p-6 sm:p-7 border border-white/10 shadow-xl flex flex-col justify-center">
-            <div className="flex items-center gap-2 mb-2.5">
-              <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-white/10 border border-white/20 text-xs font-mono font-bold text-orange-400 shadow-sm">
+          <div className="rounded-2xl sm:rounded-[32px] bg-[#121318] text-white p-4 sm:p-7 border border-white/10 shadow-xl flex flex-col justify-center">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="inline-flex items-center justify-center w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-white/10 border border-white/20 text-[11px] sm:text-xs font-mono font-bold text-orange-400 shadow-sm shrink-0">
                 1
               </span>
-              <span className="text-[10px] font-mono uppercase tracking-widest text-white/50">
+              <span className="text-[9px] sm:text-[10px] font-mono uppercase tracking-widest text-white/50">
                 Career Track
               </span>
             </div>
-            <h3 className="text-lg sm:text-xl font-bold text-white tracking-tight leading-snug">
+            <h3 className="text-base sm:text-xl font-bold text-white tracking-tight leading-snug">
               Customer service and communication
             </h3>
-            <p className="text-white/60 text-xs sm:text-sm mt-2 leading-relaxed">
+            <p className="text-white/60 text-[11px] sm:text-sm mt-1.5 leading-relaxed">
               Learn to handle customer inquiries with professionalism and care
             </p>
           </div>
 
-          <div className="rounded-[32px] bg-[#121318] border border-white/10 shadow-xl overflow-hidden h-[220px] sm:h-[250px] relative">
+          <div className="rounded-2xl sm:rounded-[32px] bg-[#121318] border border-white/10 shadow-xl overflow-hidden h-[160px] sm:h-[230px] relative">
             <Image
               src="/images/teck.jpg"
               alt="Support Specialist"
@@ -260,24 +260,24 @@ export default memo(function ExploreCareers() {
             />
           </div>
 
-          <div className="rounded-[32px] bg-[#121318] text-white p-6 sm:p-7 border border-white/10 shadow-xl flex flex-col justify-center">
-            <div className="flex items-center gap-2 mb-2.5">
-              <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-white/10 border border-white/20 text-xs font-mono font-bold text-orange-400 shadow-sm">
+          <div className="rounded-2xl sm:rounded-[32px] bg-[#121318] text-white p-4 sm:p-7 border border-white/10 shadow-xl flex flex-col justify-center">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="inline-flex items-center justify-center w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-white/10 border border-white/20 text-[11px] sm:text-xs font-mono font-bold text-orange-400 shadow-sm shrink-0">
                 2
               </span>
-              <span className="text-[10px] font-mono uppercase tracking-widest text-white/50">
+              <span className="text-[9px] sm:text-[10px] font-mono uppercase tracking-widest text-white/50">
                 Career Track
               </span>
             </div>
-            <h3 className="text-lg sm:text-xl font-bold text-white tracking-tight leading-snug">
+            <h3 className="text-base sm:text-xl font-bold text-white tracking-tight leading-snug">
               Tech Support
             </h3>
-            <p className="text-white/60 text-xs sm:text-sm mt-2 leading-relaxed">
+            <p className="text-white/60 text-[11px] sm:text-sm mt-1.5 leading-relaxed">
               Help people solve their technology problems and get back online
             </p>
           </div>
 
-          <div className="rounded-[32px] bg-[#C04828] text-white p-6 sm:p-7 border border-white/10 shadow-xl flex flex-col justify-center relative overflow-hidden">
+          <div className="rounded-2xl sm:rounded-[32px] bg-[#C04828] text-white p-4 sm:p-7 border border-white/10 shadow-xl flex flex-col justify-center relative overflow-hidden">
             <div
               className="absolute bottom-0 left-1/2 -translate-x-1/2 w-80 h-28 blur-3xl pointer-events-none opacity-30"
               style={{
@@ -285,23 +285,23 @@ export default memo(function ExploreCareers() {
                   "radial-gradient(ellipse at center, #6366f1 0%, #3b82f6 50%, transparent 80%)",
               }}
             />
-            <div className="flex items-center gap-2 mb-2.5 relative z-10">
-              <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-white/20 border border-white/30 text-xs font-mono font-bold text-white shadow-sm">
+            <div className="flex items-center gap-2 mb-2 relative z-10">
+              <span className="inline-flex items-center justify-center w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-white/20 border border-white/30 text-[11px] sm:text-xs font-mono font-bold text-white shadow-sm shrink-0">
                 3
               </span>
-              <span className="text-[10px] font-mono uppercase tracking-widest text-white/80">
+              <span className="text-[9px] sm:text-[10px] font-mono uppercase tracking-widest text-white/80">
                 Career Track
               </span>
             </div>
-            <h3 className="text-lg sm:text-xl font-bold text-white tracking-tight leading-snug relative z-10">
+            <h3 className="text-base sm:text-xl font-bold text-white tracking-tight leading-snug relative z-10">
               IT Specialist
             </h3>
-            <p className="text-white/70 text-xs sm:text-sm mt-2 leading-relaxed relative z-10">
+            <p className="text-white/80 text-[11px] sm:text-sm mt-1.5 leading-relaxed relative z-10">
               Diagnose and resolve complex IT infrastructure challenges
             </p>
           </div>
 
-          <div className="rounded-[32px] bg-[#121318] border border-white/10 shadow-xl overflow-hidden h-[220px] sm:h-[250px] relative">
+          <div className="rounded-2xl sm:rounded-[32px] bg-[#121318] border border-white/10 shadow-xl overflow-hidden h-[160px] sm:h-[230px] relative">
             <Image
               src="/images/healthcare.jpg"
               alt="Healthcare Specialist"
@@ -311,19 +311,19 @@ export default memo(function ExploreCareers() {
             />
           </div>
 
-          <div className="col-span-full rounded-[32px] bg-[#121318] text-white p-6 sm:p-7 border border-white/10 shadow-xl flex flex-col justify-center">
-            <div className="flex items-center gap-2 mb-2.5">
-              <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-white/10 border border-white/20 text-xs font-mono font-bold text-orange-400 shadow-sm">
+          <div className="col-span-full rounded-2xl sm:rounded-[32px] bg-[#121318] text-white p-4 sm:p-7 border border-white/10 shadow-xl flex flex-col justify-center">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="inline-flex items-center justify-center w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-white/10 border border-white/20 text-[11px] sm:text-xs font-mono font-bold text-orange-400 shadow-sm shrink-0">
                 4
               </span>
-              <span className="text-[10px] font-mono uppercase tracking-widest text-white/50">
+              <span className="text-[9px] sm:text-[10px] font-mono uppercase tracking-widest text-white/50">
                 Career Track
               </span>
             </div>
-            <h3 className="text-lg sm:text-xl font-bold text-white tracking-tight leading-snug">
+            <h3 className="text-base sm:text-xl font-bold text-white tracking-tight leading-snug">
               Healthcare Support & Patient Care
             </h3>
-            <p className="text-white/60 text-xs sm:text-sm mt-2 leading-relaxed">
+            <p className="text-white/60 text-[11px] sm:text-sm mt-1.5 leading-relaxed">
               Support patients and medical staff with empathy and accuracy
             </p>
           </div>
