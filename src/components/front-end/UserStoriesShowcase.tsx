@@ -68,7 +68,7 @@ export default memo(function UserStoriesShowcase() {
   return (
     <section className="relative w-full py-20 sm:py-28 bg-orange-50 text-slate-900 font-sans overflow-hidden select-none">
       {/* Section Header */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12 sm:mb-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12 sm:mb-16 ">
         <div className="flex flex-col items-center text-center space-y-4">
           {/* Badge */}
           <div className="inline-flex items-center px-4 py-1 rounded-full bg-white/80 border border-orange-200/90 text-xs font-semibold text-orange-400 uppercase tracking-wider shadow-sm">

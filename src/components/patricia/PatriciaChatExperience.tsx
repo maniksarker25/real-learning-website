@@ -503,7 +503,7 @@ export const PatriciaChatExperience = memo(function PatriciaChatExperience({
   );
 
   return (
-    <section className="relative w-full bg-orange-50 text-stone-900 py-8 sm:py-16 px-4 sm:px-6 lg:px-10 overflow-hidden">
+    <section className="relative w-full px-2 bg-orange-50 text-stone-900 py-8 sm:py-16  sm:px-6 lg:px-10 overflow-hidden">
       {/* Fullscreen Modal with GPU-Accelerated Apple Physics */}
       <AnimatePresence>
         {isFullscreen && (
@@ -536,7 +536,7 @@ export const PatriciaChatExperience = memo(function PatriciaChatExperience({
         )}
       </AnimatePresence>
 
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-7xl px-2 mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-[1.12fr_0.88fr] gap-8 lg:gap-12 items-center">
           <div className="relative rounded-3xl overflow-hidden p-3 sm:p-7 md:p-9 shadow-2xl border border-stone-900/15 bg-stone-950 flex items-center justify-center min-h-[550px]">
             <div
