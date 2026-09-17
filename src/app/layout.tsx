@@ -6,18 +6,25 @@ import { cn } from "@/lib/utils";
 const nunitoSansHeading = Nunito_Sans({
   subsets: ["latin"],
   variable: "--font-heading",
+  display: "swap",
 });
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-sans",
+  display: "swap",
+});
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+  display: "swap",
 });
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
