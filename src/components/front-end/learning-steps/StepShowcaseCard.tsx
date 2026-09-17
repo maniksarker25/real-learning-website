@@ -22,7 +22,7 @@ export function StepShowcaseCard({
       onClick={() => {
         if (!isCurrent) onSelect();
       }}
-      className={`snap-start w-[88vw] sm:w-[80vw] lg:w-[980px] shrink-0 rounded-[28px] overflow-hidden bg-[#0c0c10] border flex flex-col transition-all duration-300 ${
+      className={`snap-start w-[92vw] sm:w-[80vw] lg:w-[980px] shrink-0 rounded-2xl sm:rounded-[28px] overflow-hidden bg-[#0c0c10] border flex flex-col transition-all duration-300 ${
         isCurrent
           ? "border-black/20 opacity-100 scale-100"
           : "border-black/[0.08] opacity-75 hover:opacity-90 scale-[0.99] cursor-pointer"
@@ -31,7 +31,7 @@ export function StepShowcaseCard({
       <div className="flex flex-col lg:grid lg:grid-cols-[1.05fr_0.95fr] flex-1 w-full lg:h-[500px]">
         {/* Left Panel: Step Details, Headline & Metrics */}
         <div
-          className={`relative ${step.bgClass} p-6 sm:p-8 lg:p-11 flex flex-col justify-between shrink-0 lg:shrink lg:h-full overflow-hidden`}
+          className={`relative ${step.bgClass} p-4 sm:p-8 lg:p-11 flex flex-col justify-between shrink-0 lg:shrink lg:h-full overflow-hidden`}
         >
           <div
             className="absolute inset-0 pointer-events-none opacity-20"
@@ -42,15 +42,15 @@ export function StepShowcaseCard({
             }}
           />
 
-          <div className="relative z-10 space-y-4 sm:space-y-6">
-            <div className="flex items-center justify-between text-xs font-mono font-bold tracking-widest text-white/90">
-              <span>{step.tag}</span>
-              <span className="px-2.5 py-0.5 rounded-full bg-black/25 border border-white/15 text-[10px] font-mono text-white/80">
+          <div className="relative z-10 space-y-3 sm:space-y-6">
+            <div className="flex items-center justify-between text-[11px] sm:text-xs font-mono font-bold tracking-widest text-white/90">
+              <span className="truncate max-w-[200px]">{step.tag}</span>
+              <span className="px-2 py-0.5 rounded-full bg-black/25 border border-white/15 text-[9px] sm:text-[10px] font-mono text-white/80 shrink-0">
                 {step.stepNumber} OF 05
               </span>
             </div>
 
-            <h3 className="text-2xl sm:text-3xl lg:text-[32px] font-normal text-white/95 leading-[1.2] max-w-md tracking-tight">
+            <h3 className="text-xl sm:text-3xl lg:text-[32px] font-normal text-white/95 leading-[1.2] max-w-md tracking-tight">
               <RenderHeadline
                 text={step.title}
                 highlights={step.highlightWords}
@@ -58,14 +58,14 @@ export function StepShowcaseCard({
             </h3>
           </div>
 
-          <div className="relative z-10 space-y-6 sm:space-y-8 pt-6 sm:pt-8">
-            <div className="grid grid-cols-2 gap-4 sm:gap-6">
+          <div className="relative z-10 space-y-5 sm:space-y-8 pt-4 sm:pt-8">
+            <div className="grid grid-cols-2 gap-3 sm:gap-6">
               {step.metrics.map((m, mIdx) => (
-                <div key={mIdx} className="space-y-1">
-                  <div className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white font-mono">
+                <div key={mIdx} className="space-y-0.5 sm:space-y-1">
+                  <div className="text-2xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white font-mono">
                     {m.value}
                   </div>
-                  <div className="text-xs sm:text-sm text-white/80 font-medium leading-snug">
+                  <div className="text-[11px] sm:text-sm text-white/80 font-medium leading-snug">
                     {m.label}
                   </div>
                 </div>

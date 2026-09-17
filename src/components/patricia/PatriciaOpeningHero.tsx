@@ -59,24 +59,14 @@ export const PatriciaOpeningHero = memo(function PatriciaOpeningHero({
             <div className="lg:col-span-7 p-2 sm:p-6 lg:p-8 flex flex-col justify-center z-10 space-y-4 sm:space-y-5">
               {/* Eyebrow Badge */}
               <div>
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5 }}
-                  className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/15 backdrop-blur-md text-[11px] sm:text-xs text-white/80 font-medium shadow-sm"
-                >
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/15 backdrop-blur-md text-[11px] sm:text-xs text-white/80 font-medium shadow-sm">
                   <Sparkles className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-orange-400" />
                   <span>Front Door to Real Learning</span>
-                </motion.div>
+                </div>
               </div>
 
               {/* 1. First screen shows: Real Learning by Scorched Souls with Moving Selection Box & Cursor */}
-              <motion.div
-                initial={{ opacity: 0, y: 18 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.1 }}
-                className="flex flex-col items-start gap-1.5 sm:gap-2 select-none"
-              >
+              <div className="flex flex-col items-start gap-1.5 sm:gap-2 select-none">
                 {/* Line 1: Real Learning */}
                 <div
                   className="relative inline-block cursor-pointer group"
@@ -188,13 +178,10 @@ export const PatriciaOpeningHero = memo(function PatriciaOpeningHero({
                     by Scorched Souls
                   </span>
                 </div>
-              </motion.div>
+              </div>
 
               {/* 2. Short explanation: Real Learning is an AI Life GPS with dynamic selection */}
-              <motion.div
-                initial={{ opacity: 0, y: 18 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.18 }}
+              <div
                 className="relative inline-block cursor-pointer group max-w-xl"
                 onClick={() => setSelectedTextIndex(2)}
                 onMouseEnter={() => setSelectedTextIndex(2)}
@@ -244,13 +231,10 @@ export const PatriciaOpeningHero = memo(function PatriciaOpeningHero({
                   Real Learning is an AI Life GPS that helps you figure out
                   where you are, where you want to go, and your next best step.
                 </p>
-              </motion.div>
+              </div>
 
               {/* Slide / Swipe Up Animated Handle Button */}
-              <motion.div
-                initial={{ opacity: 0, y: 18 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.3 }}
+              <div
                 className="inline-flex items-center gap-3.5 cursor-pointer group select-none pt-1 self-start relative"
                 onClick={() => handleLaunchChat()}
               >
@@ -277,11 +261,8 @@ export const PatriciaOpeningHero = memo(function PatriciaOpeningHero({
                   <span className="text-xs sm:text-[13px] font-bold tracking-wider uppercase text-white/90 group-hover:text-orange-300 transition-colors leading-tight">
                     SLIDE / SWIPE UP INTO PATRICIA
                   </span>
-                  <span className="text-[10px] sm:text-[11px] text-white/45 group-hover:text-white/70 transition-colors leading-tight">
-                    Patricia becomes your main experience
-                  </span>
                 </div>
-              </motion.div>
+              </div>
             </div>
 
             {/* Right Column: 3D Dotted Canvas Globe with Floating Career Simulation Cards */}
@@ -295,12 +276,7 @@ export const PatriciaOpeningHero = memo(function PatriciaOpeningHero({
               </div>
 
               {/* FLOATING CARD 1: CAREER TRACKS & SCENARIOS (Top Right) - #BD492D */}
-              <motion.div
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.15 }}
-                className="absolute top-0 sm:top-1 right-0 sm:right-1 lg:-right-3 z-20 w-[215px] sm:w-[245px] scale-[0.78] sm:scale-[0.88] lg:scale-[0.92] origin-top-right rounded-xl sm:rounded-2xl bg-[#BD492D]/95 border border-white/20 p-3 sm:p-3.5 backdrop-blur-md shadow-2xl shadow-black/80 text-white"
-              >
+              <div className="absolute top-0 sm:top-1 right-0 sm:right-1 lg:-right-3 z-20 w-[215px] sm:w-[245px] scale-[0.78] sm:scale-[0.88] lg:scale-[0.92] origin-top-right rounded-xl sm:rounded-2xl bg-[#BD492D]/95 border border-white/20 p-3 sm:p-3.5 backdrop-blur-md shadow-2xl shadow-black/80 text-white">
                 {/* Status & Count */}
                 <div className="mb-2">
                   <div className="flex items-baseline gap-1.5">
@@ -369,15 +345,10 @@ export const PatriciaOpeningHero = memo(function PatriciaOpeningHero({
                     </div>
                   </div>
                 </div>
-              </motion.div>
+              </div>
 
               {/* FLOATING CARD 2: FEATURED SIMULATION (Middle Left) - #2B5748 */}
-              <motion.div
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.25 }}
-                className="absolute top-[32%] -left-3 sm:left-0 lg:-left-6 z-20 w-[195px] sm:w-[225px] scale-[0.75] sm:scale-[0.84] lg:scale-[0.88] origin-left rounded-xl sm:rounded-2xl bg-[#2B5748]/95 border border-white/20 p-2.5 sm:p-3 backdrop-blur-md shadow-2xl shadow-black/80 text-white"
-              >
+              <div className="absolute top-[32%] -left-3 sm:left-0 lg:-left-6 z-20 w-[195px] sm:w-[225px] scale-[0.75] sm:scale-[0.84] lg:scale-[0.88] origin-left rounded-xl sm:rounded-2xl bg-[#2B5748]/95 border border-white/20 p-2.5 sm:p-3 backdrop-blur-md shadow-2xl shadow-black/80 text-white">
                 <div className="mb-1">
                   <span className="text-[9px] font-mono font-semibold tracking-wider uppercase text-emerald-200">
                     FEATURED SIMULATION
@@ -412,15 +383,10 @@ export const PatriciaOpeningHero = memo(function PatriciaOpeningHero({
                     </span>
                   </div>
                 </div>
-              </motion.div>
+              </div>
 
               {/* FLOATING CARD 3: PATRICIA AI LIFE GPS (Bottom Right) - #2B5748 */}
-              <motion.div
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.35 }}
-                className="absolute bottom-0 sm:bottom-1 right-0 sm:right-1 lg:-right-2 z-20 w-[205px] sm:w-[230px] scale-[0.75] sm:scale-[0.84] lg:scale-[0.88] origin-bottom-right rounded-xl sm:rounded-2xl bg-[#2B5748]/95 border border-white/20 p-2.5 sm:p-3 backdrop-blur-md shadow-2xl shadow-black/80 text-white"
-              >
+              <div className="absolute bottom-0 sm:bottom-1 right-0 sm:right-1 lg:-right-2 z-20 w-[205px] sm:w-[230px] scale-[0.75] sm:scale-[0.84] lg:scale-[0.88] origin-bottom-right rounded-xl sm:rounded-2xl bg-[#2B5748]/95 border border-white/20 p-2.5 sm:p-3 backdrop-blur-md shadow-2xl shadow-black/80 text-white">
                 <div className="mb-0.5 flex items-center gap-1.5">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-300 animate-pulse" />
                   <span className="text-[9px] font-mono font-bold tracking-wider uppercase text-emerald-200">
@@ -450,7 +416,7 @@ export const PatriciaOpeningHero = memo(function PatriciaOpeningHero({
                     <span>Grow</span>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             </div>
           </div>
         </div>
@@ -473,7 +439,7 @@ const TracingPath = ({ className = "" }: TracingPathProps) => {
         height="231"
         viewBox="0 0 229 231"
         fill="none"
-        className="w-[110px] h-[110px] xs:w-[130px] xs:h-[130px] sm:w-[170px] sm:h-[170px] md:w-[200px] md:h-[200px] lg:w-[229px] lg:h-[231px] max-w-none drop-shadow-[0_4px_12px_rgba(0,0,0,0.4)]"
+        className="w-[90px] h-[90px] xs:w-[130px] xs:h-[130px] sm:w-[170px] sm:h-[170px] md:w-[200px] md:h-[200px] lg:w-[229px] lg:h-[231px] max-w-none drop-shadow-[0_4px_12px_rgba(0,0,0,0.4)]"
       >
         <mask
           id="mask0_1140_3"
@@ -489,12 +455,12 @@ const TracingPath = ({ className = "" }: TracingPathProps) => {
           <path
             d="M1.45251 0.378906C19.7635 70.4019 226.413 193.85 226.781 136.573C210 50 54 40 76.5306 224.759"
             stroke="url(#paint0_linear_1140_3)"
-            stroke-width="3"
+            strokeWidth="3"
           />
           <path
             d="M63.0615 209.023L76.2535 226.53L93.7598 213.338"
             stroke="#FF8000"
-            stroke-width="3"
+            strokeWidth="3"
           />
         </g>
         <defs>
@@ -506,8 +472,8 @@ const TracingPath = ({ className = "" }: TracingPathProps) => {
             y2="8.5"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#FF8000" />
-            <stop offset="0.962887" stop-color="white" stop-opacity="0" />
+            <stop stopColor="#FF8000" />
+            <stop offset="0.962887" stopColor="white" stopOpacity="0" />
           </linearGradient>
         </defs>
       </svg>

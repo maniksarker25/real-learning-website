@@ -116,11 +116,17 @@ export const DottedGlobe = memo(function DottedGlobe({
     let height = 0;
     let dpr = 1;
 
+    const isMobileDevice = typeof window !== "undefined" && window.innerWidth < 640;
+    const step = isMobileDevice ? 2 : 1;
+
     const handleResize = () => {
       const rect = canvas.getBoundingClientRect();
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
-      width = rect.width;
-      height = rect.height;
+      const fallbackW = canvas.clientWidth || canvas.offsetWidth || canvas.parentElement?.clientWidth || 350;
+      const fallbackH = canvas.clientHeight || canvas.offsetHeight || canvas.parentElement?.clientHeight || 350;
+      const maxDpr = isMobileDevice ? 1 : 2;
+      dpr = Math.min(window.devicePixelRatio || 1, maxDpr);
+      width = rect.width > 0 ? rect.width : fallbackW;
+      height = rect.height > 0 ? rect.height : fallbackH;
 
       canvas.width = Math.floor(width * dpr);
       canvas.height = Math.floor(height * dpr);
@@ -131,6 +137,7 @@ export const DottedGlobe = memo(function DottedGlobe({
       handleResize();
     });
     resizeObserver.observe(canvas);
+    // Execute handleResize immediately to calculate dimensions on frame 0
     handleResize();
 
     // IntersectionObserver to pause rendering loop when globe is out of view
@@ -150,6 +157,10 @@ export const DottedGlobe = memo(function DottedGlobe({
       if (!isVisibleRef.current) {
         animationFrameId = null;
         return;
+      }
+
+      if (width === 0 || height === 0) {
+        handleResize();
       }
 
       if (!isDraggingRef.current) {
@@ -204,7 +215,7 @@ export const DottedGlobe = memo(function DottedGlobe({
       ctx.fillStyle = "rgba(148, 163, 184, 0.08)";
       ctx.beginPath();
       const landLen = GLOBE_LAND_POINTS.length;
-      for (let i = 0; i < landLen; i++) {
+      for (let i = 0; i < landLen; i += step) {
         const pt = GLOBE_LAND_POINTS[i];
         const rx = pt[0] * cosY + pt[2] * sinY;
         const ry = pt[1];
@@ -224,7 +235,7 @@ export const DottedGlobe = memo(function DottedGlobe({
       // Batch 2: Front hemisphere dots (z > 0) grouped into alpha buckets
       ctx.fillStyle = "rgba(240, 246, 255, 0.55)";
       ctx.beginPath();
-      for (let i = 0; i < landLen; i++) {
+      for (let i = 0; i < landLen; i += step) {
         const pt = GLOBE_LAND_POINTS[i];
         const rx = pt[0] * cosY + pt[2] * sinY;
         const ry = pt[1];
