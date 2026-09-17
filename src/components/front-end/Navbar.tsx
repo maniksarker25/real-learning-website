@@ -65,7 +65,7 @@ export default memo(function Navbar() {
       { label: "About", href: "/about" },
       { label: "Contact", href: "/contact" },
     ],
-    []
+    [],
   );
 
   const handleNavClick = useCallback(
@@ -345,7 +345,7 @@ export default memo(function Navbar() {
               </motion.div>
             )}
           </AnimatePresence>,
-          document.body
+          document.body,
         )}
     </>
   );

@@ -35,7 +35,7 @@ export const OrgSettingsScreen = memo(function OrgSettingsScreen() {
       setSaved(true);
       setTimeout(() => setSaved(false), 2500);
     },
-    [loginAsOrganization, orgName, email, seats, currentOrgRole]
+    [loginAsOrganization, orgName, email, seats, currentOrgRole],
   );
 
   return (
@@ -49,7 +49,7 @@ export const OrgSettingsScreen = memo(function OrgSettingsScreen() {
                 "inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider border",
                 isOwner
                   ? "bg-amber-500/10 text-amber-300 border-amber-400/30"
-                  : "bg-blue-500/10 text-blue-300 border-blue-400/30"
+                  : "bg-blue-500/10 text-blue-300 border-blue-400/30",
               )}
             >
               {isOwner ? (
@@ -92,12 +92,18 @@ export const OrgSettingsScreen = memo(function OrgSettingsScreen() {
             <span className="font-bold text-white block mb-0.5">
               Admin Access Level
             </span>
-            You are logged in as an <strong>Organization Admin</strong>. You have permissions to invite members, assign simulations, and review performance. Upgrading seats, managing billing, and transferring ownership are reserved for the <strong>Owner</strong>.
+            You are logged in as an <strong>Organization Admin</strong>. You
+            have permissions to invite members, assign simulations, and review
+            performance. Upgrading seats, managing billing, and transferring
+            ownership are reserved for the <strong>Owner</strong>.
           </div>
         </div>
       )}
 
-      <form onSubmit={handleSave} className="bg-[#12131c]/90 rounded-2xl p-6 border border-white/10 shadow-lg space-y-5">
+      <form
+        onSubmit={handleSave}
+        className="bg-[#12131c]/90 rounded-2xl p-6 border border-white/10 shadow-lg space-y-5"
+      >
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <div>
             <label className="block text-xs font-semibold text-white/80 mb-2">
@@ -115,7 +121,7 @@ export const OrgSettingsScreen = memo(function OrgSettingsScreen() {
                   "w-full border rounded-xl pl-10 pr-4 py-3 text-xs text-white placeholder-white/40 transition-colors",
                   isOwner
                     ? "bg-black/60 border-white/10 focus:outline-none focus:border-orange-400"
-                    : "bg-white/[0.02] border-white/5 text-white/60 cursor-not-allowed"
+                    : "bg-white/[0.02] border-white/5 text-white/60 cursor-not-allowed",
                 )}
               />
             </div>
@@ -137,7 +143,7 @@ export const OrgSettingsScreen = memo(function OrgSettingsScreen() {
                   "w-full border rounded-xl pl-10 pr-4 py-3 text-xs text-white placeholder-white/40 transition-colors",
                   isOwner
                     ? "bg-black/60 border-white/10 focus:outline-none focus:border-orange-400"
-                    : "bg-white/[0.02] border-white/5 text-white/60 cursor-not-allowed"
+                    : "bg-white/[0.02] border-white/5 text-white/60 cursor-not-allowed",
                 )}
               />
             </div>
@@ -173,7 +179,9 @@ export const OrgSettingsScreen = memo(function OrgSettingsScreen() {
             <div className="p-3.5 rounded-xl bg-black/40 border border-white/10 flex items-center justify-between text-xs">
               <div className="flex items-center gap-2 text-white">
                 <CreditCard className="w-4 h-4 text-orange-400" />
-                <span className="font-bold">{seats} Seats Enrolled (Active Team Pilot)</span>
+                <span className="font-bold">
+                  {seats} Seats Enrolled (Active Team Pilot)
+                </span>
               </div>
               <span className="text-[11px] text-white/40">Read-Only</span>
             </div>
@@ -207,4 +215,3 @@ export const OrgSettingsScreen = memo(function OrgSettingsScreen() {
     </div>
   );
 });
-
