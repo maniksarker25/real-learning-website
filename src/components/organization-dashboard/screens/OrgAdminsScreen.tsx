@@ -16,7 +16,6 @@ import { cn } from "@/lib/utils";
 import { useAccount } from "@/context/AccountContext";
 import { OrgRole } from "@/types/account";
 
-
 interface AdminUserItem {
   id: string;
   name: string;
@@ -41,7 +40,9 @@ export const OrgAdminsScreen = memo(function OrgAdminsScreen() {
   const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
   const [inviteName, setInviteName] = useState("");
   const [inviteEmail, setInviteEmail] = useState("");
-  const [inviteDepartment, setInviteDepartment] = useState("Operations & Training");
+  const [inviteDepartment, setInviteDepartment] = useState(
+    "Operations & Training",
+  );
   const [inviteSuccess, setInviteSuccess] = useState(false);
 
   // Toast feedback
@@ -56,7 +57,8 @@ export const OrgAdminsScreen = memo(function OrgAdminsScreen() {
       id: "u-owner",
       name: session.name || "Hosain Ali (You)",
       email: session.email || "hosain.owner@acmecorp.com",
-      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80",
+      avatar:
+        "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80",
       role: "owner",
       title: "Founder & Organization Owner",
       department: "Executive Leadership",
@@ -67,7 +69,8 @@ export const OrgAdminsScreen = memo(function OrgAdminsScreen() {
       id: "u-admin-1",
       name: "Marcus Vance",
       email: "marcus.admin@acmecorp.com",
-      avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&auto=format&fit=crop&q=80",
+      avatar:
+        "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&auto=format&fit=crop&q=80",
       role: "admin",
       title: "L&D Training Director",
       department: "Human Resources / L&D",
@@ -78,7 +81,8 @@ export const OrgAdminsScreen = memo(function OrgAdminsScreen() {
       id: "u-admin-2",
       name: "Sophia Martinez",
       email: "sophia.m@acmecorp.com",
-      avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=100&auto=format&fit=crop&q=80",
+      avatar:
+        "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=100&auto=format&fit=crop&q=80",
       role: "admin",
       title: "Customer Success Team Lead",
       department: "Support & Enablement",
@@ -104,9 +108,8 @@ export const OrgAdminsScreen = memo(function OrgAdminsScreen() {
       setAdmins((prev) => prev.filter((a) => a.id !== adminId));
       showToast(`${adminName} removed from organization administrators.`);
     },
-    [showToast]
+    [showToast],
   );
-
 
   const handleInviteSubmit = useCallback(
     (e: React.FormEvent) => {
@@ -115,7 +118,8 @@ export const OrgAdminsScreen = memo(function OrgAdminsScreen() {
         id: `u-admin-${Date.now()}`,
         name: inviteName,
         email: inviteEmail,
-        avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&auto=format&fit=crop&q=80",
+        avatar:
+          "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&auto=format&fit=crop&q=80",
         role: "admin",
         title: "Training Administrator",
         department: inviteDepartment,
@@ -133,7 +137,7 @@ export const OrgAdminsScreen = memo(function OrgAdminsScreen() {
         showToast(`Admin invite sent to ${inviteName}`);
       }, 1500);
     },
-    [inviteName, inviteEmail, inviteDepartment, showToast]
+    [inviteName, inviteEmail, inviteDepartment, showToast],
   );
 
   if (!isOwner) {
@@ -143,9 +147,13 @@ export const OrgAdminsScreen = memo(function OrgAdminsScreen() {
           <Crown className="w-7 h-7" />
         </div>
         <div className="space-y-1">
-          <h3 className="text-lg font-bold text-white">Owner Managed Section</h3>
+          <h3 className="text-lg font-bold text-white">
+            Owner Managed Section
+          </h3>
           <p className="text-xs text-white/60 leading-relaxed max-w-sm mx-auto">
-            Only the Organization Owner can manage Administrator accounts. As an Organization Admin, you have full access to manage team Members, view completed Simulations, and monitor Progress.
+            Only the Organization Owner can manage Administrator accounts. As an
+            Organization Admin, you have full access to manage team Members,
+            view completed Simulations, and monitor Progress.
           </p>
         </div>
         <div className="pt-2">
@@ -179,7 +187,7 @@ export const OrgAdminsScreen = memo(function OrgAdminsScreen() {
                 "inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider border",
                 isOwner
                   ? "bg-amber-500/10 text-amber-300 border-amber-400/30"
-                  : "bg-blue-500/10 text-blue-300 border-blue-400/30"
+                  : "bg-blue-500/10 text-blue-300 border-blue-400/30",
               )}
             >
               {isOwner ? (
@@ -267,7 +275,10 @@ export const OrgAdminsScreen = memo(function OrgAdminsScreen() {
                 const isCurrentSelf = admin.id === "u-owner";
 
                 return (
-                  <tr key={admin.id} className="hover:bg-white/[0.02] transition-colors">
+                  <tr
+                    key={admin.id}
+                    className="hover:bg-white/[0.02] transition-colors"
+                  >
                     {/* Administrator Name & Avatar */}
                     <td className="py-3.5 px-4 whitespace-nowrap">
                       <div className="flex items-center gap-3">
@@ -309,8 +320,12 @@ export const OrgAdminsScreen = memo(function OrgAdminsScreen() {
 
                     {/* Department / Title */}
                     <td className="py-3.5 px-4 whitespace-nowrap">
-                      <div className="text-white font-medium">{admin.department}</div>
-                      <div className="text-[10px] text-white/40">{admin.title}</div>
+                      <div className="text-white font-medium">
+                        {admin.department}
+                      </div>
+                      <div className="text-[10px] text-white/40">
+                        {admin.title}
+                      </div>
                     </td>
 
                     {/* Added Date */}
@@ -326,8 +341,8 @@ export const OrgAdminsScreen = memo(function OrgAdminsScreen() {
                           admin.status === "Active"
                             ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/30"
                             : admin.status === "Suspended"
-                            ? "bg-rose-500/10 text-rose-400 border border-rose-500/30"
-                            : "bg-amber-500/10 text-amber-400 border border-amber-500/30"
+                              ? "bg-rose-500/10 text-rose-400 border border-rose-500/30"
+                              : "bg-amber-500/10 text-amber-400 border border-amber-500/30",
                         )}
                       >
                         <span className="w-1.5 h-1.5 rounded-full bg-current" />
@@ -341,7 +356,9 @@ export const OrgAdminsScreen = memo(function OrgAdminsScreen() {
                         <div className="inline-flex items-center gap-1.5 justify-end">
                           {!isOwnerRow ? (
                             <button
-                              onClick={() => handleRemoveAdmin(admin.id, admin.name)}
+                              onClick={() =>
+                                handleRemoveAdmin(admin.id, admin.name)
+                              }
                               className="inline-flex items-center gap-1 text-xs text-rose-400 hover:text-white bg-rose-500/10 hover:bg-rose-500/20 border border-rose-400/30 px-3 py-1.5 rounded-full font-bold transition-colors cursor-pointer"
                               title="Remove admin from organization"
                             >
@@ -380,9 +397,12 @@ export const OrgAdminsScreen = memo(function OrgAdminsScreen() {
                 <Shield className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="text-lg font-bold text-white">Invite Organization Admin</h3>
+                <h3 className="text-lg font-bold text-white">
+                  Invite Organization Admin
+                </h3>
                 <p className="text-xs text-white/60">
-                  Admins can invite members, assign simulations, and view progress.
+                  Admins can invite members, assign simulations, and view
+                  progress.
                 </p>
               </div>
             </div>
@@ -390,7 +410,9 @@ export const OrgAdminsScreen = memo(function OrgAdminsScreen() {
             {inviteSuccess ? (
               <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-2xl p-5 text-center space-y-2">
                 <CheckCircle2 className="w-8 h-8 text-emerald-400 mx-auto" />
-                <div className="text-sm font-bold text-white">Admin Invite Sent!</div>
+                <div className="text-sm font-bold text-white">
+                  Admin Invite Sent!
+                </div>
                 <p className="text-xs text-white/60">
                   {inviteName} has been invited with Administrator privileges.
                 </p>
@@ -442,7 +464,8 @@ export const OrgAdminsScreen = memo(function OrgAdminsScreen() {
                 <div className="p-3 rounded-xl bg-blue-500/10 border border-blue-400/20 text-[11px] text-blue-200 flex items-start gap-2">
                   <ShieldCheck className="w-4 h-4 text-blue-400 shrink-0 mt-0.5" />
                   <span>
-                    Admins can manage members and assign simulations. Billing and seats remain Owner-controlled.
+                    Admins can manage members and assign simulations. Billing
+                    and seats remain Owner-controlled.
                   </span>
                 </div>
 
