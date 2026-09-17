@@ -46,9 +46,12 @@ export type IndTabType =
 export default memo(function IndDashboardLayout() {
   const { session, logout } = useAccount();
   const [activeTab, setActiveTab] = useState<IndTabType>("pathfinder");
-  const [currentLoopStep, setCurrentLoopStep] = useState<LearningLoopStep>("pathfinder");
+  const [currentLoopStep, setCurrentLoopStep] =
+    useState<LearningLoopStep>("pathfinder");
   const [activePath, setActivePath] = useState<CareerPath | null>(null);
-  const [activeSimTitle, setActiveSimTitle] = useState<string | undefined>(undefined);
+  const [activeSimTitle, setActiveSimTitle] = useState<string | undefined>(
+    undefined,
+  );
 
   const handleLogout = useCallback(() => {
     logout();
@@ -60,7 +63,8 @@ export default memo(function IndDashboardLayout() {
     if (tab === "pathfinder") setCurrentLoopStep("pathfinder");
     if (tab === "classes") setCurrentLoopStep("class");
     if (tab === "simulations") setCurrentLoopStep("simulator");
-    if (tab === "feedback" || tab === "progress") setCurrentLoopStep("feedback");
+    if (tab === "feedback" || tab === "progress")
+      setCurrentLoopStep("feedback");
   }, []);
 
   const handleSelectLoopStep = useCallback((step: LearningLoopStep) => {
@@ -68,7 +72,11 @@ export default memo(function IndDashboardLayout() {
     if (step === "pathfinder") setActiveTab("pathfinder");
     if (step === "class") setActiveTab("classes");
     if (step === "simulator") setActiveTab("simulations");
-    if (step === "feedback" || step === "skill_progress" || step === "next_step") {
+    if (
+      step === "feedback" ||
+      step === "skill_progress" ||
+      step === "next_step"
+    ) {
       setActiveTab("feedback");
     }
   }, []);
@@ -87,24 +95,36 @@ export default memo(function IndDashboardLayout() {
     setActiveTab("simulations");
   }, []);
 
-  const handleLaunchSimulationFromHome = useCallback((scenarioTitle: string) => {
-    setActiveSimTitle(scenarioTitle);
-    setCurrentLoopStep("simulator");
-    setActiveTab("simulations");
-  }, []);
+  const handleLaunchSimulationFromHome = useCallback(
+    (scenarioTitle: string) => {
+      setActiveSimTitle(scenarioTitle);
+      setCurrentLoopStep("simulator");
+      setActiveTab("simulations");
+    },
+    [],
+  );
 
   const navItems = useMemo(
     () => [
       { id: "pathfinder" as const, label: "Pathfinder (GPS)", icon: Compass },
       { id: "classes" as const, label: "1. Class", icon: BookOpen, count: "3" },
-      { id: "simulations" as const, label: "2. Simulator", icon: Zap, count: "3" },
-      { id: "feedback" as const, label: "3. Feedback & GPS", icon: MessageSquare },
+      {
+        id: "simulations" as const,
+        label: "2. Simulator",
+        icon: Zap,
+        count: "3",
+      },
+      {
+        id: "feedback" as const,
+        label: "3. Feedback & GPS",
+        icon: MessageSquare,
+      },
       { id: "progress" as const, label: "Skills Radar", icon: BarChart3 },
       { id: "dashboard" as const, label: "Overview", icon: LayoutDashboard },
       { id: "goals" as const, label: "Goals", icon: Target },
       { id: "settings" as const, label: "Profile", icon: Settings },
     ],
-    []
+    [],
   );
 
   return (
@@ -207,18 +227,25 @@ export default memo(function IndDashboardLayout() {
                       "flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold shrink-0 whitespace-nowrap transition-colors cursor-pointer w-full text-left",
                       isActive
                         ? "bg-gradient-to-r from-orange-500/20 to-rose-500/20 text-orange-300 border border-orange-500/30"
-                        : "text-white/60 hover:text-white hover:bg-white/5 border border-transparent"
+                        : "text-white/60 hover:text-white hover:bg-white/5 border border-transparent",
                     )}
                   >
                     <div className="flex items-center gap-2.5">
-                      <Icon className={cn("w-4 h-4", isActive ? "text-orange-400" : "text-white/40")} />
+                      <Icon
+                        className={cn(
+                          "w-4 h-4",
+                          isActive ? "text-orange-400" : "text-white/40",
+                        )}
+                      />
                       <span>{item.label}</span>
                     </div>
                     {item.count && (
                       <span
                         className={cn(
                           "text-[10px] font-mono px-2 py-0.5 rounded-full hidden md:inline-block",
-                          isActive ? "bg-orange-500/30 text-orange-200" : "bg-white/5 text-white/40"
+                          isActive
+                            ? "bg-orange-500/30 text-orange-200"
+                            : "bg-white/5 text-white/40",
                         )}
                       >
                         {item.count}
@@ -254,7 +281,9 @@ export default memo(function IndDashboardLayout() {
             <LearningLoopStepper
               currentStep={currentLoopStep}
               onSelectStep={handleSelectLoopStep}
-              activePathTitle={activePath?.title || "Technical Support Specialist"}
+              activePathTitle={
+                activePath?.title || "Technical Support Specialist"
+              }
             />
 
             {/* Main Screen Router */}
