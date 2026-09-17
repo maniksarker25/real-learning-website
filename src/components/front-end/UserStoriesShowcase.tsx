@@ -88,7 +88,7 @@ export default memo(function UserStoriesShowcase() {
   return (
     <section
       ref={sectionRef}
-      className="relative w-full py-20 sm:py-28 bg-orange-50 text-slate-900 font-sans overflow-hidden select-none"
+      className="relative w-full py-6 sm:py-18 lg:py-26 bg-orange-50 text-slate-900 font-sans overflow-hidden select-none"
     >
       {/* Section Header */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12 sm:mb-16">
