@@ -207,7 +207,7 @@ export default memo(function FeedbackSection() {
     <section
       id="feedback-section"
       ref={sectionRef}
-      className="relative w-full py-20 sm:py-28 bg-orange-50 text-stone-900 font-sans overflow-hidden select-none"
+      className="relative w-full py-6 sm:py-18 lg:py-26 bg-orange-50 text-stone-900 font-sans overflow-hidden select-none"
     >
       {/* Precision Blueprint Grid Background */}
       <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(to_right,#0000000c_1px,transparent_1px),linear-gradient(to_bottom,#0000000c_1px,transparent_1px)] bg-[size:32px_32px] [mask-image:radial-gradient(ellipse_80%_60%_at_50%_50%,#000_65%,transparent_100%)]" />
