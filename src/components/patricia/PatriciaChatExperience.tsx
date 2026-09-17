@@ -540,7 +540,7 @@ export const PatriciaChatExperience = memo(function PatriciaChatExperience({
         <div className="grid grid-cols-1 lg:grid-cols-[1.12fr_0.88fr] gap-8 lg:gap-12 items-center">
           <div className="relative rounded-3xl overflow-hidden p-3 sm:p-7 md:p-9 shadow-2xl border border-stone-900/15 bg-stone-950 flex items-center justify-center min-h-[550px]">
             <div
-              className="absolute inset-0 bg-cover bg-center bg-no-repeat bg-fixed"
+              className="absolute inset-0 bg-cover bg-center bg-no-repeat"
               style={{ backgroundImage: "url('/images/forest-tapestry.jpg')" }}
             />
             <div className="absolute inset-0 bg-black/45 backdrop-blur-[1px] pointer-events-none" />

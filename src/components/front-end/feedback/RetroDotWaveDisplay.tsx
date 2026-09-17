@@ -19,10 +19,11 @@ export function RetroDotWaveDisplay({
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    let animationFrameId: number;
+    let animationFrameId: number | null = null;
+    let isVisible = true;
     const startTime = performance.now();
 
-    const dpr = typeof window !== "undefined" ? window.devicePixelRatio || 1 : 1;
+    const dpr = typeof window !== "undefined" ? Math.min(window.devicePixelRatio || 1, 2) : 1;
     const size = 236;
     canvas.width = size * dpr;
     canvas.height = size * dpr;
@@ -35,7 +36,24 @@ export function RetroDotWaveDisplay({
     const center = size / 2;
     const maxRadius = size / 2 - 4;
 
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const [entry] = entries;
+        isVisible = entry.isIntersecting;
+        if (isVisible && animationFrameId === null) {
+          animationFrameId = requestAnimationFrame(render);
+        }
+      },
+      { threshold: 0.05 }
+    );
+    observer.observe(canvas);
+
     const render = (currentTime: number) => {
+      if (!isVisible) {
+        animationFrameId = null;
+        return;
+      }
+
       const elapsed = (currentTime - startTime) / 1000;
       ctx.clearRect(0, 0, size, size);
 
@@ -65,23 +83,24 @@ export function RetroDotWaveDisplay({
           const dotRadius = baseRadius + intensity * 2.4;
           const alpha = 0.15 + intensity * 0.85;
 
-          ctx.beginPath();
-          ctx.arc(x, y, dotRadius, 0, Math.PI * 2);
-
-          // Highly luminous white dots with radial glow
+          // Performantly render luminous dots without costly canvas shadowBlur
           if (intensity > 0.65) {
+            // Draw soft outer glow halo without shadowBlur cost
+            ctx.fillStyle = `rgba(255, 255, 255, ${0.18 * intensity})`;
+            ctx.beginPath();
+            ctx.arc(x, y, dotRadius * 1.8, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Bright core dot
             ctx.fillStyle = `rgba(255, 255, 255, ${Math.min(1, alpha * 1.15)})`;
-            ctx.shadowColor = "rgba(255, 255, 255, 0.85)";
-            ctx.shadowBlur = 8;
           } else if (intensity > 0.35) {
             ctx.fillStyle = `rgba(255, 255, 255, ${alpha * 0.75})`;
-            ctx.shadowColor = "rgba(255, 255, 255, 0.4)";
-            ctx.shadowBlur = 3;
           } else {
             ctx.fillStyle = `rgba(255, 255, 255, ${Math.max(0.12, alpha * 0.25)})`;
-            ctx.shadowBlur = 0;
           }
 
+          ctx.beginPath();
+          ctx.arc(x, y, dotRadius, 0, Math.PI * 2);
           ctx.fill();
         }
       }
@@ -92,7 +111,10 @@ export function RetroDotWaveDisplay({
     animationFrameId = requestAnimationFrame(render);
 
     return () => {
-      cancelAnimationFrame(animationFrameId);
+      if (animationFrameId !== null) {
+        cancelAnimationFrame(animationFrameId);
+      }
+      observer.disconnect();
     };
   }, [isTyping]);
 
