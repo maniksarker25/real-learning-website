@@ -74,14 +74,14 @@ export const PatriciaGpsPanel = memo(function PatriciaGpsPanel({
   return (
     <div className="flex flex-col justify-center space-y-7 lg:pl-2">
       {/* Heading & Subtitle */}
-      <div className="space-y-3">
-        <h2 className="text-3xl sm:text-4xl lg:text-[42px] uppercase font-extrabold text-stone-950 tracking-tight leading-[1.15]">
+      <div className="space-y-2.5 sm:space-y-3">
+        <h2 className="text-2xl sm:text-3xl lg:text-[42px] uppercase font-extrabold text-stone-950 tracking-tight leading-[1.15]">
           Yes, you even have a{" "}
-          <span className="border-b-4 border-dashed border-orange-400">
+          <span className="border-b-3 sm:border-b-4 border-dashed border-orange-400">
             personal Life GPS.
           </span>
         </h2>
-        <p className="text-sm sm:text-base text-stone-900/80 font-medium leading-relaxed max-w-xl">
+        <p className="text-xs sm:text-base text-stone-900/80 font-medium leading-relaxed max-w-xl">
           When you&apos;re trying to figure out what career to pursue or what
           skill to practice next, vague advice isn&apos;t enough. That&apos;s where
           Patricia maps your exact direction.
@@ -92,24 +92,24 @@ export const PatriciaGpsPanel = memo(function PatriciaGpsPanel({
       <div
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
-        className="rounded-2xl bg-[#191917] border border-stone-800 shadow-2xl p-5 sm:p-6 transition-all relative overflow-hidden group"
+        className="rounded-2xl bg-[#191917] border border-stone-800 shadow-2xl p-3.5 sm:p-6 transition-all relative overflow-hidden group"
       >
-        <div className="flex items-start gap-4">
-          <div className="w-12 h-12 rounded-xl bg-white/[0.06] border border-white/10 flex items-center justify-center shrink-0">
-            <StepIcon className={`w-5 h-5 ${currentStep.color}`} />
+        <div className="flex items-start gap-2.5 sm:gap-4">
+          <div className="w-9 h-9 sm:w-12 sm:h-12 rounded-xl bg-white/[0.06] border border-white/10 flex items-center justify-center shrink-0">
+            <StepIcon className={`w-4 h-4 sm:w-5 sm:h-5 ${currentStep.color}`} />
           </div>
 
-          <div className="space-y-1.5 min-w-0 flex-1">
-            <div className="flex items-center justify-between gap-2">
-              <h3 className="text-sm sm:text-base font-semibold text-white tracking-tight">
+          <div className="space-y-1 sm:space-y-1.5 min-w-0 flex-1">
+            <div className="flex flex-wrap items-center justify-between gap-1.5 sm:gap-2">
+              <h3 className="text-xs sm:text-base font-bold text-white tracking-tight leading-snug">
                 {currentStep.title}
               </h3>
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-white/[0.08] text-orange-50 border border-white/10">
+              <span className="text-[9px] sm:text-[10px] font-mono px-2 py-0.5 rounded bg-white/[0.08] text-orange-300 border border-white/10 shrink-0">
                 {currentStep.badge}
               </span>
             </div>
 
-            <p className="text-xs text-stone-400 leading-relaxed">
+            <p className="text-[11px] sm:text-xs text-stone-400 leading-relaxed">
               {currentStep.subtitle}
             </p>
 
@@ -120,7 +120,7 @@ export const PatriciaGpsPanel = memo(function PatriciaGpsPanel({
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -3 }}
                 transition={{ duration: 0.2 }}
-                className="pt-2 text-xs sm:text-sm font-medium text-orange-50/95 leading-relaxed bg-stone-800/80 p-3 rounded-xl border border-stone-700/60"
+                className="pt-1.5 text-[11px] sm:text-sm font-medium text-orange-50/95 leading-relaxed bg-stone-800/80 p-2.5 sm:p-3 rounded-xl border border-stone-700/60"
               >
                 {currentStep.value}
               </motion.div>
@@ -129,18 +129,18 @@ export const PatriciaGpsPanel = memo(function PatriciaGpsPanel({
         </div>
 
         {/* Auto-Rotation Progress Bar */}
-        <div className="mt-4 pt-3 border-t border-white/[0.08] flex items-center justify-between">
-          <span className="text-[10px] font-mono text-stone-500 uppercase tracking-wider">
+        <div className="mt-3 sm:mt-4 pt-2.5 sm:pt-3 border-t border-white/[0.08] flex items-center justify-between gap-2">
+          <span className="text-[9px] sm:text-[10px] font-mono text-stone-500 uppercase tracking-wider truncate">
             {isPaused ? "Paused on Hover" : "Auto-Updating Step"}
           </span>
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-1.5 shrink-0">
             {stepsData.map((_, idx) => {
               const isActive = activeStep === idx;
               return (
                 <div
                   key={idx}
                   className={`h-1 rounded-full transition-all duration-300 ${
-                    isActive ? "w-6 bg-orange-400" : "w-2 bg-white/20"
+                    isActive ? "w-5 sm:w-6 bg-orange-400" : "w-1.5 sm:w-2 bg-white/20"
                   }`}
                 />
               );
@@ -172,22 +172,22 @@ export const PatriciaGpsPanel = memo(function PatriciaGpsPanel({
 
       {/* Alternatives & Action CTA */}
       <div className="pt-2 border-t border-stone-900/15 space-y-4">
-        <div className="flex flex-wrap items-center gap-3">
-          <span className="text-xs text-stone-900/70 font-semibold">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+          <span className="text-xs text-stone-900/70 font-semibold shrink-0">
             Alternative to:
           </span>
-          <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/80 hover:bg-white text-xs text-stone-900 font-semibold border border-stone-900/10 shadow-sm backdrop-blur transition-all">
-              <FileQuestion className="w-3.5 h-3.5 text-amber-600" />
-              Generic Tests
+          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+            <span className="inline-flex items-center gap-1.5 px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-full bg-white/80 hover:bg-white text-[11px] sm:text-xs text-stone-900 font-semibold border border-stone-900/10 shadow-sm backdrop-blur transition-all">
+              <FileQuestion className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-amber-600 shrink-0" />
+              <span>Generic Tests</span>
             </span>
-            <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/80 hover:bg-white text-xs text-stone-900 font-semibold border border-stone-900/10 shadow-sm backdrop-blur transition-all">
-              <HelpCircle className="w-3.5 h-3.5 text-rose-600" />
-              Vague Advice
+            <span className="inline-flex items-center gap-1.5 px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-full bg-white/80 hover:bg-white text-[11px] sm:text-xs text-stone-900 font-semibold border border-stone-900/10 shadow-sm backdrop-blur transition-all">
+              <HelpCircle className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-rose-600 shrink-0" />
+              <span>Vague Advice</span>
             </span>
-            <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/80 hover:bg-white text-xs text-stone-900 font-semibold border border-stone-900/10 shadow-sm backdrop-blur transition-all">
-              <Compass className="w-3.5 h-3.5 text-emerald-700" />
-              Guesswork
+            <span className="inline-flex items-center gap-1.5 px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-full bg-white/80 hover:bg-white text-[11px] sm:text-xs text-stone-900 font-semibold border border-stone-900/10 shadow-sm backdrop-blur transition-all">
+              <Compass className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-emerald-700 shrink-0" />
+              <span>Guesswork</span>
             </span>
           </div>
         </div>
