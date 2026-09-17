@@ -48,7 +48,7 @@ export const PatriciaOpeningHero = memo(function PatriciaOpeningHero({
 
   return (
     <motion.section
-      className="relative px-2 w-full bg-[#08090d] text-white select-none py-6 sm:py-8 lg:py-10"
+      className="relative px-2 w-full bg-[#08090d] text-white select-none py-4 sm:py-8 lg:py-10"
       onPanEnd={handlePanEnd}
     >
       {/* Outer framing wrapper matching the sleek modern design */}

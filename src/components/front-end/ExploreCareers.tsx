@@ -10,7 +10,7 @@ export default memo(function ExploreCareers() {
   return (
     <section
       id="explore-careers"
-      className="relative w-full py-12 sm:py-20 lg:py-28 bg-orange-50 text-stone-900 font-sans overflow-hidden select-none border-t border-stone-200/80"
+      className="relative w-full py-6 sm:py-16 lg:py-24 bg-orange-50 text-stone-900 font-sans overflow-hidden select-none border-t border-stone-200/80"
     >
       <div className="absolute inset-0 pointer-events-none opacity-40">
         <div

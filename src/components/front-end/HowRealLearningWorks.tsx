@@ -67,7 +67,7 @@ export default memo(function HowRealLearningWorks() {
   }, []);
 
   return (
-    <section className="relative w-full py-12 sm:py-20 lg:py-28 bg-orange-50 text-white overflow-hidden select-none border-t border-white/[0.08]">
+    <section className="relative w-full py-6 sm:py-16 lg:py-24 bg-orange-50 text-white overflow-hidden select-none border-t border-white/[0.08]">
       {/* Precision Background Pattern */}
       <div className="absolute inset-0 pointer-events-none opacity-25">
         <div
