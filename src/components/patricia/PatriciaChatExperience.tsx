@@ -503,7 +503,7 @@ export const PatriciaChatExperience = memo(function PatriciaChatExperience({
   );
 
   return (
-    <section className="relative w-full px-2 bg-orange-50 text-stone-900 py-8 sm:py-16  sm:px-6 lg:px-10 overflow-hidden">
+    <section className="relative w-full px-2 bg-orange-50 text-stone-900 py-4 sm:py-12 lg:py-16 sm:px-6 lg:px-10 overflow-hidden">
       {/* Fullscreen Modal with GPU-Accelerated Apple Physics */}
       <AnimatePresence>
         {isFullscreen && (
