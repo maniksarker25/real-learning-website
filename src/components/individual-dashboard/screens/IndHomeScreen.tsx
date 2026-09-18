@@ -130,14 +130,8 @@ export const IndHomeScreen = memo(function IndHomeScreen({
 
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 relative z-10">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-amber-500 to-orange-600 border border-amber-400 flex items-center justify-center text-white shrink-0">
-              <Compass className="w-4 h-4" />
-            </div>
             <div>
               <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-[10px] font-mono font-bold uppercase text-amber-900 bg-amber-200/70 border border-amber-300 px-1.5 py-0.5 rounded tracking-wide">
-                  GPS
-                </span>
                 <span className="text-xs font-semibold text-stone-900">
                   {activePathTitle}
                 </span>
@@ -185,61 +179,89 @@ export const IndHomeScreen = memo(function IndHomeScreen({
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           {/* Metric 1 */}
-          <div className="bg-[#FAF8F5] p-3.5 rounded-lg border border-stone-200 space-y-0.5 relative overflow-hidden">
-            <span className="text-[10px] font-mono text-stone-500 uppercase font-semibold">
-              Classes
-            </span>
-            <div className="text-xl sm:text-2xl font-black text-stone-900 font-mono tracking-tight">
-              3
+          <div className="group relative overflow-hidden rounded-xl border border-stone-200/80 p-3.5 transition-all duration-300">
+            <div
+              className="absolute inset-0 bg-cover bg-center transition-transform duration-500 ease-out"
+              style={{ backgroundImage: "url('/bg1.jfif')" }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-br from-white/90 via-[#FAF8F5]/85 to-white/75 backdrop-blur-[0.5px]" />
+            <div className="relative z-10 space-y-0.5">
+              <span className="text-[10px] font-mono text-stone-600 uppercase font-bold tracking-wider">
+                Classes
+              </span>
+              <div className="text-xl sm:text-2xl font-black text-stone-900 font-mono tracking-tight">
+                3
+              </div>
+              <span className="text-[10px] text-stone-600 font-medium block">
+                1 in progress
+              </span>
             </div>
-            <span className="text-[10px] text-stone-500 font-medium block">
-              1 in progress
-            </span>
           </div>
 
           {/* Metric 2 */}
-          <div className="bg-[#FAF8F5] p-3.5 rounded-lg border border-stone-200 space-y-0.5 relative overflow-hidden">
-            <span className="text-[10px] font-mono text-stone-500 uppercase font-semibold">
-              Simulations
-            </span>
-            <div className="text-xl sm:text-2xl font-black text-stone-900 font-mono tracking-tight">
-              5
+          <div className="group relative overflow-hidden rounded-xl border border-stone-200/80 p-3.5 transition-all duration-300">
+            <div
+              className="absolute inset-0 bg-cover bg-center transition-transform duration-500 ease-out"
+              style={{ backgroundImage: "url('/bg2.jfif')" }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-br from-white/90 via-[#FAF8F5]/85 to-white/75 backdrop-blur-[0.5px]" />
+            <div className="relative z-10 space-y-0.5">
+              <span className="text-[10px] font-mono text-stone-600 uppercase font-bold tracking-wider">
+                Simulations
+              </span>
+              <div className="text-xl sm:text-2xl font-black text-stone-900 font-mono tracking-tight">
+                5
+              </div>
+              <span className="text-[10px] text-stone-600 font-medium block">
+                3 completed
+              </span>
             </div>
-            <span className="text-[10px] text-stone-500 font-medium block">
-              3 completed
-            </span>
           </div>
 
           {/* Metric 3 */}
-          <div className="bg-[#FAF8F5] p-3.5 rounded-lg border border-stone-200 space-y-0.5 relative overflow-hidden">
-            <div className="flex items-center justify-between">
-              <span className="text-[10px] font-mono text-stone-500 uppercase font-semibold">
-                Quiz Avg
+          <div className="group relative overflow-hidden rounded-xl border border-stone-200/80 p-3.5 hover:border-emerald-200 transition-all duration-300">
+            <div
+              className="absolute inset-0 bg-cover bg-center transition-transform duration-500 ease-out"
+              style={{ backgroundImage: "url('/bg3.avif')" }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-br from-white/90 via-[#FAF8F5]/85 to-white/75 backdrop-blur-[0.5px]" />
+            <div className="relative z-10 space-y-0.5">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-mono text-stone-600 uppercase font-bold tracking-wider">
+                  Quiz Avg
+                </span>
+                <StarburstRosette size={11} className="text-emerald-600/70" />
+              </div>
+              <div className="text-xl sm:text-2xl font-black text-stone-900 font-mono tracking-tight">
+                92.5%
+              </div>
+              <span className="text-[10px] text-emerald-700 font-semibold block">
+                High score
               </span>
-              <StarburstRosette size={11} className="text-emerald-600/70" />
             </div>
-            <div className="text-xl sm:text-2xl font-black text-stone-900 font-mono tracking-tight">
-              92.5%
-            </div>
-            <span className="text-[10px] text-emerald-700 font-semibold block">
-              High score
-            </span>
           </div>
 
           {/* Metric 4 */}
-          <div className="bg-[#FAF8F5] p-3.5 rounded-lg border border-stone-200 space-y-0.5 relative overflow-hidden">
-            <div className="flex items-center justify-between">
-              <span className="text-[10px] font-mono text-stone-500 uppercase font-semibold">
-                Simulation Avg
+          <div className="group relative overflow-hidden rounded-xl border border-stone-200/80 p-3.5 hover:border-orange-200 transition-all duration-300">
+            <div
+              className="absolute inset-0 bg-cover bg-center transition-transform duration-500 ease-out"
+              style={{ backgroundImage: "url('/bg4.avif')" }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-br from-white/90 via-[#FAF8F5]/85 to-white/75 backdrop-blur-[0.5px]" />
+            <div className="relative z-10 space-y-0.5">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-mono text-stone-600 uppercase font-bold tracking-wider">
+                  Simulation Avg
+                </span>
+                <StarburstRosette size={11} className="text-orange-600/70" />
+              </div>
+              <div className="text-xl sm:text-2xl font-black text-stone-900 font-mono tracking-tight">
+                89.0%
+              </div>
+              <span className="text-[10px] text-orange-700 font-semibold block">
+                Top tier
               </span>
-              <StarburstRosette size={11} className="text-orange-600/70" />
             </div>
-            <div className="text-xl sm:text-2xl font-black text-stone-900 font-mono tracking-tight">
-              89.0%
-            </div>
-            <span className="text-[10px] text-orange-700 font-semibold block">
-              Top tier
-            </span>
           </div>
         </div>
       </div>
