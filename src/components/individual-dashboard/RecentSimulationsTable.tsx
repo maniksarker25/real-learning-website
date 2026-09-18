@@ -272,49 +272,40 @@ export const RecentSimulationsTable = memo(function RecentSimulationsTable({
   }, [recentSimulations, trackFilter]);
 
   return (
-    <div className="space-y-4">
-      {/* Section Header */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-[#12131c]/90 rounded-2xl p-5 border border-white/10 shadow-lg">
-        <div>
-          <h2 className="text-xl font-bold text-white flex items-center gap-2">
-            <span>Recent Completed Simulations</span>
-          </h2>
-          <p className="text-xs text-white/60 mt-0.5">
-            Review your past simulation attempts, evaluate AI score feedback, and inspect key coaching takeaways.
-          </p>
-        </div>
-
-        {/* Track Filter Tabs */}
-        <div className="flex items-center gap-1.5 overflow-x-auto w-full sm:w-auto">
-          {[
-            { id: "all", label: "All" },
-            { id: "Customer Service", label: "Support" },
-            { id: "Tech Support", label: "Tech" },
-            { id: "IT Specialist", label: "IT" },
-            { id: "Healthcare Support", label: "Healthcare" },
-          ].map((tab) => (
+    <div className="space-y-3">
+      {/* Filter Tabs */}
+      <div className="flex flex-wrap items-center gap-1.5">
+        {[
+          { id: "all", label: "All Tracks" },
+          { id: "Customer Service", label: "Customer Service" },
+          { id: "Tech Support", label: "Tech Support" },
+          { id: "IT Specialist", label: "IT Specialist" },
+          { id: "Healthcare Support", label: "Healthcare Support" },
+        ].map((f) => {
+          const isActive = trackFilter === f.id;
+          return (
             <button
-              key={tab.id}
-              onClick={() => setTrackFilter(tab.id)}
+              key={f.id}
+              onClick={() => setTrackFilter(f.id)}
               className={cn(
-                "px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer border",
-                trackFilter === tab.id
-                  ? "bg-orange-500/20 border-orange-400/50 text-orange-300"
-                  : "bg-black/40 border-white/10 text-white/60 hover:text-white"
+                "px-3 py-1 rounded-full text-xs font-medium transition-colors cursor-pointer border",
+                isActive
+                  ? "bg-stone-900 text-white border-stone-900 font-semibold"
+                  : "bg-white text-stone-600 border-stone-200 hover:bg-stone-50 hover:text-stone-900"
               )}
             >
-              {tab.label}
+              {f.label}
             </button>
-          ))}
-        </div>
+          );
+        })}
       </div>
 
       {/* Recent Simulations Table */}
-      <div className="bg-[#12131c]/90 rounded-2xl border border-white/10 shadow-lg overflow-hidden">
+      <div className="bg-white rounded-xl border border-stone-200 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs border-collapse">
             <thead>
-              <tr className="border-b border-white/10 text-white/40 font-mono text-[10px] uppercase bg-black/40">
+              <tr className="border-b border-stone-200 text-stone-500 font-mono text-[10px] uppercase bg-stone-50/80">
                 <th className="py-3 px-4 font-semibold">SIMULATION SCENARIO</th>
                 <th className="py-3 px-4 font-semibold">CAREER TRACK</th>
                 <th className="py-3 px-4 font-semibold">SCORE</th>
@@ -323,22 +314,22 @@ export const RecentSimulationsTable = memo(function RecentSimulationsTable({
                 <th className="py-3 px-4 font-semibold text-right">FEEDBACK & ACTION</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/5">
+            <tbody className="divide-y divide-stone-100">
               {filteredSimulations.map((sim) => (
                 <tr
                   key={sim.id}
-                  className="hover:bg-white/[0.02] transition-colors group"
+                  className="hover:bg-stone-50/70 transition-colors group"
                 >
                   {/* Scenario Title & AI Persona */}
                   <td className="py-3.5 px-4">
                     <div className="space-y-0.5 max-w-sm">
-                      <div className="font-bold text-white text-xs group-hover:text-orange-300 transition-colors">
+                      <div className="font-bold text-stone-900 text-xs group-hover:text-orange-700 transition-colors">
                         {sim.scenarioTitle}
                       </div>
-                      <div className="text-[11px] text-white/50 flex items-center gap-1.5">
+                      <div className="text-[11px] text-stone-500 flex items-center gap-1.5">
                         <span>AI Persona:</span>
-                        <span className="text-white/80 font-medium">{sim.aiPersona.name}</span>
-                        <span className="text-[10px] text-white/40">({sim.aiPersona.role})</span>
+                        <span className="text-stone-800 font-medium">{sim.aiPersona.name}</span>
+                        <span className="text-[10px] text-stone-400">({sim.aiPersona.role})</span>
                       </div>
                     </div>
                   </td>
@@ -347,8 +338,14 @@ export const RecentSimulationsTable = memo(function RecentSimulationsTable({
                   <td className="py-3.5 px-4 whitespace-nowrap">
                     <span
                       className={cn(
-                        "inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-semibold border",
-                        sim.trackColor
+                        "inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold border",
+                        sim.careerTrack === "Customer Service"
+                          ? "bg-orange-50 text-orange-900 border-orange-200"
+                          : sim.careerTrack === "Tech Support"
+                          ? "bg-emerald-50 text-emerald-900 border-emerald-200"
+                          : sim.careerTrack === "IT Specialist"
+                          ? "bg-rose-50 text-rose-900 border-rose-200"
+                          : "bg-purple-50 text-purple-900 border-purple-200"
                       )}
                     >
                       {sim.careerTrack}
@@ -358,15 +355,15 @@ export const RecentSimulationsTable = memo(function RecentSimulationsTable({
                   {/* Score */}
                   <td className="py-3.5 px-4 whitespace-nowrap">
                     <div className="flex items-center gap-1.5">
-                      <span className="font-mono text-sm font-extrabold text-white">
+                      <span className="font-mono text-sm font-black text-stone-900">
                         {sim.score}%
                       </span>
                       <span
                         className={cn(
                           "text-[9px] font-mono font-bold px-1.5 py-0.2 rounded border",
                           sim.scoreGrade === "Mastery"
-                            ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/30"
-                            : "bg-orange-500/10 text-orange-300 border-orange-400/30"
+                            ? "bg-emerald-50 text-emerald-800 border-emerald-200"
+                            : "bg-amber-50 text-amber-800 border-amber-200"
                         )}
                       >
                         {sim.scoreGrade}
@@ -376,14 +373,14 @@ export const RecentSimulationsTable = memo(function RecentSimulationsTable({
 
                   {/* Date & Duration */}
                   <td className="py-3.5 px-4 whitespace-nowrap font-mono text-xs">
-                    <div className="text-white/80">{sim.date}</div>
-                    <div className="text-[10px] text-white/40">{sim.duration}</div>
+                    <div className="text-stone-800 font-medium">{sim.date}</div>
+                    <div className="text-[10px] text-stone-400">{sim.duration}</div>
                   </td>
 
                   {/* Status */}
                   <td className="py-3.5 px-4 whitespace-nowrap">
-                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
-                      <CheckCircle2 className="w-3 h-3 text-emerald-400" />
+                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                      <CheckCircle2 className="w-3 h-3 text-emerald-600" />
                       <span>{sim.status}</span>
                     </span>
                   </td>
@@ -392,9 +389,9 @@ export const RecentSimulationsTable = memo(function RecentSimulationsTable({
                   <td className="py-3.5 px-4 text-right whitespace-nowrap">
                     <button
                       onClick={() => setSelectedSimFeedback(sim)}
-                      className="inline-flex items-center gap-1.5 text-xs text-orange-400 hover:text-white bg-orange-500/10 hover:bg-orange-500/20 border border-orange-400/30 px-3 py-1.5 rounded-full font-bold transition-colors cursor-pointer shadow-xs"
+                      className="inline-flex items-center gap-1.5 text-xs text-orange-800 hover:text-white bg-orange-50 hover:bg-orange-600 border border-orange-200 hover:border-orange-600 px-3 py-1.5 rounded-full font-bold transition-colors cursor-pointer"
                     >
-                      <MessageSquare className="w-3.5 h-3.5 text-orange-400" />
+                      <MessageSquare className="w-3.5 h-3.5 text-orange-600 group-hover:text-white" />
                       <span>Feedback</span>
                     </button>
                   </td>
@@ -407,26 +404,25 @@ export const RecentSimulationsTable = memo(function RecentSimulationsTable({
 
       {/* FULL SIMULATION FEEDBACK MODAL (EXACT SAME AS FEEDBACK TAB SCREEN) */}
       {selectedSimFeedback && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/85 backdrop-blur-md overflow-y-auto">
-          <div className="relative w-full max-w-4xl bg-[#0e0f17] border border-orange-400/40 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6 text-left max-h-[92vh] overflow-y-auto">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-stone-900/50 backdrop-blur-xs overflow-y-auto">
+          <div className="relative w-full max-w-4xl bg-[#FCFAF6] border border-stone-200 rounded-3xl p-6 sm:p-8 space-y-6 text-left max-h-[92vh] overflow-y-auto shadow-xl">
             <button
               onClick={() => setSelectedSimFeedback(null)}
-              className="absolute top-5 right-5 p-2 rounded-full bg-white/5 hover:bg-white/10 text-white/60 hover:text-white cursor-pointer transition-colors"
+              className="absolute top-5 right-5 p-2 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-600 hover:text-stone-900 cursor-pointer transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
 
             {/* Header Banner */}
-            <div className="bg-[#12131c]/90 rounded-2xl p-5 border border-white/10 shadow-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="bg-white rounded-2xl p-5 border border-stone-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div>
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-400/30 text-xs text-orange-300 font-medium mb-1.5">
-                  {/* <Sparkles className="w-3.5 h-3.5 text-orange-400" /> */}
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-orange-100 border border-orange-200 text-xs text-orange-900 font-bold mb-1.5">
                   <span>FEEDBACK = UNDERSTAND YOUR PERFORMANCE</span>
                 </div>
-                <h2 className="text-xl font-bold text-white">
+                <h2 className="text-xl font-bold text-stone-900">
                   Simulation Result & AI Evaluation
                 </h2>
-                <p className="text-xs text-white/60">
+                <p className="text-xs text-stone-600">
                   Scenario: {selectedSimFeedback.scenarioTitle}
                 </p>
               </div>
@@ -439,7 +435,7 @@ export const RecentSimulationsTable = memo(function RecentSimulationsTable({
                     onLaunchSimulation(title);
                   }
                 }}
-                className="px-5 py-2.5 rounded-full bg-white text-black hover:bg-white/90 text-xs font-extrabold transition-colors shadow-md cursor-pointer flex items-center gap-2 shrink-0"
+                className="px-5 py-2.5 rounded-full bg-stone-900 text-white hover:bg-stone-800 text-xs font-bold transition-colors cursor-pointer flex items-center gap-2 shrink-0"
               >
                 <RotateCcw className="w-3.5 h-3.5 text-orange-400" />
                 <span>Practice Again</span>
@@ -449,23 +445,23 @@ export const RecentSimulationsTable = memo(function RecentSimulationsTable({
             {/* Overall Score & Skill Scores Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
               {/* Left: Overall Score Card */}
-              <div className="lg:col-span-4 bg-gradient-to-br from-orange-500/15 via-[#12131c] to-[#0d0e14] rounded-2xl p-6 border border-orange-400/30 shadow-xl text-center flex flex-col justify-center space-y-3">
-                <span className="text-xs font-mono font-bold uppercase tracking-wider text-orange-300">
+              <div className="lg:col-span-4 bg-gradient-to-br from-amber-500/10 via-white to-orange-50 rounded-2xl p-6 border border-amber-200 text-center flex flex-col justify-center space-y-3">
+                <span className="text-xs font-mono font-bold uppercase tracking-wider text-amber-900">
                   Overall Simulation Score
                 </span>
-                <div className="text-5xl sm:text-6xl font-extrabold text-white font-mono tracking-tight">
+                <div className="text-5xl sm:text-6xl font-black text-stone-900 font-mono tracking-tight">
                   {selectedSimFeedback.score}%
                 </div>
-                <div className="inline-flex items-center justify-center gap-1.5 text-xs text-emerald-400 font-medium bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20 max-w-xs mx-auto">
-                  <TrendingUp className="w-3.5 h-3.5" />
+                <div className="inline-flex items-center justify-center gap-1.5 text-xs text-emerald-800 font-bold bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200 max-w-xs mx-auto">
+                  <TrendingUp className="w-3.5 h-3.5 text-emerald-600" />
                   <span>High Workplace Performance</span>
                 </div>
               </div>
 
               {/* Right: Evaluated Skill Breakdown */}
-              <div className="lg:col-span-8 bg-[#12131c]/90 rounded-2xl p-6 border border-white/10 shadow-xl space-y-4">
-                <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                  <ShieldCheck className="w-4 h-4 text-orange-400" />
+              <div className="lg:col-span-8 bg-white rounded-2xl p-6 border border-stone-200 space-y-4">
+                <h3 className="text-sm font-bold text-stone-900 flex items-center gap-2">
+                  <ShieldCheck className="w-4 h-4 text-orange-600" />
                   <span>Skill Level Evaluation Breakdown</span>
                 </h3>
 
@@ -499,10 +495,10 @@ export const RecentSimulationsTable = memo(function RecentSimulationsTable({
                   ].map((sk) => (
                     <div key={sk.name} className="space-y-1">
                       <div className="flex justify-between text-xs">
-                        <span className="font-bold text-white">{sk.name}</span>
-                        <span className="font-mono text-orange-400 font-bold">{sk.score}%</span>
+                        <span className="font-bold text-stone-800">{sk.name}</span>
+                        <span className="font-mono text-orange-700 font-bold">{sk.score}%</span>
                       </div>
-                      <div className="w-full h-1.5 bg-black/60 rounded-full overflow-hidden border border-white/10">
+                      <div className="w-full h-1.5 bg-stone-100 rounded-full overflow-hidden border border-stone-200">
                         <div
                           className={cn("h-full rounded-full", sk.color)}
                           style={{ width: `${sk.score}%` }}
@@ -517,15 +513,15 @@ export const RecentSimulationsTable = memo(function RecentSimulationsTable({
             {/* What You Did Well vs What to Improve */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               {/* Positive Highlights */}
-              <div className="bg-[#12131c]/90 rounded-2xl p-5 border border-emerald-500/30 shadow-lg space-y-3">
-                <h3 className="text-sm font-bold text-emerald-400 flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4" />
+              <div className="bg-white rounded-2xl p-5 border border-emerald-200 space-y-3">
+                <h3 className="text-sm font-bold text-emerald-900 flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
                   <span>What You Did Well</span>
                 </h3>
                 <ul className="space-y-2.5">
                   {selectedSimFeedback.positiveHighlights.map((point) => (
-                    <li key={point} className="flex items-start gap-2 text-xs text-white/80 leading-relaxed">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0 mt-1.5" />
+                    <li key={point} className="flex items-start gap-2 text-xs text-stone-700 leading-relaxed">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0 mt-1.5" />
                       <span>{point}</span>
                     </li>
                   ))}
@@ -533,15 +529,15 @@ export const RecentSimulationsTable = memo(function RecentSimulationsTable({
               </div>
 
               {/* Improvement Points */}
-              <div className="bg-[#12131c]/90 rounded-2xl p-5 border border-orange-400/30 shadow-lg space-y-3">
-                <h3 className="text-sm font-bold text-orange-400 flex items-center gap-2">
-                  <AlertCircle className="w-4 h-4" />
+              <div className="bg-white rounded-2xl p-5 border border-orange-200 space-y-3">
+                <h3 className="text-sm font-bold text-orange-950 flex items-center gap-2">
+                  <AlertCircle className="w-4 h-4 text-orange-600" />
                   <span>What You Could Improve</span>
                 </h3>
                 <ul className="space-y-2.5">
                   {selectedSimFeedback.improvementPoints.map((point) => (
-                    <li key={point} className="flex items-start gap-2 text-xs text-white/80 leading-relaxed">
-                      <span className="w-1.5 h-1.5 rounded-full bg-orange-400 shrink-0 mt-1.5" />
+                    <li key={point} className="flex items-start gap-2 text-xs text-stone-700 leading-relaxed">
+                      <span className="w-1.5 h-1.5 rounded-full bg-orange-500 shrink-0 mt-1.5" />
                       <span>{point}</span>
                     </li>
                   ))}
@@ -550,9 +546,9 @@ export const RecentSimulationsTable = memo(function RecentSimulationsTable({
             </div>
 
             {/* Key Conversation Moments & AI Analysis */}
-            <div className="bg-[#12131c]/90 rounded-2xl p-5 border border-white/10 shadow-lg space-y-4">
-              <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                <MessageSquare className="w-4 h-4 text-orange-400" />
+            <div className="bg-white rounded-2xl p-5 border border-stone-200 space-y-4">
+              <h3 className="text-sm font-bold text-stone-900 flex items-center gap-2">
+                <MessageSquare className="w-4 h-4 text-orange-600" />
                 <span>Key Conversation Moments & AI Analysis</span>
               </h3>
 
@@ -563,32 +559,32 @@ export const RecentSimulationsTable = memo(function RecentSimulationsTable({
                     className={cn(
                       "p-4 rounded-xl border text-xs space-y-1 leading-relaxed",
                       moment.quality === "good"
-                        ? "bg-emerald-500/10 border-emerald-500/30 text-white/90"
-                        : "bg-orange-500/10 border-orange-400/30 text-white/90"
+                        ? "bg-emerald-50/70 border-emerald-200 text-stone-800"
+                        : "bg-orange-50/70 border-orange-200 text-stone-800"
                     )}
                   >
                     <div className="flex items-center justify-between font-mono text-[10px]">
-                      <span className="font-bold text-orange-300">Timestamp {moment.timestamp}</span>
+                      <span className="font-bold text-stone-700">Timestamp {moment.timestamp}</span>
                       <span
                         className={
                           moment.quality === "good"
-                            ? "text-emerald-400 font-bold"
-                            : "text-orange-400 font-bold"
+                            ? "text-emerald-800 font-bold"
+                            : "text-orange-800 font-bold"
                         }
                       >
                         {moment.quality === "good" ? "Effective Response" : "Improvement Opportunity"}
                       </span>
                     </div>
-                    <p>{moment.note}</p>
+                    <p className="text-stone-700">{moment.note}</p>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* Recommended Next Actions to Improve */}
-            <div className="bg-[#12131c]/90 rounded-2xl p-5 border border-white/10 shadow-lg space-y-4">
-              <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                <BookOpen className="w-4 h-4 text-orange-400" />
+            <div className="bg-white rounded-2xl p-5 border border-stone-200 space-y-4">
+              <h3 className="text-sm font-bold text-stone-900 flex items-center gap-2">
+                <BookOpen className="w-4 h-4 text-orange-600" />
                 <span>Recommended Next Actions to Improve</span>
               </h3>
 
@@ -596,17 +592,17 @@ export const RecentSimulationsTable = memo(function RecentSimulationsTable({
                 {selectedSimFeedback.recommendedLessons.map((lesson) => (
                   <div
                     key={lesson}
-                    className="p-4 rounded-xl bg-black/50 border border-white/10 flex items-center justify-between gap-3 text-xs"
+                    className="p-4 rounded-xl bg-stone-50 border border-stone-200 flex items-center justify-between gap-3 text-xs"
                   >
                     <div>
-                      <span className="text-[10px] font-mono text-orange-400 uppercase font-bold">
+                      <span className="text-[10px] font-mono text-orange-800 uppercase font-bold">
                         Recommended Class Lesson
                       </span>
-                      <div className="font-bold text-white mt-0.5">{lesson}</div>
+                      <div className="font-bold text-stone-900 mt-0.5">{lesson}</div>
                     </div>
                     <a
                       href="/user-dashboard/classes"
-                      className="px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white font-bold text-xs transition-colors cursor-pointer shrink-0"
+                      className="px-3.5 py-1.5 rounded-full bg-white hover:bg-stone-100 text-stone-900 border border-stone-300 font-bold text-xs transition-colors cursor-pointer shrink-0"
                     >
                       Review Lesson
                     </a>
@@ -616,7 +612,7 @@ export const RecentSimulationsTable = memo(function RecentSimulationsTable({
             </div>
 
             {/* Bottom Actions */}
-            <div className="pt-2 flex items-center justify-between gap-3 border-t border-white/10">
+            <div className="pt-2 flex items-center justify-between gap-3 border-t border-stone-200">
               <button
                 onClick={() => {
                   const title = selectedSimFeedback.scenarioTitle;
@@ -625,7 +621,7 @@ export const RecentSimulationsTable = memo(function RecentSimulationsTable({
                     onLaunchSimulation(title);
                   }
                 }}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-orange-500 to-rose-500 text-white font-extrabold text-xs hover:opacity-90 transition-opacity cursor-pointer"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-orange-600 to-amber-600 text-white font-extrabold text-xs hover:opacity-95 transition-opacity cursor-pointer"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
                 <span>Retake Simulation</span>
@@ -633,7 +629,7 @@ export const RecentSimulationsTable = memo(function RecentSimulationsTable({
 
               <button
                 onClick={() => setSelectedSimFeedback(null)}
-                className="px-6 py-2.5 rounded-full bg-white text-black font-extrabold text-xs hover:bg-white/90 transition-colors cursor-pointer shadow-md"
+                className="px-6 py-2.5 rounded-full bg-stone-900 text-white font-bold text-xs hover:bg-stone-800 transition-colors cursor-pointer"
               >
                 Close Feedback
               </button>
@@ -644,3 +640,4 @@ export const RecentSimulationsTable = memo(function RecentSimulationsTable({
     </div>
   );
 });
+
