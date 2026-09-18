@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { memo, useCallback } from "react";
@@ -30,6 +29,7 @@ const STEPS: {
   subLabel: string;
   route: string;
   icon: React.ElementType;
+  bgImage: string;
 }[] = [
   {
     id: "pathfinder",
@@ -37,6 +37,7 @@ const STEPS: {
     subLabel: "Where Am I? & Paths",
     route: "/user-dashboard/pathfinder",
     icon: Compass,
+    bgImage: "/bg1.jfif",
   },
   {
     id: "class",
@@ -44,6 +45,7 @@ const STEPS: {
     subLabel: "Learn Fundamentals",
     route: "/user-dashboard/classes",
     icon: BookOpen,
+    bgImage: "/bg2.jfif",
   },
   {
     id: "simulator",
@@ -51,6 +53,7 @@ const STEPS: {
     subLabel: "Practice Layer",
     route: "/user-dashboard/simulations",
     icon: Zap,
+    bgImage: "/bg3.avif",
   },
   {
     id: "feedback",
@@ -58,23 +61,8 @@ const STEPS: {
     subLabel: "Performance Breakdown",
     route: "/user-dashboard/feedback",
     icon: MessageSquare,
+    bgImage: "/bg4.avif",
   },
-  /*
-  {
-    id: "skill_progress",
-    label: "Skill Progress",
-    subLabel: "Demonstrated Gains",
-    route: "/user-dashboard/feedback#skills",
-    icon: BarChart3,
-  },
-  {
-    id: "next_step",
-    label: "Next Step",
-    subLabel: "GPS Guidance",
-    route: "/user-dashboard/feedback#next-step",
-    icon: ArrowRight,
-  },
-  */
 ];
 
 export const LearningLoopStepper = memo(function LearningLoopStepper({
@@ -148,7 +136,7 @@ export const LearningLoopStepper = memo(function LearningLoopStepper({
   );
 
   return (
-    <div className="bg-white border border-stone-200 rounded-xl p-3.5 sm:p-4 space-y-3">
+    <div className="bg-white border border-stone-200 rounded-xl p-3.5 sm:p-4 space-y-3 shadow-sm">
       {/* Top Banner Context */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-b border-stone-100 pb-2.5">
         <div className="flex items-center gap-2">
@@ -180,61 +168,77 @@ export const LearningLoopStepper = memo(function LearningLoopStepper({
         </div>
       </div>
 
-      {/* Stepper Flow Cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+      {/* Stepper Flow Cards with bg assets */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
         {STEPS.map((step, idx) => {
           const Icon = step.icon;
-          const isActive = activeStep === step.id;
-          
-          const isUnlocked = contextValue
-            ? contextValue.isStepUnlocked(step.id)
-            : idx <= maxUnlockedStepIndex;
+          const isCurrent = activeStep === step.id;
 
-          const isCompleted = contextValue
-            ? contextValue.isStepCompleted(step.id)
-            : idx < currentStepIndex;
+          // A step is considered passed if it's before the current active step, or marked completed in context
+          const isPassed =
+            idx < currentStepIndex ||
+            (contextValue
+              ? contextValue.isStepCompleted(step.id) && !isCurrent
+              : false);
 
-          const isDisabled = !isUnlocked;
+          const isDeactive = !isCurrent && !isPassed;
 
           return (
             <button
               key={step.id}
-              onClick={() => handleStepClick(step, idx)}
-              disabled={isDisabled}
+              onClick={() => !isDeactive && handleStepClick(step, idx)}
+              disabled={isDeactive}
               title={
-                isDisabled
+                isDeactive
                   ? `Locked: Complete Step ${idx} first`
                   : step.label
               }
               className={cn(
-                "relative p-3 rounded-xl border text-left transition-all duration-200 flex flex-col justify-between space-y-2 group select-none",
-                isDisabled
-                  ? "bg-stone-50/60 border-stone-200 opacity-50 cursor-not-allowed pointer-events-auto"
-                  : isActive
-                  ? "bg-orange-50/90 border-orange-300 shadow-sm cursor-pointer"
-                  : isCompleted
-                  ? "bg-emerald-50/60 border-emerald-200 hover:bg-emerald-50 hover:border-emerald-300 cursor-pointer"
-                  : "bg-stone-50/80 border-stone-200 hover:bg-white hover:border-stone-300 cursor-pointer"
+                "relative overflow-hidden rounded-xl border text-left p-3.5 select-none flex flex-col justify-between min-h-[96px] w-full transition-colors",
+                isCurrent
+                  ? "border-orange-500 ring-2 ring-orange-400/30 cursor-pointer"
+                  : isPassed
+                  ? "border-emerald-300/90 hover:border-emerald-400 cursor-pointer"
+                  : "border-stone-200/90 bg-stone-100/90 opacity-60 cursor-not-allowed"
               )}
             >
-              {/* Header Icon + Status Badge */}
-              <div className="flex items-center justify-between">
+              {/* Background Image Layer covering 100% full card */}
+              <div
+                className={cn(
+                  "absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat pointer-events-none",
+                  isDeactive && "grayscale opacity-10"
+                )}
+                style={{ backgroundImage: `url('${step.bgImage}')` }}
+              />
+
+              {/* Solid / Tint Overlay Layer */}
+              <div
+                className={cn(
+                  "absolute inset-0 w-full h-full pointer-events-none",
+                  isCurrent
+                    ? "bg-gradient-to-br from-orange-50/85 via-white/75 to-amber-50/65 backdrop-blur-[0.5px]"
+                    : isPassed
+                    ? "bg-gradient-to-br from-emerald-50/80 via-white/75 to-[#FAF8F5]/65 backdrop-blur-[0.5px]"
+                    : "bg-stone-100/90 backdrop-blur-[1px]"
+                )}
+              />
+
+              {/* Content Row 1: Icon + Status Pill */}
+              <div className="relative z-10 flex items-center justify-between w-full">
                 <div
                   className={cn(
-                    "w-7 h-7 rounded-lg flex items-center justify-center transition-colors",
-                    isDisabled
-                      ? "bg-stone-100 text-stone-400 border border-stone-200"
-                      : isActive
-                      ? "bg-gradient-to-r from-orange-500 to-amber-600 text-white shadow-xs"
-                      : isCompleted
-                      ? "bg-emerald-100 text-emerald-700 border border-emerald-200"
-                      : "bg-white text-stone-600 border border-stone-200 group-hover:text-stone-900"
+                    "w-7 h-7 rounded-lg flex items-center justify-center shrink-0 transition-colors",
+                    isCurrent
+                      ? "bg-gradient-to-r from-amber-500 to-orange-600 text-white shadow-xs"
+                      : isPassed
+                      ? "bg-emerald-100 text-emerald-700 border border-emerald-300"
+                      : "bg-stone-200 text-stone-400 border border-stone-300/70"
                   )}
                 >
-                  {isDisabled ? (
-                    <Lock className="w-3.5 h-3.5 text-stone-400" />
-                  ) : isCompleted ? (
+                  {isPassed ? (
                     <CheckCircle2 className="w-4 h-4 text-emerald-700" />
+                  ) : isDeactive ? (
+                    <Lock className="w-3.5 h-3.5 text-stone-400" />
                   ) : (
                     <Icon className="w-3.5 h-3.5" />
                   )}
@@ -242,39 +246,40 @@ export const LearningLoopStepper = memo(function LearningLoopStepper({
 
                 <span
                   className={cn(
-                    "text-[9px] font-mono font-bold px-1.5 py-0.5 rounded flex items-center gap-1",
-                    isDisabled
-                      ? "bg-stone-100 text-stone-400 border border-stone-200"
-                      : isActive
-                      ? "bg-orange-100 text-orange-900 border border-orange-200"
-                      : isCompleted
+                    "text-[9px] font-mono font-bold px-1.5 py-0.5 rounded flex items-center gap-1 shrink-0",
+                    isCurrent
+                      ? "bg-orange-100 text-orange-900 border border-orange-300"
+                      : isPassed
                       ? "bg-emerald-100 text-emerald-800 border border-emerald-200"
-                      : "text-stone-500 bg-white border border-stone-200"
+                      : "bg-stone-200/80 text-stone-400 border border-stone-300/60"
                   )}
                 >
-                  {isDisabled ? (
+                  {isDeactive ? (
                     <>
                       <Lock className="w-2.5 h-2.5" />
-                      LOCKED
+                      #{idx + 1}
+                    </>
+                  ) : isPassed ? (
+                    <>
+                      <CheckCircle2 className="w-2.5 h-2.5" />
+                      #{idx + 1}
                     </>
                   ) : (
-                    `#${idx + 1}`
+                    `#${idx + 1} ACTIVE`
                   )}
                 </span>
               </div>
 
-              {/* Step Labels */}
-              <div>
+              {/* Content Row 2: Step Labels */}
+              <div className="relative z-10 pt-1">
                 <div
                   className={cn(
                     "text-xs font-bold leading-tight",
-                    isDisabled
-                      ? "text-stone-400"
-                      : isActive
+                    isCurrent
                       ? "text-stone-950 font-black"
-                      : isCompleted
-                      ? "text-emerald-900"
-                      : "text-stone-800 group-hover:text-stone-950"
+                      : isPassed
+                      ? "text-stone-900"
+                      : "text-stone-400"
                   )}
                 >
                   {step.label}
@@ -282,16 +287,14 @@ export const LearningLoopStepper = memo(function LearningLoopStepper({
                 <div
                   className={cn(
                     "text-[10px] truncate mt-0.5 font-sans",
-                    isDisabled
-                      ? "text-stone-400"
-                      : isActive
-                      ? "text-stone-600"
-                      : isCompleted
-                      ? "text-emerald-700"
-                      : "text-stone-500"
+                    isCurrent
+                      ? "text-stone-600 font-medium"
+                      : isPassed
+                      ? "text-emerald-800 font-medium"
+                      : "text-stone-400"
                   )}
                 >
-                  {isDisabled ? "Locked step" : step.subLabel}
+                  {isDeactive ? "Locked step" : step.subLabel}
                 </div>
               </div>
 
@@ -299,8 +302,8 @@ export const LearningLoopStepper = memo(function LearningLoopStepper({
               {idx < STEPS.length - 1 && (
                 <div
                   className={cn(
-                    "hidden lg:block absolute -right-2.5 top-1/2 -translate-y-1/2 z-10 text-xs font-mono",
-                    isDisabled ? "text-stone-300" : "text-stone-400"
+                    "hidden lg:block absolute -right-2 top-1/2 -translate-y-1/2 z-20 text-[10px] font-mono",
+                    isPassed ? "text-emerald-500 font-bold" : "text-stone-300"
                   )}
                 >
                   ➔
