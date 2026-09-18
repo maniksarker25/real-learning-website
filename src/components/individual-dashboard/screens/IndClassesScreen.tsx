@@ -220,155 +220,100 @@ export const IndClassesScreen = memo(function IndClassesScreen({
 
   if (isLoading) {
     return (
-      <div className="min-h-[480px] bg-[#12131c]/90 rounded-2xl border border-white/10 p-8 sm:p-12 shadow-2xl flex flex-col items-center justify-center text-center relative overflow-hidden space-y-8 animate-in fade-in duration-300">
-        {/* Glowing background ambient lights */}
-        <div className="absolute -top-24 -left-24 w-72 h-72 bg-orange-500/15 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-24 -right-24 w-72 h-72 bg-rose-500/15 rounded-full blur-3xl pointer-events-none" />
-
+      <div className="min-h-[400px] bg-white rounded-xl border border-stone-200 p-8 sm:p-12 flex flex-col items-center justify-center text-center relative overflow-hidden space-y-6">
         {/* Step Badge */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-orange-500/10 border border-orange-400/30 text-orange-300 text-xs font-mono font-bold tracking-wide uppercase shadow-inner">
-          <Sparkles className="w-3.5 h-3.5 text-orange-400 animate-pulse" />
-          <span>Step 2 Loading: Class & Fundamentals</span>
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-800 text-xs font-mono font-semibold">
+          <Sparkles className="w-3.5 h-3.5 text-amber-600" />
+          <span>Step 2: Preparing Class Modules</span>
         </div>
 
-        {/* Visual Animated Orb & Icon */}
-        <div className="relative flex items-center justify-center">
-          <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-orange-500 to-rose-500 opacity-25 blur-xl animate-pulse" />
-          <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-3xl bg-black/70 border border-orange-400/30 flex items-center justify-center relative shadow-2xl backdrop-blur-md">
-            <BookOpen className="w-9 h-9 sm:w-10 sm:h-10 text-orange-400 animate-bounce" />
-            <div className="absolute -top-1 -right-1">
-              <span className="relative flex h-3.5 w-3.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-orange-500"></span>
-              </span>
-            </div>
-          </div>
+        {/* Visual Icon */}
+        <div className="w-16 h-16 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-700">
+          <BookOpen className="w-8 h-8" />
         </div>
 
         {/* Heading & Subtext */}
-        <div className="max-w-md space-y-2">
-          <h3 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight">
-            Preparing Your Class Modules
+        <div className="max-w-md space-y-1">
+          <h3 className="text-lg font-bold text-stone-900 tracking-tight">
+            Loading Curriculum
           </h3>
-          <p className="text-xs text-white/60 leading-relaxed">
-            AI is compiling interactive lessons, workplace case studies, and knowledge evaluation checks for <span className="text-orange-300 font-semibold">{activeGoal}</span>.
+          <p className="text-xs text-stone-500 leading-relaxed">
+            Compiling lessons and evaluations for <strong className="text-stone-800 font-semibold">{activeGoal}</strong>.
           </p>
         </div>
 
         {/* Progress Bar */}
-        <div className="w-full max-w-md space-y-2">
+        <div className="w-full max-w-md space-y-1.5">
           <div className="flex items-center justify-between text-xs font-mono">
-            <span className="text-white/50">Curriculum Initialization</span>
-            <span className="text-orange-400 font-bold">{loadingProgress}%</span>
+            <span className="text-stone-500">Progress</span>
+            <span className="text-stone-800 font-bold">{loadingProgress}%</span>
           </div>
-          <div className="w-full h-2.5 bg-black/60 rounded-full border border-white/10 p-0.5 overflow-hidden">
+          <div className="w-full h-2 bg-stone-100 rounded-full border border-stone-200 overflow-hidden">
             <div
-              className="h-full bg-gradient-to-r from-orange-500 via-rose-500 to-amber-400 rounded-full transition-all duration-300 ease-out shadow-[0_0_12px_rgba(249,115,22,0.6)]"
+              className="h-full bg-gradient-to-r from-orange-500 to-amber-500 rounded-full transition-all duration-300 ease-out"
               style={{ width: `${loadingProgress}%` }}
             />
-          </div>
-        </div>
-
-        {/* Checklist Steps */}
-        <div className="w-full max-w-md bg-black/40 rounded-xl p-4 border border-white/10 space-y-2.5 text-left text-xs font-mono">
-          <div className="flex items-center gap-2.5">
-            {loadingStage > 0 ? (
-              <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-            ) : (
-              <Zap className="w-4 h-4 text-orange-400 animate-spin shrink-0" />
-            )}
-            <span className={cn(loadingStage > 0 ? "text-white/90" : "text-orange-300 font-semibold")}>
-              1. Synthesizing De-escalation Core Principles
-            </span>
-          </div>
-
-          <div className="flex items-center gap-2.5">
-            {loadingStage > 1 ? (
-              <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-            ) : loadingStage === 1 ? (
-              <Zap className="w-4 h-4 text-orange-400 animate-spin shrink-0" />
-            ) : (
-              <Clock className="w-4 h-4 text-white/30 shrink-0" />
-            )}
-            <span className={cn(loadingStage > 1 ? "text-white/90" : loadingStage === 1 ? "text-orange-300 font-semibold" : "text-white/40")}>
-              2. Structuring Case Studies & Active Exercises
-            </span>
-          </div>
-
-          <div className="flex items-center gap-2.5">
-            {loadingProgress === 100 ? (
-              <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-            ) : loadingStage === 2 ? (
-              <Zap className="w-4 h-4 text-orange-400 animate-spin shrink-0" />
-            ) : (
-              <Clock className="w-4 h-4 text-white/30 shrink-0" />
-            )}
-            <span className={cn(loadingProgress === 100 ? "text-white/90" : loadingStage === 2 ? "text-orange-300 font-semibold" : "text-white/40")}>
-              3. Initializing Knowledge Check Quiz Engine
-            </span>
           </div>
         </div>
 
         {/* Quick Skip Link */}
         <button
           onClick={() => setIsLoading(false)}
-          className="text-[11px] text-white/40 hover:text-white underline underline-offset-4 cursor-pointer transition-colors pt-1"
+          className="text-xs text-stone-500 hover:text-stone-900 underline underline-offset-4 cursor-pointer transition-colors"
         >
-          Skip loading screen & enter class immediately
+          Skip & enter class immediately
         </button>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       {/* Header Banner */}
-      <div className="bg-[#12131c]/90 rounded-2xl p-5 border border-white/10 shadow-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div className="bg-white rounded-xl p-4 sm:p-5 border border-stone-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         <div>
-          <h2 className="text-xl font-bold text-white flex items-center gap-2">
-            <span>Class Fundamentals & Knowledge Checks</span>
+          <h2 className="text-lg font-bold text-stone-900 flex items-center gap-2">
+            <span>Class Fundamentals</span>
           </h2>
-          <p className="text-xs text-white/60 mt-0.5 max-w-xl">
-            Study key principles and take the quiz before entering the
-            simulator, or skip directly to the practice layer.
+          <p className="text-xs text-stone-500 mt-0.5">
+            Learn core techniques, complete the knowledge check, or jump straight to practice.
           </p>
         </div>
 
-        {/* Quick Action Buttons: Skip Class or Jump to Simulator */}
-        <div className="flex items-center gap-2 shrink-0 flex-wrap">
+        <div className="flex items-center gap-2 shrink-0">
           <button
             onClick={() =>
               onLaunchPracticeSimulator && onLaunchPracticeSimulator("sim-1")
             }
-            className="px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 text-white text-xs font-bold transition-colors cursor-pointer flex items-center gap-1.5"
+            className="px-3.5 py-1.5 rounded-lg bg-stone-50 hover:bg-stone-100 border border-stone-200 text-stone-700 hover:text-stone-900 text-xs font-semibold transition-colors cursor-pointer"
           >
-            <span>Skip Class & Start Simulation</span>
+            <span>Skip to Simulator →</span>
           </button>
         </div>
       </div>
 
       {/* Main Class Card & Reader Frame */}
-      <div className="bg-[#12131c]/90 rounded-2xl border border-white/10 shadow-xl overflow-hidden">
+      <div className="bg-white rounded-xl border border-stone-200 overflow-hidden">
         {/* Class Title Bar */}
-        <div className="p-5 bg-black/40 border-b border-white/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+        <div className="p-4 sm:p-5 border-b border-stone-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-stone-50/50">
           <div>
-            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-orange-500/10 text-orange-300 border border-orange-400/20">
+            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-amber-100/70 text-amber-900 border border-amber-200">
               {currentClass.category}
             </span>
-            <h3 className="text-lg sm:text-xl font-extrabold text-white mt-1">
+            <h3 className="text-base sm:text-lg font-bold text-stone-900 mt-1">
               {currentClass.title}
             </h3>
           </div>
 
           {/* Sub Tab Switcher: Lessons vs Quiz */}
-          <div className="flex items-center gap-1 bg-black p-1 rounded-xl border border-white/10 shrink-0">
+          <div className="flex items-center gap-1 bg-white p-1 rounded-lg border border-stone-200 shrink-0">
             <button
               onClick={() => setActiveTab("lessons")}
               className={cn(
-                "px-4 py-1.5 rounded-lg text-xs font-bold transition-colors cursor-pointer flex items-center gap-1.5",
+                "px-3 py-1.5 rounded text-xs font-semibold transition-colors cursor-pointer flex items-center gap-1.5",
                 activeTab === "lessons"
-                  ? "bg-orange-500/20 text-orange-300 border border-orange-500/30"
-                  : "text-white/60 hover:text-white",
+                  ? "bg-stone-900 text-white font-bold"
+                  : "text-stone-600 hover:text-stone-950",
               )}
             >
               <FileText className="w-3.5 h-3.5" />
@@ -377,10 +322,10 @@ export const IndClassesScreen = memo(function IndClassesScreen({
             <button
               onClick={() => setActiveTab("quiz")}
               className={cn(
-                "px-4 py-1.5 rounded-lg text-xs font-bold transition-colors cursor-pointer flex items-center gap-1.5",
+                "px-3 py-1.5 rounded text-xs font-semibold transition-colors cursor-pointer flex items-center gap-1.5",
                 activeTab === "quiz"
-                  ? "bg-orange-500/20 text-orange-300 border border-orange-500/30"
-                  : "text-white/60 hover:text-white",
+                  ? "bg-stone-900 text-white font-bold"
+                  : "text-stone-600 hover:text-stone-950",
               )}
             >
               <HelpCircle className="w-3.5 h-3.5" />
@@ -391,10 +336,10 @@ export const IndClassesScreen = memo(function IndClassesScreen({
 
         {/* TAB 1: LESSON READER */}
         {activeTab === "lessons" && (
-          <div className="p-6 space-y-6">
+          <div className="p-4 sm:p-6 space-y-4">
             {/* Lesson Navigation Header */}
-            <div className="flex items-center justify-between border-b border-white/10 pb-4">
-              <div className="text-xs text-white/50 font-mono">
+            <div className="flex items-center justify-between border-b border-stone-100 pb-3">
+              <div className="text-xs text-stone-500 font-mono">
                 Lesson {activeLessonIndex + 1} of {currentClass.lessons.length}
               </div>
               <div className="flex items-center gap-2">
@@ -403,7 +348,7 @@ export const IndClassesScreen = memo(function IndClassesScreen({
                   onClick={() =>
                     setActiveLessonIndex((prev) => Math.max(0, prev - 1))
                   }
-                  className="px-3 py-1 rounded-lg bg-white/5 disabled:opacity-30 text-xs text-white border border-white/10 cursor-pointer"
+                  className="px-3 py-1 rounded-lg bg-stone-50 hover:bg-stone-100 disabled:opacity-40 text-xs text-stone-700 border border-stone-200 cursor-pointer font-medium"
                 >
                   Previous
                 </button>
@@ -416,7 +361,7 @@ export const IndClassesScreen = memo(function IndClassesScreen({
                       Math.min(currentClass.lessons.length - 1, prev + 1),
                     )
                   }
-                  className="px-3 py-1 rounded-lg bg-white text-black hover:bg-white/90 text-xs font-extrabold cursor-pointer"
+                  className="px-3 py-1 rounded-lg bg-stone-900 hover:bg-stone-800 disabled:opacity-40 text-xs text-white cursor-pointer font-semibold"
                 >
                   Next Lesson
                 </button>
@@ -425,32 +370,32 @@ export const IndClassesScreen = memo(function IndClassesScreen({
 
             {/* Current Lesson Body */}
             {currentClass.lessons[activeLessonIndex] && (
-              <div className="space-y-5">
-                <h4 className="text-lg font-bold text-white">
+              <div className="space-y-3.5">
+                <h4 className="text-sm sm:text-base font-bold text-stone-900">
                   {currentClass.lessons[activeLessonIndex].title}
                 </h4>
 
-                <div className="p-4 rounded-xl bg-black/50 border border-white/10 text-xs text-white/80 leading-relaxed">
+                <div className="p-4 rounded-lg bg-[#FAF8F5] border border-stone-200 text-xs text-stone-700 leading-relaxed">
                   {currentClass.lessons[activeLessonIndex].content}
                 </div>
 
                 {/* Example Box */}
-                <div className="p-4 rounded-xl bg-orange-500/10 border border-orange-400/30 text-xs space-y-2">
-                  <span className="font-mono text-[10px] uppercase font-bold text-orange-400 flex items-center gap-1">
-                    <span>Real Workplace Example</span>
+                <div className="p-3.5 rounded-lg bg-amber-50/60 border border-amber-200 text-xs space-y-1.5">
+                  <span className="font-mono text-[10px] uppercase font-bold text-amber-900 flex items-center gap-1">
+                    <span>Workplace Example</span>
                   </span>
-                  <div className="whitespace-pre-line text-white/90 font-mono text-[11px]">
+                  <div className="whitespace-pre-line text-stone-800 font-mono text-xs">
                     {currentClass.lessons[activeLessonIndex].example}
                   </div>
                 </div>
 
                 {/* Exercise Box */}
-                <div className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-xs space-y-2">
-                  <span className="font-mono text-[10px] uppercase font-bold text-emerald-400 flex items-center gap-1">
-                    <CheckCircle2 className="w-3.5 h-3.5" />
+                <div className="p-3.5 rounded-lg bg-emerald-50/60 border border-emerald-200 text-xs space-y-1.5">
+                  <span className="font-mono text-[10px] uppercase font-bold text-emerald-900 flex items-center gap-1">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-700" />
                     <span>Knowledge Check Exercise</span>
                   </span>
-                  <p className="text-white/80">
+                  <p className="text-stone-700">
                     {currentClass.lessons[activeLessonIndex].exercisePrompt}
                   </p>
                 </div>
@@ -461,34 +406,33 @@ export const IndClassesScreen = memo(function IndClassesScreen({
 
         {/* TAB 2: QUIZ EVALUATION */}
         {activeTab === "quiz" && (
-          <div className="p-6 space-y-6">
-            <div className="flex items-center justify-between border-b border-white/10 pb-4">
+          <div className="p-4 sm:p-6 space-y-4">
+            <div className="flex items-center justify-between border-b border-stone-100 pb-3">
               <div>
-                <h4 className="text-base font-bold text-white">
-                  Understanding Check Quiz
+                <h4 className="text-sm sm:text-base font-bold text-stone-900">
+                  Knowledge Evaluation
                 </h4>
-                <p className="text-xs text-white/60">
-                  Measure your conceptual understanding before starting
-                  practical simulations.
+                <p className="text-xs text-stone-500">
+                  Test your understanding before entering the simulator.
                 </p>
               </div>
 
-              <div className="text-xs font-mono text-white/60">
+              <div className="text-xs font-mono text-stone-500">
                 Attempt #{quizAttempts}
               </div>
             </div>
 
             {/* Quiz Submitted Score Banner */}
             {quizSubmitted && (
-              <div className="p-5 rounded-2xl bg-black/60 border border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="p-4 rounded-xl bg-stone-50 border border-stone-200 flex flex-col sm:flex-row items-center justify-between gap-3">
                 <div>
-                  <span className="text-[10px] font-mono uppercase text-white/50">
-                    QUIZ EVALUATION SCORE
+                  <span className="text-[10px] font-mono uppercase text-stone-500">
+                    Quiz Score
                   </span>
-                  <div className="text-3xl font-extrabold text-white font-mono">
+                  <div className="text-2xl font-black text-stone-900 font-mono">
                     {calculatedQuizScore}%
                   </div>
-                  <p className="text-xs text-white/70 mt-0.5">
+                  <p className="text-xs text-stone-600 mt-0.5">
                     {calculatedQuizScore >= 80
                       ? "Great job! You demonstrate strong conceptual understanding."
                       : "Review the lesson materials and retake the quiz to improve your score."}
@@ -497,34 +441,34 @@ export const IndClassesScreen = memo(function IndClassesScreen({
 
                 <button
                   onClick={handleRetakeQuiz}
-                  className="px-5 py-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition-colors cursor-pointer flex items-center gap-2"
+                  className="px-3.5 py-1.5 rounded-lg bg-white hover:bg-stone-100 border border-stone-200 text-stone-800 text-xs font-semibold transition-colors cursor-pointer flex items-center gap-1.5"
                 >
-                  <RotateCcw className="w-3.5 h-3.5 text-orange-400" />
-                  <span>Retake Quiz</span>
+                  <RotateCcw className="w-3.5 h-3.5 text-orange-600" />
+                  <span>Retake</span>
                 </button>
               </div>
             )}
 
             {/* Questions List */}
-            <div className="space-y-6">
+            <div className="space-y-4">
               {currentClass.quiz.map((q, qIdx) => {
                 const selectedOption = quizAnswers[q.id];
                 return (
                   <div
                     key={q.id}
-                    className="p-5 rounded-2xl bg-black/40 border border-white/10 space-y-4"
+                    className="p-4 rounded-xl bg-[#FAF8F5] border border-stone-200 space-y-3"
                   >
-                    <div className="flex items-start gap-3">
-                      <span className="w-6 h-6 rounded-lg bg-orange-500/10 border border-orange-400/30 flex items-center justify-center text-orange-400 font-mono text-xs font-bold shrink-0 mt-0.5">
+                    <div className="flex items-start gap-2.5">
+                      <span className="w-5 h-5 rounded bg-white border border-stone-200 flex items-center justify-center text-stone-800 font-mono text-xs font-bold shrink-0 mt-0.5">
                         {qIdx + 1}
                       </span>
-                      <h5 className="text-sm font-bold text-white">
+                      <h5 className="text-xs sm:text-sm font-bold text-stone-900">
                         {q.question}
                       </h5>
                     </div>
 
                     {/* Options Grid */}
-                    <div className="grid grid-cols-1 gap-2 pl-9">
+                    <div className="grid grid-cols-1 gap-2 pl-7">
                       {q.options.map((optionText, optIdx) => {
                         const isSelected = selectedOption === optIdx;
                         const isCorrect = q.correctAnswerIndex === optIdx;
@@ -533,25 +477,25 @@ export const IndClassesScreen = memo(function IndClassesScreen({
                             key={optionText}
                             onClick={() => handleSelectOption(q.id, optIdx)}
                             className={cn(
-                              "p-3 rounded-xl border text-left text-xs font-medium transition-colors cursor-pointer flex items-center justify-between",
+                              "p-2.5 rounded-lg border text-left text-xs font-medium transition-colors cursor-pointer flex items-center justify-between",
                               isSelected
-                                ? "bg-orange-500/10 border-orange-400 text-white"
-                                : "bg-black/40 border-white/10 text-white/70 hover:border-white/20 hover:text-white",
+                                ? "bg-amber-50 border-amber-300 text-stone-900 font-semibold"
+                                : "bg-white border-stone-200 text-stone-700 hover:bg-stone-50",
                               quizSubmitted &&
                                 isCorrect &&
-                                "bg-emerald-500/20 border-emerald-500 text-emerald-300",
+                                "bg-emerald-50 border-emerald-300 text-emerald-950 font-semibold",
                               quizSubmitted &&
                                 isSelected &&
                                 !isCorrect &&
-                                "bg-rose-500/20 border-rose-500 text-rose-300",
+                                "bg-rose-50 border-rose-300 text-rose-950 font-semibold",
                             )}
                           >
                             <span>{optionText}</span>
                             {quizSubmitted && isCorrect && (
-                              <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                              <CheckCircle2 className="w-4 h-4 text-emerald-700 shrink-0" />
                             )}
                             {quizSubmitted && isSelected && !isCorrect && (
-                              <XCircle className="w-4 h-4 text-rose-400 shrink-0" />
+                              <XCircle className="w-4 h-4 text-rose-600 shrink-0" />
                             )}
                           </button>
                         );
@@ -560,8 +504,8 @@ export const IndClassesScreen = memo(function IndClassesScreen({
 
                     {/* Explanation when submitted */}
                     {quizSubmitted && (
-                      <div className="ml-9 p-3 rounded-xl bg-white/5 border border-white/10 text-[11px] text-white/70">
-                        <span className="font-bold text-orange-400">
+                      <div className="ml-7 p-2.5 rounded-lg bg-white border border-stone-200 text-xs text-stone-600">
+                        <span className="font-bold text-stone-800">
                           Explanation:{" "}
                         </span>
                         {q.explanation}
@@ -574,29 +518,27 @@ export const IndClassesScreen = memo(function IndClassesScreen({
 
             {/* Submit Quiz Button */}
             {!quizSubmitted ? (
-              <div className="pt-2">
+              <div className="pt-1">
                 <button
                   onClick={handleQuizSubmit}
-                  className="w-full py-3.5 rounded-full bg-white text-black hover:bg-white/90 text-xs font-extrabold transition-colors shadow-lg cursor-pointer flex items-center justify-center gap-2"
+                  className="w-full py-2.5 rounded-lg bg-stone-900 hover:bg-stone-800 text-white text-xs font-bold transition-colors cursor-pointer flex items-center justify-center gap-1.5"
                 >
-                  <span>Submit Quiz & Evaluate Understanding</span>
-                  <ArrowRight className="w-4 h-4" />
+                  <span>Submit Quiz</span>
+                  <ArrowRight className="w-4 h-4 text-orange-400" />
                 </button>
               </div>
             ) : (
               /* Practice Layer Banner after Quiz Submission */
-              <div className="bg-gradient-to-br from-rose-500/20 via-[#161726] to-[#0e0f18] rounded-2xl p-6 border border-rose-400/50 shadow-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mt-6">
+              <div className="bg-gradient-to-r from-amber-50/60 via-white to-orange-50/40 rounded-xl p-4 border border-amber-200/70 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mt-4">
                 <div>
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-500/20 text-rose-300 border border-rose-400/30 text-xs font-mono font-bold uppercase mb-2">
-                    <span>STEP 3: PRACTICE LAYER (SIMULATOR)</span>
+                  <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-amber-100 text-amber-900 border border-amber-200 text-[10px] font-mono font-bold uppercase mb-1">
+                    <span>STEP 3: PRACTICE SIMULATOR</span>
                   </div>
-                  <h4 className="text-lg font-extrabold text-white">
+                  <h4 className="text-sm font-bold text-stone-900">
                     Apply What You Learned in the Simulator
                   </h4>
-                  <p className="text-xs text-white/70 mt-1 max-w-xl">
-                    The simulator is NOT a separate feature—it is your practice
-                    layer for what you just learned. Enter the realistic
-                    tech-support scenario now to demonstrate your skills.
+                  <p className="text-xs text-stone-500 mt-0.5">
+                    Launch the roleplay simulation to practice customer communication with AI feedback.
                   </p>
                 </div>
                 <button
@@ -604,10 +546,10 @@ export const IndClassesScreen = memo(function IndClassesScreen({
                     onLaunchPracticeSimulator &&
                     onLaunchPracticeSimulator("sim-1")
                   }
-                  className="px-6 py-3.5 rounded-full bg-gradient-to-r from-rose-500 to-orange-500 hover:from-rose-600 hover:to-orange-600 text-white text-xs font-black transition-all shadow-lg hover:shadow-rose-500/20 cursor-pointer flex items-center gap-2 shrink-0"
+                  className="px-4 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 text-white text-xs font-bold transition-colors cursor-pointer flex items-center gap-1.5 shrink-0"
                 >
-                  <span>Launch Practice Simulator</span>
-                  <ArrowRight className="w-4 h-4" />
+                  <span>Launch Simulator</span>
+                  <ArrowRight className="w-3.5 h-3.5 text-orange-400" />
                 </button>
               </div>
             )}
@@ -617,23 +559,23 @@ export const IndClassesScreen = memo(function IndClassesScreen({
 
       {/* Practice Layer Card visible on Lessons tab as well */}
       {activeTab === "lessons" && (
-        <div className="bg-gradient-to-br from-orange-500/10 via-[#12131c] to-[#0git config --local --listd0e14] rounded-2xl p-5 border border-orange-400/30 shadow-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div className="bg-gradient-to-r from-amber-50/60 via-white to-orange-50/40 rounded-xl p-4 border border-amber-200/70 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
           <div>
-            <h4 className="text-base font-extrabold text-white">
-              Ready to test your active listening in a realistic situation?
+            <h4 className="text-xs sm:text-sm font-bold text-stone-900">
+              Ready to practice in a realistic scenario?
             </h4>
-            <p className="text-xs text-white/60 mt-0.5">
-              Jump straight into the practice simulator for this class.
+            <p className="text-xs text-stone-500 mt-0.5">
+              Enter the practice simulator for this class.
             </p>
           </div>
           <button
             onClick={() =>
               onLaunchPracticeSimulator && onLaunchPracticeSimulator("sim-1")
             }
-            className="px-5 py-2.5 rounded-full bg-white text-black hover:bg-white/90 text-xs font-extrabold transition-colors shadow-md cursor-pointer flex items-center gap-2 shrink-0"
+            className="px-3.5 py-1.5 rounded-lg bg-stone-900 hover:bg-stone-800 text-white text-xs font-semibold transition-colors cursor-pointer flex items-center gap-1.5 shrink-0"
           >
-            <span>Practice Simulator Layer</span>
-            <ArrowRight className="w-4 h-4 text-orange-500" />
+            <span>Open Simulator</span>
+            <ArrowRight className="w-3.5 h-3.5 text-orange-400" />
           </button>
         </div>
       )}

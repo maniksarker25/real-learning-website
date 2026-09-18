@@ -19,6 +19,12 @@ import { useLearningLoop } from "@/context/LearningLoopContext";
 import { cn } from "@/lib/utils";
 
 import { RecentSimulationsTable } from "../RecentSimulationsTable";
+import {
+  VictorianCornerFlourish,
+  EngravedSeal,
+  LaurelEmblem,
+  StarburstRosette,
+} from "@/components/ui/DecorativeAssets";
 
 interface IndHomeScreenProps {
   onNavigateToTab: (tabId: string) => void;
@@ -54,12 +60,12 @@ export const IndHomeScreen = memo(function IndHomeScreen({
 
   const currentStepLabel =
     currentStep === "pathfinder"
-      ? "1. Discovery & Baseline"
+      ? "1. Discovery"
       : currentStep === "class"
-      ? "2. Class (Theory & Fundamentals)"
+      ? "2. Class"
       : currentStep === "simulator"
-      ? "3. Simulator (Practice Layer)"
-      : "4-6. AI Feedback & Demonstrated Skills";
+      ? "3. Simulator"
+      : "4. AI Feedback";
 
   const handleContinueClass = useCallback(() => {
     onNavigateToTab("classes");
@@ -75,129 +81,164 @@ export const IndHomeScreen = memo(function IndHomeScreen({
   }, [onNavigateToTab, onLaunchSimulation]);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       {/* Top Welcome Banner */}
-      <div className="bg-[#12131c]/90 rounded-2xl p-6 border border-white/10 shadow-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-400/30 text-xs text-orange-300 font-medium mb-2">
-            <Sparkles className="w-3.5 h-3.5 text-orange-400" />
-            <span>LEARNING LOOP DASHBOARD</span>
-          </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white">
-            Welcome back, {session.name || "Learner"}!
-          </h1>
-          <p className="text-xs text-white/70 mt-1 max-w-lg">
-            Track your continuous learning loop for{" "}
-            <span className="text-orange-300 font-semibold">
-              {session.goal || "Customer Service"}
-            </span>
-            : Learn in Classes → Practice in Simulations → Inspect AI Feedback.
-          </p>
-        </div>
+      <div className="bg-white rounded-xl p-4 sm:p-5 border border-stone-200 relative overflow-hidden">
+        {/* Subtle decorative corner flourish */}
+        <VictorianCornerFlourish
+          position="top-right"
+          className="absolute top-2 right-2 text-stone-300/60 hidden sm:block"
+        />
 
-        <button
-          onClick={() => onNavigateToTab("goals")}
-          className="px-4 py-2 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold text-white/80 hover:text-white transition-colors cursor-pointer shrink-0"
-        >
-          View Goal Roadmap
-        </button>
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 relative z-10">
+          <div className="flex items-center gap-3.5">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-stone-100 to-stone-200 border border-stone-300/80 flex items-center justify-center text-amber-700 shrink-0">
+              <LaurelEmblem size={24} className="text-amber-700" />
+            </div>
+            <div>
+              <h1 className="text-lg sm:text-xl font-bold text-stone-900 tracking-tight">
+                Welcome back, {session.name || "Sarah Jenkins"}
+              </h1>
+              <p className="text-xs text-stone-500 mt-0.5 flex items-center gap-1.5 flex-wrap">
+                <span>Goal: <strong className="text-stone-800 font-semibold">{session.goal || "Customer Service"}</strong></span>
+                <span className="text-stone-300">·</span>
+                <span className="text-stone-600">Learn → Practice → Feedback</span>
+              </p>
+            </div>
+          </div>
+
+          <button
+            onClick={() => onNavigateToTab("goals")}
+            className="px-3.5 py-1.5 rounded-lg bg-stone-50 hover:bg-stone-100 border border-stone-200 text-xs font-semibold text-stone-700 hover:text-stone-900 transition-colors cursor-pointer shrink-0"
+          >
+            Goal Roadmap
+          </button>
+        </div>
       </div>
 
       {/* AI Pathfinder GPS Status Banner */}
-      <div className="bg-gradient-to-r from-orange-500/15 via-[#161726] to-[#0e0f18] rounded-2xl p-5 border border-orange-400/40 shadow-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div className="flex items-start gap-3">
-          <div className="w-10 h-10 rounded-xl bg-orange-500/20 border border-orange-400/30 flex items-center justify-center text-orange-400 shrink-0">
-            <Compass className="w-5 h-5" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2 flex-wrap">
-              <span className="text-[10px] font-mono font-bold uppercase text-orange-300 bg-orange-500/20 px-2 py-0.5 rounded">
-                RL LEARNING GPS
-              </span>
-              <span className="text-xs font-bold text-white">
-                PATH: {activePathTitle}
-              </span>
-            </div>
-            <p className="text-xs text-white/70 mt-1 max-w-xl">
-              Active Stage: <span className="text-white font-bold">{currentStepLabel}</span>. Complete your class, enter the connected practice simulator, and evaluate your demonstrated skills.
-            </p>
-          </div>
-        </div>
+      <div className="bg-gradient-to-r from-amber-50/70 via-white to-orange-50/50 rounded-xl p-3.5 sm:p-4 border border-amber-200/70 relative overflow-hidden">
+        {/* Engraved Seal Watermark Asset */}
+        <EngravedSeal
+          size={84}
+          className="absolute -right-4 -bottom-4 text-amber-600/15 pointer-events-none hidden sm:block"
+        />
+        <VictorianCornerFlourish
+          position="top-left"
+          className="absolute top-1.5 left-1.5 text-amber-300/40 hidden sm:block"
+        />
 
-        <div className="flex items-center gap-2 shrink-0">
-          <button
-            onClick={() => onNavigateToTab("pathfinder")}
-            className="px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition-colors cursor-pointer"
-          >
-            Change Path
-          </button>
-          <button
-            onClick={() => onNavigateToTab(currentStepTab)}
-            className="px-5 py-2 rounded-full bg-white text-black hover:bg-white/90 text-xs font-black transition-colors shadow cursor-pointer flex items-center gap-1.5"
-          >
-            <span>Resume Loop</span>
-            <ArrowRight className="w-3.5 h-3.5 text-orange-500" />
-          </button>
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 relative z-10">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-amber-500 to-orange-600 border border-amber-400 flex items-center justify-center text-white shrink-0">
+              <Compass className="w-4 h-4" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="text-[10px] font-mono font-bold uppercase text-amber-900 bg-amber-200/70 border border-amber-300 px-1.5 py-0.5 rounded tracking-wide">
+                  GPS
+                </span>
+                <span className="text-xs font-semibold text-stone-900">
+                  {activePathTitle}
+                </span>
+              </div>
+              <p className="text-xs text-stone-500 mt-0.5">
+                Stage: <strong className="text-stone-800 font-semibold">{currentStepLabel}</strong> · Complete lesson to unlock simulation practice.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 shrink-0 w-full sm:w-auto justify-end">
+            <button
+              onClick={() => onNavigateToTab("pathfinder")}
+              className="px-3 py-1.5 rounded-lg bg-white hover:bg-stone-50 text-stone-700 hover:text-stone-950 border border-stone-200 text-xs font-medium transition-colors cursor-pointer"
+            >
+              Change
+            </button>
+            <button
+              onClick={() => onNavigateToTab(currentStepTab)}
+              className="px-3.5 py-1.5 rounded-lg bg-stone-900 text-white hover:bg-stone-800 text-xs font-medium transition-colors cursor-pointer flex items-center gap-1.5"
+            >
+              <span>Continue</span>
+              <ArrowRight className="w-3.5 h-3.5 text-orange-400" />
+            </button>
+          </div>
         </div>
       </div>
-      {/* Progress Summary High-Level Metrics */}
-      <div className="bg-[#12131c]/90 rounded-2xl p-5 border border-white/10 shadow-lg space-y-4">
-        <div className="flex items-center justify-between border-b border-white/10 pb-3">
+
+      {/* Progress Summary Metrics */}
+      <div className="bg-white rounded-xl p-4 sm:p-5 border border-stone-200 space-y-3.5 relative overflow-hidden">
+        <div className="flex items-center justify-between border-b border-stone-100 pb-3">
           <div className="flex items-center gap-2">
-            <TrendingUp className="w-4 h-4 text-orange-400" />
-            <h3 className="text-sm font-bold text-white">
-              Progress Summary & Metrics
+            <div className="w-6 h-6 rounded-lg bg-orange-100 border border-orange-200 flex items-center justify-center text-orange-700">
+              <TrendingUp className="w-3.5 h-3.5" />
+            </div>
+            <h3 className="text-xs sm:text-sm font-bold text-stone-900 flex items-center gap-1.5">
+              <span>Progress & Metrics</span>
+              <StarburstRosette size={13} className="text-orange-500/70" />
             </h3>
           </div>
-          <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
-            +14.2% Growth This Month
+          <span className="text-[10px] font-mono font-semibold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
+            +14.2% this month
           </span>
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <div className="bg-black/50 p-4 rounded-xl border border-white/10 space-y-1">
-            <span className="text-[10px] font-mono text-white/50 uppercase">
-              CLASSES COMPLETED
+          {/* Metric 1 */}
+          <div className="bg-[#FAF8F5] p-3.5 rounded-lg border border-stone-200 space-y-0.5 relative overflow-hidden">
+            <span className="text-[10px] font-mono text-stone-500 uppercase font-semibold">
+              Classes
             </span>
-            <div className="text-2xl font-extrabold text-white font-mono">
+            <div className="text-xl sm:text-2xl font-black text-stone-900 font-mono tracking-tight">
               3
             </div>
-            <span className="text-[10px] text-white/40">1 in progress</span>
+            <span className="text-[10px] text-stone-500 font-medium block">
+              1 in progress
+            </span>
           </div>
 
-          <div className="bg-black/50 p-4 rounded-xl border border-white/10 space-y-1">
-            <span className="text-[10px] font-mono text-white/50 uppercase">
-              SIMULATIONS PASSED
+          {/* Metric 2 */}
+          <div className="bg-[#FAF8F5] p-3.5 rounded-lg border border-stone-200 space-y-0.5 relative overflow-hidden">
+            <span className="text-[10px] font-mono text-stone-500 uppercase font-semibold">
+              Simulations
             </span>
-            <div className="text-2xl font-extrabold text-white font-mono">
+            <div className="text-xl sm:text-2xl font-black text-stone-900 font-mono tracking-tight">
               5
             </div>
-            <span className="text-[10px] text-white/40">
-              3 practice sessions
+            <span className="text-[10px] text-stone-500 font-medium block">
+              3 completed
             </span>
           </div>
 
-          <div className="bg-black/50 p-4 rounded-xl border border-white/10 space-y-1">
-            <span className="text-[10px] font-mono text-white/50 uppercase">
-              AVG QUIZ SCORE
-            </span>
-            <div className="text-2xl font-extrabold text-white font-mono">
+          {/* Metric 3 */}
+          <div className="bg-[#FAF8F5] p-3.5 rounded-lg border border-stone-200 space-y-0.5 relative overflow-hidden">
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] font-mono text-stone-500 uppercase font-semibold">
+                Quiz Avg
+              </span>
+              <StarburstRosette size={11} className="text-emerald-600/70" />
+            </div>
+            <div className="text-xl sm:text-2xl font-black text-stone-900 font-mono tracking-tight">
               92.5%
             </div>
-            <span className="text-[10px] text-emerald-400">
-              High understanding
+            <span className="text-[10px] text-emerald-700 font-semibold block">
+              High score
             </span>
           </div>
 
-          <div className="bg-black/50 p-4 rounded-xl border border-white/10 space-y-1">
-            <span className="text-[10px] font-mono text-white/50 uppercase">
-              AVG SIMULATION SCORE
-            </span>
-            <div className="text-2xl font-extrabold text-white font-mono">
+          {/* Metric 4 */}
+          <div className="bg-[#FAF8F5] p-3.5 rounded-lg border border-stone-200 space-y-0.5 relative overflow-hidden">
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] font-mono text-stone-500 uppercase font-semibold">
+                Simulation Avg
+              </span>
+              <StarburstRosette size={11} className="text-orange-600/70" />
+            </div>
+            <div className="text-xl sm:text-2xl font-black text-stone-900 font-mono tracking-tight">
               89.0%
             </div>
-            <span className="text-[10px] text-orange-400">
-              High performance
+            <span className="text-[10px] text-orange-700 font-semibold block">
+              Top tier
             </span>
           </div>
         </div>

@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { memo, useCallback } from "react";
@@ -147,27 +148,27 @@ export const LearningLoopStepper = memo(function LearningLoopStepper({
   );
 
   return (
-    <div className="bg-[#0f1019]/90 border border-white/10 rounded-2xl p-4 shadow-xl space-y-3">
+    <div className="bg-white border border-stone-200 rounded-xl p-3.5 sm:p-4 space-y-3">
       {/* Top Banner Context */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-b border-white/10 pb-3">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-b border-stone-100 pb-2.5">
         <div className="flex items-center gap-2">
-          <div>
-            <h4 className="text-xs font-black uppercase tracking-wider text-white flex items-center gap-2 flex-wrap">
-              <span>RL LEARNING GPS LOOP</span>
-              <span className="text-[10px] font-mono font-normal text-orange-300 bg-orange-500/10 px-2 py-0.5 rounded-full border border-orange-400/20">
-                ACTIVE PATH: {activePathTitle}
-              </span>
-            </h4>
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="text-xs font-bold uppercase tracking-wider text-stone-900">
+              Learning GPS Loop
+            </span>
+            <span className="text-[10px] font-mono font-semibold text-amber-900 bg-amber-100/70 border border-amber-200 px-2 py-0.5 rounded">
+              Path: {activePathTitle}
+            </span>
           </div>
         </div>
 
-        <div className="text-[10px] font-mono text-white/50 flex items-center gap-2">
+        <div className="text-[10px] font-mono text-stone-500 flex items-center gap-2">
           <span>
             Step {Math.max(1, currentStepIndex + 1)} of {STEPS.length}
           </span>
-          <div className="w-16 h-1.5 bg-black/60 rounded-full overflow-hidden border border-white/10">
+          <div className="w-16 h-1.5 bg-stone-100 rounded-full overflow-hidden border border-stone-200">
             <div
-              className="h-full bg-gradient-to-r from-orange-500 to-rose-500 transition-all duration-300"
+              className="h-full bg-gradient-to-r from-orange-500 to-amber-500 transition-all duration-300"
               style={{
                 width: `${Math.min(
                   100,
@@ -208,12 +209,12 @@ export const LearningLoopStepper = memo(function LearningLoopStepper({
               className={cn(
                 "relative p-3 rounded-xl border text-left transition-all duration-200 flex flex-col justify-between space-y-2 group select-none",
                 isDisabled
-                  ? "bg-black/30 border-white/5 opacity-50 cursor-not-allowed pointer-events-auto"
+                  ? "bg-stone-50/60 border-stone-200 opacity-50 cursor-not-allowed pointer-events-auto"
                   : isActive
-                  ? "bg-gradient-to-br from-orange-500/20 via-[#161826] to-[#0d0e15] border-orange-400/60 shadow-lg shadow-orange-500/10 scale-[1.02] cursor-pointer"
+                  ? "bg-orange-50/90 border-orange-300 shadow-sm cursor-pointer"
                   : isCompleted
-                  ? "bg-[#12131d]/80 border-emerald-500/30 hover:border-emerald-500/50 hover:bg-[#161726] cursor-pointer"
-                  : "bg-black/40 border-white/10 hover:border-white/20 hover:bg-[#12131d] cursor-pointer"
+                  ? "bg-emerald-50/60 border-emerald-200 hover:bg-emerald-50 hover:border-emerald-300 cursor-pointer"
+                  : "bg-stone-50/80 border-stone-200 hover:bg-white hover:border-stone-300 cursor-pointer"
               )}
             >
               {/* Header Icon + Status Badge */}
@@ -222,18 +223,18 @@ export const LearningLoopStepper = memo(function LearningLoopStepper({
                   className={cn(
                     "w-7 h-7 rounded-lg flex items-center justify-center transition-colors",
                     isDisabled
-                      ? "bg-white/5 text-white/20 border border-white/5"
+                      ? "bg-stone-100 text-stone-400 border border-stone-200"
                       : isActive
-                      ? "bg-gradient-to-r from-orange-500 to-rose-500 text-white shadow-md"
+                      ? "bg-gradient-to-r from-orange-500 to-amber-600 text-white shadow-xs"
                       : isCompleted
-                      ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
-                      : "bg-white/5 text-white/40 group-hover:text-white/70"
+                      ? "bg-emerald-100 text-emerald-700 border border-emerald-200"
+                      : "bg-white text-stone-600 border border-stone-200 group-hover:text-stone-900"
                   )}
                 >
                   {isDisabled ? (
-                    <Lock className="w-3.5 h-3.5 text-white/30" />
+                    <Lock className="w-3.5 h-3.5 text-stone-400" />
                   ) : isCompleted ? (
-                    <CheckCircle2 className="w-4 h-4" />
+                    <CheckCircle2 className="w-4 h-4 text-emerald-700" />
                   ) : (
                     <Icon className="w-3.5 h-3.5" />
                   )}
@@ -243,12 +244,12 @@ export const LearningLoopStepper = memo(function LearningLoopStepper({
                   className={cn(
                     "text-[9px] font-mono font-bold px-1.5 py-0.5 rounded flex items-center gap-1",
                     isDisabled
-                      ? "bg-white/5 text-white/30 border border-white/5"
+                      ? "bg-stone-100 text-stone-400 border border-stone-200"
                       : isActive
-                      ? "bg-orange-400/20 text-orange-300 border border-orange-400/30"
+                      ? "bg-orange-100 text-orange-900 border border-orange-200"
                       : isCompleted
-                      ? "bg-emerald-500/10 text-emerald-300"
-                      : "text-white/30"
+                      ? "bg-emerald-100 text-emerald-800 border border-emerald-200"
+                      : "text-stone-500 bg-white border border-stone-200"
                   )}
                 >
                   {isDisabled ? (
@@ -266,14 +267,14 @@ export const LearningLoopStepper = memo(function LearningLoopStepper({
               <div>
                 <div
                   className={cn(
-                    "text-xs font-extrabold leading-tight",
+                    "text-xs font-bold leading-tight",
                     isDisabled
-                      ? "text-white/30"
+                      ? "text-stone-400"
                       : isActive
-                      ? "text-white"
+                      ? "text-stone-950 font-black"
                       : isCompleted
-                      ? "text-emerald-300"
-                      : "text-white/70 group-hover:text-white"
+                      ? "text-emerald-900"
+                      : "text-stone-800 group-hover:text-stone-950"
                   )}
                 >
                   {step.label}
@@ -281,7 +282,13 @@ export const LearningLoopStepper = memo(function LearningLoopStepper({
                 <div
                   className={cn(
                     "text-[10px] truncate mt-0.5 font-sans",
-                    isDisabled ? "text-white/20" : "text-white/50"
+                    isDisabled
+                      ? "text-stone-400"
+                      : isActive
+                      ? "text-stone-600"
+                      : isCompleted
+                      ? "text-emerald-700"
+                      : "text-stone-500"
                   )}
                 >
                   {isDisabled ? "Locked step" : step.subLabel}
@@ -292,8 +299,8 @@ export const LearningLoopStepper = memo(function LearningLoopStepper({
               {idx < STEPS.length - 1 && (
                 <div
                   className={cn(
-                    "hidden lg:block absolute -right-2.5 top-1/2 -translate-y-1/2 z-10",
-                    isDisabled ? "text-white/10" : "text-white/20"
+                    "hidden lg:block absolute -right-2.5 top-1/2 -translate-y-1/2 z-10 text-xs font-mono",
+                    isDisabled ? "text-stone-300" : "text-stone-400"
                   )}
                 >
                   ➔

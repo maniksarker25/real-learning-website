@@ -94,14 +94,14 @@ export function NotificationDropdown() {
         className={cn(
           "relative p-2 rounded-full border transition-colors cursor-pointer flex items-center justify-center",
           isOpen
-            ? "bg-orange-500/20 text-orange-300 border-orange-400/40"
-            : "bg-white/5 hover:bg-white/10 border-white/10 text-white/70 hover:text-white"
+            ? "bg-orange-100 text-orange-900 border-orange-300"
+            : "bg-stone-100 hover:bg-stone-200/80 border-stone-200 text-stone-700 hover:text-stone-900"
         )}
         aria-label="Notifications"
       >
         <Bell className="w-4 h-4" />
         {unreadCount > 0 && (
-          <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-gradient-to-r from-orange-500 to-rose-500 text-white font-mono font-bold text-[9px] flex items-center justify-center shadow-md animate-pulse">
+          <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-gradient-to-r from-orange-500 to-amber-600 text-white font-mono font-bold text-[9px] flex items-center justify-center shadow-xs animate-pulse">
             {unreadCount}
           </span>
         )}
@@ -109,13 +109,13 @@ export function NotificationDropdown() {
 
       {/* Notification Dropdown Menu */}
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-80 sm:w-96 z-50 bg-[#0e0f17] border border-white/15 rounded-2xl shadow-2xl p-3 space-y-3 animate-in fade-in slide-in-from-top-2">
+        <div className="absolute right-0 mt-2 w-80 sm:w-96 z-50 bg-white border border-stone-200/90 rounded-2xl shadow-xl p-3 space-y-3 animate-in fade-in slide-in-from-top-2 text-stone-900">
           {/* Header */}
-          <div className="flex items-center justify-between border-b border-white/10 pb-2.5 px-1">
+          <div className="flex items-center justify-between border-b border-stone-100 pb-2.5 px-1">
             <div className="flex items-center gap-2">
-              <span className="font-bold text-xs text-white">Notifications</span>
+              <span className="font-bold text-xs text-stone-900">Notifications</span>
               {unreadCount > 0 && (
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-orange-500/20 text-orange-300 border border-orange-400/30">
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-orange-100 text-orange-900 border border-orange-200">
                   {unreadCount} new
                 </span>
               )}
@@ -125,7 +125,7 @@ export function NotificationDropdown() {
               <button
                 type="button"
                 onClick={markAllNotificationsAsRead}
-                className="text-[10px] text-orange-400 hover:text-orange-300 hover:underline cursor-pointer"
+                className="text-[10px] text-orange-700 hover:text-orange-900 font-bold hover:underline cursor-pointer"
               >
                 Mark all as read
               </button>
@@ -135,7 +135,7 @@ export function NotificationDropdown() {
           {/* Notifications List */}
           <div className="space-y-2 max-h-[380px] overflow-y-auto pr-0.5">
             {notifications.length === 0 ? (
-              <div className="py-8 text-center text-xs text-white/40">
+              <div className="py-8 text-center text-xs text-stone-400">
                 No notifications right now.
               </div>
             ) : (
@@ -145,8 +145,8 @@ export function NotificationDropdown() {
                   className={cn(
                     "p-3 rounded-xl border text-xs space-y-2 transition-colors",
                     !notif.read
-                      ? "bg-white/[0.04] border-orange-400/30"
-                      : "bg-black/40 border-white/5 opacity-80"
+                      ? "bg-orange-50/50 border-orange-200"
+                      : "bg-stone-50 border-stone-200 opacity-80"
                   )}
                 >
                   <div className="flex items-start justify-between gap-2">
@@ -156,10 +156,10 @@ export function NotificationDropdown() {
                         className={cn(
                           "w-7 h-7 rounded-lg flex items-center justify-center shrink-0 mt-0.5",
                           notif.type === "org_invite_admin"
-                            ? "bg-blue-500/20 text-blue-400"
+                            ? "bg-blue-100 text-blue-700"
                             : notif.type === "org_invite_member"
-                            ? "bg-purple-500/20 text-purple-400"
-                            : "bg-emerald-500/20 text-emerald-400"
+                            ? "bg-purple-100 text-purple-700"
+                            : "bg-emerald-100 text-emerald-700"
                         )}
                       >
                         {notif.type === "org_invite_admin" ? (
@@ -174,15 +174,15 @@ export function NotificationDropdown() {
                       {/* Content */}
                       <div className="space-y-0.5">
                         <div className="flex items-center gap-1.5 flex-wrap">
-                          <span className="font-bold text-white text-xs">
+                          <span className="font-bold text-stone-900 text-xs">
                             {notif.orgName}
                           </span>
                           <span
                             className={cn(
                               "text-[9px] font-mono font-bold px-1.5 py-0.2 rounded uppercase",
                               notif.invitedRole === "admin"
-                                ? "bg-blue-500/20 text-blue-300"
-                                : "bg-purple-500/20 text-purple-300"
+                                ? "bg-blue-100 text-blue-800 border border-blue-200"
+                                : "bg-purple-100 text-purple-800 border border-purple-200"
                             )}
                           >
                             {notif.invitedRole === "admin"
@@ -190,17 +190,17 @@ export function NotificationDropdown() {
                               : "Member Invite"}
                           </span>
                           {notif.careerTrack && (
-                            <span className="text-[9px] font-mono text-white/50 bg-white/5 px-1.5 py-0.2 rounded">
+                            <span className="text-[9px] font-mono text-stone-600 bg-stone-100 border border-stone-200 px-1.5 py-0.2 rounded">
                               {notif.careerTrack}
                             </span>
                           )}
                         </div>
 
-                        <p className="text-[11px] text-white/80 leading-relaxed font-normal">
+                        <p className="text-[11px] text-stone-600 leading-relaxed font-normal">
                           {notif.message}
                         </p>
 
-                        <div className="text-[10px] text-white/40 font-mono pt-0.5">
+                        <div className="text-[10px] text-stone-400 font-mono pt-0.5">
                           {notif.timestamp}
                         </div>
                       </div>
@@ -209,7 +209,7 @@ export function NotificationDropdown() {
 
                   {/* Actions for Invites */}
                   {notif.type.startsWith("org_invite") && (
-                    <div className="pt-1.5 border-t border-white/5 flex items-center justify-between gap-2">
+                    <div className="pt-1.5 border-t border-stone-200 flex items-center justify-between gap-2">
                       {notif.status === "pending" ? (
                         <>
                           <button
@@ -221,24 +221,24 @@ export function NotificationDropdown() {
                                 notif.invitedRole
                               )
                             }
-                            className="flex-1 py-1.5 px-3 rounded-lg bg-white text-black hover:bg-white/90 text-xs font-bold transition-colors cursor-pointer flex items-center justify-center gap-1 shadow-xs"
+                            className="flex-1 py-1.5 px-3 rounded-lg bg-stone-900 text-white hover:bg-stone-800 text-xs font-bold transition-colors cursor-pointer flex items-center justify-center gap-1 shadow-2xs"
                           >
-                            <Check className="w-3.5 h-3.5 text-black" />
+                            <Check className="w-3.5 h-3.5 text-white" />
                             <span>Accept {notif.invitedRole === "admin" ? "Admin" : "Member"}</span>
                           </button>
 
                           <button
                             type="button"
                             onClick={() => handleDecline(notif.id)}
-                            className="py-1.5 px-3 rounded-lg bg-white/5 hover:bg-white/10 text-white/60 hover:text-white text-xs font-semibold transition-colors cursor-pointer"
+                            className="py-1.5 px-3 rounded-lg bg-stone-100 hover:bg-stone-200 text-stone-700 hover:text-stone-900 text-xs font-semibold transition-colors cursor-pointer"
                           >
                             Decline
                           </button>
                         </>
                       ) : notif.status === "accepted" ? (
                         <div className="w-full flex items-center justify-between gap-2">
-                          <span className="text-[10px] font-mono text-emerald-400 font-bold flex items-center gap-1">
-                            <CheckCircle2 className="w-3 h-3" />
+                          <span className="text-[10px] font-mono text-emerald-800 font-bold flex items-center gap-1">
+                            <CheckCircle2 className="w-3 h-3 text-emerald-600" />
                             <span>Accepted</span>
                           </span>
                           <button
@@ -249,14 +249,14 @@ export function NotificationDropdown() {
                                 notif.invitedRole
                               )
                             }
-                            className="text-[11px] font-bold text-orange-400 hover:text-orange-300 hover:underline flex items-center gap-1 cursor-pointer"
+                            className="text-[11px] font-bold text-orange-700 hover:text-orange-900 hover:underline flex items-center gap-1 cursor-pointer"
                           >
                             <span>Switch into {notif.orgName}</span>
                             <ArrowRight className="w-3 h-3" />
                           </button>
                         </div>
                       ) : (
-                        <span className="text-[10px] font-mono text-white/40">
+                        <span className="text-[10px] font-mono text-stone-400">
                           Invitation Declined
                         </span>
                       )}
