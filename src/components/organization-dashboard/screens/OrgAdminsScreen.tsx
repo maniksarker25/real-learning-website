@@ -142,15 +142,15 @@ export const OrgAdminsScreen = memo(function OrgAdminsScreen() {
 
   if (!isOwner) {
     return (
-      <div className="bg-[#12131c]/90 rounded-3xl p-8 sm:p-10 border border-white/10 text-center space-y-4 max-w-lg mx-auto my-12 shadow-2xl">
-        <div className="w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-400/30 flex items-center justify-center text-amber-400 mx-auto">
+      <div className="bg-white rounded-3xl p-8 sm:p-10 border border-stone-200 text-center space-y-4 max-w-lg mx-auto my-12 shadow-sm">
+        <div className="w-14 h-14 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-600 mx-auto">
           <Crown className="w-7 h-7" />
         </div>
         <div className="space-y-1">
-          <h3 className="text-lg font-bold text-white">
+          <h3 className="text-lg font-bold text-stone-900">
             Owner Managed Section
           </h3>
-          <p className="text-xs text-white/60 leading-relaxed max-w-sm mx-auto">
+          <p className="text-xs text-stone-500 leading-relaxed max-w-sm mx-auto">
             Only the Organization Owner can manage Administrator accounts. As an
             Organization Admin, you have full access to manage team Members,
             view completed Simulations, and monitor Progress.
@@ -159,7 +159,7 @@ export const OrgAdminsScreen = memo(function OrgAdminsScreen() {
         <div className="pt-2">
           <a
             href="/organization-dashboard/members"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white text-black font-bold text-xs hover:bg-white/90 transition-colors shadow-md"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-stone-900 text-white font-bold text-xs hover:bg-stone-800 transition-colors shadow-sm"
           >
             <span>Go to Members Management &rarr;</span>
           </a>
@@ -172,42 +172,42 @@ export const OrgAdminsScreen = memo(function OrgAdminsScreen() {
     <div className="space-y-6">
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="fixed top-20 right-6 z-50 bg-blue-500 text-white text-xs font-bold px-4 py-3 rounded-2xl shadow-2xl flex items-center gap-2 animate-in fade-in slide-in-from-top-2">
-          <CheckCircle2 className="w-4 h-4" />
+        <div className="fixed top-20 right-6 z-50 bg-stone-900 text-white text-xs font-bold px-4 py-3 rounded-2xl shadow-xl flex items-center gap-2 animate-in fade-in slide-in-from-top-2 border border-stone-800">
+          <CheckCircle2 className="w-4 h-4 text-emerald-400" />
           <span>{toastMessage}</span>
         </div>
       )}
 
       {/* Top Banner */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-[#12131c]/90 rounded-2xl p-5 border border-white/10 shadow-lg">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white rounded-2xl p-5 border border-stone-200 shadow-sm">
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span
               className={cn(
                 "inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider border",
                 isOwner
-                  ? "bg-amber-500/10 text-amber-300 border-amber-400/30"
-                  : "bg-blue-500/10 text-blue-300 border-blue-400/30",
+                  ? "bg-amber-50 text-amber-800 border-amber-200"
+                  : "bg-blue-50 text-blue-800 border-blue-200",
               )}
             >
               {isOwner ? (
                 <>
-                  <Crown className="w-3 h-3 text-amber-400" />
+                  <Crown className="w-3 h-3 text-amber-600" />
                   <span>Owner View</span>
                 </>
               ) : (
                 <>
-                  <Shield className="w-3 h-3 text-blue-400" />
+                  <Shield className="w-3 h-3 text-blue-600" />
                   <span>Admin View</span>
                 </>
               )}
             </span>
           </div>
-          <h2 className="text-xl font-bold text-white flex items-center gap-2">
-            <Shield className="w-5 h-5 text-blue-400" />
+          <h2 className="text-xl font-bold text-stone-900 flex items-center gap-2">
+            <Shield className="w-5 h-5 text-blue-600" />
             <span>Organization Administrators</span>
           </h2>
-          <p className="text-xs text-white/60 mt-0.5">
+          <p className="text-xs text-stone-500 mt-0.5">
             {isOwner
               ? "Manage organization administrators, invite team leads, and oversee leadership staff."
               : "View the active organization administrators and team leads."}
@@ -217,33 +217,33 @@ export const OrgAdminsScreen = memo(function OrgAdminsScreen() {
         {isOwner && (
           <button
             onClick={() => setIsInviteModalOpen(true)}
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-white text-black font-extrabold text-xs hover:bg-white/90 transition-colors shadow-md cursor-pointer shrink-0"
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-stone-900 text-white font-bold text-xs hover:bg-stone-800 transition-colors shadow-sm cursor-pointer shrink-0"
           >
-            <UserPlus className="w-4 h-4 text-blue-600" />
+            <UserPlus className="w-4 h-4 text-orange-400" />
             <span>Invite New Admin</span>
           </button>
         )}
       </div>
 
       {/* Search & Filter Controls */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-[#0d0e14] p-3 rounded-2xl border border-white/10">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-[#FCFAF6] p-3 rounded-2xl border border-stone-200">
         <div className="relative max-w-sm w-full">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400" />
           <input
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search admins by name, email, or department..."
-            className="w-full bg-black/60 border border-white/10 rounded-xl pl-9 pr-4 py-2 text-xs text-white placeholder-white/40 focus:outline-none focus:border-blue-400 transition-colors"
+            className="w-full bg-white border border-stone-200 rounded-xl pl-9 pr-4 py-2 text-xs text-stone-900 placeholder-stone-400 focus:outline-none focus:border-orange-500 transition-colors"
           />
         </div>
 
         <div className="flex items-center gap-2 w-full sm:w-auto">
-          <Filter className="w-4 h-4 text-white/40 shrink-0" />
+          <Filter className="w-4 h-4 text-stone-400 shrink-0" />
           <select
             value={selectedStatusFilter}
             onChange={(e) => setSelectedStatusFilter(e.target.value)}
-            className="w-full sm:w-auto bg-black/60 border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-400 transition-colors"
+            className="w-full sm:w-auto bg-white border border-stone-200 rounded-xl px-3 py-2 text-xs text-stone-800 focus:outline-none focus:border-orange-500 transition-colors font-medium"
           >
             <option value="all">All Statuses</option>
             <option value="Active">Active</option>
@@ -254,11 +254,11 @@ export const OrgAdminsScreen = memo(function OrgAdminsScreen() {
       </div>
 
       {/* Admins Table */}
-      <div className="bg-[#12131c]/90 rounded-2xl border border-white/10 shadow-lg overflow-hidden">
+      <div className="bg-white rounded-2xl border border-stone-200 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs border-collapse">
             <thead>
-              <tr className="border-b border-white/10 text-white/40 font-mono text-[10px] uppercase bg-black/40">
+              <tr className="border-b border-stone-200 text-stone-400 font-mono text-[10px] uppercase bg-stone-50/70">
                 <th className="py-3 px-4 font-semibold">ADMINISTRATOR</th>
                 <th className="py-3 px-4 font-semibold">ROLE</th>
                 <th className="py-3 px-4 font-semibold">DEPARTMENT</th>
@@ -269,7 +269,7 @@ export const OrgAdminsScreen = memo(function OrgAdminsScreen() {
                 )}
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/5">
+            <tbody className="divide-y divide-stone-100">
               {filteredAdmins.map((admin) => {
                 const isOwnerRow = admin.role === "owner";
                 const isCurrentSelf = admin.id === "u-owner";
@@ -277,7 +277,7 @@ export const OrgAdminsScreen = memo(function OrgAdminsScreen() {
                 return (
                   <tr
                     key={admin.id}
-                    className="hover:bg-white/[0.02] transition-colors"
+                    className="hover:bg-stone-50/70 transition-colors"
                   >
                     {/* Administrator Name & Avatar */}
                     <td className="py-3.5 px-4 whitespace-nowrap">
@@ -285,18 +285,18 @@ export const OrgAdminsScreen = memo(function OrgAdminsScreen() {
                         <img
                           src={admin.avatar}
                           alt={admin.name}
-                          className="w-9 h-9 rounded-full object-cover border border-white/20 shrink-0"
+                          className="w-9 h-9 rounded-full object-cover border border-stone-200 shrink-0"
                         />
                         <div>
-                          <div className="font-bold text-white text-xs flex items-center gap-1.5">
+                          <div className="font-bold text-stone-900 text-xs flex items-center gap-1.5">
                             <span>{admin.name}</span>
                             {isCurrentSelf && (
-                              <span className="text-[9px] bg-white/10 text-white/70 px-1.5 py-0.2 rounded font-mono">
+                              <span className="text-[9px] bg-stone-100 text-stone-600 border border-stone-200 px-1.5 py-0.2 rounded font-mono font-bold">
                                 You
                               </span>
                             )}
                           </div>
-                          <div className="text-[11px] text-white/50 font-mono">
+                          <div className="text-[11px] text-stone-500 font-mono">
                             {admin.email}
                           </div>
                         </div>
@@ -306,13 +306,13 @@ export const OrgAdminsScreen = memo(function OrgAdminsScreen() {
                     {/* Role Badge */}
                     <td className="py-3.5 px-4 whitespace-nowrap">
                       {isOwnerRow ? (
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-amber-500/10 text-amber-300 border border-amber-400/30">
-                          <Crown className="w-3 h-3 text-amber-400" />
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-amber-50 text-amber-800 border border-amber-200">
+                          <Crown className="w-3 h-3 text-amber-600" />
                           <span>Owner</span>
                         </span>
                       ) : (
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-blue-500/10 text-blue-300 border border-blue-400/30">
-                          <Shield className="w-3 h-3 text-blue-400" />
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-blue-50 text-blue-800 border border-blue-200">
+                          <Shield className="w-3 h-3 text-blue-600" />
                           <span>Admin</span>
                         </span>
                       )}
@@ -320,16 +320,16 @@ export const OrgAdminsScreen = memo(function OrgAdminsScreen() {
 
                     {/* Department / Title */}
                     <td className="py-3.5 px-4 whitespace-nowrap">
-                      <div className="text-white font-medium">
+                      <div className="text-stone-900 font-semibold">
                         {admin.department}
                       </div>
-                      <div className="text-[10px] text-white/40">
+                      <div className="text-[10px] text-stone-500">
                         {admin.title}
                       </div>
                     </td>
 
                     {/* Added Date */}
-                    <td className="py-3.5 px-4 text-white/60 font-mono whitespace-nowrap">
+                    <td className="py-3.5 px-4 text-stone-500 font-mono whitespace-nowrap">
                       {admin.addedDate}
                     </td>
 
@@ -337,12 +337,12 @@ export const OrgAdminsScreen = memo(function OrgAdminsScreen() {
                     <td className="py-3.5 px-4 whitespace-nowrap">
                       <span
                         className={cn(
-                          "inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold",
+                          "inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold border font-mono",
                           admin.status === "Active"
-                            ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/30"
+                            ? "bg-emerald-50 text-emerald-800 border-emerald-200"
                             : admin.status === "Suspended"
-                              ? "bg-rose-500/10 text-rose-400 border border-rose-500/30"
-                              : "bg-amber-500/10 text-amber-400 border border-amber-500/30",
+                              ? "bg-rose-50 text-rose-800 border-rose-200"
+                              : "bg-amber-50 text-amber-800 border-amber-200",
                         )}
                       >
                         <span className="w-1.5 h-1.5 rounded-full bg-current" />
@@ -359,14 +359,14 @@ export const OrgAdminsScreen = memo(function OrgAdminsScreen() {
                               onClick={() =>
                                 handleRemoveAdmin(admin.id, admin.name)
                               }
-                              className="inline-flex items-center gap-1 text-xs text-rose-400 hover:text-white bg-rose-500/10 hover:bg-rose-500/20 border border-rose-400/30 px-3 py-1.5 rounded-full font-bold transition-colors cursor-pointer"
+                              className="inline-flex items-center gap-1 text-xs text-rose-600 hover:text-rose-700 bg-rose-50 hover:bg-rose-100 border border-rose-200 px-3 py-1.5 rounded-full font-bold transition-colors cursor-pointer"
                               title="Remove admin from organization"
                             >
                               <X className="w-3.5 h-3.5" />
                               <span>Remove</span>
                             </button>
                           ) : (
-                            <span className="text-[10px] text-amber-400/80 font-mono px-2.5 py-1 bg-amber-500/5 rounded-full border border-amber-400/20">
+                            <span className="text-[10px] text-amber-800 font-mono font-bold px-2.5 py-1 bg-amber-50 rounded-full border border-amber-200">
                               Protected Owner
                             </span>
                           )}
@@ -383,24 +383,24 @@ export const OrgAdminsScreen = memo(function OrgAdminsScreen() {
 
       {/* INVITE NEW ADMIN MODAL */}
       {isInviteModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
-          <div className="relative w-full max-w-md bg-[#0e0f17] border border-blue-400/30 rounded-3xl p-6 sm:p-7 shadow-2xl space-y-5 text-left">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-900/50 backdrop-blur-sm">
+          <div className="relative w-full max-w-md bg-white border border-stone-200 rounded-3xl p-6 sm:p-7 shadow-2xl space-y-5 text-left">
             <button
               onClick={() => setIsInviteModalOpen(false)}
-              className="absolute top-4 right-4 p-2 rounded-full bg-white/5 hover:bg-white/10 text-white/60 hover:text-white cursor-pointer transition-colors"
+              className="absolute top-4 right-4 p-2 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-500 hover:text-stone-900 cursor-pointer transition-colors"
             >
               <X className="w-4 h-4" />
             </button>
 
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-2xl bg-blue-500/10 border border-blue-400/30 flex items-center justify-center text-blue-400">
+              <div className="w-10 h-10 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-600">
                 <Shield className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="text-lg font-bold text-white">
+                <h3 className="text-lg font-bold text-stone-900">
                   Invite Organization Admin
                 </h3>
-                <p className="text-xs text-white/60">
+                <p className="text-xs text-stone-500">
                   Admins can invite members, assign simulations, and view
                   progress.
                 </p>
@@ -408,19 +408,19 @@ export const OrgAdminsScreen = memo(function OrgAdminsScreen() {
             </div>
 
             {inviteSuccess ? (
-              <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-2xl p-5 text-center space-y-2">
-                <CheckCircle2 className="w-8 h-8 text-emerald-400 mx-auto" />
-                <div className="text-sm font-bold text-white">
+              <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-5 text-center space-y-2">
+                <CheckCircle2 className="w-8 h-8 text-emerald-600 mx-auto" />
+                <div className="text-sm font-bold text-stone-900">
                   Admin Invite Sent!
                 </div>
-                <p className="text-xs text-white/60">
+                <p className="text-xs text-stone-600">
                   {inviteName} has been invited with Administrator privileges.
                 </p>
               </div>
             ) : (
               <form onSubmit={handleInviteSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-xs font-semibold text-white/80 mb-1">
+                  <label className="block text-xs font-semibold text-stone-700 mb-1">
                     Admin Full Name
                   </label>
                   <input
@@ -429,12 +429,12 @@ export const OrgAdminsScreen = memo(function OrgAdminsScreen() {
                     value={inviteName}
                     onChange={(e) => setInviteName(e.target.value)}
                     placeholder="e.g. Rachel Adams"
-                    className="w-full bg-black/60 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white placeholder-white/40 focus:outline-none focus:border-blue-400"
+                    className="w-full bg-stone-50 border border-stone-200 rounded-xl px-4 py-2.5 text-xs text-stone-900 placeholder-stone-400 focus:bg-white focus:outline-none focus:border-orange-500"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-white/80 mb-1">
+                  <label className="block text-xs font-semibold text-stone-700 mb-1">
                     Work Email Address
                   </label>
                   <input
@@ -443,12 +443,12 @@ export const OrgAdminsScreen = memo(function OrgAdminsScreen() {
                     value={inviteEmail}
                     onChange={(e) => setInviteEmail(e.target.value)}
                     placeholder="rachel.adams@acmecorp.com"
-                    className="w-full bg-black/60 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white placeholder-white/40 focus:outline-none focus:border-blue-400"
+                    className="w-full bg-stone-50 border border-stone-200 rounded-xl px-4 py-2.5 text-xs text-stone-900 placeholder-stone-400 focus:bg-white focus:outline-none focus:border-orange-500"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-white/80 mb-1">
+                  <label className="block text-xs font-semibold text-stone-700 mb-1">
                     Department / Team Area
                   </label>
                   <input
@@ -457,12 +457,12 @@ export const OrgAdminsScreen = memo(function OrgAdminsScreen() {
                     value={inviteDepartment}
                     onChange={(e) => setInviteDepartment(e.target.value)}
                     placeholder="e.g. Operations & Support"
-                    className="w-full bg-black/60 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white placeholder-white/40 focus:outline-none focus:border-blue-400"
+                    className="w-full bg-stone-50 border border-stone-200 rounded-xl px-4 py-2.5 text-xs text-stone-900 placeholder-stone-400 focus:bg-white focus:outline-none focus:border-orange-500"
                   />
                 </div>
 
-                <div className="p-3 rounded-xl bg-blue-500/10 border border-blue-400/20 text-[11px] text-blue-200 flex items-start gap-2">
-                  <ShieldCheck className="w-4 h-4 text-blue-400 shrink-0 mt-0.5" />
+                <div className="p-3 rounded-xl bg-blue-50 border border-blue-200 text-[11px] text-blue-900 flex items-start gap-2">
+                  <ShieldCheck className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
                   <span>
                     Admins can manage members and assign simulations. Billing
                     and seats remain Owner-controlled.
@@ -471,7 +471,7 @@ export const OrgAdminsScreen = memo(function OrgAdminsScreen() {
 
                 <button
                   type="submit"
-                  className="w-full py-3 rounded-full bg-white text-black hover:bg-white/90 text-xs font-extrabold transition-colors shadow-md cursor-pointer mt-2"
+                  className="w-full py-3 rounded-full bg-orange-600 hover:bg-orange-700 text-white text-xs font-bold transition-colors shadow-sm cursor-pointer mt-2"
                 >
                   Send Admin Invitation
                 </button>
