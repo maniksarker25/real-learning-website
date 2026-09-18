@@ -153,7 +153,15 @@ export default memo(function Navbar() {
           <div className="hidden md:flex items-center gap-3">
             {session.accountType ? (
               <div className="flex items-center gap-3">
-                <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs text-white">
+                <Link
+                  href={
+                    session.accountType === "organization"
+                      ? "/organization-dashboard"
+                      : "/user-dashboard"
+                  }
+                  className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-xs text-white font-semibold transition-all cursor-pointer shadow-sm group"
+                  title="Go to your Dashboard"
+                >
                   {session.accountType === "individual" ? (
                     <User className="w-3.5 h-3.5 text-orange-400" />
                   ) : (
@@ -161,10 +169,11 @@ export default memo(function Navbar() {
                   )}
                   <span className="font-semibold max-w-[130px] truncate">
                     {session.accountType === "individual"
-                      ? session.name || "Individual"
-                      : session.orgName || "Organization"}
+                      ? session.name || "Dashboard"
+                      : session.orgName || "Org Dashboard"}
                   </span>
-                </div>
+                  <ArrowRight className="w-3 h-3 text-white/50 group-hover:text-orange-400 group-hover:translate-x-0.5 transition-all" />
+                </Link>
                 <button
                   onClick={handleLogout}
                   className="inline-flex items-center gap-1.5 text-xs text-white/60 hover:text-white bg-white/5 hover:bg-white/10 px-3 py-2 rounded-full border border-white/10 transition-colors cursor-pointer"
@@ -316,13 +325,27 @@ export default memo(function Navbar() {
                   className="relative z-10 pt-6 border-t border-white/10 flex flex-col gap-3 max-w-md mx-auto w-full"
                 >
                   {session.accountType ? (
-                    <button
-                      onClick={handleLogout}
-                      className="w-full text-center py-3 text-xs font-bold text-rose-300 bg-rose-500/10 border border-rose-500/30 rounded-full hover:bg-rose-500/20 transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md"
-                    >
-                      <LogOut className="w-4 h-4" />
-                      <span>Logout / Switch Account</span>
-                    </button>
+                    <div className="flex flex-col gap-2">
+                      <Link
+                        href={
+                          session.accountType === "organization"
+                            ? "/organization-dashboard"
+                            : "/user-dashboard"
+                        }
+                        onClick={closeMobileMenu}
+                        className="w-full text-center py-3 text-xs font-extrabold text-black bg-white hover:bg-white/90 rounded-full transition-all flex items-center justify-center gap-2 shadow-xl active:scale-95 cursor-pointer"
+                      >
+                        <span>Go to Dashboard</span>
+                        <ArrowRight className="w-4 h-4" />
+                      </Link>
+                      <button
+                        onClick={handleLogout}
+                        className="w-full text-center py-3 text-xs font-bold text-rose-300 bg-rose-500/10 border border-rose-500/30 rounded-full hover:bg-rose-500/20 transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md"
+                      >
+                        <LogOut className="w-4 h-4" />
+                        <span>Logout / Switch Account</span>
+                      </button>
+                    </div>
                   ) : (
                     <>
                       <Link
