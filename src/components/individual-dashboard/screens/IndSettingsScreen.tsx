@@ -348,7 +348,7 @@ export const IndSettingsScreen = memo(function IndSettingsScreen() {
         </div>
 
         {/* Simulation & Experience Preferences */}
-        <div className="bg-white rounded-xl p-4 sm:p-5 border border-stone-200 shadow-sm space-y-3.5">
+        {/* <div className="bg-white rounded-xl p-4 sm:p-5 border border-stone-200 shadow-sm space-y-3.5">
           <div className="flex items-center justify-between border-b border-stone-100 pb-2.5">
             <div className="flex items-center gap-2">
               <Volume2 className="w-4 h-4 text-orange-600" />
@@ -414,7 +414,7 @@ export const IndSettingsScreen = memo(function IndSettingsScreen() {
               </button>
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* Notifications & Reminders */}
         <div className="bg-white rounded-xl p-4 sm:p-5 border border-stone-200 shadow-sm space-y-3.5">
