@@ -89,7 +89,7 @@ export const OrgUsersScreen = memo(function OrgUsersScreen() {
       avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80",
       role: "owner",
       track: "Executive Ops",
-      trackColor: "bg-amber-500/10 text-amber-300 border-amber-400/30",
+      trackColor: "bg-amber-50 text-amber-800 border-amber-200",
       enrolledClasses: 6,
       progress: 100,
       score: "99%",
@@ -112,7 +112,7 @@ export const OrgUsersScreen = memo(function OrgUsersScreen() {
       avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&auto=format&fit=crop&q=80",
       role: "admin",
       track: "Tech Support",
-      trackColor: "bg-blue-500/10 text-blue-300 border-blue-400/30",
+      trackColor: "bg-blue-50 text-blue-800 border-blue-200",
       enrolledClasses: 4,
       progress: 92,
       score: "94%",
@@ -135,7 +135,7 @@ export const OrgUsersScreen = memo(function OrgUsersScreen() {
       avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&auto=format&fit=crop&q=80",
       role: "member",
       track: "Customer Service",
-      trackColor: "bg-orange-500/10 text-orange-300 border-orange-400/30",
+      trackColor: "bg-orange-50 text-orange-800 border-orange-200",
       enrolledClasses: 4,
       progress: 94,
       score: "96%",
@@ -159,7 +159,7 @@ export const OrgUsersScreen = memo(function OrgUsersScreen() {
       avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80",
       role: "member",
       track: "Tech Support",
-      trackColor: "bg-emerald-500/10 text-emerald-300 border-emerald-500/30",
+      trackColor: "bg-emerald-50 text-emerald-800 border-emerald-200",
       enrolledClasses: 3,
       progress: 78,
       score: "88%",
@@ -182,7 +182,7 @@ export const OrgUsersScreen = memo(function OrgUsersScreen() {
       avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80",
       role: "member",
       track: "IT Specialist",
-      trackColor: "bg-rose-500/10 text-rose-300 border-rose-400/30",
+      trackColor: "bg-rose-50 text-rose-800 border-rose-200",
       enrolledClasses: 3,
       progress: 64,
       score: "85%",
@@ -204,7 +204,7 @@ export const OrgUsersScreen = memo(function OrgUsersScreen() {
       avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=100&auto=format&fit=crop&q=80",
       role: "member",
       track: "Customer Service",
-      trackColor: "bg-orange-500/10 text-orange-300 border-orange-400/30",
+      trackColor: "bg-orange-50 text-orange-800 border-orange-200",
       enrolledClasses: 5,
       progress: 98,
       score: "94%",
@@ -305,12 +305,12 @@ export const OrgUsersScreen = memo(function OrgUsersScreen() {
         track: inviteTrack,
         trackColor:
           inviteTrack === "Customer Service"
-            ? "bg-orange-500/10 text-orange-300 border-orange-400/30"
+            ? "bg-orange-50 text-orange-800 border-orange-200"
             : inviteTrack === "Tech Support"
-            ? "bg-emerald-500/10 text-emerald-300 border-emerald-500/30"
+            ? "bg-emerald-50 text-emerald-800 border-emerald-200"
             : inviteTrack === "IT Specialist"
-            ? "bg-rose-500/10 text-rose-300 border-rose-400/30"
-            : "bg-purple-500/10 text-purple-300 border-purple-400/30",
+            ? "bg-rose-50 text-rose-800 border-rose-200"
+            : "bg-purple-50 text-purple-800 border-purple-200",
         enrolledClasses: 1,
         progress: 0,
         score: "Pending",
@@ -335,42 +335,42 @@ export const OrgUsersScreen = memo(function OrgUsersScreen() {
     <div className="space-y-6">
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="fixed top-20 right-6 z-50 bg-orange-500 text-white text-xs font-bold px-4 py-3 rounded-2xl shadow-2xl flex items-center gap-2 animate-in fade-in slide-in-from-top-2">
-          <CheckCircle2 className="w-4 h-4" />
+        <div className="fixed top-20 right-6 z-50 bg-stone-900 text-white text-xs font-bold px-4 py-3 rounded-2xl shadow-xl flex items-center gap-2 animate-in fade-in slide-in-from-top-2 border border-stone-800">
+          <CheckCircle2 className="w-4 h-4 text-emerald-400" />
           <span>{toastMessage}</span>
         </div>
       )}
 
       {/* Top Header Row */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-[#12131c]/90 rounded-2xl p-5 border border-white/10 shadow-lg">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white rounded-2xl p-5 border border-stone-200 shadow-sm">
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span
               className={cn(
-                "inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider border",
+                "inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider border font-mono",
                 currentOrgRole === "owner"
-                  ? "bg-amber-500/10 text-amber-300 border-amber-400/30"
-                  : "bg-blue-500/10 text-blue-300 border-blue-400/30"
+                  ? "bg-amber-50 text-amber-800 border-amber-200"
+                  : "bg-blue-50 text-blue-800 border-blue-200"
               )}
             >
               {currentOrgRole === "owner" ? (
                 <>
-                  <Crown className="w-3 h-3 text-amber-400" />
+                  <Crown className="w-3 h-3 text-amber-600" />
                   <span>Owner View (Full Control)</span>
                 </>
               ) : (
                 <>
-                  <Shield className="w-3 h-3 text-blue-400" />
+                  <Shield className="w-3 h-3 text-blue-600" />
                   <span>Admin View (Member Management)</span>
                 </>
               )}
             </span>
           </div>
-          <h2 className="text-xl font-bold text-white flex items-center gap-2">
-            <Users className="w-5 h-5 text-orange-400" />
+          <h2 className="text-xl font-bold text-stone-900 flex items-center gap-2">
+            <Users className="w-5 h-5 text-orange-600" />
             <span>Organization Members & Role Permissions</span>
           </h2>
-          <p className="text-xs text-white/60 mt-0.5">
+          <p className="text-xs text-stone-500 mt-0.5">
             {currentOrgRole === "owner"
               ? "Manage all members, promote/demote admins, transfer ownership, and view AI simulation progress."
               : "Invite and manage regular members, assign learning tracks, and evaluate simulation scores."}
@@ -379,32 +379,32 @@ export const OrgUsersScreen = memo(function OrgUsersScreen() {
 
         <button
           onClick={() => setIsInviteModalOpen(true)}
-          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-white text-black font-extrabold text-xs hover:bg-white/90 transition-colors shadow-md cursor-pointer shrink-0"
+          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-stone-900 text-white font-bold text-xs hover:bg-stone-800 transition-colors shadow-sm cursor-pointer shrink-0"
         >
-          <UserPlus className="w-4 h-4" />
+          <UserPlus className="w-4 h-4 text-orange-400" />
           <span>Invite New Member</span>
         </button>
       </div>
 
       {/* Filter & Search Controls */}
-      <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 bg-[#0d0e14] p-3 rounded-2xl border border-white/10">
+      <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 bg-[#FCFAF6] p-3 rounded-2xl border border-stone-200">
         <div className="sm:col-span-6 relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400" />
           <input
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search by name, email, or role..."
-            className="w-full bg-black/60 border border-white/10 rounded-xl pl-9 pr-4 py-2 text-xs text-white placeholder-white/40 focus:outline-none focus:border-orange-400 transition-colors"
+            className="w-full bg-white border border-stone-200 rounded-xl pl-9 pr-4 py-2 text-xs text-stone-900 placeholder-stone-400 focus:outline-none focus:border-orange-500 transition-colors"
           />
         </div>
 
         <div className="sm:col-span-3 flex items-center gap-2">
-          <Filter className="w-4 h-4 text-white/40 shrink-0" />
+          <Filter className="w-4 h-4 text-stone-400 shrink-0" />
           <select
             value={selectedRoleFilter}
             onChange={(e) => setSelectedRoleFilter(e.target.value)}
-            className="w-full bg-black/60 border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-orange-400 transition-colors"
+            className="w-full bg-white border border-stone-200 rounded-xl px-3 py-2 text-xs text-stone-800 focus:outline-none focus:border-orange-500 transition-colors font-medium"
           >
             <option value="all">All Roles (Owner, Admin, Member)</option>
             <option value="owner">👑 Owner</option>
@@ -417,7 +417,7 @@ export const OrgUsersScreen = memo(function OrgUsersScreen() {
           <select
             value={selectedTrack}
             onChange={(e) => setSelectedTrack(e.target.value)}
-            className="w-full bg-black/60 border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-orange-400 transition-colors"
+            className="w-full bg-white border border-stone-200 rounded-xl px-3 py-2 text-xs text-stone-800 focus:outline-none focus:border-orange-500 transition-colors font-medium"
           >
             <option value="all">All Tracks</option>
             <option value="Customer Service">Customer Service</option>
@@ -429,11 +429,11 @@ export const OrgUsersScreen = memo(function OrgUsersScreen() {
       </div>
 
       {/* User Table with RBAC Controls */}
-      <div className="bg-[#12131c]/90 rounded-2xl border border-white/10 shadow-lg overflow-hidden">
+      <div className="bg-white rounded-2xl border border-stone-200 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs border-collapse">
             <thead>
-              <tr className="border-b border-white/10 text-white/40 font-mono text-[10px] uppercase bg-black/40">
+              <tr className="border-b border-stone-200 text-stone-400 font-mono text-[10px] uppercase bg-stone-50/70">
                 <th className="py-3 px-4 font-semibold">PARTICIPANT</th>
                 <th className="py-3 px-4 font-semibold">ORG ROLE</th>
                 <th className="py-3 px-4 font-semibold">CAREER TRACK</th>
@@ -443,7 +443,7 @@ export const OrgUsersScreen = memo(function OrgUsersScreen() {
                 <th className="py-3 px-4 font-semibold text-right">MANAGE & ACTIONS</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/5">
+            <tbody className="divide-y divide-stone-100">
               {filteredUsers.map((user) => {
                 const isOwnerRow = user.role === "owner";
                 const isAdminRow = user.role === "admin";
@@ -458,7 +458,7 @@ export const OrgUsersScreen = memo(function OrgUsersScreen() {
                 return (
                   <tr
                     key={user.id}
-                    className="hover:bg-white/[0.02] transition-colors"
+                    className="hover:bg-stone-50/70 transition-colors"
                   >
                     {/* Participant Column */}
                     <td className="py-3.5 px-4 whitespace-nowrap">
@@ -466,18 +466,18 @@ export const OrgUsersScreen = memo(function OrgUsersScreen() {
                         <img
                           src={user.avatar}
                           alt={user.name}
-                          className="w-8 h-8 rounded-full object-cover border border-white/20 shrink-0"
+                          className="w-8 h-8 rounded-full object-cover border border-stone-200 shrink-0"
                         />
                         <div>
-                          <div className="font-bold text-white text-xs flex items-center gap-1.5">
+                          <div className="font-bold text-stone-900 text-xs flex items-center gap-1.5">
                             <span>{user.name}</span>
                             {isCurrentSelf && (
-                              <span className="text-[9px] bg-white/10 text-white/70 px-1.5 py-0.2 rounded font-mono">
+                              <span className="text-[9px] bg-stone-100 text-stone-600 border border-stone-200 px-1.5 py-0.2 rounded font-mono font-bold">
                                 You
                               </span>
                             )}
                           </div>
-                          <div className="text-[11px] text-white/50 font-mono">
+                          <div className="text-[11px] text-stone-500 font-mono">
                             {user.email}
                           </div>
                         </div>
@@ -487,20 +487,20 @@ export const OrgUsersScreen = memo(function OrgUsersScreen() {
                     {/* Org Role Badge Column */}
                     <td className="py-3.5 px-4 whitespace-nowrap">
                       {user.role === "owner" && (
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-amber-500/10 text-amber-300 border border-amber-400/30">
-                          <Crown className="w-3 h-3 text-amber-400" />
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-amber-50 text-amber-800 border border-amber-200">
+                          <Crown className="w-3 h-3 text-amber-600" />
                           <span>Owner</span>
                         </span>
                       )}
                       {user.role === "admin" && (
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-blue-500/10 text-blue-300 border border-blue-400/30">
-                          <Shield className="w-3 h-3 text-blue-400" />
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-blue-50 text-blue-800 border border-blue-200">
+                          <Shield className="w-3 h-3 text-blue-600" />
                           <span>Admin</span>
                         </span>
                       )}
                       {user.role === "member" && (
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-white/5 text-white/70 border border-white/10">
-                          <User className="w-3 h-3 text-white/40" />
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-stone-100 text-stone-700 border border-stone-200">
+                          <User className="w-3 h-3 text-stone-400" />
                           <span>Member</span>
                         </span>
                       )}
@@ -510,7 +510,7 @@ export const OrgUsersScreen = memo(function OrgUsersScreen() {
                     <td className="py-3.5 px-4 whitespace-nowrap">
                       <span
                         className={cn(
-                          "inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-medium border",
+                          "inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-medium border font-mono",
                           user.trackColor
                         )}
                       >
@@ -521,13 +521,13 @@ export const OrgUsersScreen = memo(function OrgUsersScreen() {
                     {/* Progress Column */}
                     <td className="py-3.5 px-4 w-32">
                       <div className="flex items-center gap-2">
-                        <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
+                        <div className="w-full h-1.5 bg-stone-100 rounded-full overflow-hidden border border-stone-200/60">
                           <div
-                            className="h-full bg-gradient-to-r from-orange-500 to-amber-400 rounded-full"
+                            className="h-full bg-gradient-to-r from-orange-500 to-amber-500 rounded-full"
                             style={{ width: `${user.progress}%` }}
                           />
                         </div>
-                        <span className="font-mono text-[11px] text-white/80 font-bold">
+                        <span className="font-mono text-[11px] text-stone-700 font-bold">
                           {user.progress}%
                         </span>
                       </div>
@@ -535,7 +535,7 @@ export const OrgUsersScreen = memo(function OrgUsersScreen() {
 
                     {/* AI Score Column */}
                     <td className="py-3.5 px-4 whitespace-nowrap">
-                      <span className="font-mono font-bold text-xs text-white bg-white/5 px-2 py-0.5 rounded border border-white/10">
+                      <span className="font-mono font-bold text-xs text-stone-900 bg-stone-100 px-2 py-0.5 rounded border border-stone-200">
                         {user.score}
                       </span>
                     </td>
@@ -544,12 +544,12 @@ export const OrgUsersScreen = memo(function OrgUsersScreen() {
                     <td className="py-3.5 px-4 whitespace-nowrap">
                       <span
                         className={cn(
-                          "inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold",
+                          "inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold border font-mono",
                           user.status === "Active"
-                            ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/30"
+                            ? "bg-emerald-50 text-emerald-800 border-emerald-200"
                             : user.status === "Suspended"
-                            ? "bg-rose-500/10 text-rose-400 border border-rose-500/30"
-                            : "bg-amber-500/10 text-amber-400 border border-amber-500/30"
+                            ? "bg-rose-50 text-rose-800 border-rose-200"
+                            : "bg-amber-50 text-amber-800 border-amber-200"
                         )}
                       >
                         <span className="w-1.5 h-1.5 rounded-full bg-current" />
@@ -563,7 +563,7 @@ export const OrgUsersScreen = memo(function OrgUsersScreen() {
                         {/* View Details */}
                         <button
                           onClick={() => setSelectedUserDetails(user)}
-                          className="inline-flex items-center gap-1 text-xs text-orange-400 hover:text-white bg-orange-500/10 hover:bg-orange-500/20 border border-orange-400/30 px-2.5 py-1.5 rounded-full font-bold transition-colors cursor-pointer"
+                          className="inline-flex items-center gap-1 text-xs text-orange-700 hover:text-orange-800 bg-orange-50 hover:bg-orange-100 border border-orange-200 px-2.5 py-1.5 rounded-full font-bold transition-colors cursor-pointer"
                           title="View detailed skill evaluation and test history"
                         >
                           <Eye className="w-3.5 h-3.5" />
@@ -577,8 +577,8 @@ export const OrgUsersScreen = memo(function OrgUsersScreen() {
                             className={cn(
                               "inline-flex items-center gap-1 text-xs px-2.5 py-1.5 rounded-full font-bold transition-colors cursor-pointer border",
                               isAdminRow
-                                ? "bg-white/5 hover:bg-white/10 text-white/80 border-white/10"
-                                : "bg-blue-500/10 hover:bg-blue-500/20 text-blue-300 border-blue-400/30"
+                                ? "bg-stone-100 hover:bg-stone-200 text-stone-700 border-stone-200"
+                                : "bg-blue-50 hover:bg-blue-100 text-blue-800 border-blue-200"
                             )}
                             title={
                               isAdminRow
@@ -595,10 +595,10 @@ export const OrgUsersScreen = memo(function OrgUsersScreen() {
                         {currentOrgRole === "owner" && isAdminRow && (
                           <button
                             onClick={() => setTransferOwnershipTarget(user)}
-                            className="inline-flex items-center gap-1 text-xs text-amber-300 hover:text-amber-100 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-400/30 px-2.5 py-1.5 rounded-full font-bold transition-colors cursor-pointer"
+                            className="inline-flex items-center gap-1 text-xs text-amber-800 hover:text-amber-900 bg-amber-50 hover:bg-amber-100 border border-amber-200 px-2.5 py-1.5 rounded-full font-bold transition-colors cursor-pointer"
                             title="Transfer full organization ownership to this admin"
                           >
-                            <Crown className="w-3 h-3 text-amber-400" />
+                            <Crown className="w-3 h-3 text-amber-600" />
                             <span>Transfer</span>
                           </button>
                         )}
@@ -612,8 +612,8 @@ export const OrgUsersScreen = memo(function OrgUsersScreen() {
                             className={cn(
                               "p-1.5 rounded-full border transition-colors cursor-pointer",
                               user.status === "Suspended"
-                                ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/20"
-                                : "bg-white/5 text-white/50 border-white/10 hover:text-rose-300 hover:border-rose-400/30"
+                                ? "bg-emerald-50 text-emerald-800 border-emerald-200 hover:bg-emerald-100"
+                                : "bg-stone-100 text-stone-500 border-stone-200 hover:text-rose-600 hover:border-rose-200"
                             )}
                             title={
                               user.status === "Suspended"
@@ -633,7 +633,7 @@ export const OrgUsersScreen = memo(function OrgUsersScreen() {
                         {canSuspendOrRemove && (
                           <button
                             onClick={() => handleRemoveUser(user.id)}
-                            className="p-1.5 rounded-full bg-white/5 text-white/40 border border-white/10 hover:text-rose-400 hover:bg-rose-500/10 hover:border-rose-400/30 transition-colors cursor-pointer"
+                            className="p-1.5 rounded-full bg-rose-50 text-rose-600 border border-rose-200 hover:text-rose-700 hover:bg-rose-100 transition-colors cursor-pointer"
                             title="Remove from organization"
                           >
                             <X className="w-3.5 h-3.5" />
@@ -642,7 +642,7 @@ export const OrgUsersScreen = memo(function OrgUsersScreen() {
 
                         {/* Protected Badge for Owner Row */}
                         {isOwnerRow && (
-                          <span className="text-[10px] text-amber-400/80 font-mono px-2 py-1 bg-amber-500/5 rounded-full border border-amber-400/20">
+                          <span className="text-[10px] text-amber-800 font-mono font-bold px-2 py-1 bg-amber-50 rounded-full border border-amber-200">
                             Protected Owner
                           </span>
                         )}
@@ -658,42 +658,42 @@ export const OrgUsersScreen = memo(function OrgUsersScreen() {
 
       {/* TRANSFER OWNERSHIP MODAL */}
       {transferOwnershipTarget && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
-          <div className="relative w-full max-w-md bg-[#0e0f17] border border-amber-400/40 rounded-3xl p-6 sm:p-7 shadow-2xl space-y-5 text-left">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-900/50 backdrop-blur-sm">
+          <div className="relative w-full max-w-md bg-white border border-stone-200 rounded-3xl p-6 sm:p-7 shadow-2xl space-y-5 text-left">
             <button
               onClick={() => setTransferOwnershipTarget(null)}
-              className="absolute top-4 right-4 p-2 rounded-full bg-white/5 hover:bg-white/10 text-white/60 hover:text-white cursor-pointer transition-colors"
+              className="absolute top-4 right-4 p-2 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-500 hover:text-stone-900 cursor-pointer transition-colors"
             >
               <X className="w-4 h-4" />
             </button>
 
             <div className="flex items-center gap-3">
-              <div className="w-11 h-11 rounded-2xl bg-amber-500/10 border border-amber-400/30 flex items-center justify-center text-amber-400">
+              <div className="w-11 h-11 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-600">
                 <Crown className="w-6 h-6" />
               </div>
               <div>
-                <h3 className="text-lg font-bold text-white">Transfer Organization Ownership</h3>
-                <p className="text-xs text-white/60">
+                <h3 className="text-lg font-bold text-stone-900">Transfer Organization Ownership</h3>
+                <p className="text-xs text-stone-500">
                   Careful: This transfers full billing and admin control.
                 </p>
               </div>
             </div>
 
             {transferSuccess ? (
-              <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-2xl p-5 text-center space-y-2">
-                <CheckCircle2 className="w-8 h-8 text-emerald-400 mx-auto" />
-                <div className="text-sm font-bold text-white">Ownership Transferred!</div>
-                <p className="text-xs text-white/60">
+              <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-5 text-center space-y-2">
+                <CheckCircle2 className="w-8 h-8 text-emerald-600 mx-auto" />
+                <div className="text-sm font-bold text-stone-900">Ownership Transferred!</div>
+                <p className="text-xs text-stone-600">
                   {transferOwnershipTarget.name} is now the Organization Owner.
                 </p>
               </div>
             ) : (
               <div className="space-y-4">
-                <div className="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-400/30 flex items-start gap-3">
-                  <AlertTriangle className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
-                  <div className="text-xs text-amber-200/90 leading-relaxed">
+                <div className="p-3.5 rounded-2xl bg-amber-50 border border-amber-200 flex items-start gap-3">
+                  <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+                  <div className="text-xs text-amber-900 leading-relaxed">
                     You are transferring primary ownership to{" "}
-                    <span className="font-bold text-white">
+                    <span className="font-bold text-stone-900">
                       {transferOwnershipTarget.name} ({transferOwnershipTarget.email})
                     </span>
                     . Your role will be converted to <strong>Admin</strong>.
@@ -703,13 +703,13 @@ export const OrgUsersScreen = memo(function OrgUsersScreen() {
                 <div className="flex gap-3 pt-2">
                   <button
                     onClick={() => setTransferOwnershipTarget(null)}
-                    className="flex-1 py-3 rounded-full bg-white/5 hover:bg-white/10 text-white text-xs font-bold transition-colors cursor-pointer"
+                    className="flex-1 py-3 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-800 text-xs font-bold transition-colors cursor-pointer"
                   >
                     Cancel
                   </button>
                   <button
                     onClick={handleConfirmTransferOwnership}
-                    className="flex-1 py-3 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-black text-xs font-extrabold transition-colors shadow-lg cursor-pointer flex items-center justify-center gap-1.5"
+                    className="flex-1 py-3 rounded-full bg-orange-600 hover:bg-orange-700 text-white text-xs font-bold transition-colors shadow-sm cursor-pointer flex items-center justify-center gap-1.5"
                   >
                     <Crown className="w-4 h-4" />
                     <span>Confirm Transfer</span>
@@ -723,49 +723,49 @@ export const OrgUsersScreen = memo(function OrgUsersScreen() {
 
       {/* FULL USER DETAILS MODAL */}
       {selectedUserDetails && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md overflow-y-auto">
-          <div className="relative w-full max-w-2xl bg-[#0e0f17] border border-orange-400/40 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6 text-left max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-900/50 backdrop-blur-sm overflow-y-auto">
+          <div className="relative w-full max-w-2xl bg-white border border-stone-200 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6 text-left max-h-[90vh] overflow-y-auto">
             <button
               onClick={() => setSelectedUserDetails(null)}
-              className="absolute top-5 right-5 p-2 rounded-full bg-white/5 hover:bg-white/10 text-white/60 hover:text-white cursor-pointer transition-colors"
+              className="absolute top-5 right-5 p-2 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-500 hover:text-stone-900 cursor-pointer transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
 
             {/* Profile Header */}
-            <div className="flex items-center gap-4 border-b border-white/10 pb-5">
+            <div className="flex items-center gap-4 border-b border-stone-100 pb-5">
               <img
                 src={selectedUserDetails.avatar}
                 alt={selectedUserDetails.name}
-                className="w-14 h-14 rounded-2xl object-cover border-2 border-orange-400/40 shadow-md shrink-0"
+                className="w-14 h-14 rounded-2xl object-cover border-2 border-stone-200 shadow-sm shrink-0"
               />
               <div>
                 <div className="flex items-center gap-2">
-                  <h3 className="text-xl font-extrabold text-white">
+                  <h3 className="text-xl font-extrabold text-stone-900">
                     {selectedUserDetails.name}
                   </h3>
                   <span
                     className={cn(
-                      "px-2.5 py-0.5 rounded-full text-[10px] font-bold border",
+                      "px-2.5 py-0.5 rounded-full text-[10px] font-bold border font-mono",
                       selectedUserDetails.role === "owner"
-                        ? "bg-amber-500/10 text-amber-300 border-amber-400/30"
+                        ? "bg-amber-50 text-amber-800 border-amber-200"
                         : selectedUserDetails.role === "admin"
-                        ? "bg-blue-500/10 text-blue-300 border-blue-400/30"
-                        : "bg-white/5 text-white/70 border-white/10"
+                        ? "bg-blue-50 text-blue-800 border-blue-200"
+                        : "bg-stone-100 text-stone-700 border-stone-200"
                     )}
                   >
                     {selectedUserDetails.role.toUpperCase()}
                   </span>
                   <span
                     className={cn(
-                      "px-2.5 py-0.5 rounded-full text-[10px] font-bold border",
+                      "px-2.5 py-0.5 rounded-full text-[10px] font-bold border font-mono",
                       selectedUserDetails.trackColor
                     )}
                   >
                     {selectedUserDetails.track}
                   </span>
                 </div>
-                <div className="text-xs text-white/60 font-mono mt-0.5">
+                <div className="text-xs text-stone-500 font-mono mt-0.5">
                   {selectedUserDetails.email}
                 </div>
               </div>
@@ -773,36 +773,36 @@ export const OrgUsersScreen = memo(function OrgUsersScreen() {
 
             {/* AI Score & Skill Breakdown Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-12 gap-4">
-              <div className="sm:col-span-4 bg-gradient-to-br from-orange-500/20 via-[#12131c] to-[#0d0e14] rounded-2xl p-4 border border-orange-400/30 text-center flex flex-col justify-center space-y-1">
-                <span className="text-[10px] font-mono uppercase text-white/50">
+              <div className="sm:col-span-4 bg-gradient-to-br from-orange-50 via-amber-50 to-orange-50/50 rounded-2xl p-4 border border-orange-200 text-center flex flex-col justify-center space-y-1">
+                <span className="text-[10px] font-mono uppercase text-stone-500 font-bold">
                   OVERALL AI SCORE
                 </span>
-                <div className="text-4xl font-extrabold text-white font-mono">
+                <div className="text-4xl font-extrabold text-stone-900 font-mono">
                   {selectedUserDetails.score}
                 </div>
-                <span className="text-[10px] text-emerald-400 font-bold">
+                <span className="text-[10px] text-emerald-700 font-bold">
                   Evaluated via Simulations
                 </span>
               </div>
 
-              <div className="sm:col-span-8 bg-[#12131c] rounded-2xl p-4 border border-white/10 space-y-2.5">
-                <span className="text-xs font-bold text-white flex items-center gap-1.5">
-                  <ShieldCheck className="w-4 h-4 text-orange-400" />
+              <div className="sm:col-span-8 bg-[#FCFAF6] rounded-2xl p-4 border border-stone-200 space-y-2.5">
+                <span className="text-xs font-bold text-stone-900 flex items-center gap-1.5">
+                  <ShieldCheck className="w-4 h-4 text-orange-600" />
                   <span>Evaluated Skill Competencies</span>
                 </span>
 
                 {selectedUserDetails.skillsBreakdown && (
                   <div className="space-y-2 text-xs">
                     <div>
-                      <div className="flex justify-between text-[11px] font-mono text-white/70">
+                      <div className="flex justify-between text-[11px] font-mono text-stone-600 font-medium">
                         <span>Communication Tone</span>
-                        <span className="text-orange-400 font-bold">
+                        <span className="text-orange-600 font-bold">
                           {selectedUserDetails.skillsBreakdown.communication}%
                         </span>
                       </div>
-                      <div className="w-full h-1.5 bg-black/60 rounded-full overflow-hidden">
+                      <div className="w-full h-1.5 bg-stone-200/80 rounded-full overflow-hidden">
                         <div
-                          className="h-full bg-orange-400 rounded-full"
+                          className="h-full bg-orange-500 rounded-full"
                           style={{
                             width: `${selectedUserDetails.skillsBreakdown.communication}%`,
                           }}
@@ -811,15 +811,15 @@ export const OrgUsersScreen = memo(function OrgUsersScreen() {
                     </div>
 
                     <div>
-                      <div className="flex justify-between text-[11px] font-mono text-white/70">
+                      <div className="flex justify-between text-[11px] font-mono text-stone-600 font-medium">
                         <span>De-escalation & Conflict</span>
-                        <span className="text-emerald-400 font-bold">
+                        <span className="text-emerald-700 font-bold">
                           {selectedUserDetails.skillsBreakdown.deEscalation}%
                         </span>
                       </div>
-                      <div className="w-full h-1.5 bg-black/60 rounded-full overflow-hidden">
+                      <div className="w-full h-1.5 bg-stone-200/80 rounded-full overflow-hidden">
                         <div
-                          className="h-full bg-emerald-400 rounded-full"
+                          className="h-full bg-emerald-500 rounded-full"
                           style={{
                             width: `${selectedUserDetails.skillsBreakdown.deEscalation}%`,
                           }}
@@ -828,15 +828,15 @@ export const OrgUsersScreen = memo(function OrgUsersScreen() {
                     </div>
 
                     <div>
-                      <div className="flex justify-between text-[11px] font-mono text-white/70">
+                      <div className="flex justify-between text-[11px] font-mono text-stone-600 font-medium">
                         <span>Technical Triage & Logic</span>
-                        <span className="text-purple-400 font-bold">
+                        <span className="text-purple-700 font-bold">
                           {selectedUserDetails.skillsBreakdown.diagnostics}%
                         </span>
                       </div>
-                      <div className="w-full h-1.5 bg-black/60 rounded-full overflow-hidden">
+                      <div className="w-full h-1.5 bg-stone-200/80 rounded-full overflow-hidden">
                         <div
-                          className="h-full bg-purple-400 rounded-full"
+                          className="h-full bg-purple-500 rounded-full"
                           style={{
                             width: `${selectedUserDetails.skillsBreakdown.diagnostics}%`,
                           }}
@@ -850,8 +850,8 @@ export const OrgUsersScreen = memo(function OrgUsersScreen() {
 
             {/* Completed Classes & Simulations History */}
             <div className="space-y-3">
-              <h4 className="text-xs font-bold text-white flex items-center gap-1.5">
-                <BookOpen className="w-4 h-4 text-orange-400" />
+              <h4 className="text-xs font-bold text-stone-900 flex items-center gap-1.5">
+                <BookOpen className="w-4 h-4 text-orange-600" />
                 <span>Completed Classes & Simulation History</span>
               </h4>
 
@@ -860,21 +860,21 @@ export const OrgUsersScreen = memo(function OrgUsersScreen() {
                   selectedUserDetails.completedClassesHistory.map((item) => (
                     <div
                       key={item.title}
-                      className="p-3.5 rounded-xl bg-black/50 border border-white/10 flex items-center justify-between text-xs"
+                      className="p-3.5 rounded-xl bg-white border border-stone-200 flex items-center justify-between text-xs shadow-xs"
                     >
                       <div>
-                        <div className="font-bold text-white">{item.title}</div>
-                        <div className="text-[10px] text-white/40 font-mono mt-0.5">
+                        <div className="font-bold text-stone-900">{item.title}</div>
+                        <div className="text-[10px] text-stone-500 font-mono mt-0.5">
                           Completed: {item.date}
                         </div>
                       </div>
-                      <span className="font-mono font-bold text-xs text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded border border-emerald-500/20">
+                      <span className="font-mono font-bold text-xs text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded border border-emerald-200">
                         Score: {item.score}
                       </span>
                     </div>
                   ))
                 ) : (
-                  <div className="p-4 text-xs text-white/40 text-center bg-black/40 rounded-xl">
+                  <div className="p-4 text-xs text-stone-500 text-center bg-stone-50 rounded-xl border border-stone-200">
                     No completed simulations yet.
                   </div>
                 )}
@@ -884,7 +884,7 @@ export const OrgUsersScreen = memo(function OrgUsersScreen() {
             <div className="pt-2 flex justify-end">
               <button
                 onClick={() => setSelectedUserDetails(null)}
-                className="px-5 py-2.5 rounded-full bg-white text-black font-extrabold text-xs hover:bg-white/90 transition-colors cursor-pointer"
+                className="px-5 py-2.5 rounded-full bg-stone-900 text-white font-bold text-xs hover:bg-stone-800 transition-colors cursor-pointer shadow-sm"
               >
                 Close Profile Details
               </button>
@@ -895,39 +895,39 @@ export const OrgUsersScreen = memo(function OrgUsersScreen() {
 
       {/* INVITE USER MODAL WITH ROLE SELECTOR */}
       {isInviteModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
-          <div className="relative w-full max-w-md bg-[#0e0f17] border border-orange-400/30 rounded-3xl p-6 sm:p-7 shadow-2xl space-y-5 text-left">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-900/50 backdrop-blur-sm">
+          <div className="relative w-full max-w-md bg-white border border-stone-200 rounded-3xl p-6 sm:p-7 shadow-2xl space-y-5 text-left">
             <button
               onClick={() => setIsInviteModalOpen(false)}
-              className="absolute top-4 right-4 p-2 rounded-full bg-white/5 hover:bg-white/10 text-white/60 hover:text-white cursor-pointer transition-colors"
+              className="absolute top-4 right-4 p-2 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-500 hover:text-stone-900 cursor-pointer transition-colors"
             >
               <X className="w-4 h-4" />
             </button>
 
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-2xl bg-orange-500/10 border border-orange-400/30 flex items-center justify-center text-orange-400">
+              <div className="w-10 h-10 rounded-2xl bg-orange-50 border border-orange-200 flex items-center justify-center text-orange-600">
                 <UserPlus className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="text-lg font-bold text-white">Invite Team Participant</h3>
-                <p className="text-xs text-white/60">
+                <h3 className="text-lg font-bold text-stone-900">Invite Team Participant</h3>
+                <p className="text-xs text-stone-500">
                   Assign role and career track for onboarding.
                 </p>
               </div>
             </div>
 
             {inviteSuccess ? (
-              <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-2xl p-5 text-center space-y-2">
-                <CheckCircle2 className="w-8 h-8 text-emerald-400 mx-auto" />
-                <div className="text-sm font-bold text-white">Invite Sent Successfully!</div>
-                <p className="text-xs text-white/60">
+              <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-5 text-center space-y-2">
+                <CheckCircle2 className="w-8 h-8 text-emerald-600 mx-auto" />
+                <div className="text-sm font-bold text-stone-900">Invite Sent Successfully!</div>
+                <p className="text-xs text-stone-600">
                   {inviteName} has been invited as <strong>{inviteRole.toUpperCase()}</strong> to the {inviteTrack} track.
                 </p>
               </div>
             ) : (
               <form onSubmit={handleInviteSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-xs font-semibold text-white/80 mb-1">
+                  <label className="block text-xs font-semibold text-stone-700 mb-1">
                     Participant Full Name
                   </label>
                   <input
@@ -936,12 +936,12 @@ export const OrgUsersScreen = memo(function OrgUsersScreen() {
                     value={inviteName}
                     onChange={(e) => setInviteName(e.target.value)}
                     placeholder="e.g. Alex Morgan"
-                    className="w-full bg-black/60 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white placeholder-white/40 focus:outline-none focus:border-orange-400"
+                    className="w-full bg-stone-50 border border-stone-200 rounded-xl px-4 py-2.5 text-xs text-stone-900 placeholder-stone-400 focus:bg-white focus:outline-none focus:border-orange-500"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-white/80 mb-1">
+                  <label className="block text-xs font-semibold text-stone-700 mb-1">
                     Work Email Address
                   </label>
                   <input
@@ -950,13 +950,13 @@ export const OrgUsersScreen = memo(function OrgUsersScreen() {
                     value={inviteEmail}
                     onChange={(e) => setInviteEmail(e.target.value)}
                     placeholder="alex@acmecorp.com"
-                    className="w-full bg-black/60 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white placeholder-white/40 focus:outline-none focus:border-orange-400"
+                    className="w-full bg-stone-50 border border-stone-200 rounded-xl px-4 py-2.5 text-xs text-stone-900 placeholder-stone-400 focus:bg-white focus:outline-none focus:border-orange-500"
                   />
                 </div>
 
                 {/* ROLE SELECTOR (ADMIN vs MEMBER) */}
                 <div>
-                  <label className="block text-xs font-semibold text-white/80 mb-1">
+                  <label className="block text-xs font-semibold text-stone-700 mb-1">
                     Assigned Organization Role
                   </label>
                   <div className="grid grid-cols-2 gap-2">
@@ -966,15 +966,15 @@ export const OrgUsersScreen = memo(function OrgUsersScreen() {
                       className={cn(
                         "p-3 rounded-xl border text-left transition-all cursor-pointer",
                         inviteRole === "member"
-                          ? "bg-orange-500/15 border-orange-400 text-white shadow-sm"
-                          : "bg-black/40 border-white/10 text-white/60 hover:border-white/20"
+                          ? "bg-orange-50 border-orange-300 text-orange-950 font-bold shadow-xs"
+                          : "bg-stone-50 border-stone-200 text-stone-600 hover:text-stone-900 hover:bg-stone-100"
                       )}
                     >
-                      <div className="flex items-center gap-1.5 font-bold text-xs text-white">
-                        <User className="w-3.5 h-3.5 text-orange-400" />
+                      <div className="flex items-center gap-1.5 font-bold text-xs text-stone-900">
+                        <User className="w-3.5 h-3.5 text-orange-600" />
                         <span>Member</span>
                       </div>
-                      <p className="text-[10px] text-white/50 mt-1">
+                      <p className="text-[10px] text-stone-500 mt-1 font-normal">
                         Learner who completes assigned simulations & classes.
                       </p>
                     </button>
@@ -985,15 +985,15 @@ export const OrgUsersScreen = memo(function OrgUsersScreen() {
                       className={cn(
                         "p-3 rounded-xl border text-left transition-all cursor-pointer",
                         inviteRole === "admin"
-                          ? "bg-blue-500/15 border-blue-400 text-white shadow-sm"
-                          : "bg-black/40 border-white/10 text-white/60 hover:border-white/20"
+                          ? "bg-blue-50 border-blue-300 text-blue-950 font-bold shadow-xs"
+                          : "bg-stone-50 border-stone-200 text-stone-600 hover:text-stone-900 hover:bg-stone-100"
                       )}
                     >
-                      <div className="flex items-center gap-1.5 font-bold text-xs text-white">
-                        <Shield className="w-3.5 h-3.5 text-blue-400" />
+                      <div className="flex items-center gap-1.5 font-bold text-xs text-stone-900">
+                        <Shield className="w-3.5 h-3.5 text-blue-600" />
                         <span>Admin</span>
                       </div>
-                      <p className="text-[10px] text-white/50 mt-1">
+                      <p className="text-[10px] text-stone-500 mt-1 font-normal">
                         Can invite members, assign simulations, and view progress.
                       </p>
                     </button>
@@ -1001,13 +1001,13 @@ export const OrgUsersScreen = memo(function OrgUsersScreen() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-white/80 mb-1">
+                  <label className="block text-xs font-semibold text-stone-700 mb-1">
                     Assign Primary Career Track
                   </label>
                   <select
                     value={inviteTrack}
                     onChange={(e) => setInviteTrack(e.target.value)}
-                    className="w-full bg-black/60 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-orange-400"
+                    className="w-full bg-stone-50 border border-stone-200 rounded-xl px-4 py-2.5 text-xs text-stone-900 focus:bg-white focus:outline-none focus:border-orange-500 font-medium"
                   >
                     <option value="Customer Service">Customer Service</option>
                     <option value="Tech Support">Tech Support</option>
@@ -1018,7 +1018,7 @@ export const OrgUsersScreen = memo(function OrgUsersScreen() {
 
                 <button
                   type="submit"
-                  className="w-full py-3 rounded-full bg-white text-black hover:bg-white/90 text-xs font-extrabold transition-colors shadow-md cursor-pointer mt-2"
+                  className="w-full py-3 rounded-full bg-orange-600 hover:bg-orange-700 text-white text-xs font-bold transition-colors shadow-sm cursor-pointer mt-2"
                 >
                   Send Invitation Key
                 </button>
