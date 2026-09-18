@@ -5,12 +5,7 @@ import { useAccount } from "@/context/AccountContext";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import {
-  ArrowLeft,
-  ArrowRight,
-  CheckCircle2,
-  Check,
-} from "lucide-react";
+import { ArrowLeft, ArrowRight, CheckCircle2, Check } from "lucide-react";
 import { ImageConstants } from "@/constant/image.index";
 
 interface TrackOption {
@@ -25,25 +20,29 @@ const CAREER_TRACKS: TrackOption[] = [
     id: "customer-service",
     title: "Customer Service",
     image: "/images/specialist.jpg",
-    description: "De-escalation, conflict resolution, and customer empathy dialogues.",
+    description:
+      "De-escalation, conflict resolution, and customer empathy dialogues.",
   },
   {
     id: "tech-support",
     title: "Technical Support",
     image: "/images/teck.jpg",
-    description: "System troubleshooting, outage incident calls, and diagnostic workflows.",
+    description:
+      "System troubleshooting, outage incident calls, and diagnostic workflows.",
   },
   {
     id: "it-specialist",
     title: "IT Specialist",
     image: "/images/step-career.jpg",
-    description: "Security access, cloud incidents, and internal stakeholder requests.",
+    description:
+      "Security access, cloud incidents, and internal stakeholder requests.",
   },
   {
     id: "healthcare-support",
     title: "Healthcare Support",
     image: "/images/healthcare.jpg",
-    description: "Patient inquiries, clinical routing, and physician communication.",
+    description:
+      "Patient inquiries, clinical routing, and physician communication.",
   },
 ];
 
@@ -58,15 +57,17 @@ export default function IndividualOnboardingPage() {
   const router = useRouter();
 
   const [currentStep, setCurrentStep] = useState<1 | 2 | 3>(1);
-  const [selectedTrackId, setSelectedTrackId] = useState<string>("customer-service");
+  const [selectedTrackId, setSelectedTrackId] =
+    useState<string>("customer-service");
   const [name, setName] = useState("Sarah Jenkins");
   const [email, setEmail] = useState("sarah.jenkins@reallearning.ai");
   const [selectedPacing, setSelectedPacing] = useState("regular");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const selectedTrack = useMemo(
-    () => CAREER_TRACKS.find((t) => t.id === selectedTrackId) || CAREER_TRACKS[0],
-    [selectedTrackId]
+    () =>
+      CAREER_TRACKS.find((t) => t.id === selectedTrackId) || CAREER_TRACKS[0],
+    [selectedTrackId],
   );
 
   const handleCompleteSetup = useCallback(() => {
@@ -118,7 +119,6 @@ export default function IndividualOnboardingPage() {
 
       {/* Main Content Area */}
       <div className="max-w-5xl w-full mx-auto my-auto py-8">
-        
         {/* ============================================================ */}
         {/* STEP 1: SELECT CAREER SIMULATION TRACK */}
         {/* ============================================================ */}
@@ -129,7 +129,8 @@ export default function IndividualOnboardingPage() {
                 Select your simulation track
               </h1>
               <p className="text-xs text-stone-500">
-                Choose a track to focus your initial workplace simulation scenarios.
+                Choose a track to focus your initial workplace simulation
+                scenarios.
               </p>
             </div>
 
@@ -156,7 +157,7 @@ export default function IndividualOnboardingPage() {
                         className="object-cover"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-stone-950/70 via-transparent to-transparent" />
-                      
+
                       <div className="absolute top-2.5 right-2.5">
                         {isSelected && (
                           <div className="w-5 h-5 rounded-full bg-orange-500 text-white flex items-center justify-center shadow-md">
@@ -307,12 +308,16 @@ export default function IndividualOnboardingPage() {
                   Ready to Practice!
                 </h2>
                 <p className="text-xs text-stone-500 font-normal">
-                  Your simulation sandbox for <strong className="text-stone-900">{selectedTrack.title}</strong> is active.
+                  Your simulation sandbox for{" "}
+                  <strong className="text-stone-900">
+                    {selectedTrack.title}
+                  </strong>{" "}
+                  is active.
                 </p>
               </div>
 
               <Link
-                href="/demo"
+                href="/"
                 className="w-full py-2.5 rounded-xl bg-orange-600 hover:bg-orange-700 text-white font-medium text-xs transition-colors shadow-[0_2px_10px_-2px_rgba(234,88,12,0.3)] flex items-center justify-center gap-2"
               >
                 <span>Start Interactive Simulation</span>
@@ -321,7 +326,6 @@ export default function IndividualOnboardingPage() {
             </div>
           </div>
         )}
-
       </div>
 
       {/* Footer */}
