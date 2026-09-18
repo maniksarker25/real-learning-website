@@ -384,31 +384,30 @@ export const IndSimulationsScreen = memo(function IndSimulationsScreen({
     setIsSimActive(false);
     setIsFullscreen(false);
   }, []);
-
   return (
-    <div className={cn("space-y-6", isFullscreen && "space-y-0")}>
+    <div className={cn("space-y-5", isFullscreen && "space-y-0")}>
       {/* Simulation Active Context Banner */}
       {!isGeneratingFeedback && !showCompletedFeedback && isSimActive && (
-        <div className="bg-[#12131c]/90 rounded-2xl p-4 border border-white/10 shadow-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div className="bg-white rounded-xl p-4 border border-stone-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
           <div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-400/30 text-xs text-orange-300 font-medium mb-1">
-              <Zap className="w-3.5 h-3.5 text-orange-400" />
-              <span>STEP 3: PRACTICE LAYER (APPLY WHAT YOU LEARNED)</span>
+            <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-amber-100 text-amber-900 border border-amber-200 text-[10px] font-mono font-semibold mb-1">
+              <Zap className="w-3 h-3 text-amber-700" />
+              <span>STEP 3: PRACTICE SIMULATOR</span>
             </div>
-            <h2 className="text-lg font-bold text-white flex items-center gap-2">
+            <h2 className="text-base sm:text-lg font-bold text-stone-900 flex items-center gap-2">
               <span>{selectedScenario.title}</span>
             </h2>
-            <p className="text-xs text-white/60 mt-0.5">
-              Practice scenario for <span className="text-orange-300 font-semibold">{contextValue?.activePath?.title || "Your Career Track"}</span>. Apply your skills in real time.
+            <p className="text-xs text-stone-500 mt-0.5">
+              Practice scenario for <strong className="text-stone-800 font-semibold">{contextValue?.activePath?.title || "Your Career Track"}</strong>.
             </p>
           </div>
 
           <div className="flex items-center gap-2 shrink-0">
             <button
               onClick={() => onNavigateToTab && onNavigateToTab("classes")}
-              className="px-3.5 py-1.5 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold text-white/80 hover:text-white transition-colors cursor-pointer"
+              className="px-3.5 py-1.5 rounded-lg bg-stone-50 hover:bg-stone-100 border border-stone-200 text-xs font-semibold text-stone-700 hover:text-stone-900 transition-colors cursor-pointer"
             >
-              Review Class Theory
+              Review Class
             </button>
           </div>
         </div>
@@ -416,404 +415,199 @@ export const IndSimulationsScreen = memo(function IndSimulationsScreen({
 
       {/* 1. AI GENERATING FEEDBACK LOADING OVERLAY */}
       {isGeneratingFeedback && (
-        <div className="bg-[#12131c]/95 rounded-3xl p-8 sm:p-12 border border-orange-400/40 shadow-2xl text-center space-y-6 max-w-xl mx-auto my-8 animate-in fade-in zoom-in-95">
-          {/* Animated Glowing Radar Icon */}
-          <div className="relative w-20 h-20 mx-auto flex items-center justify-center">
-            <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-orange-500 to-rose-500 blur-xl opacity-50 animate-pulse" />
-            <div className="relative w-16 h-16 rounded-2xl bg-black/80 border border-orange-400/60 flex items-center justify-center text-orange-400 shadow-lg">
-              <Sparkles
-                className="w-8 h-8 animate-spin text-orange-400"
-                style={{ animationDuration: "3s" }}
-              />
-            </div>
+        <div className="bg-white rounded-xl p-8 sm:p-10 border border-amber-200 text-center space-y-5 max-w-lg mx-auto my-6">
+          <div className="w-14 h-14 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-700 mx-auto">
+            <Sparkles className="w-7 h-7 animate-spin" style={{ animationDuration: "3s" }} />
           </div>
 
-          <div className="space-y-2">
-            <h3 className="text-2xl font-extrabold text-white">
-              AI Analyzing Your Simulation...
+          <div className="space-y-1">
+            <h3 className="text-lg font-bold text-stone-900">
+              AI Analyzing Simulation...
             </h3>
-            <p className="text-xs text-white/60 max-w-md mx-auto leading-relaxed">
-              Evaluating dialogue cadence, emotional validation, and rubric
-              competency scores.
+            <p className="text-xs text-stone-500 max-w-sm mx-auto leading-relaxed">
+              Evaluating dialogue cadence, empathy, and coaching rubrics.
             </p>
           </div>
 
-          {/* Dynamic Step-by-Step Generation Stages */}
-          <div className="bg-black/60 rounded-2xl p-4 border border-white/10 space-y-3 text-left max-w-md mx-auto text-xs">
+          {/* Step-by-Step Stages */}
+          <div className="bg-[#FAF8F5] rounded-xl p-4 border border-stone-200 space-y-2.5 text-left max-w-md mx-auto text-xs">
             <div
               className={cn(
-                "flex items-center gap-2.5 transition-colors",
-                feedbackStage >= 1
-                  ? "text-emerald-400 font-bold"
-                  : "text-white/40",
+                "flex items-center gap-2 transition-colors",
+                feedbackStage >= 1 ? "text-emerald-800 font-semibold" : "text-stone-400",
               )}
             >
               {feedbackStage > 1 ? (
-                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                <CheckCircle2 className="w-4 h-4 text-emerald-700 shrink-0" />
               ) : (
-                <Loader2 className="w-4 h-4 animate-spin text-orange-400 shrink-0" />
+                <Loader2 className="w-4 h-4 animate-spin text-amber-600 shrink-0" />
               )}
-              <span>Transcribing conversation turns & tone metrics...</span>
+              <span>Transcribing conversation turns & tone...</span>
             </div>
 
             <div
               className={cn(
-                "flex items-center gap-2.5 transition-colors",
-                feedbackStage >= 2
-                  ? "text-emerald-400 font-bold"
-                  : "text-white/40",
+                "flex items-center gap-2 transition-colors",
+                feedbackStage >= 2 ? "text-emerald-800 font-semibold" : "text-stone-400",
               )}
             >
               {feedbackStage > 2 ? (
-                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                <CheckCircle2 className="w-4 h-4 text-emerald-700 shrink-0" />
               ) : feedbackStage === 2 ? (
-                <Loader2 className="w-4 h-4 animate-spin text-orange-400 shrink-0" />
+                <Loader2 className="w-4 h-4 animate-spin text-amber-600 shrink-0" />
               ) : (
-                <div className="w-4 h-4 rounded-full border border-white/20 shrink-0" />
+                <div className="w-4 h-4 rounded-full border border-stone-300 shrink-0" />
               )}
-              <span>Scoring Empathy, Problem Solving & Tone rubric...</span>
+              <span>Scoring Empathy & Conflict Resolution...</span>
             </div>
 
             <div
               className={cn(
-                "flex items-center gap-2.5 transition-colors",
-                feedbackStage >= 3
-                  ? "text-emerald-400 font-bold"
-                  : "text-white/40",
+                "flex items-center gap-2 transition-colors",
+                feedbackStage >= 3 ? "text-emerald-800 font-semibold" : "text-stone-400",
               )}
             >
               {feedbackStage === 3 ? (
-                <Loader2 className="w-4 h-4 animate-spin text-orange-400 shrink-0" />
+                <Loader2 className="w-4 h-4 animate-spin text-amber-600 shrink-0" />
               ) : (
-                <div className="w-4 h-4 rounded-full border border-white/20 shrink-0" />
+                <div className="w-4 h-4 rounded-full border border-stone-300 shrink-0" />
               )}
-              <span>Synthesizing coaching points & standout highlights...</span>
+              <span>Synthesizing coaching takeaways...</span>
             </div>
           </div>
         </div>
       )}
 
-      {/* 2. COMPLETED SIMULATION RESULT & FULL AI EVALUATION SCREEN */}
+      {/* 2. COMPLETED SIMULATION RESULT SCREEN */}
       {!isGeneratingFeedback && showCompletedFeedback && selectedScenario && (
-        <div className="space-y-6 animate-in fade-in slide-in-from-bottom-3">
+        <div className="space-y-5">
           {/* Header Banner */}
-          <div className="bg-[#12131c]/90 rounded-2xl p-5 border border-white/10 shadow-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="bg-white rounded-xl p-4 sm:p-5 border border-stone-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
             <div>
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-400/30 text-xs text-orange-300 font-medium mb-1.5">
-                <Sparkles className="w-3.5 h-3.5 text-orange-400" />
-                <span>FEEDBACK = UNDERSTAND YOUR PERFORMANCE</span>
+              <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-amber-100 text-amber-900 border border-amber-200 text-[10px] font-mono font-semibold mb-1">
+                <Sparkles className="w-3 h-3 text-amber-700" />
+                <span>SIMULATION FEEDBACK</span>
               </div>
-              <h2 className="text-xl font-bold text-white">
-                Simulation Result & AI Evaluation
+              <h2 className="text-lg font-bold text-stone-900">
+                Simulation Result & Evaluation
               </h2>
-              <p className="text-xs text-white/60">
+              <p className="text-xs text-stone-500 mt-0.5">
                 Scenario: {selectedScenario.title}
               </p>
             </div>
 
-            <div className="flex items-center gap-2.5">
+            <div className="flex items-center gap-2">
               <button
                 onClick={() => handleStartSimulation(selectedScenario)}
-                className="px-4 py-2 rounded-full bg-white text-black hover:bg-white/90 text-xs font-extrabold transition-colors shadow-md cursor-pointer flex items-center gap-2 shrink-0"
+                className="px-3.5 py-1.5 rounded-lg bg-stone-900 hover:bg-stone-800 text-white text-xs font-semibold transition-colors cursor-pointer flex items-center gap-1.5"
               >
                 <RotateCcw className="w-3.5 h-3.5 text-orange-400" />
                 <span>Practice Again</span>
               </button>
               <button
                 onClick={handleCloseFeedbackAndGoHome}
-                className="px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition-colors cursor-pointer"
+                className="px-3.5 py-1.5 rounded-lg bg-stone-50 hover:bg-stone-100 border border-stone-200 text-stone-700 text-xs font-semibold transition-colors cursor-pointer"
               >
-                Back to Simulations
+                Back to List
               </button>
             </div>
           </div>
 
           {/* Overall Score & Skill Scores Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
-            {/* Left: Overall Score Card */}
-            <div className="lg:col-span-4 bg-gradient-to-br from-orange-500/15 via-[#12131c] to-[#0d0e14] rounded-2xl p-6 border border-orange-400/30 shadow-xl text-center flex flex-col justify-center space-y-3">
-              <span className="text-xs font-mono font-bold uppercase tracking-wider text-orange-300">
-                Overall Simulation Score
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+            <div className="lg:col-span-4 bg-gradient-to-br from-amber-50/70 via-white to-orange-50/50 rounded-xl p-5 border border-amber-200/70 text-center flex flex-col justify-center space-y-2">
+              <span className="text-[10px] font-mono font-semibold uppercase text-stone-500">
+                Overall Score
               </span>
-              <div className="text-5xl sm:text-6xl font-extrabold text-white font-mono tracking-tight">
+              <div className="text-4xl sm:text-5xl font-black text-stone-900 font-mono">
                 94%
               </div>
-              <div className="inline-flex items-center justify-center gap-1.5 text-xs text-emerald-400 font-medium bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20 max-w-xs mx-auto">
-                <TrendingUp className="w-3.5 h-3.5" />
-                <span>High Workplace Performance</span>
+              <div className="inline-flex items-center justify-center gap-1 text-[11px] text-emerald-800 font-semibold bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200 mx-auto">
+                <TrendingUp className="w-3 h-3 text-emerald-700" />
+                <span>High Performance</span>
               </div>
             </div>
 
-            {/* Right: Evaluated Skill Radar Scores */}
-            <div className="lg:col-span-8 bg-[#12131c]/90 rounded-2xl p-6 border border-white/10 shadow-xl space-y-4">
-              <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                <ShieldCheck className="w-4 h-4 text-orange-400" />
-                <span>Skill Level Evaluation Breakdown</span>
+            <div className="lg:col-span-8 bg-white rounded-xl p-5 border border-stone-200 space-y-3">
+              <h3 className="text-xs sm:text-sm font-bold text-stone-900 flex items-center gap-1.5">
+                <ShieldCheck className="w-4 h-4 text-amber-600" />
+                <span>Skill Level Breakdown</span>
               </h3>
 
-              <div className="space-y-3">
+              <div className="space-y-2.5">
                 {[
-                  {
-                    name: "Communication & Clarity",
-                    score: 95,
-                    color: "bg-orange-500",
-                  },
-                  {
-                    name: "Empathy & Tone",
-                    score: 96,
-                    color: "bg-emerald-500",
-                  },
+                  { name: "Communication & Clarity", score: 95, color: "bg-orange-500" },
+                  { name: "Empathy & Tone", score: 96, color: "bg-emerald-500" },
                   { name: "Active Listening", score: 93, color: "bg-rose-500" },
-                  {
-                    name: "Problem Solving & Logic",
-                    score: 92,
-                    color: "bg-purple-500",
-                  },
-                  {
-                    name: "Conflict Resolution",
-                    score: 94,
-                    color: "bg-amber-500",
-                  },
+                  { name: "Problem Solving", score: 92, color: "bg-purple-500" },
+                  { name: "Conflict Resolution", score: 94, color: "bg-amber-500" },
                 ].map((sk) => (
                   <div key={sk.name} className="space-y-1">
-                    <div className="flex justify-between text-xs">
-                      <span className="font-bold text-white">{sk.name}</span>
-                      <span className="font-mono text-orange-400 font-bold">
-                        {sk.score}%
-                      </span>
+                    <div className="flex justify-between text-xs font-medium">
+                      <span className="text-stone-800">{sk.name}</span>
+                      <span className="font-mono text-stone-900 font-bold">{sk.score}%</span>
                     </div>
-                    <div className="w-full h-1.5 bg-black/60 rounded-full overflow-hidden border border-white/10">
-                      <div
-                        className={cn("h-full rounded-full", sk.color)}
-                        style={{ width: `${sk.score}%` }}
-                      />
+                    <div className="w-full h-1.5 bg-stone-100 rounded-full overflow-hidden border border-stone-200">
+                      <div className={cn("h-full rounded-full", sk.color)} style={{ width: `${sk.score}%` }} />
                     </div>
                   </div>
                 ))}
               </div>
             </div>
           </div>
-
-          {/* What You Did Well vs What to Improve */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            {/* Positive Highlights */}
-            <div className="bg-[#12131c]/90 rounded-2xl p-5 border border-emerald-500/30 shadow-lg space-y-3">
-              <h3 className="text-sm font-bold text-emerald-400 flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4" />
-                <span>What You Did Well</span>
-              </h3>
-              <ul className="space-y-2.5">
-                <li className="flex items-start gap-2 text-xs text-white/80 leading-relaxed">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0 mt-1.5" />
-                  <span>
-                    Immediate Emotional Validation: Validated the
-                    customer&apos;s frustration within the first 10 seconds
-                    before discussing company policy.
-                  </span>
-                </li>
-                <li className="flex items-start gap-2 text-xs text-white/80 leading-relaxed">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0 mt-1.5" />
-                  <span>
-                    Positive Framing: Used &quot;What I can do right
-                    now...&quot; instead of defensive language.
-                  </span>
-                </li>
-                <li className="flex items-start gap-2 text-xs text-white/80 leading-relaxed">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0 mt-1.5" />
-                  <span>
-                    Explicit Action Agreement: Set a clear 2 PM email update
-                    follow-up timestamp.
-                  </span>
-                </li>
-              </ul>
-            </div>
-
-            {/* Improvement Points */}
-            <div className="bg-[#12131c]/90 rounded-2xl p-5 border border-orange-400/30 shadow-lg space-y-3">
-              <h3 className="text-sm font-bold text-orange-400 flex items-center gap-2">
-                <AlertCircle className="w-4 h-4" />
-                <span>What You Could Improve</span>
-              </h3>
-              <ul className="space-y-2.5">
-                <li className="flex items-start gap-2 text-xs text-white/80 leading-relaxed">
-                  <span className="w-1.5 h-1.5 rounded-full bg-orange-400 shrink-0 mt-1.5" />
-                  <span>
-                    Speed of Agreement: State the specific resolution credit
-                    option ~30 seconds earlier in the interaction.
-                  </span>
-                </li>
-                <li className="flex items-start gap-2 text-xs text-white/80 leading-relaxed">
-                  <span className="w-1.5 h-1.5 rounded-full bg-orange-400 shrink-0 mt-1.5" />
-                  <span>
-                    Summarizing Facts: Confirm order invoice # before confirming
-                    the refund credit amount.
-                  </span>
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          {/* Important Dialogue Moments Timeline */}
-          <div className="bg-[#12131c]/90 rounded-2xl p-5 border border-white/10 shadow-lg space-y-4">
-            <h3 className="text-sm font-bold text-white flex items-center gap-2">
-              <MessageSquare className="w-4 h-4 text-orange-400" />
-              <span>Key Conversation Moments & AI Analysis</span>
-            </h3>
-
-            <div className="space-y-3">
-              <div className="p-4 rounded-xl border text-xs space-y-1 leading-relaxed bg-emerald-500/10 border-emerald-500/30 text-white/90">
-                <div className="flex items-center justify-between font-mono text-[10px]">
-                  <span className="font-bold text-orange-300">
-                    Timestamp 00:15
-                  </span>
-                  <span className="text-emerald-400 font-bold">
-                    Effective Response
-                  </span>
-                </div>
-                <p>
-                  Customer expressed anger over delay. You responded with
-                  empathy and validated their frustration immediately.
-                </p>
-              </div>
-
-              <div className="p-4 rounded-xl border text-xs space-y-1 leading-relaxed bg-emerald-500/10 border-emerald-500/30 text-white/90">
-                <div className="flex items-center justify-between font-mono text-[10px]">
-                  <span className="font-bold text-orange-300">
-                    Timestamp 01:20
-                  </span>
-                  <span className="text-emerald-400 font-bold">
-                    Effective Response
-                  </span>
-                </div>
-                <p>
-                  Customer demanded immediate resolution. You framed available
-                  credit options positively without confrontation.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Recommended Next Actions to Improve */}
-          <div className="bg-[#12131c]/90 rounded-2xl p-5 border border-white/10 shadow-lg space-y-4">
-            <h3 className="text-sm font-bold text-white flex items-center gap-2">
-              <BookOpen className="w-4 h-4 text-orange-400" />
-              <span>Recommended Next Actions to Improve</span>
-            </h3>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div className="p-4 rounded-xl bg-black/50 border border-white/10 flex items-center justify-between gap-3 text-xs">
-                <div>
-                  <span className="text-[10px] font-mono text-orange-400 uppercase font-bold">
-                    Recommended Class Lesson
-                  </span>
-                  <div className="font-bold text-white mt-0.5">
-                    Lesson 4: Establishing Control & Action Agreements
-                  </div>
-                </div>
-                <a
-                  href="/user-dashboard/classes"
-                  className="px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white font-bold text-xs transition-colors cursor-pointer shrink-0"
-                >
-                  Review Lesson
-                </a>
-              </div>
-
-              <div className="p-4 rounded-xl bg-black/50 border border-white/10 flex items-center justify-between gap-3 text-xs">
-                <div>
-                  <span className="text-[10px] font-mono text-rose-400 uppercase font-bold">
-                    Next Recommended Simulation
-                  </span>
-                  <div className="font-bold text-white mt-0.5">
-                    L1 Network Diagnostics Under High SLA Pressure
-                  </div>
-                </div>
-                <button
-                  onClick={() => handleStartSimulation(scenarios[1])}
-                  className="px-3.5 py-1.5 rounded-full bg-gradient-to-r from-orange-500 to-rose-500 text-white font-bold text-xs transition-opacity hover:opacity-90 cursor-pointer shrink-0"
-                >
-                  Start Sim
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Bottom Actions */}
-          <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-white/10">
-            <button
-              onClick={() => handleStartSimulation(selectedScenario)}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-orange-500 to-rose-500 text-white font-extrabold text-xs hover:opacity-90 transition-opacity cursor-pointer shadow-md"
-            >
-              <RotateCcw className="w-3.5 h-3.5" />
-              <span>Practice Scenario Again</span>
-            </button>
-
-            <button
-              onClick={() => {
-                if (onNavigateToTab) {
-                  onNavigateToTab("feedback");
-                } else {
-                  handleCloseFeedbackAndGoHome();
-                }
-              }}
-              className="w-full sm:w-auto px-6 py-2.5 rounded-full bg-white text-black font-extrabold text-xs hover:bg-white/90 transition-colors cursor-pointer shadow-md flex items-center justify-center gap-2"
-            >
-              <span>View Demonstrated Skills & Next Steps</span>
-              <ArrowRight className="w-4 h-4 text-orange-500" />
-            </button>
-          </div>
         </div>
       )}
 
-      {/* 3. ACTIVE SIMULATION INTERACTIVE PLAYER (FULL SCREEN WIDTH & HEIGHT OPTIMISTIC CHAT) */}
+      {/* 3. ACTIVE SIMULATION INTERACTIVE PLAYER */}
       {!isGeneratingFeedback &&
         !showCompletedFeedback &&
         isSimActive &&
         selectedScenario && (
           <div
             className={cn(
-              "transition-all duration-300 flex flex-col bg-[#11121a]/95 border border-orange-400/30 shadow-2xl backdrop-blur-xl overflow-hidden",
+              "transition-all duration-200 flex flex-col bg-white border border-stone-200 shadow-sm overflow-hidden",
               isFullscreen
-                ? "fixed inset-0 z-50 w-screen h-screen rounded-none p-0 border-none bg-[#0a0b12]"
-                : "w-full h-[calc(100vh-8.5rem)] min-h-[560px] rounded-2xl",
+                ? "fixed inset-0 z-50 w-screen h-screen rounded-none p-0 border-none bg-white"
+                : "w-full h-[calc(100vh-9rem)] min-h-[520px] rounded-xl",
             )}
           >
             {/* Top Bar Header */}
-            <div className="px-4 py-3 bg-[#0c0d15]/95 border-b border-white/10 flex flex-wrap items-center justify-between gap-3 shrink-0">
+            <div className="px-4 py-3 bg-[#FCFAF6] border-b border-stone-200 flex flex-wrap items-center justify-between gap-3 shrink-0">
               {/* Left Info */}
               <div className="flex items-center gap-3 min-w-0">
                 <div className="relative shrink-0">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-500 to-rose-500 flex items-center justify-center text-white font-black text-xs shadow-md border border-orange-400/40">
-                    <Bot className="w-5 h-5 text-white" />
+                  <div className="w-9 h-9 rounded-full bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center text-white font-bold text-xs shadow-xs">
+                    <Bot className="w-4 h-4 text-white" />
                   </div>
-                  <span className="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-emerald-500 border-2 border-[#0c0d15]" />
+                  <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-white" />
                 </div>
                 <div className="min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <h3 className="text-sm font-bold text-white truncate">
+                    <h3 className="text-xs sm:text-sm font-bold text-stone-900 truncate">
                       {selectedScenario.characterName}
                     </h3>
-                    <span className="text-[10px] font-mono font-semibold text-orange-300 bg-orange-500/15 px-2.5 py-0.5 rounded-full border border-orange-400/30 shrink-0">
+                    <span className="text-[10px] font-mono font-semibold text-amber-900 bg-amber-100 px-2 py-0.5 rounded border border-amber-200 shrink-0">
                       {selectedScenario.characterRole}
                     </span>
-                    <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20 shrink-0">
+                    <span className="text-[10px] font-mono text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 shrink-0">
                       {selectedScenario.difficulty}
                     </span>
                   </div>
-                  <p className="text-[11px] text-white/60 truncate mt-0.5">
+                  <p className="text-[11px] text-stone-500 truncate mt-0.5">
                     {selectedScenario.title}
                   </p>
                 </div>
               </div>
 
               {/* Center Metrics & Timer */}
-              <div className="hidden md:flex items-center gap-4 text-xs font-mono text-white/70 bg-black/40 px-3.5 py-1.5 rounded-full border border-white/10">
-                <div className="flex items-center gap-1.5 text-orange-300 font-bold">
-                  <Clock className="w-3.5 h-3.5 text-orange-400 animate-pulse" />
+              <div className="hidden md:flex items-center gap-3 text-xs font-mono text-stone-600 bg-stone-100/80 px-3 py-1 rounded-full border border-stone-200">
+                <div className="flex items-center gap-1.5 text-stone-800 font-bold">
+                  <Clock className="w-3.5 h-3.5 text-orange-600" />
                   <span>{formattedTime}</span>
                 </div>
-                <span className="text-white/20">|</span>
+                <span className="text-stone-300">|</span>
                 <div className="flex items-center gap-1.5">
-                  <MessageSquare className="w-3.5 h-3.5 text-rose-400" />
+                  <MessageSquare className="w-3.5 h-3.5 text-stone-500" />
                   <span>
                     {messages.filter((m) => m.sender === "user").length} Turns
                   </span>
@@ -821,107 +615,96 @@ export const IndSimulationsScreen = memo(function IndSimulationsScreen({
               </div>
 
               {/* Right Action Tools */}
-              <div className="flex items-center gap-2 shrink-0">
+              <div className="flex items-center gap-1.5 shrink-0">
                 <button
                   onClick={() => setIsFullscreen((prev) => !prev)}
-                  className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-white/80 hover:text-white border border-white/10 transition-colors cursor-pointer flex items-center gap-1.5 text-xs"
-                  title={isFullscreen ? "Exit Fullscreen" : "Full Screen Mode"}
+                  className="p-1.5 rounded-lg bg-stone-100 hover:bg-stone-200 text-stone-700 hover:text-stone-950 border border-stone-200 transition-colors cursor-pointer text-xs"
+                  title={isFullscreen ? "Exit Fullscreen" : "Full Screen"}
                 >
                   {isFullscreen ? (
-                    <>
-                      <Minimize2 className="w-4 h-4 text-orange-400" />
-                      <span className="hidden sm:inline font-medium">
-                        Exit Fullscreen
-                      </span>
-                    </>
+                    <Minimize2 className="w-3.5 h-3.5" />
                   ) : (
-                    <>
-                      <Maximize2 className="w-4 h-4 text-orange-400" />
-                      <span className="hidden sm:inline font-medium">
-                        Full Screen
-                      </span>
-                    </>
+                    <Maximize2 className="w-3.5 h-3.5" />
                   )}
                 </button>
 
                 <button
                   onClick={() => handleStartSimulation(selectedScenario)}
-                  className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-white/80 hover:text-white border border-white/10 transition-colors cursor-pointer text-xs flex items-center gap-1.5"
-                  title="Restart Simulation"
+                  className="p-1.5 rounded-lg bg-stone-100 hover:bg-stone-200 text-stone-700 hover:text-stone-950 border border-stone-200 transition-colors cursor-pointer text-xs"
+                  title="Reset"
                 >
-                  <RefreshCw className="w-4 h-4 text-rose-400" />
-                  <span className="hidden sm:inline font-medium">Reset</span>
+                  <RefreshCw className="w-3.5 h-3.5" />
                 </button>
 
                 <button
                   onClick={() => setIsSimActive(false)}
-                  className="p-2 rounded-xl bg-white/5 hover:bg-rose-500/20 text-white/70 hover:text-rose-300 border border-white/10 hover:border-rose-500/30 transition-colors cursor-pointer text-xs flex items-center gap-1"
-                  title="Exit Simulation"
+                  className="p-1.5 rounded-lg bg-stone-100 hover:bg-rose-50 text-stone-700 hover:text-rose-700 border border-stone-200 hover:border-rose-200 transition-colors cursor-pointer text-xs"
+                  title="Close"
                 >
-                  <X className="w-4 h-4" />
+                  <X className="w-3.5 h-3.5" />
                 </button>
               </div>
             </div>
 
             {/* Evaluated Skills Bar */}
-            <div className="px-4 py-2 bg-black/60 border-b border-white/10 flex items-center gap-2 overflow-x-auto text-[11px] shrink-0 no-scrollbar">
-              <span className="text-white/40 font-mono shrink-0">
-                Target Skills:
+            <div className="px-4 py-1.5 bg-[#FAF8F5] border-b border-stone-200 flex items-center gap-2 overflow-x-auto text-[10px] shrink-0 no-scrollbar">
+              <span className="text-stone-500 font-mono font-semibold shrink-0">
+                Skills Tested:
               </span>
               {selectedScenario.expectedSkills.map((sk) => (
                 <span
                   key={sk}
-                  className="px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-orange-300 font-mono whitespace-nowrap shrink-0"
+                  className="px-2 py-0.5 rounded bg-white border border-stone-200 text-stone-700 font-mono whitespace-nowrap shrink-0"
                 >
                   {sk}
                 </span>
               ))}
             </div>
 
-            {/* Main Chat Messages Stream Container (Flex 1 to take all available space) */}
-            <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 bg-gradient-to-b from-[#0e0f17] to-[#090a0f] min-h-0">
+            {/* Main Chat Messages Stream Container */}
+            <div className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-3 bg-[#FBF9F5] min-h-0">
               {messages.map((m) => (
                 <div
                   key={m.id}
                   className={cn(
-                    "flex items-start gap-3 max-w-[90%] sm:max-w-[80%] md:max-w-[70%] text-xs sm:text-sm animate-in fade-in slide-in-from-bottom-2 duration-200",
+                    "flex items-start gap-2.5 max-w-[85%] sm:max-w-[75%] md:max-w-[65%] text-xs sm:text-sm",
                     m.sender === "user" ? "ml-auto flex-row-reverse" : "",
                   )}
                 >
                   {/* Avatar */}
                   <div
                     className={cn(
-                      "w-8 h-8 rounded-full flex items-center justify-center font-extrabold text-[11px] shrink-0 border shadow-md",
+                      "w-7 h-7 rounded-full flex items-center justify-center font-bold text-[10px] shrink-0 border",
                       m.sender === "user"
-                        ? "bg-gradient-to-tr from-orange-500 to-rose-500 text-white border-orange-400/40"
-                        : "bg-[#181a28] text-orange-300 border-white/10",
+                        ? "bg-stone-900 text-white border-stone-900"
+                        : "bg-white text-stone-700 border-stone-200",
                     )}
                   >
                     {m.sender === "user" ? (
-                      <User className="w-4 h-4" />
+                      <User className="w-3.5 h-3.5" />
                     ) : (
-                      <Bot className="w-4 h-4 text-orange-400" />
+                      <Bot className="w-3.5 h-3.5 text-amber-700" />
                     )}
                   </div>
 
                   {/* Message Bubble Body */}
                   <div
                     className={cn(
-                      "p-4 rounded-2xl leading-relaxed shadow-lg font-sans space-y-1.5",
+                      "p-3.5 rounded-xl leading-relaxed font-sans space-y-1",
                       m.sender === "user"
-                        ? "bg-gradient-to-r from-orange-500/20 via-rose-500/20 to-orange-600/20 text-white border border-orange-400/40 rounded-tr-xs"
-                        : "bg-[#161826] text-slate-100 border border-white/10 rounded-tl-xs",
+                        ? "bg-stone-900 text-white rounded-tr-xs"
+                        : "bg-white text-stone-900 border border-stone-200 rounded-tl-xs shadow-xs",
                     )}
                   >
-                    <div className="flex items-center justify-between gap-3 text-[10px] text-white/50 font-mono">
-                      <span className="font-bold text-white/80">
+                    <div className="flex items-center justify-between gap-3 text-[10px] opacity-60 font-mono">
+                      <span className="font-semibold">
                         {m.sender === "user"
-                          ? "You (Learner)"
+                          ? "You"
                           : selectedScenario.characterName}
                       </span>
                       <span>{m.timestamp}</span>
                     </div>
-                    <p className="text-xs sm:text-sm text-slate-100 whitespace-pre-wrap">
+                    <p className="text-xs sm:text-sm whitespace-pre-wrap">
                       {m.text}
                     </p>
                   </div>
@@ -930,22 +713,22 @@ export const IndSimulationsScreen = memo(function IndSimulationsScreen({
 
               {/* Optimistic AI Typing Indicator */}
               {isAiTyping && (
-                <div className="flex items-start gap-3 max-w-md text-xs animate-in fade-in slide-in-from-bottom-2">
-                  <div className="w-8 h-8 rounded-full bg-[#181a28] border border-orange-400/40 flex items-center justify-center text-orange-400 shrink-0 shadow-md">
-                    <Bot className="w-4 h-4" />
+                <div className="flex items-start gap-2.5 max-w-md text-xs">
+                  <div className="w-7 h-7 rounded-full bg-white border border-stone-200 flex items-center justify-center text-amber-700 shrink-0">
+                    <Bot className="w-3.5 h-3.5" />
                   </div>
-                  <div className="px-4 py-3 rounded-2xl rounded-tl-xs bg-[#161826] border border-orange-400/30 text-white/70 flex items-center gap-2">
-                    <span className="text-xs text-orange-300 font-medium">
+                  <div className="px-3.5 py-2.5 rounded-xl rounded-tl-xs bg-white border border-stone-200 text-stone-600 flex items-center gap-2 shadow-xs">
+                    <span className="text-xs text-stone-700 font-medium">
                       {selectedScenario.characterName} is replying
                     </span>
                     <div className="flex items-center gap-1">
-                      <span className="w-1.5 h-1.5 rounded-full bg-orange-400 animate-bounce" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-stone-400 animate-bounce" />
                       <span
-                        className="w-1.5 h-1.5 rounded-full bg-orange-400 animate-bounce"
+                        className="w-1.5 h-1.5 rounded-full bg-stone-400 animate-bounce"
                         style={{ animationDelay: "0.15s" }}
                       />
                       <span
-                        className="w-1.5 h-1.5 rounded-full bg-orange-400 animate-bounce"
+                        className="w-1.5 h-1.5 rounded-full bg-stone-400 animate-bounce"
                         style={{ animationDelay: "0.3s" }}
                       />
                     </div>
@@ -959,10 +742,10 @@ export const IndSimulationsScreen = memo(function IndSimulationsScreen({
 
             {/* Quick Response Helper Chips Bar */}
             {quickPromptsMap[selectedScenario.id] && (
-              <div className="px-4 py-2 bg-[#0d0e17] border-t border-white/10 flex items-center gap-2 overflow-x-auto shrink-0 no-scrollbar">
-                <span className="text-[10px] font-mono text-orange-400 uppercase font-bold shrink-0 flex items-center gap-1">
-                  <Sparkles className="w-3 h-3 text-orange-400" />
-                  <span>Quick Responses:</span>
+              <div className="px-4 py-2 bg-[#FAF8F5] border-t border-stone-200 flex items-center gap-2 overflow-x-auto shrink-0 no-scrollbar">
+                <span className="text-[10px] font-mono text-stone-500 uppercase font-bold shrink-0 flex items-center gap-1">
+                  <Sparkles className="w-3 h-3 text-amber-600" />
+                  <span>Suggestions:</span>
                 </span>
                 {quickPromptsMap[selectedScenario.id].map((prompt, idx) => (
                   <button
@@ -970,17 +753,17 @@ export const IndSimulationsScreen = memo(function IndSimulationsScreen({
                     type="button"
                     onClick={() => handleSendMessage(prompt)}
                     disabled={isAiTyping}
-                    className="px-3 py-1 rounded-full bg-white/5 hover:bg-orange-500/20 text-white/80 hover:text-white border border-white/10 hover:border-orange-400/40 text-xs transition-all cursor-pointer whitespace-nowrap shrink-0 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5"
+                    className="px-2.5 py-1 rounded-full bg-white hover:bg-stone-50 text-stone-700 hover:text-stone-950 border border-stone-200 text-xs transition-colors cursor-pointer whitespace-nowrap shrink-0 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1"
                   >
-                    <span className="truncate max-w-[260px]">{prompt}</span>
-                    <ChevronRight className="w-3 h-3 text-orange-400" />
+                    <span className="truncate max-w-[240px]">{prompt}</span>
+                    <ChevronRight className="w-3 h-3 text-stone-400" />
                   </button>
                 ))}
               </div>
             )}
 
             {/* Bottom Form & Action Bar */}
-            <div className="p-3 sm:p-4 bg-[#0a0b12] border-t border-white/10 space-y-2.5 shrink-0">
+            <div className="p-3 bg-white border-t border-stone-200 space-y-2 shrink-0">
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
@@ -993,28 +776,28 @@ export const IndSimulationsScreen = memo(function IndSimulationsScreen({
                     type="text"
                     value={inputText}
                     onChange={(e) => setInputText(e.target.value)}
-                    placeholder={`Type your response to ${selectedScenario.characterName}...`}
+                    placeholder={`Reply to ${selectedScenario.characterName}...`}
                     disabled={isAiTyping}
-                    className="w-full bg-black/80 border border-white/15 rounded-full px-5 py-3 pr-12 text-xs sm:text-sm text-white placeholder-white/40 focus:outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-400/50 transition-all disabled:opacity-60"
+                    className="w-full bg-stone-50 border border-stone-200 rounded-lg px-3.5 py-2 pr-10 text-xs sm:text-sm text-stone-900 placeholder-stone-400 focus:outline-none focus:border-amber-500 focus:bg-white transition-colors disabled:opacity-60"
                   />
-                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] font-mono text-white/30 hidden sm:inline-block">
-                    Press Enter ↵
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-mono text-stone-400 hidden sm:inline-block">
+                    ↵
                   </span>
                 </div>
 
                 <button
                   type="submit"
                   disabled={!inputText.trim() || isAiTyping}
-                  className="px-5 py-3 rounded-full bg-gradient-to-r from-orange-500 to-rose-500 hover:opacity-95 text-white text-xs sm:text-sm font-extrabold transition-all shadow-lg cursor-pointer flex items-center gap-2 shrink-0 disabled:opacity-40 disabled:cursor-not-allowed"
+                  className="px-4 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 text-white text-xs sm:text-sm font-semibold transition-colors cursor-pointer flex items-center gap-1.5 shrink-0 disabled:opacity-40 disabled:cursor-not-allowed"
                 >
                   <span>Send</span>
-                  <Send className="w-4 h-4" />
+                  <Send className="w-3.5 h-3.5" />
                 </button>
               </form>
 
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-1 text-xs">
-                <div className="flex items-center gap-2 text-white/50 text-[11px] truncate">
-                  <span className="font-mono text-orange-400 font-bold shrink-0">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-0.5 text-xs">
+                <div className="flex items-center gap-1.5 text-stone-500 text-[11px] truncate">
+                  <span className="font-mono font-semibold text-stone-700 shrink-0">
                     Goal:
                   </span>
                   <span className="truncate">{selectedScenario.objective}</span>
@@ -1023,33 +806,33 @@ export const IndSimulationsScreen = memo(function IndSimulationsScreen({
                 <button
                   type="button"
                   onClick={handleFinishAndGetFeedback}
-                  className="px-4 py-2 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:opacity-95 text-black font-extrabold text-xs transition-all shadow-lg cursor-pointer flex items-center justify-center gap-2 shrink-0 self-end sm:self-auto"
+                  className="px-3 py-1.5 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white font-semibold text-xs transition-colors cursor-pointer flex items-center justify-center gap-1.5 shrink-0 self-end sm:self-auto"
                 >
                   <Sparkles className="w-3.5 h-3.5 fill-current" />
-                  <span>Finish Simulation & Get AI Feedback</span>
+                  <span>Finish & Get Feedback</span>
                 </button>
               </div>
             </div>
           </div>
         )}
 
-      {/* Fallback state when not in live sim: Resume active scenario */}
+      {/* Fallback state when not in live sim */}
       {!isGeneratingFeedback && !showCompletedFeedback && !isSimActive && (
-        <div className="bg-[#12131c]/90 rounded-2xl p-8 border border-orange-400/30 shadow-xl text-center space-y-4 max-w-lg mx-auto">
-          <div className="w-12 h-12 rounded-2xl bg-orange-500/20 border border-orange-400/40 flex items-center justify-center text-orange-400 mx-auto">
+        <div className="bg-white rounded-xl p-8 border border-stone-200 text-center space-y-3 max-w-md mx-auto">
+          <div className="w-12 h-12 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-700 mx-auto">
             <Zap className="w-6 h-6" />
           </div>
           <div className="space-y-1">
-            <h3 className="text-lg font-bold text-white">Practice Simulation Ready</h3>
-            <p className="text-xs text-white/60 max-w-sm mx-auto">
-              Ready to practice for <span className="text-orange-300 font-semibold">{selectedScenario.title}</span>?
+            <h3 className="text-base font-bold text-stone-900">Practice Simulation Ready</h3>
+            <p className="text-xs text-stone-500 max-w-xs mx-auto">
+              Ready to start <strong className="text-stone-800 font-semibold">{selectedScenario.title}</strong>?
             </p>
           </div>
           <button
             onClick={() => handleStartSimulation(selectedScenario)}
-            className="px-6 py-2.5 rounded-full bg-gradient-to-r from-orange-500 to-rose-500 hover:opacity-95 text-white text-xs font-bold transition-all shadow-md cursor-pointer"
+            className="px-4 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 text-white text-xs font-semibold transition-colors cursor-pointer"
           >
-            Start Live Simulation
+            Start Simulation
           </button>
         </div>
       )}

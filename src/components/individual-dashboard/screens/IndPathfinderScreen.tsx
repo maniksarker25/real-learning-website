@@ -21,6 +21,13 @@ import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { useLearningLoop, DEFAULT_CAREER_PATHS } from "@/context/LearningLoopContext";
 
+import {
+  VictorianCornerFlourish,
+  EngravedSeal,
+  LaurelEmblem,
+  StarburstRosette,
+} from "@/components/ui/DecorativeAssets";
+
 interface IndPathfinderScreenProps {
   onSelectPath?: (path: CareerPath) => void;
   onStartClass?: (classId: string) => void;
@@ -76,79 +83,95 @@ export const IndPathfinderScreen = memo(function IndPathfinderScreen({
   );
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       {/* Top GPS Header Banner */}
-      <div className="bg-[#12131c]/90 rounded-2xl p-6 border border-white/10 shadow-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white">
-            Discover Your Career Pathway
-          </h1>
-          <p className="text-xs text-white/70 mt-1 max-w-xl">
-            RL continuous GPS evaluates where you are today, identifies optimal growth pathways, and connects your learning directly to practical practice.
-          </p>
-        </div>
+      <div className="bg-white rounded-xl p-4 sm:p-5 border border-stone-200 relative overflow-hidden">
+        <VictorianCornerFlourish
+          position="top-right"
+          className="absolute top-2 right-2 text-stone-300/60 hidden sm:block"
+        />
 
-        <button
-          onClick={() => handleLaunchPath()}
-          disabled={isStarting}
-          className="px-6 py-3 rounded-full bg-gradient-to-r from-orange-500 to-rose-500 hover:from-orange-600 hover:to-rose-600 text-white text-xs font-black transition-all shadow-lg hover:shadow-orange-500/20 cursor-pointer flex items-center gap-2 shrink-0 disabled:opacity-80"
-        >
-          <span>{isStarting ? "Starting Pathway..." : "Start Selected Pathway"}</span>
-          {isStarting ? (
-            <Loader2 className="w-4 h-4 text-white animate-spin" />
-          ) : (
-            <ArrowRight className="w-4 h-4" />
-          )}
-        </button>
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 relative z-10">
+          <div className="flex items-center gap-3.5">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 border border-amber-400 flex items-center justify-center text-white shrink-0">
+              <Compass className="w-5 h-5" />
+            </div>
+            <div>
+              <h1 className="text-lg sm:text-xl font-bold text-stone-900 tracking-tight">
+                Career Pathfinder
+              </h1>
+              <p className="text-xs text-stone-500 mt-0.5">
+                AI matches your skills to target roles with structured classes and practice simulations.
+              </p>
+            </div>
+          </div>
+
+          <button
+            onClick={() => handleLaunchPath()}
+            disabled={isStarting}
+            className="px-4 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 text-white text-xs font-semibold transition-colors cursor-pointer flex items-center gap-1.5 shrink-0 disabled:opacity-80"
+          >
+            <span>{isStarting ? "Starting..." : "Start Pathway"}</span>
+            {isStarting ? (
+              <Loader2 className="w-3.5 h-3.5 text-white animate-spin" />
+            ) : (
+              <ArrowRight className="w-3.5 h-3.5 text-orange-400" />
+            )}
+          </button>
+        </div>
       </div>
 
       {/* Core Question 1: WHERE AM I? */}
-      <div className="bg-[#12131c]/90 rounded-2xl p-6 border border-white/10 shadow-xl space-y-4">
-        <div className="flex items-center justify-between border-b border-white/10 pb-3">
+      <div className="bg-white rounded-xl p-4 sm:p-5 border border-stone-200 space-y-3.5 relative overflow-hidden">
+        <div className="flex items-center justify-between border-b border-stone-100 pb-3">
           <div className="flex items-center gap-2">
-            <h3 className="text-sm font-bold text-white uppercase tracking-wider">
-              1. WHERE AM I? (Baseline Skill Profile)
+            <div className="w-6 h-6 rounded-lg bg-orange-100 border border-orange-200 flex items-center justify-center text-orange-700">
+              <MapPin className="w-3.5 h-3.5" />
+            </div>
+            <h3 className="text-xs sm:text-sm font-bold text-stone-900 flex items-center gap-1.5">
+              <span>1. Where Am I? (Baseline Profile)</span>
+              <StarburstRosette size={12} className="text-orange-500/70" />
             </h3>
           </div>
-          <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
-            Profile Evaluated by RL AI
+          <span className="text-[10px] font-mono font-semibold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
+            AI Evaluated
           </span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="bg-black/50 p-4 rounded-xl border border-white/10 space-y-1">
-            <span className="text-[10px] font-mono text-white/50 uppercase">
-              CURRENT LEVEL
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <div className="bg-[#FAF8F5] p-3.5 rounded-lg border border-stone-200 space-y-0.5">
+            <span className="text-[10px] font-mono text-stone-500 uppercase font-semibold">
+              Current Level
             </span>
-            <div className="text-base font-extrabold text-white">
+            <div className="text-sm font-bold text-stone-900">
               Entry-Level Specialist
             </div>
-            <span className="text-[10px] text-white/50">
-              Strong foundational communication
+            <span className="text-[10px] text-stone-500 block">
+              Strong communication foundation
             </span>
           </div>
 
-          <div className="bg-black/50 p-4 rounded-xl border border-white/10 space-y-1">
-            <span className="text-[10px] font-mono text-white/50 uppercase">
-              DEMONSTRATED SKILLS
+          <div className="bg-[#FAF8F5] p-3.5 rounded-lg border border-stone-200 space-y-0.5">
+            <span className="text-[10px] font-mono text-stone-500 uppercase font-semibold">
+              Demonstrated Skills
             </span>
-            <div className="text-base font-extrabold text-orange-300">
+            <div className="text-sm font-bold text-amber-800">
               Empathy & Tone Control
             </div>
-            <span className="text-[10px] text-white/50">
-              Verified in initial assessment
+            <span className="text-[10px] text-stone-500 block">
+              Verified in baseline assessment
             </span>
           </div>
 
-          <div className="bg-black/50 p-4 rounded-xl border border-white/10 space-y-1">
-            <span className="text-[10px] font-mono text-white/50 uppercase">
-              GROWTH TARGET
+          <div className="bg-[#FAF8F5] p-3.5 rounded-lg border border-stone-200 space-y-0.5">
+            <span className="text-[10px] font-mono text-stone-500 uppercase font-semibold">
+              Growth Target
             </span>
-            <div className="text-base font-extrabold text-emerald-400">
+            <div className="text-sm font-bold text-emerald-800">
               Structured Troubleshooting
             </div>
-            <span className="text-[10px] text-white/50">
-              High market demand (+24% open roles)
+            <span className="text-[10px] text-stone-500 block">
+              High market demand (+24% roles)
             </span>
           </div>
         </div>
@@ -158,16 +181,17 @@ export const IndPathfinderScreen = memo(function IndPathfinderScreen({
       <div className="space-y-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <h3 className="text-sm font-bold text-white uppercase tracking-wider">
-              2. WHAT PATHS CAN I TAKE? (Select Your Career Track)
+            <h3 className="text-xs sm:text-sm font-bold text-stone-900 flex items-center gap-1.5">
+              <span>2. Career Tracks</span>
+              <LaurelEmblem size={18} className="text-stone-400" />
             </h3>
           </div>
-          <span className="text-[10px] font-mono text-white/50">
-            Click a card to select, then click Start
+          <span className="text-[10px] font-mono text-stone-500">
+            Select a track below
           </span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
           {careerPaths.map((path) => {
             const isSelected = selectedPath.id === path.id;
             const isThisPathStarting =
@@ -184,26 +208,26 @@ export const IndPathfinderScreen = memo(function IndPathfinderScreen({
                   }
                 }}
                 className={cn(
-                  "p-5 rounded-2xl border transition-colors duration-200 cursor-pointer flex flex-col justify-between space-y-4 group relative",
+                  "p-4 rounded-xl border transition-colors duration-150 cursor-pointer flex flex-col justify-between space-y-3 relative overflow-hidden",
                   isSelected
-                    ? "bg-gradient-to-br from-orange-500/25 via-[#1a1c2e] to-[#0e0f17] border-orange-500/60 shadow-lg shadow-orange-500/5"
-                    : "bg-[#12131c]/90 border-white/10 hover:border-white/20 hover:bg-[#161725]"
+                    ? "bg-amber-50/60 border-amber-300 shadow-sm"
+                    : "bg-white border-stone-200 hover:border-stone-300 hover:bg-stone-50/50"
                 )}
               >
-                <div className="space-y-3">
+                <div className="space-y-2.5">
                   <div className="flex items-center justify-between">
                     <span
                       className={cn(
-                        "text-[10px] font-mono px-2 py-0.5 rounded border",
+                        "text-[10px] font-mono px-2 py-0.5 rounded font-semibold border",
                         isSelected
-                          ? "text-orange-200 bg-orange-500/20 border-orange-400/40 font-bold"
-                          : "text-orange-300 bg-orange-500/10 border-orange-400/20"
+                          ? "text-amber-900 bg-amber-100 border-amber-200"
+                          : "text-stone-600 bg-stone-100 border-stone-200"
                       )}
                     >
                       {path.category}
                     </span>
-                    <span className="text-xs font-mono font-black text-emerald-400 flex items-center gap-1">
-                      <Sparkles className="w-3 h-3 text-emerald-400" />
+                    <span className="text-xs font-mono font-bold text-emerald-700 flex items-center gap-1">
+                      <Sparkles className="w-3 h-3 text-emerald-600" />
                       {path.matchScore}% Match
                     </span>
                   </div>
@@ -211,26 +235,26 @@ export const IndPathfinderScreen = memo(function IndPathfinderScreen({
                   <div>
                     <h4
                       className={cn(
-                        "text-base font-extrabold transition-colors",
-                        isSelected ? "text-orange-300" : "text-white group-hover:text-orange-300"
+                        "text-sm font-bold transition-colors",
+                        isSelected ? "text-amber-950" : "text-stone-900"
                       )}
                     >
                       {path.title}
                     </h4>
-                    <p className="text-xs text-white/60 mt-1 leading-relaxed">
+                    <p className="text-xs text-stone-500 mt-1 leading-relaxed">
                       {path.description}
                     </p>
                   </div>
 
-                  <div className="space-y-1.5 pt-2 border-t border-white/10">
-                    <div className="text-[10px] font-mono text-white/50 uppercase">
-                      Core Skills You Will Build:
+                  <div className="space-y-1 pt-2 border-t border-stone-100">
+                    <div className="text-[10px] font-mono text-stone-400 uppercase font-semibold">
+                      Core Skills:
                     </div>
                     <div className="flex flex-wrap gap-1">
                       {path.coreSkills.map((sk) => (
                         <span
                           key={sk}
-                          className="text-[10px] px-2 py-0.5 rounded bg-white/5 border border-white/10 text-white/80"
+                          className="text-[10px] px-1.5 py-0.5 rounded bg-stone-100 border border-stone-200 text-stone-700 font-medium"
                         >
                           {sk}
                         </span>
@@ -239,10 +263,10 @@ export const IndPathfinderScreen = memo(function IndPathfinderScreen({
                   </div>
                 </div>
 
-                <div className="flex flex-col gap-2.5 pt-3 border-t border-white/10">
-                  <div className="flex items-center justify-between text-[10px] font-mono text-white/40">
+                <div className="flex flex-col gap-2 pt-2.5 border-t border-stone-100">
+                  <div className="flex items-center justify-between text-[10px] font-mono text-stone-500">
                     <span>Est. Salary:</span>
-                    <span className="text-white/70 font-semibold">{path.avgSalaryRange}</span>
+                    <span className="text-stone-800 font-semibold">{path.avgSalaryRange}</span>
                   </div>
 
                   <button
@@ -256,21 +280,21 @@ export const IndPathfinderScreen = memo(function IndPathfinderScreen({
                     }}
                     disabled={isStarting}
                     className={cn(
-                      "w-full h-9 px-3 rounded-full text-xs font-black border transition-all duration-200 cursor-pointer flex items-center justify-center gap-1.5 shrink-0 disabled:opacity-80",
+                      "w-full h-8 px-3 rounded-lg text-xs font-semibold border transition-colors cursor-pointer flex items-center justify-center gap-1.5 shrink-0 disabled:opacity-80",
                       isSelected
-                        ? "bg-gradient-to-r from-orange-500 to-rose-500 hover:from-orange-600 hover:to-rose-600 text-white border-transparent shadow-md shadow-orange-500/10"
-                        : "bg-white/5 hover:bg-white/10 text-white/70 hover:text-white border-white/10"
+                        ? "bg-stone-900 hover:bg-stone-800 text-white border-stone-900"
+                        : "bg-white hover:bg-stone-50 text-stone-700 border-stone-200"
                     )}
                   >
                     {isThisPathStarting ? (
                       <>
-                        <span>Starting Track...</span>
-                        <Loader2 className="w-3.5 h-3.5 text-white animate-spin" />
+                        <span>Starting...</span>
+                        <Loader2 className="w-3 h-3 text-white animate-spin" />
                       </>
                     ) : (
                       <>
                         <span>{isSelected ? "Start Track" : "Select Track"}</span>
-                        {isSelected && <ArrowRight className="w-3.5 h-3.5 text-white" />}
+                        {isSelected && <ArrowRight className="w-3 h-3 text-orange-400" />}
                       </>
                     )}
                   </button>
@@ -282,60 +306,67 @@ export const IndPathfinderScreen = memo(function IndPathfinderScreen({
       </div>
 
       {/* Core Question 3: WHAT SHOULD I LEARN? */}
-      <div className="bg-gradient-to-br from-orange-500/10 via-[#12131c] to-[#0d0e14] rounded-2xl p-6 border border-orange-400/30 shadow-xl space-y-4">
-        <div className="flex items-center justify-between border-b border-white/10 pb-3">
+      <div className="bg-gradient-to-r from-amber-50/60 via-white to-orange-50/40 rounded-xl p-4 sm:p-5 border border-amber-200/70 space-y-3.5 relative overflow-hidden">
+        <EngravedSeal
+          size={84}
+          className="absolute -right-4 -bottom-4 text-amber-600/15 pointer-events-none hidden sm:block"
+        />
+
+        <div className="flex items-center justify-between border-b border-stone-100 pb-2.5 relative z-10">
           <div className="flex items-center gap-2">
-            <h3 className="text-sm font-bold text-white uppercase tracking-wider">
-              3. WHAT SHOULD I LEARN? (AI Pathfinder Recommendation)
+            <h3 className="text-xs sm:text-sm font-bold text-stone-900">
+              3. Recommended Starting Pair
             </h3>
           </div>
-          <span className="text-xs font-mono text-orange-300">
-            Recommended Starting Pair
+          <span className="text-[10px] font-mono text-amber-800 bg-amber-100/70 border border-amber-200 px-2 py-0.5 rounded font-semibold">
+            Classes + Simulator
           </span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 relative z-10">
           {/* Class recommendation */}
-          <div className="bg-black/50 p-4 rounded-xl border border-white/10 space-y-2">
-            <div className="flex items-center gap-2 text-xs font-bold text-orange-300 uppercase tracking-wider">
-              <span>Step 1: Class (Theory & Techniques)</span>
+          <div className="bg-white p-3.5 rounded-lg border border-stone-200 space-y-1.5">
+            <div className="flex items-center gap-1.5 text-[10px] font-bold text-amber-800 uppercase tracking-wider">
+              <BookOpen className="w-3 h-3 text-amber-600" />
+              <span>Step 1: Class (Theory)</span>
             </div>
-            <h4 className="text-base font-extrabold text-white">
-              Customer Communication & De-escalation Mastery
+            <h4 className="text-xs sm:text-sm font-bold text-stone-900">
+              Customer Communication & De-escalation
             </h4>
-            <p className="text-xs text-white/60">
-              Learn non-confrontational phrasing, active listening, positive framing, and establishing action agreements.
+            <p className="text-xs text-stone-500 leading-relaxed">
+              Master active listening, tone control, and positive framing.
             </p>
           </div>
 
           {/* Connected Simulator practice layer */}
-          <div className="bg-black/50 p-4 rounded-xl border border-white/10 space-y-2">
-            <div className="flex items-center gap-2 text-xs font-bold text-rose-300 uppercase tracking-wider">
-              <span>Step 2: Simulator (Practice Layer)</span>
+          <div className="bg-white p-3.5 rounded-lg border border-stone-200 space-y-1.5">
+            <div className="flex items-center gap-1.5 text-[10px] font-bold text-orange-800 uppercase tracking-wider">
+              <Zap className="w-3 h-3 text-orange-600" />
+              <span>Step 2: Simulator (Practice)</span>
             </div>
-            <h4 className="text-base font-extrabold text-white">
-              Handling an Upset Customer Requesting Refund
+            <h4 className="text-xs sm:text-sm font-bold text-stone-900">
+              Handling an Upset Customer Refund
             </h4>
-            <p className="text-xs text-white/60">
-              Directly apply your learned de-escalation techniques in a dynamic AI roleplay simulation with realistic caller persona.
+            <p className="text-xs text-stone-500 leading-relaxed">
+              De-escalate an upset customer in an interactive AI roleplay simulation.
             </p>
           </div>
         </div>
 
-        <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-white/10">
-          <div className="text-xs text-white/70">
-            Ready to begin? Click below to enter your first Class and start the learning loop.
+        <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-stone-100 relative z-10">
+          <div className="text-xs text-stone-500">
+            Ready to begin? Enter your class to start your learning loop.
           </div>
           <button
             onClick={() => handleLaunchPath()}
             disabled={isStarting}
-            className="w-full sm:w-auto px-6 py-3 rounded-full bg-white text-black hover:bg-white/90 text-xs font-black transition-colors shadow-lg cursor-pointer flex items-center justify-center gap-2 disabled:opacity-80"
+            className="w-full sm:w-auto px-4 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 text-white text-xs font-semibold transition-colors cursor-pointer flex items-center justify-center gap-1.5 disabled:opacity-80 shrink-0"
           >
-            <span>{isStarting ? "Starting Pathway..." : "Enter Class & Begin Pathway"}</span>
+            <span>{isStarting ? "Starting..." : "Enter Class & Start Loop"}</span>
             {isStarting ? (
-              <Loader2 className="w-4 h-4 text-orange-500 animate-spin" />
+              <Loader2 className="w-3.5 h-3.5 text-white animate-spin" />
             ) : (
-              <ArrowRight className="w-4 h-4 text-orange-500" />
+              <ArrowRight className="w-3.5 h-3.5 text-orange-400" />
             )}
           </button>
         </div>

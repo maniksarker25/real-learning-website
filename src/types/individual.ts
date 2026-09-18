@@ -108,3 +108,48 @@ export interface SkillLevel {
   delta?: number; // e.g. +12
 }
 
+/**
+ * Standard User Progress API response schemas
+ */
+export interface UserProgressMetric {
+  learningStreakDays: number;
+  classesCompleted: number;
+  totalClasses: number;
+  simulationsPassed: number;
+  overallAccuracy: number;
+  monthlyAccuracyGain: number;
+}
+
+export interface UserSkillProficiency {
+  id: string;
+  name: string;
+  level: number; // 0 - 100 percentage
+  benchmark: number; // e.g. 80
+  category: string;
+  delta: string; // e.g. "+18%"
+  lastEvaluatedAt?: string;
+}
+
+export interface UserProgressMilestone {
+  id: string;
+  title: string;
+  desc: string;
+  status: "completed" | "in_progress" | "locked";
+  progress: string; // e.g. "100%", "5 / 6 Completed"
+  progressPercent: number; // 0 - 100
+  unlockedAt?: string;
+  badgeIcon?: string;
+}
+
+export interface UserProgressSummary {
+  userId: string;
+  careerTrackId: string;
+  careerTrackTitle: string;
+  levelTier: string; // e.g. "Level 2 Specialist"
+  metrics: UserProgressMetric;
+  skills: UserSkillProficiency[];
+  milestones: UserProgressMilestone[];
+  nextBadgeHint: string;
+  updatedAt: string;
+}
+
