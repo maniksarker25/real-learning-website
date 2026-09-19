@@ -32,7 +32,11 @@ interface SkillScores {
 interface CompletedSimulationItem {
   id: string;
   scenarioTitle: string;
-  careerTrack: "Customer Service" | "Tech Support" | "IT Specialist" | "Healthcare Support";
+  careerTrack:
+    | "Customer Service"
+    | "Tech Support"
+    | "IT Specialist"
+    | "Healthcare Support";
   trackColor: string;
   aiCharacterName: string;
   aiCharacterRole: string;
@@ -82,7 +86,7 @@ export const OrgSimulationsScreen = memo(function OrgSimulationsScreen() {
           resolution: 95,
         },
         highlightQuote:
-          "\"I completely understand — 45 minutes on hold is unacceptable. Let me personally handle this right now.\"",
+          '"I completely understand — 45 minutes on hold is unacceptable. Let me personally handle this right now."',
         dialoguePreview: [
           {
             role: "ai",
@@ -131,7 +135,7 @@ export const OrgSimulationsScreen = memo(function OrgSimulationsScreen() {
           resolution: 90,
         },
         highlightQuote:
-          "\"Let's run a fast traceroute while I isolate the tunnel interface to confirm DNS resolution.\"",
+          '"Let\'s run a fast traceroute while I isolate the tunnel interface to confirm DNS resolution."',
         dialoguePreview: [
           {
             role: "ai",
@@ -175,7 +179,7 @@ export const OrgSimulationsScreen = memo(function OrgSimulationsScreen() {
           resolution: 92,
         },
         highlightQuote:
-          "\"VLAN 14 segregated immediately. Revoking compromised Kerberos ticket grants.\"",
+          '"VLAN 14 segregated immediately. Revoking compromised Kerberos ticket grants."',
         dialoguePreview: [
           {
             role: "ai",
@@ -215,7 +219,7 @@ export const OrgSimulationsScreen = memo(function OrgSimulationsScreen() {
           resolution: 93,
         },
         highlightQuote:
-          "\"You are in safe hands, Maria. Let's take a deep breath together while I record your symptoms.\"",
+          '"You are in safe hands, Maria. Let\'s take a deep breath together while I record your symptoms."',
         dialoguePreview: [
           {
             role: "ai",
@@ -255,7 +259,7 @@ export const OrgSimulationsScreen = memo(function OrgSimulationsScreen() {
           resolution: 96,
         },
         highlightQuote:
-          "\"I will reverse the $89 fee right now and send the email confirmation while we talk.\"",
+          '"I will reverse the $89 fee right now and send the email confirmation while we talk."',
         dialoguePreview: [
           {
             role: "ai",
@@ -295,7 +299,7 @@ export const OrgSimulationsScreen = memo(function OrgSimulationsScreen() {
           resolution: 89,
         },
         highlightQuote:
-          "\"Mounted read-only snapshot. Restoring WAL logs from secondary replica.\"",
+          '"Mounted read-only snapshot. Restoring WAL logs from secondary replica."',
         dialoguePreview: [
           {
             role: "ai",
@@ -311,13 +315,14 @@ export const OrgSimulationsScreen = memo(function OrgSimulationsScreen() {
         ],
       },
     ],
-    []
+    [],
   );
 
   const filteredSimulations = useMemo(() => {
     return completedSimulations.filter((sim) => {
       const matchesTrack =
-        selectedTrackFilter === "all" || sim.careerTrack === selectedTrackFilter;
+        selectedTrackFilter === "all" ||
+        sim.careerTrack === selectedTrackFilter;
       const matchesSearch =
         sim.scenarioTitle.toLowerCase().includes(searchTerm.toLowerCase()) ||
         sim.member.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -339,7 +344,8 @@ export const OrgSimulationsScreen = memo(function OrgSimulationsScreen() {
             <span>Completed AI Workplace Simulations</span>
           </h2>
           <p className="text-xs text-stone-500 mt-0.5 max-w-xl">
-            Live feed and detailed score evaluations of real-time AI simulations recently completed by your team members across all 4 career tracks.
+            Live feed and detailed score evaluations of real-time AI simulations
+            recently completed by your team members across all 4 career tracks.
           </p>
         </div>
 
@@ -365,7 +371,10 @@ export const OrgSimulationsScreen = memo(function OrgSimulationsScreen() {
           {/* Career Track Tabs */}
           <div className="flex items-center gap-2 overflow-x-auto w-full sm:w-auto pb-1">
             {[
-              { id: "all", label: `All Simulations (${completedSimulations.length})` },
+              {
+                id: "all",
+                label: `All Simulations (${completedSimulations.length})`,
+              },
               { id: "Customer Service", label: "Customer Service" },
               { id: "Tech Support", label: "Tech Support" },
               { id: "IT Specialist", label: "IT Specialist" },
@@ -378,7 +387,7 @@ export const OrgSimulationsScreen = memo(function OrgSimulationsScreen() {
                   "px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer border",
                   selectedTrackFilter === tab.id
                     ? "bg-stone-900 border-stone-900 text-white font-bold shadow-xs"
-                    : "bg-white border-stone-200 text-stone-600 hover:text-stone-900 hover:bg-stone-50 shadow-xs"
+                    : "bg-white border-stone-200 text-stone-600 hover:text-stone-900 hover:bg-stone-50 shadow-xs",
                 )}
               >
                 {tab.label}
@@ -413,7 +422,7 @@ export const OrgSimulationsScreen = memo(function OrgSimulationsScreen() {
                 <span
                   className={cn(
                     "px-3 py-1 rounded-full text-[10px] font-bold border font-mono",
-                    sim.trackColor
+                    sim.trackColor,
                   )}
                 >
                   {sim.careerTrack}
@@ -448,9 +457,24 @@ export const OrgSimulationsScreen = memo(function OrgSimulationsScreen() {
               {/* Evaluated Competency Bar Breakdown */}
               <div className="space-y-1.5 pt-1">
                 <div className="flex justify-between text-[10px] font-mono text-stone-500">
-                  <span>Empathy: <strong className="text-stone-800">{sim.skills.empathy}%</strong></span>
-                  <span>Ownership: <strong className="text-stone-800">{sim.skills.ownership}%</strong></span>
-                  <span>Problem Solving: <strong className="text-stone-800">{sim.skills.problemSolving}%</strong></span>
+                  <span>
+                    Empathy:{" "}
+                    <strong className="text-stone-800">
+                      {sim.skills.empathy}%
+                    </strong>
+                  </span>
+                  <span>
+                    Ownership:{" "}
+                    <strong className="text-stone-800">
+                      {sim.skills.ownership}%
+                    </strong>
+                  </span>
+                  <span>
+                    Problem Solving:{" "}
+                    <strong className="text-stone-800">
+                      {sim.skills.problemSolving}%
+                    </strong>
+                  </span>
                 </div>
                 <div className="w-full h-1.5 bg-stone-100 rounded-full overflow-hidden border border-stone-200/60">
                   <div
@@ -510,13 +534,14 @@ export const OrgSimulationsScreen = memo(function OrgSimulationsScreen() {
                 <span
                   className={cn(
                     "px-2.5 py-0.5 rounded-full text-[10px] font-bold border font-mono",
-                    selectedSimulationDetails.trackColor
+                    selectedSimulationDetails.trackColor,
                   )}
                 >
                   {selectedSimulationDetails.careerTrack}
                 </span>
                 <span className="text-xs text-stone-500 font-mono">
-                  {selectedSimulationDetails.completedAt} • Duration: {selectedSimulationDetails.duration}
+                  {selectedSimulationDetails.completedAt} • Duration:{" "}
+                  {selectedSimulationDetails.duration}
                 </span>
               </div>
               <h3 className="text-xl font-extrabold text-stone-900">
@@ -561,19 +586,25 @@ export const OrgSimulationsScreen = memo(function OrgSimulationsScreen() {
 
                 <div className="grid grid-cols-3 gap-2 pt-2 border-t border-stone-200 text-center">
                   <div className="bg-white border border-stone-200 p-2 rounded-xl">
-                    <div className="text-[9px] text-stone-500 font-mono font-bold">EMPATHY</div>
+                    <div className="text-[9px] text-stone-500 font-mono font-bold">
+                      EMPATHY
+                    </div>
                     <div className="font-bold text-orange-600 text-xs">
                       {selectedSimulationDetails.skills.empathy}%
                     </div>
                   </div>
                   <div className="bg-white border border-stone-200 p-2 rounded-xl">
-                    <div className="text-[9px] text-stone-500 font-mono font-bold">OWNERSHIP</div>
+                    <div className="text-[9px] text-stone-500 font-mono font-bold">
+                      OWNERSHIP
+                    </div>
                     <div className="font-bold text-emerald-700 text-xs">
                       {selectedSimulationDetails.skills.ownership}%
                     </div>
                   </div>
                   <div className="bg-white border border-stone-200 p-2 rounded-xl">
-                    <div className="text-[9px] text-stone-500 font-mono font-bold">RESOLUTION</div>
+                    <div className="text-[9px] text-stone-500 font-mono font-bold">
+                      RESOLUTION
+                    </div>
                     <div className="font-bold text-blue-700 text-xs">
                       {selectedSimulationDetails.skills.resolution}%
                     </div>
@@ -590,24 +621,26 @@ export const OrgSimulationsScreen = memo(function OrgSimulationsScreen() {
               </h4>
 
               <div className="space-y-2.5 max-h-52 overflow-y-auto pr-1">
-                {selectedSimulationDetails.dialoguePreview.map((turn, index) => (
-                  <div
-                    key={index}
-                    className={cn(
-                      "p-3 rounded-2xl text-xs leading-relaxed max-w-[85%]",
-                      turn.role === "user"
-                        ? "bg-orange-50 border border-orange-200 text-stone-900 ml-auto"
-                        : "bg-stone-100 border border-stone-200 text-stone-800 mr-auto"
-                    )}
-                  >
-                    <div className="text-[9px] font-mono font-bold mb-1 opacity-70 uppercase">
-                      {turn.role === "user"
-                        ? `${selectedSimulationDetails.member.name} (Member)`
-                        : `${selectedSimulationDetails.aiCharacterName} (AI Character)`}
+                {selectedSimulationDetails.dialoguePreview.map(
+                  (turn, index) => (
+                    <div
+                      key={index}
+                      className={cn(
+                        "p-3 rounded-2xl text-xs leading-relaxed max-w-[85%]",
+                        turn.role === "user"
+                          ? "bg-orange-50 border border-orange-200 text-stone-900 ml-auto"
+                          : "bg-stone-100 border border-stone-200 text-stone-800 mr-auto",
+                      )}
+                    >
+                      <div className="text-[9px] font-mono font-bold mb-1 opacity-70 uppercase">
+                        {turn.role === "user"
+                          ? `${selectedSimulationDetails.member.name} (Member)`
+                          : `${selectedSimulationDetails.aiCharacterName} (AI Character)`}
+                      </div>
+                      {turn.text}
                     </div>
-                    {turn.text}
-                  </div>
-                ))}
+                  ),
+                )}
               </div>
             </div>
 
@@ -618,9 +651,11 @@ export const OrgSimulationsScreen = memo(function OrgSimulationsScreen() {
                 <span>AI Rubric Feedback Highlights</span>
               </h4>
               <ul className="space-y-1 text-stone-600 list-disc list-inside">
-                {selectedSimulationDetails.feedbackHighlights.map((point, i) => (
-                  <li key={i}>{point}</li>
-                ))}
+                {selectedSimulationDetails.feedbackHighlights.map(
+                  (point, i) => (
+                    <li key={i}>{point}</li>
+                  ),
+                )}
               </ul>
             </div>
 
