@@ -28,15 +28,15 @@ export default memo(function Navbar() {
     setMounted(true);
   }, []);
 
-  // Lock body scroll when mobile menu is open
+  // Lock body vertical scroll when mobile menu is open without affecting overflow-x
   useEffect(() => {
     if (mobileMenuOpen) {
-      document.body.style.overflow = "hidden";
+      document.body.style.overflowY = "hidden";
     } else {
-      document.body.style.overflow = "";
+      document.body.style.overflowY = "";
     }
     return () => {
-      document.body.style.overflow = "";
+      document.body.style.overflowY = "";
     };
   }, [mobileMenuOpen]);
 
@@ -113,10 +113,7 @@ export default memo(function Navbar() {
                 />
               </div>
               <span className="text-lg font-extrabold tracking-wider text-white uppercase font-sans">
-                REAL{" "}
-                <span className="bg-gradient-to-r from-orange-400 to-rose-400 bg-clip-text text-transparent">
-                  LEARNING
-                </span>
+                REAL <span className="text-orange-400">LEARNING</span>
               </span>
             </Link>
 
@@ -249,7 +246,7 @@ export default memo(function Navbar() {
                   duration: 0.55,
                   ease: [0.4, 0, 0.2, 1],
                 }}
-                className="fixed inset-0 z-[999] bg-[#090a0f]/98 backdrop-blur-3xl md:hidden flex flex-col justify-between px-6 pt-24 pb-8 shadow-2xl overflow-y-auto w-screen h-screen top-0 left-0"
+                className="fixed inset-0 z-[999] bg-[#090a0f]/98 backdrop-blur-3xl md:hidden flex flex-col justify-between px-6 pt-24 pb-8 shadow-2xl overflow-y-auto overflow-x-hidden w-full h-full max-w-full top-0 left-0"
               >
                 {/* Close Button at top right of portal overlay */}
                 <button
@@ -260,8 +257,10 @@ export default memo(function Navbar() {
                   <X className="w-5 h-5" />
                 </button>
 
-                {/* Ambient Radiant Radial Glow behind list */}
-                <div className="absolute top-1/4 right-0 w-80 h-80 bg-gradient-to-tr from-orange-500/20 via-rose-500/10 to-transparent rounded-full blur-3xl pointer-events-none" />
+                {/* Ambient Radiant Radial Glow behind list (contained to prevent horizontal bleed) */}
+                <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                  <div className="absolute top-1/4 right-0 w-80 h-80 bg-gradient-to-tr from-orange-500/20 via-rose-500/10 to-transparent rounded-full blur-3xl" />
+                </div>
 
                 <div className="relative z-10 space-y-6 max-w-md mx-auto w-full">
                   {/* Session Profile Banner if logged in */}

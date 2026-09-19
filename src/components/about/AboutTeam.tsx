@@ -52,7 +52,7 @@ export function AboutTeam() {
 
           <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight uppercase leading-[1.15]">
             Built by engineers, psychologists,{" "}
-            <span className="bg-gradient-to-r from-orange-400 to-rose-400 bg-clip-text text-transparent">
+            <span className="bg-black bg-clip-text text-transparent">
               and industry veterans.
             </span>
           </h2>
