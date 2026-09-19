@@ -125,9 +125,13 @@
     @apply font-sans;
     scroll-behavior: smooth !important;
     scroll-padding-top: 5.5rem;
+    overflow-x: hidden;
+    max-width: 100%;
   }
   body {
     @apply bg-background text-foreground;
+    overflow-x: hidden;
+    max-width: 100%;
   }
 }
 
