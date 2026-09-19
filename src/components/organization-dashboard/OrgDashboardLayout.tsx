@@ -125,7 +125,9 @@ export default memo(function OrgDashboardLayout() {
           <span className="hidden lg:inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-orange-50 border border-orange-200 text-orange-900">
             <Building2 className="w-3.5 h-3.5 text-orange-600" />
             <span className="font-bold">{session.orgName || "Acme Corp"}</span>
-            <span className="text-[10px] text-orange-700 font-mono">Workspace</span>
+            <span className="text-[10px] text-orange-700 font-mono">
+              Workspace
+            </span>
           </span>
         </div>
 
@@ -164,7 +166,11 @@ export default memo(function OrgDashboardLayout() {
                     : "bg-blue-100 border-blue-200 text-blue-800",
                 )}
               >
-                {isOwner ? <Crown className="w-4 h-4 text-amber-700" /> : <Shield className="w-4 h-4 text-blue-700" />}
+                {isOwner ? (
+                  <Crown className="w-4 h-4 text-amber-700" />
+                ) : (
+                  <Shield className="w-4 h-4 text-blue-700" />
+                )}
               </div>
               <div className="truncate">
                 <div className="text-xs font-bold text-stone-900 leading-none truncate">
@@ -241,7 +247,9 @@ export default memo(function OrgDashboardLayout() {
           {/* Sidebar Seat Quota Widget */}
           <div className="hidden md:block bg-white rounded-2xl p-3.5 border border-stone-200 mt-auto text-xs space-y-2 shadow-sm">
             <div className="flex items-center justify-between text-stone-600">
-              <span className="font-semibold text-stone-700">Allocated Seats</span>
+              <span className="font-semibold text-stone-700">
+                Allocated Seats
+              </span>
               <span className="text-stone-900 font-mono font-bold">
                 18 / {session.seats || "25"}
               </span>

@@ -46,6 +46,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={cn(
         "h-full",
         "antialiased",
+        "overflow-x-hidden",
+        "max-w-full",
         geistSans.variable,
         geistMono.variable,
         "font-sans",
@@ -53,7 +55,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         nunitoSansHeading.variable,
       )}
     >
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-full flex flex-col overflow-x-hidden max-w-full">
         <AccountProvider>{children}</AccountProvider>
       </body>
     </html>

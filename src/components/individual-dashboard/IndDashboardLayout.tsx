@@ -128,7 +128,7 @@ export default memo(function IndDashboardLayout() {
   );
 
   return (
-    <div className="h-screen bg-[#07080c] text-slate-100 font-sans flex flex-col overflow-hidden selection:bg-orange-500 selection:text-white">
+    <div className="h-screen w-full max-w-full bg-[#07080c] text-slate-100 font-sans flex flex-col overflow-hidden selection:bg-orange-500 selection:text-white">
       {/* Top Application Header */}
       <header className="shrink-0 z-50 bg-[#0d0e15]/95 backdrop-blur-md border-b border-white/10 px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
         {/* Brand Logo & Active Session Indicator */}
@@ -186,7 +186,7 @@ export default memo(function IndDashboardLayout() {
       </header>
 
       {/* Main Full-Bleed Application Body */}
-      <div className="flex-1 flex flex-col md:flex-row h-[calc(100vh-4rem)] overflow-hidden">
+      <div className="flex-1 min-w-0 flex flex-col md:flex-row h-[calc(100vh-4rem)] overflow-hidden">
         {/* Left Sidebar Navigation */}
         <aside className="w-full md:w-60 h-auto md:h-full bg-[#0d0e14]/95 border-b md:border-b-0 md:border-r border-white/10 p-4 flex flex-row md:flex-col justify-between shrink-0 gap-4 overflow-y-auto">
           <div className="w-full space-y-4">
@@ -275,7 +275,7 @@ export default memo(function IndDashboardLayout() {
         </aside>
 
         {/* Main Content Workspace */}
-        <main className="flex-1 p-4 sm:p-6 lg:p-8 bg-[#07080c] overflow-y-auto space-y-6">
+        <main className="flex-1 min-w-0 p-4 sm:p-6 lg:p-8 bg-[#07080c] overflow-y-auto overflow-x-hidden space-y-6">
           <div className="max-w-5xl mx-auto space-y-6">
             {/* Top Stepper displaying active step in 6-stage GPS journey */}
             <LearningLoopStepper
