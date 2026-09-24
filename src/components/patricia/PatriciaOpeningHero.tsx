@@ -60,7 +60,6 @@ export const PatriciaOpeningHero = memo(function PatriciaOpeningHero({
               {/* Eyebrow Badge */}
               <div>
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/15 backdrop-blur-md text-[11px] sm:text-xs text-white/80 font-medium shadow-sm">
-                  <Sparkles className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-orange-400" />
                   <span>Front Door to Real Learning</span>
                 </div>
               </div>
