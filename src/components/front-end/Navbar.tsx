@@ -17,6 +17,7 @@ import Link from "next/link";
 import { useAccount } from "@/context/AccountContext";
 import Image from "next/image";
 import { ImageConstants } from "@/constant/image.index";
+import { useLenis } from "lenis/react";
 
 export default memo(function Navbar() {
   const { session, logout } = useAccount();
@@ -68,6 +69,8 @@ export default memo(function Navbar() {
     [],
   );
 
+  const lenis = useLenis();
+
   const handleNavClick = useCallback(
     (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
       if (href.startsWith("/#") || href.startsWith("#")) {
@@ -77,7 +80,11 @@ export default memo(function Navbar() {
           if (elem) {
             e.preventDefault();
             closeMobileMenu();
-            elem.scrollIntoView({ behavior: "smooth", block: "start" });
+            if (lenis) {
+              lenis.scrollTo(elem, { offset: -80, duration: 1.2 });
+            } else {
+              elem.scrollIntoView({ behavior: "smooth", block: "start" });
+            }
             window.history.pushState(null, "", `#${targetId}`);
           }
         }
@@ -85,15 +92,19 @@ export default memo(function Navbar() {
         if (typeof window !== "undefined" && window.location.pathname === "/") {
           e.preventDefault();
           closeMobileMenu();
-          window.scrollTo({
-            top: 0,
-            behavior: "smooth",
-          });
+          if (lenis) {
+            lenis.scrollTo(0, { duration: 1.2 });
+          } else {
+            window.scrollTo({
+              top: 0,
+              behavior: "smooth",
+            });
+          }
           window.history.pushState(null, "", "/");
         }
       }
     },
-    [closeMobileMenu],
+    [closeMobileMenu, lenis],
   );
 
   return (

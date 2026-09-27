@@ -12,7 +12,7 @@ export default memo(function FooterCTA() {
   return (
     <footer className="relative w-full bg-orange-50 text-slate-100 font-sans select-none">
       {/* Outer Banner Wrapper */}
-      <div className="max-w-7xl  mx-auto px-4 sm:px-6 lg:px-8 pt-3 pb-6 sm:pb-24">
+      <div className="max-w-7xl  mx-auto px-2 lg:px-8 pt-3 pb-6 sm:pb-24">
         <div className="relative w-full overflow-hidden rounded-[32px] sm:rounded-[40px] bg-[#F7F6F3] border border-black/5 py-6 sm:py-20 md:py-28 px-6 sm:px-12 flex flex-col items-center justify-center text-center min-h-[300px] sm:min-h-[440px]">
           {/* Static CTA Background Image */}
           <Image
