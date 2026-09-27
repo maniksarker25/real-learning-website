@@ -35,6 +35,7 @@ export const MessageList = memo(function MessageList({
   return (
     <div
       ref={containerRef}
+      data-lenis-prevent
       className={`px-3 sm:px-5 py-4 ${heightClass} overflow-y-auto scroll-smooth relative`}
       style={{
         scrollbarWidth: "thin",

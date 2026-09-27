@@ -1,21 +1,33 @@
 "use client";
 
 import React, { useRef, useState, useCallback } from "react";
-import { PatriciaOpeningHero } from "./PatriciaOpeningHero";
+// import { PatriciaOpeningHero } from "./PatriciaOpeningHero";
 import { PatriciaChatExperience } from "./PatriciaChatExperience";
+import { useLenis } from "lenis/react";
 
 export function PatriciaMainSection() {
   const patriciaSectionRef = useRef<HTMLDivElement>(null);
   const [initialPrompt, setInitialPrompt] = useState<string | null>(null);
+  const lenis = useLenis();
 
-  const handleSlideUpToPatricia = useCallback((prompt?: string) => {
-    if (prompt) {
-      setInitialPrompt(prompt);
-    }
-    if (patriciaSectionRef.current) {
-      patriciaSectionRef.current.scrollIntoView({ behavior: "smooth" });
-    }
-  }, []);
+  const handleSlideUpToPatricia = useCallback(
+    (prompt?: string) => {
+      if (prompt) {
+        setInitialPrompt(prompt);
+      }
+      if (patriciaSectionRef.current) {
+        if (lenis) {
+          lenis.scrollTo(patriciaSectionRef.current, {
+            offset: -40,
+            duration: 1.2,
+          });
+        } else {
+          patriciaSectionRef.current.scrollIntoView({ behavior: "smooth" });
+        }
+      }
+    },
+    [lenis],
+  );
 
   const handleClearInitialPrompt = useCallback(() => {
     setInitialPrompt(null);
@@ -23,7 +35,7 @@ export function PatriciaMainSection() {
 
   return (
     <>
-      <PatriciaOpeningHero onSlideUp={handleSlideUpToPatricia} />
+      {/* <PatriciaOpeningHero onSlideUp={handleSlideUpToPatricia} /> */}
 
       <div
         id="patricia-experience"

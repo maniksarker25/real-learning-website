@@ -1,7 +1,12 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Inter, Nunito_Sans } from "next/font/google";
+import "lenis/dist/lenis.css";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import { AccountProvider } from "@/context/AccountContext";
+import { LenisProvider } from "@/components/providers/lenis-provider";
+import { FeatherCursor } from "@/components/cinematic/FeatherCursor";
+import { ScreenFadeIn } from "@/components/cinematic/ScreenFadeIn";
 
 const nunitoSansHeading = Nunito_Sans({
   subsets: ["latin"],
@@ -37,8 +42,6 @@ export const metadata: Metadata = {
   },
 };
 
-import { AccountProvider } from "@/context/AccountContext";
-
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
@@ -56,7 +59,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       )}
     >
       <body className="min-h-full flex flex-col overflow-x-hidden max-w-full">
-        <AccountProvider>{children}</AccountProvider>
+        {/* Global Dark Fade-in Overlay when screen loads */}
+        <ScreenFadeIn />
+        {/* Custom Feather Cursor across entire website (desktop only, disabled on touch/thumb devices) */}
+        <FeatherCursor />
+        <LenisProvider>
+          <AccountProvider>{children}</AccountProvider>
+        </LenisProvider>
       </body>
     </html>
   );
