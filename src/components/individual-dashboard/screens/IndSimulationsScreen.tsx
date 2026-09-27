@@ -662,7 +662,7 @@ export const IndSimulationsScreen = memo(function IndSimulationsScreen({
             </div>
 
             {/* Main Chat Messages Stream Container */}
-            <div className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-3 bg-[#FBF9F5] min-h-0">
+            <div data-lenis-prevent className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-3 bg-[#FBF9F5] min-h-0">
               {messages.map((m) => (
                 <div
                   key={m.id}
