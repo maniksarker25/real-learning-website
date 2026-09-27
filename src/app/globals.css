@@ -48,6 +48,10 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+@utility max-w-335 {
+  max-width: 335px;
+}
+
 :root {
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0.008 326);
@@ -123,7 +127,6 @@
   }
   html {
     @apply font-sans;
-    scroll-behavior: smooth !important;
     scroll-padding-top: 5.5rem;
     overflow-x: hidden;
     max-width: 100%;
@@ -144,4 +147,14 @@
     scrollbar-width: none;
   }
 }
+
+/* Custom Feather Cursor active: completely hide native OS cursor across the entire website */
+html.custom-feather-cursor-active,
+html.custom-feather-cursor-active body,
+html.custom-feather-cursor-active *,
+html.custom-feather-cursor-active *::before,
+html.custom-feather-cursor-active *::after {
+  cursor: none !important;
+}
+
 
