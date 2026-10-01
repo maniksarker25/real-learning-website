@@ -477,7 +477,7 @@ export const GsapAwwwardsHero = memo(function GsapAwwwardsHero() {
       {/* Pinned Viewport Container with min-h-[100dvh] and top padding for fixed navbar clearance */}
       <div
         ref={pinSectionRef}
-        className="relative min-h-[100dvh] w-full flex flex-col items-center justify-start bg-[#fdceb2] pt-14 sm:pt-16 md:pt-18 pb-12 sm:pb-16"
+        className="relative min-h-[70dvh] w-full flex flex-col items-center justify-start bg-[#fdceb2] pt-14 sm:pt-16 md:pt-18 pb-12 sm:pb-16"
       >
         {/* Subtle graph paper grid pattern */}
         <div
@@ -567,7 +567,7 @@ export const GsapAwwwardsHero = memo(function GsapAwwwardsHero() {
         <div
           ref={realLearningSectionRef}
           id="real-learning-intro"
-          className="relative z-10 flex flex-col items-stretch px-4 sm:px-6 md:px-8 max-w-5xl mx-auto will-change-transform pointer-events-auto w-full py-1 sm:py-2"
+          className="relative z-10 flex flex-col items-stretch px-4 sm:px-6 md:px-8 max-w-7xl mx-auto will-change-transform pointer-events-auto w-full py-1 sm:py-2"
         >
           {/* Feather: starts centered & large, smoothly resizes and glides here on scroll */}
           <div
@@ -628,7 +628,7 @@ export const GsapAwwwardsHero = memo(function GsapAwwwardsHero() {
                 {TRUSTED_AVATARS.map((avatar, idx) => (
                   <div
                     key={idx}
-                    className="relative w-11 h-12 sm:w-12 sm:h-14 rounded-xl sm:rounded-2xl overflow-hidden border-[2.5px] border-white shadow-sm ring-1 ring-slate-900/10 bg-slate-200 shrink-0 transform transition-transform duration-200 hover:-translate-y-1 hover:z-20 cursor-pointer"
+                    className="relative w-11 h-12 sm:w-12 sm:h-14 rounded-xl sm:rounded-2xl overflow-hidden border-[2.5px] border-white shadow-sm ring-1 ring-slate-900/10 bg-slate-200 shrink-0 transform transition-transform duration-200 cursor-pointer"
                   >
                     <Image
                       src={avatar.src}
@@ -665,6 +665,7 @@ export const GsapAwwwardsHero = memo(function GsapAwwwardsHero() {
               </div>
             </div>
           </div>
+            <div className="bg-red-500"></div>
         </div>
       </div>
     </div>
