@@ -24,7 +24,15 @@ export const GsapAwwwardsHero = memo(function GsapAwwwardsHero() {
   const realLearningSectionRef = useRef<HTMLDivElement>(null);
   const headlineRef = useRef<HTMLHeadingElement>(null);
   const subtitleRef = useRef<HTMLParagraphElement>(null);
+  const socialProofRef = useRef<HTMLDivElement>(null);
   const dashboardPreviewRef = useRef<HTMLDivElement>(null);
+
+  const TRUSTED_AVATARS = [
+    { src: "/images/avatars/avatar-1.jpg", alt: "Executive Leader" },
+    { src: "/images/avatars/avatar-2.jpg", alt: "Tech Specialist" },
+    { src: "/images/avatars/avatar-3.jpg", alt: "Product Manager" },
+    { src: "/images/avatars/avatar-4.jpg", alt: "Business Lead" },
+  ];
 
   const circleProgressRef = useRef<SVGCircleElement>(null);
   const autoScrollTweenRef = useRef<gsap.core.Tween | null>(null);
@@ -206,23 +214,28 @@ export const GsapAwwwardsHero = memo(function GsapAwwwardsHero() {
       return;
 
     const ctx = gsap.context(() => {
-      // Helper to compute exact deltaY to center the feather initially in the visible viewport
+      // Helper to compute exact deltaX and deltaY to center the feather initially in the visible viewport
       const getMetrics = () => {
         if (!pinSectionRef.current || !featherImgRef.current) {
-          return { deltaY: 200, scale: 3.0, scorchedY: 520, scrollCueTop: 720 };
+          return { deltaX: 0, deltaY: 200, scale: 3.0, scorchedY: 520, scrollCueTop: 720 };
         }
         const pinRect = pinSectionRef.current.getBoundingClientRect();
         const featherRect = featherImgRef.current.getBoundingClientRect();
 
         const windowW = window.innerWidth;
         const viewportH = window.innerHeight;
-        // Exact vertical center of visible screen viewport
+        // Exact vertical and horizontal center of visible screen viewport
         const viewportCenterY = viewportH / 2;
+        const viewportCenterX = windowW / 2;
 
-        // Center of feather relative to top of pinSectionRef
+        // Center of feather relative to top-left of pinSectionRef
         const featherCenterY =
           featherRect.top - pinRect.top + featherRect.height / 2;
         const deltaY = viewportCenterY - featherCenterY;
+
+        const featherCenterX =
+          featherRect.left - pinRect.left + featherRect.width / 2;
+        const deltaX = viewportCenterX - featherCenterX;
 
         // Large feather size tailored for mobile & desktop screens
         const targetLargeWidth = Math.min(
@@ -238,7 +251,7 @@ export const GsapAwwwardsHero = memo(function GsapAwwwardsHero() {
 
         const scrollCueTop = viewportH - (windowW < 640 ? 76 : 96);
 
-        return { deltaY, scale, scorchedY, scrollCueTop };
+        return { deltaX, deltaY, scale, scorchedY, scrollCueTop };
       };
 
       let metrics = getMetrics();
@@ -246,6 +259,7 @@ export const GsapAwwwardsHero = memo(function GsapAwwwardsHero() {
       // 1. Initial visual state (Warm #fdceb2 canvas with centered large feather, set behind dark curtain)
       gsap.set(pinSectionRef.current, { backgroundColor: "#fdceb2" });
       gsap.set(featherImgRef.current, {
+        x: metrics.deltaX,
         y: metrics.deltaY,
         scale: metrics.scale,
         transformOrigin: "center center",
@@ -262,6 +276,7 @@ export const GsapAwwwardsHero = memo(function GsapAwwwardsHero() {
       });
       gsap.set(headlineRef.current, { autoAlpha: 0, y: 20 });
       gsap.set(subtitleRef.current, { autoAlpha: 0, y: 16 });
+      gsap.set(socialProofRef.current, { autoAlpha: 0, y: 16 });
       gsap.set(dashboardPreviewRef.current, { autoAlpha: 0, y: 30 });
 
       // Re-center if device rotates or resizes while user is at the top
@@ -275,6 +290,7 @@ export const GsapAwwwardsHero = memo(function GsapAwwwardsHero() {
         ) {
           metrics = getMetrics();
           gsap.set(featherImgRef.current, {
+            x: metrics.deltaX,
             y: metrics.deltaY,
             scale: metrics.scale,
           });
@@ -342,6 +358,7 @@ export const GsapAwwwardsHero = memo(function GsapAwwwardsHero() {
       tl.to(
         featherImgRef.current,
         {
+          x: 0,
           y: 0,
           scale: 1,
           duration: 1,
@@ -364,6 +381,17 @@ export const GsapAwwwardsHero = memo(function GsapAwwwardsHero() {
 
       tl.to(
         subtitleRef.current,
+        {
+          autoAlpha: 1,
+          y: 0,
+          duration: 0.4,
+          ease: "power2.out",
+        },
+        0.38,
+      );
+
+      tl.to(
+        socialProofRef.current,
         {
           autoAlpha: 1,
           y: 0,
@@ -534,25 +562,25 @@ export const GsapAwwwardsHero = memo(function GsapAwwwardsHero() {
         </div>
 
         {/* ========================================================= */}
-        {/* REAL LEARNING HERO (With Resized Feather)                 */}
+        {/* REAL LEARNING HERO (Layout Matching Reference Image)      */}
         {/* ========================================================= */}
         <div
           ref={realLearningSectionRef}
           id="real-learning-intro"
-          className="relative z-10 flex flex-col items-center justify-center px-3 sm:px-6 md:px-8 max-w-5xl mx-auto will-change-transform pointer-events-auto w-full py-2 sm:py-3"
+          className="relative z-10 flex flex-col items-stretch px-4 sm:px-6 md:px-8 max-w-5xl mx-auto will-change-transform pointer-events-auto w-full py-1 sm:py-2"
         >
           {/* Feather: starts centered & large, smoothly resizes and glides here on scroll */}
           <div
             ref={featherWrapperRef}
-            className="relative flex flex-col items-center justify-center mb-2 sm:mb-2.5 pointer-events-auto"
+            className="relative flex flex-col items-start mb-2 sm:mb-3 pointer-events-auto"
           >
             <div
               ref={featherFloatRef}
-              className="will-change-transform flex items-center justify-center"
+              className="will-change-transform flex items-center justify-start"
             >
               <div
                 ref={featherImgRef}
-                className="relative w-16 sm:w-20 md:w-24 lg:w-28 aspect-[627/410] flex items-center justify-center will-change-transform cursor-pointer"
+                className="relative w-14 sm:w-16 md:w-20 lg:w-22 aspect-[627/410] flex items-center justify-center will-change-transform cursor-pointer"
               >
                 <Image
                   src="/feathers.png"
@@ -566,34 +594,76 @@ export const GsapAwwwardsHero = memo(function GsapAwwwardsHero() {
             </div>
           </div>
 
-          {/* Centered Large Bold Headline (hidden by default to avoid SSR flash) */}
+          {/* Large Bold Left-Aligned Headline (matching reference image) */}
           <h1
             ref={headlineRef}
             style={{ opacity: 0, visibility: "hidden" }}
-            className="opacity-0 text-3xl sm:text-5xl md:text-6xl lg:text-[62px] font-extrabold text-slate-900 tracking-tight leading-[1.08] sm:leading-[1.04] font-sans max-w-4xl mx-auto will-change-transform text-center"
+            className="opacity-0 text-3xl sm:text-5xl md:text-6xl lg:text-[72px] xl:text-[78px] font-extrabold text-slate-900 tracking-[-0.03em] leading-[1.05] sm:leading-[1.0] font-sans will-change-transform text-left"
           >
             Real Learning for <br className="hidden sm:inline" />
             humans and AI agents
           </h1>
 
-          {/* Centered Subtitle Paragraph (hidden by default to avoid SSR flash) */}
-          <p
-            ref={subtitleRef}
-            style={{ opacity: 0, visibility: "hidden" }}
-            className="opacity-0 mt-2.5 sm:mt-3 text-xs sm:text-sm md:text-base text-slate-600 font-normal max-w-2xl mx-auto leading-relaxed px-2 will-change-transform text-center"
-          >
-            Real Learning gives you the education you deserve so you never
-            become outmoded. Practice high-stakes workplace situations, talk
-            with Patricia, and master your career.
-          </p>
+          {/* Split Row: Subtitle Paragraph on Left, Social Proof Badge on Right */}
+          <div className="w-full mt-6 sm:mt-8 md:mt-10 flex flex-col md:flex-row items-start md:items-end justify-between gap-6 sm:gap-10">
+            {/* Left Column: Description Paragraph */}
+            <p
+              ref={subtitleRef}
+              style={{ opacity: 0, visibility: "hidden" }}
+              className="opacity-0 text-sm sm:text-base md:text-[17px] text-slate-600 font-normal max-w-lg md:max-w-xl leading-relaxed will-change-transform text-left"
+            >
+              Real Learning gives you the education you deserve so you never
+              become outmoded. Practice high-stakes workplace situations, talk
+              with Patricia, and master your career.
+            </p>
 
-          {/* Dashboard Preview Window (hidden by default to avoid SSR flash) */}
-          <div
-            ref={dashboardPreviewRef}
-            style={{ opacity: 0, visibility: "hidden" }}
-            className="opacity-0 w-full will-change-transform mt-2 sm:mt-3 text-start text-left"
-          >
-            <HeroDashboardPreview />
+            {/* Right Column: Social Proof / Trust Badge (matching reference image) */}
+            <div
+              ref={socialProofRef}
+              style={{ opacity: 0, visibility: "hidden" }}
+              className="opacity-0 flex flex-col items-start md:items-end shrink-0 will-change-transform self-start md:self-end"
+            >
+              {/* Overlapping rounded squircle avatars */}
+              <div className="flex items-center -space-x-3 sm:-space-x-3.5">
+                {TRUSTED_AVATARS.map((avatar, idx) => (
+                  <div
+                    key={idx}
+                    className="relative w-11 h-12 sm:w-12 sm:h-14 rounded-xl sm:rounded-2xl overflow-hidden border-[2.5px] border-white shadow-sm ring-1 ring-slate-900/10 bg-slate-200 shrink-0 transform transition-transform duration-200 hover:-translate-y-1 hover:z-20 cursor-pointer"
+                  >
+                    <Image
+                      src={avatar.src}
+                      alt={avatar.alt}
+                      fill
+                      sizes="64px"
+                      className="object-cover object-top"
+                    />
+                  </div>
+                ))}
+              </div>
+
+              {/* Stars & Rating */}
+              <div className="mt-1 flex items-center justify-start md:justify-end gap-1.5 text-slate-900">
+                <div className="flex items-center gap-0.5">
+                  {[...Array(5)].map((_, i) => (
+                    <svg
+                      key={i}
+                      className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-amber-400 stroke-amber-500"
+                      viewBox="0 0 24 24"
+                      strokeWidth="1.2"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
+                      />
+                    </svg>
+                  ))}
+                </div>
+                <span className="text-xs sm:text-sm font-extrabold font-sans text-slate-900 tracking-tight">
+                  / 5.0
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -27,9 +27,9 @@ export const CinematicNavbar = memo(function CinematicNavbar({
   }, []);
 
   const navTabs = [
-    { label: "Overview", id: "hero-top" },
+    { label: "Home", id: "hero-top" },
     { label: "Why Real Learning", id: "why-youre-here" },
-    { label: "Patricia AI", id: "patricia-experience" },
+    
   ];
 
   const handleTabClick = (e: React.MouseEvent, id: string) => {
