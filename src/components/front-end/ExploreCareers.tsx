@@ -301,7 +301,7 @@ export default memo(function ExploreCareers() {
             </p>
           </div>
 
-          <div className="rounded-2xl sm:rounded-[32px] bg-[#121318] border border-white/10 shadow-xl overflow-hidden h-[160px] sm:h-[230px] relative">
+          <div className="rounded-2xl hidden xl:block sm:rounded-[32px] bg-[#121318] border border-white/10 shadow-xl overflow-hidden h-[160px] sm:h-[230px] relative">
             <Image
               src="/images/healthcare.jpg"
               alt="Healthcare Specialist"
