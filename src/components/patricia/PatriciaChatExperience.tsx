@@ -208,26 +208,27 @@ export const PatriciaChatExperience = memo(function PatriciaChatExperience({
       {/* ========================================================= */}
       {/* 1. TOP HEADER BAR: Clean, spacious, no-clutter layout     */}
       {/* ========================================================= */}
-      <header className="relative z-20 h-12 sm:h-14 px-3 sm:px-6 border-b border-white/[0.08] bg-[#1a1a18]/95 backdrop-blur-xl flex items-center justify-between shrink-0">
-        {/* Left: macOS Dots + Patricia Brand Title */}
+      <header className="relative z-20 h-11 sm:h-14 px-2.5 sm:px-6 border-b border-white/[0.08] bg-[#1a1a18]/95 backdrop-blur-xl flex items-center justify-between shrink-0">
+        {/* Left: Brand Identity & Status */}
         <div className="flex items-center gap-2 sm:gap-3 min-w-0">
-          <div className="flex items-center gap-1.5 shrink-0">
+          {/* macOS dots for tablet/desktop */}
+          <div className="hidden sm:flex items-center gap-1.5 shrink-0">
             <button
               type="button"
               onClick={handleReset}
               title="Reset Conversation"
-              className="w-3 h-3 rounded-full bg-[#ff5f56] border border-black/20 flex items-center justify-center cursor-pointer transition-transform hover:scale-115 active:scale-95 shadow-sm"
+              className="w-2.5 h-2.5 rounded-full bg-[#ff5f56] border border-black/20 flex items-center justify-center cursor-pointer transition-transform hover:scale-115 active:scale-95"
             />
-            <div className="w-3 h-3 rounded-full bg-[#ffbd2e] border border-black/20" />
-            <div className="w-3 h-3 rounded-full bg-[#27c93f] border border-black/20" />
+            <div className="w-2.5 h-2.5 rounded-full bg-[#ffbd2e] border border-black/20" />
+            <div className="w-2.5 h-2.5 rounded-full bg-[#27c93f] border border-black/20" />
           </div>
 
-          <div className="flex items-center gap-1.5 ml-0.5 truncate">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0 animate-pulse shadow-[0_0_6px_rgba(52,211,153,0.6)]" />
+          <div className="flex items-center gap-1.5 truncate">
+            <PatriciaAvatar className="w-5 h-5 sm:w-6 sm:h-6 rounded-md sm:rounded-lg" />
             <span className="font-bold text-xs sm:text-sm text-white tracking-tight truncate">
               Patricia
             </span>
-            <span className="hidden md:inline-flex items-center px-2 py-0.5 rounded-full bg-orange-500/15 border border-orange-500/30 text-[9px] font-mono text-orange-300 font-semibold tracking-wider uppercase shrink-0">
+            <span className="inline-flex items-center px-1.5 py-0.5 rounded-full bg-orange-500/15 border border-orange-500/30 text-[8px] sm:text-[9px] font-mono text-orange-300 font-semibold tracking-wider uppercase shrink-0">
               AI Life GPS
             </span>
           </div>
@@ -239,12 +240,12 @@ export const PatriciaChatExperience = memo(function PatriciaChatExperience({
           <span className="truncate">{gpsState.whereYouAre}</span>
         </div>
 
-        {/* Right Tools: Reset + Skip CTA (Always cleanly visible!) */}
-        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+        {/* Right Tools: Reset + Skip CTA */}
+        <div className="flex items-center gap-1 sm:gap-2 shrink-0">
           <button
             type="button"
             onClick={handleReset}
-            className="p-1.5 rounded-lg text-white/50 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
+            className="p-1 sm:p-1.5 rounded-lg text-white/50 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
             title="Reset conversation"
           >
             <RefreshCw className="w-3.5 h-3.5" />
@@ -254,7 +255,7 @@ export const PatriciaChatExperience = memo(function PatriciaChatExperience({
           <button
             type="button"
             onClick={handleGoNext}
-            className="inline-flex items-center gap-1 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg bg-orange-500 hover:bg-orange-600 text-white text-[11px] sm:text-xs font-semibold shadow-sm transition-all cursor-pointer group active:scale-95 shrink-0"
+            className="inline-flex items-center gap-1 px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg bg-orange-500 hover:bg-orange-600 text-white text-[10px] sm:text-xs font-semibold shadow-sm transition-all cursor-pointer group active:scale-95 shrink-0"
             title="Skip and go to next section"
           >
             <span>Skip</span>
