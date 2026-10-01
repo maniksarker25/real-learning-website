@@ -48,7 +48,7 @@ export function HeroDashboardPreview() {
   ];
 
   return (
-    <div id="hero-dashboard-showcase" className="w-full max-w-5xl mx-auto px-2 sm:px-4 mt-4 sm:mt-6 flex flex-col items-center text-left text-start">
+    <div id="hero-dashboard-showcase" className="w-full flex flex-col items-center text-left text-start">
       {/* 1. Pill-shaped Segmented Tab Switcher Bar */}
       <div className="inline-flex items-center gap-1 p-1 rounded-full bg-[#18181b] border border-white/10 shadow-2xl backdrop-blur-md mb-4 sm:mb-5 select-none z-10">
         {tabs.map((tab) => {

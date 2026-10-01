@@ -35,9 +35,9 @@ export default function Home() {
         <div id="explore-careers">
           <ExploreCareers />
         </div>
-        <div id="feedback-section">
+        {/* <div id="feedback-section">
           <FeedbackSection />
-        </div>
+        </div> */}
         <div id="customer-stories">
           <UserStoriesShowcase />
         </div>
