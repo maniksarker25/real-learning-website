@@ -119,9 +119,7 @@ export default function IndividualOnboardingPage() {
 
       {/* Main Content Area */}
       <div className="max-w-5xl w-full mx-auto my-auto py-8">
-        {/* ============================================================ */}
-        {/* STEP 1: SELECT CAREER SIMULATION TRACK */}
-        {/* ============================================================ */}
+        {/* Step 1: Select Track */}
         {currentStep === 1 && (
           <div className="space-y-6">
             <div className="text-center max-w-xl mx-auto space-y-1.5">
@@ -195,9 +193,7 @@ export default function IndividualOnboardingPage() {
           </div>
         )}
 
-        {/* ============================================================ */}
-        {/* STEP 2: PROFILE & PRACTICE PACING */}
-        {/* ============================================================ */}
+        {/* Step 2: Profile Setup */}
         {currentStep === 2 && (
           <div className="max-w-md mx-auto space-y-6">
             <div className="text-center space-y-1">
@@ -293,9 +289,7 @@ export default function IndividualOnboardingPage() {
           </div>
         )}
 
-        {/* ============================================================ */}
-        {/* STEP 3: CONFIRMATION & LAUNCH */}
-        {/* ============================================================ */}
+        {/* Step 3: Confirmation */}
         {currentStep === 3 && (
           <div className="max-w-sm mx-auto space-y-6">
             <div className="bg-white border border-stone-200/80 rounded-3xl p-6 text-center space-y-4 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)]">

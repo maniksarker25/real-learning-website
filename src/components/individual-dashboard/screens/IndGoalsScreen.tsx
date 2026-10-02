@@ -322,7 +322,7 @@ export const IndGoalsScreen = memo(function IndGoalsScreen() {
 
           <p className="text-[11px] text-stone-500 font-medium">
             {activeDaysCount >= 4
-              ? "🔥 Excellent pace! You are hitting your consistency target."
+              ? "Excellent pace! You are hitting your consistency target."
               : "Complete 1 practice session today to keep your streak alive."}
           </p>
         </div>
