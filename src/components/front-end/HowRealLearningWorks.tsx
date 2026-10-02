@@ -1,70 +1,20 @@
 "use client";
 
-import React, { useState, useRef, useEffect, memo, useCallback } from "react";
+import React, { memo } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { SHOWCASE_STEPS, StepShowcaseCard } from "./learning-steps";
+import { useHowRealLearningWorks } from "./useHowRealLearningWorks";
 
 export default memo(function HowRealLearningWorks() {
-  const [activeIndex, setActiveIndex] = useState<number>(0);
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
-
-  const scrollToIndex = (index: number) => {
-    const nextIdx = Math.max(0, Math.min(SHOWCASE_STEPS.length - 1, index));
-    setActiveIndex(nextIdx);
-
-    const container = scrollContainerRef.current;
-    if (container) {
-      const firstChild = container.firstElementChild as HTMLElement | null;
-      const targetCard = container.children[nextIdx] as HTMLElement | null;
-      if (firstChild && targetCard) {
-        const baseOffset = firstChild.offsetLeft;
-        const targetScroll = targetCard.offsetLeft - baseOffset;
-
-        container.scrollTo({
-          left: Math.max(0, targetScroll),
-          behavior: "smooth",
-        });
-      }
-    }
-  };
-
-  const handleNext = () => scrollToIndex(activeIndex + 1);
-  const handlePrev = () => scrollToIndex(activeIndex - 1);
-
-  useEffect(() => {
-    const container = scrollContainerRef.current;
-    if (!container) return;
-
-    let timeoutId: NodeJS.Timeout;
-    const handleScroll = () => {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => {
-        const scrollLeft = container.scrollLeft;
-        const firstChild = container.firstElementChild as HTMLElement | null;
-        const baseOffset = firstChild ? firstChild.offsetLeft : 0;
-        const children = Array.from(container.children) as HTMLElement[];
-        let closestIdx = 0;
-        let minDiff = Infinity;
-
-        children.forEach((child, i) => {
-          const childScrollPos = child.offsetLeft - baseOffset;
-          const diff = Math.abs(childScrollPos - scrollLeft);
-          if (diff < minDiff) {
-            minDiff = diff;
-            closestIdx = i;
-          }
-        });
-
-        setActiveIndex(closestIdx);
-      }, 60);
-    };
-
-    container.addEventListener("scroll", handleScroll, { passive: true });
-    return () => {
-      clearTimeout(timeoutId);
-      container.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+  const {
+    activeIndex,
+    scrollContainerRef,
+    scrollToIndex,
+    handleNext,
+    handlePrev,
+    isFirstStep,
+    isLastStep,
+  } = useHowRealLearningWorks();
 
   return (
     <section className="relative w-full py-6 sm:py-16 lg:py-24 bg-orange-50 text-white overflow-hidden select-none border-t border-white/[0.08]">
@@ -101,7 +51,7 @@ export default memo(function HowRealLearningWorks() {
             </p>
           </div>
 
-          {/* Navigation Controls: Tabs and Previous/Next Buttons */}
+          {/* Navigation Controls: Step Pill Tabs and Prev/Next Arrows */}
           <div className="flex flex-wrap items-center gap-2 sm:gap-3">
             <div className="flex items-center gap-1 sm:gap-1.5 p-1 rounded-full bg-black/[0.04] border border-white/10 max-w-full overflow-x-auto no-scrollbar">
               {SHOWCASE_STEPS.map((step, idx) => (
@@ -123,7 +73,7 @@ export default memo(function HowRealLearningWorks() {
             <div className="flex items-center gap-1.5">
               <button
                 onClick={handlePrev}
-                disabled={activeIndex === 0}
+                disabled={isFirstStep}
                 className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-black/70 hover:text-black hover:bg-white/10 disabled:opacity-25 disabled:hover:bg-white/5 cursor-pointer transition-all"
                 title="Previous step"
               >
@@ -131,7 +81,7 @@ export default memo(function HowRealLearningWorks() {
               </button>
               <button
                 onClick={handleNext}
-                disabled={activeIndex === SHOWCASE_STEPS.length - 1}
+                disabled={isLastStep}
                 className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-black/70 hover:text-black hover:bg-white/10 disabled:opacity-25 disabled:hover:bg-white/5 cursor-pointer transition-all"
                 title="Next step"
               >
@@ -180,3 +130,4 @@ export default memo(function HowRealLearningWorks() {
     </section>
   );
 });
+

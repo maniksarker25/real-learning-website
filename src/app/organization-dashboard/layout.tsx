@@ -93,7 +93,10 @@ export default memo(function OrgDashboardLayout({
   }, [isOwner]);
 
   return (
-    <div className="h-screen w-full max-w-full bg-[#FBF9F5] text-stone-900 font-sans flex flex-col overflow-hidden selection:bg-orange-500 selection:text-white">
+    <div
+      data-lenis-prevent
+      className="h-screen w-full max-w-full bg-[#FBF9F5] text-stone-900 font-sans flex flex-col overflow-hidden selection:bg-orange-500 selection:text-white"
+    >
       {/* Top Application Bar */}
       <header className="shrink-0 z-50 bg-white/95 backdrop-blur-md border-b border-stone-200 px-3 sm:px-4 md:px-5 lg:px-6 h-16 flex items-center justify-between gap-2 sm:gap-4">
         {/* Brand Logo & Org Badge */}
@@ -213,7 +216,10 @@ export default memo(function OrgDashboardLayout({
         </div>
 
         {/* Left Sidebar Navigation: Sleek Rail on md (tablet 768-1023px), Full Sidebar on lg (desktop 1024px+) */}
-        <aside className="hidden md:flex md:w-20 lg:w-60 h-full bg-[#FCFAF6] border-r border-stone-200 p-2.5 lg:p-4 flex-col justify-between shrink-0 overflow-y-auto transition-all duration-150">
+        <aside
+          data-lenis-prevent
+          className="hidden md:flex md:w-20 lg:w-60 h-full bg-[#FCFAF6] border-r border-stone-200 p-2.5 lg:p-4 flex-col justify-between shrink-0 overflow-y-auto transition-all duration-150"
+        >
           <div className="w-full space-y-3 lg:space-y-4">
             {/* Workspace Organization Profile Header */}
             <div className="flex items-center md:flex-col lg:flex-row gap-2.5 lg:gap-3 p-2 lg:p-3 rounded-2xl bg-white border border-stone-200 shadow-sm text-center lg:text-left">
@@ -357,7 +363,10 @@ export default memo(function OrgDashboardLayout({
         </aside>
 
         {/* Main Content Workspace */}
-        <main className="flex-1 min-w-0 p-3.5 sm:p-5 md:p-5 lg:p-8 bg-[#FBF9F5] overflow-y-auto overflow-x-hidden">
+        <main
+          data-lenis-prevent
+          className="flex-1 min-w-0 p-3.5 sm:p-5 md:p-5 lg:p-8 bg-[#FBF9F5] overflow-y-auto overflow-x-hidden"
+        >
           <div className="space-y-4 md:space-y-5 max-w-6xl mx-auto w-full">
             {children}
           </div>

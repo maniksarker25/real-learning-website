@@ -111,7 +111,10 @@ function UserDashboardLayoutInner({ children }: { children: React.ReactNode }) {
   const [searchQuery, setSearchQuery] = useState("");
 
   const content = (
-    <div className="h-screen bg-[#FBF9F5] text-stone-900 font-sans flex flex-col overflow-hidden selection:bg-orange-500 selection:text-white">
+    <div
+      data-lenis-prevent
+      className="h-screen bg-[#FBF9F5] text-stone-900 font-sans flex flex-col overflow-hidden selection:bg-orange-500 selection:text-white"
+    >
       {/* Top Application Header */}
       <header className="shrink-0 z-50 bg-white/95 backdrop-blur-md border-b border-stone-200 px-3 sm:px-6 h-16 flex items-center justify-between gap-2 sm:gap-4">
         {isMobileSearchOpen ? (
@@ -381,7 +384,10 @@ function UserDashboardLayoutInner({ children }: { children: React.ReactNode }) {
         </div>
 
         {/* Desktop Left Sidebar Navigation */}
-        <aside className="hidden md:flex w-60 h-full bg-[#FCFAF6] border-r border-stone-200 p-4 flex-col justify-between shrink-0 overflow-y-auto">
+        <aside
+          data-lenis-prevent
+          className="hidden md:flex w-60 h-full bg-[#FCFAF6] border-r border-stone-200 p-4 flex-col justify-between shrink-0 overflow-y-auto"
+        >
           <div className="w-full space-y-4">
             {/* Learner Profile Card Header */}
             <Link
@@ -479,7 +485,10 @@ function UserDashboardLayoutInner({ children }: { children: React.ReactNode }) {
         </aside>
 
         {/* Main Content Workspace */}
-        <main className="flex-1 p-4 sm:p-6 lg:p-8 bg-[#FBF9F5] overflow-y-auto">
+        <main
+          data-lenis-prevent
+          className="flex-1 p-4 sm:p-6 lg:p-8 bg-[#FBF9F5] overflow-y-auto"
+        >
           <div className="space-y-5 max-w-6xl mx-auto">
             {/* Organization Member Banner if in Member mode */}
             {isEnrolledInOrg && (

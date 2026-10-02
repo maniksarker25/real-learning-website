@@ -59,7 +59,7 @@ export const UnifiedLearningGPSView = memo(function UnifiedLearningGPSView() {
   );
 
   return (
-    <div className="space-y-6">
+    <div data-lenis-prevent className="space-y-6">
       {/* Learning Loop GPS Stepper */}
       <LearningLoopStepper
         currentStep={currentStep}
