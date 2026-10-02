@@ -48,7 +48,7 @@ export function useWhyYouAreHereAnimation(): WhyYouAreHereAnimationRefs {
       const titleHeight =
         titleInnerRef.current?.offsetHeight || (isMobile ? 65 : 110);
 
-      // 1. Initial visual states: spacious, aligned, zero layout shift
+      // Initial state
       gsap.set(pinWrapperRef.current, {
         backgroundColor: "#fdceb2",
         paddingTop: `${initialPadTop}px`,
@@ -80,7 +80,7 @@ export function useWhyYouAreHereAnimation(): WhyYouAreHereAnimationRefs {
         borderRadius: isMobile ? "14px" : "20px",
       });
 
-      // 2. Master Scrub Timeline: Smooth expansion directly from initial state to full-screen immersion
+      // Timeline configuration
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: containerRef.current,

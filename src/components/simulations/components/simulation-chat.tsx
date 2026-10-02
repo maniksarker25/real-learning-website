@@ -150,7 +150,7 @@ export const SimulationChat = memo(function SimulationChat({
                 : "text-white/40 hover:text-white/70"
             }`}
           >
-            💬 Simulation Chat
+            Simulation Chat
           </button>
           <button
             type="button"
@@ -161,7 +161,7 @@ export const SimulationChat = memo(function SimulationChat({
                 : "text-white/40 hover:text-white/70"
             }`}
           >
-            📊 Feedback & Scores
+            Feedback & Scores
           </button>
         </div>
 

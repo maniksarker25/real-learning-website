@@ -205,9 +205,7 @@ export const PatriciaChatExperience = memo(function PatriciaChatExperience({
       {/* Top subtle ambient glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-5xl h-36 bg-gradient-to-b from-orange-500/10 via-amber-500/[0.02] to-transparent pointer-events-none blur-3xl" />
 
-      {/* ========================================================= */}
-      {/* 1. TOP HEADER BAR: Clean, spacious, no-clutter layout     */}
-      {/* ========================================================= */}
+      {/* Header Bar */}
       <header className="relative z-20 h-11 sm:h-14 px-2.5 sm:px-6 border-b border-white/[0.08] bg-[#1a1a18]/95 backdrop-blur-xl flex items-center justify-between shrink-0">
         {/* Left: Brand Identity & Status */}
         <div className="flex items-center gap-2 sm:gap-3 min-w-0">
@@ -264,9 +262,7 @@ export const PatriciaChatExperience = memo(function PatriciaChatExperience({
         </div>
       </header>
 
-      {/* ========================================================= */}
-      {/* 2. CHAT FEED: Comfortable, readable message list          */}
-      {/* ========================================================= */}
+      {/* Message feed */}
       <div
         ref={scrollContainerRef}
         className="relative z-10 flex-1 overflow-y-auto overscroll-y-auto w-full no-scrollbar [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
@@ -388,9 +384,7 @@ export const PatriciaChatExperience = memo(function PatriciaChatExperience({
         </div>
       </div>
 
-      {/* ========================================================= */}
-      {/* 3. BOTTOM INPUT DOCK: Clean, comfortable spacing          */}
-      {/* ========================================================= */}
+      {/* Input controls */}
       <footer className="relative z-20 border-t border-white/[0.08] bg-[#181816]/95 backdrop-blur-xl px-3 sm:px-6 py-2.5 sm:py-3.5 shrink-0 pb-[max(env(safe-area-inset-bottom),12px)]">
         <div className="max-w-4xl mx-auto w-full space-y-1.5">
           <form

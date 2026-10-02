@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useRef, useState, useCallback } from "react";
-// import { PatriciaOpeningHero } from "./PatriciaOpeningHero";
 import { PatriciaChatExperience } from "./PatriciaChatExperience";
 import { useLenis } from "lenis/react";
 
@@ -34,19 +33,15 @@ export function PatriciaMainSection() {
   }, []);
 
   return (
-    <>
-      {/* <PatriciaOpeningHero onSlideUp={handleSlideUpToPatricia} /> */}
-
-      <div
-        id="patricia-experience"
-        ref={patriciaSectionRef}
-        className="bg-orange-50"
-      >
-        <PatriciaChatExperience
-          initialPrompt={initialPrompt}
-          onClearInitialPrompt={handleClearInitialPrompt}
-        />
-      </div>
-    </>
+    <div
+      id="patricia-experience"
+      ref={patriciaSectionRef}
+      className="bg-orange-50"
+    >
+      <PatriciaChatExperience
+        initialPrompt={initialPrompt}
+        onClearInitialPrompt={handleClearInitialPrompt}
+      />
+    </div>
   );
 }

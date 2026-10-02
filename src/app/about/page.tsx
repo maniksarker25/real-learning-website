@@ -20,19 +20,10 @@ export default function AboutPage() {
       <Navbar />
 
       <main className="overflow-x-clip">
-        {/* 1. Hero Section */}
         <AboutHero />
-
-        {/* 2. Mission & Manifesto (The Problem vs Real Learning) */}
         <AboutMission />
-
-        {/* 3. Core Architectural Values (Bento Grid) */}
         <AboutValues />
-
-        {/* 4. Timeline & Milestones */}
         <AboutStory />
-
-        {/* 5. Footer Call-to-Action */}
         <FooterCTA />
       </main>
     </div>

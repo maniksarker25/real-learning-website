@@ -136,12 +136,12 @@ export const SkillMatrixEqualizer = memo(function SkillMatrixEqualizer({
                 onMouseLeave={() => setHoveredSkillId(null)}
                 className="flex flex-col items-center group cursor-pointer transition-transform duration-200 hover:-translate-y-0.5"
               >
-                {/* 1. Top Percentage Display */}
+                {/* Percentage */}
                 <div className="text-sm sm:text-base md:text-xl font-black text-white font-mono tracking-tight mb-2 sm:mb-3 transition-colors group-hover:text-amber-200">
                   {skill.level}%
                 </div>
 
-                {/* 2. Vertical Capsule Chamber */}
+                {/* Capsule Chamber */}
                 <div className="w-full max-w-[58px] sm:max-w-[68px] md:max-w-[76px] h-[170px] sm:h-[195px] md:h-[215px] rounded-2xl sm:rounded-3xl bg-[#182894]/85 border border-white/15 relative flex flex-col justify-end p-1 overflow-hidden backdrop-blur-xs shadow-inner">
                   {/* Dashed Benchmark Line (at benchmark% from bottom = 100 - benchmark% from top) */}
                   <div
@@ -171,7 +171,7 @@ export const SkillMatrixEqualizer = memo(function SkillMatrixEqualizer({
                   </div>
                 </div>
 
-                {/* 3. Bottom Skill Label */}
+                {/* Label */}
                 <div className="mt-2.5 sm:mt-3.5 text-center">
                   <span className="text-[10px] sm:text-xs md:text-sm font-semibold text-white/95 group-hover:text-white leading-tight block tracking-tight">
                     {skill.name}
