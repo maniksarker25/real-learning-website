@@ -103,7 +103,7 @@ export default memo(function FeedbackSection() {
       const scenario = SCENARIO_STEPS[index % SCENARIO_STEPS.length];
       const initialCoords = getTargetCoords();
 
-      // 1. Customer turn is active, cursor rests naturally
+      // Setup customer turn state
       setDisplayedSpeaker("Customer");
       setDisplayedRole("Frustrated Client");
       setDisplayedMessage(scenario.customerMessage);
@@ -115,11 +115,10 @@ export default memo(function FeedbackSection() {
       setCursorDuration(0.8);
       setCursorPos(initialCoords.rest);
 
-      // Natural pause while reading customer's message
       await delay(1200);
       if (!isMounted) return;
 
-      // 2. Cursor glides smoothly toward input box
+      // Move cursor to input
       const freshCoords = getTargetCoords();
       setCursorDuration(0.75);
       setCursorPos(freshCoords.input);
@@ -127,14 +126,14 @@ export default memo(function FeedbackSection() {
       await delay(800);
       if (!isMounted) return;
 
-      // 3. Cursor clicks inside the input
+      // Focus input
       setIsClicking(true);
       setIsInputFocused(true);
       await delay(200);
       if (!isMounted) return;
       setIsClicking(false);
 
-      // 4. Type the specialist reply letter-by-letter
+      // Type reply
       const textToType = scenario.suggestedReply;
       for (let i = 1; i <= textToType.length; i++) {
         if (!isMounted) return;
@@ -145,7 +144,7 @@ export default memo(function FeedbackSection() {
       await delay(350);
       if (!isMounted) return;
 
-      // 5. Cursor glides smoothly toward the "Send" button
+      // Move cursor to send
       const sendCoords = getTargetCoords();
       setCursorDuration(0.65);
       setCursorPos(sendCoords.send);
@@ -153,14 +152,14 @@ export default memo(function FeedbackSection() {
       await delay(700);
       if (!isMounted) return;
 
-      // 6. Cursor clicks "Send" button
+      // Submit reply
       setIsClicking(true);
       setIsSendPressed(true);
       await delay(180);
       if (!isMounted) return;
       setIsClicking(false);
 
-      // 7. Message is sent! Dialogue bubble updates, scores update, input resets
+      // Update dialogue state with response
       setDisplayedSpeaker("Learner");
       setDisplayedRole("Support Specialist");
       setDisplayedMessage(`"${textToType}"`);
@@ -170,12 +169,11 @@ export default memo(function FeedbackSection() {
       setIsInputFocused(false);
       setIsSendPressed(false);
 
-      // Cursor moves back toward neutral rest position
       const restCoords = getTargetCoords();
       setCursorDuration(0.9);
       setCursorPos(restCoords.rest);
 
-      // 8. Realistic customer response typing interval
+      // Customer reply simulation
       await delay(400);
       if (!isMounted) return;
       setIsCustomerTyping(true);
@@ -184,7 +182,6 @@ export default memo(function FeedbackSection() {
       if (!isMounted) return;
       setIsCustomerTyping(false);
 
-      // 9. Advance to next scenario in automated cycle
       if (isMounted) {
         setStepIdx((prev) => (prev + 1) % SCENARIO_STEPS.length);
       }
@@ -241,17 +238,14 @@ export default memo(function FeedbackSection() {
           </div>
         </div>
 
-        {/* Bento Cards Container */}
         <div className="space-y-[18px]">
-          {/* Row 1: Telemetry Stat Gauge, Interactive Simulation Dialogue & Practitioner Photo */}
+          {/* Cards Grid */}
           <div className="flex flex-col lg:flex-row items-stretch gap-[18px] justify-center">
-            {/* 1. Retro Dot-Matrix Wave Stat Card */}
             <RetroDotWaveDisplay
               score={averageMastery}
               isTyping={isCustomerTyping}
             />
 
-            {/* 2. Automated Cursor-Driven Dialogue Card */}
             <DialogueSimulationCard
               cardRef={cardRef}
               inputContainerRef={inputContainerRef}
@@ -271,11 +265,10 @@ export default memo(function FeedbackSection() {
               }
             />
 
-            {/* 3. Practitioner Photo Card */}
             <PractitionerPhotoCard />
           </div>
 
-          {/* Row 2: Live Equalizer Telemetry Chart Board (7 Dynamic Competency Bars) */}
+          {/* Equalizer */}
           <PerformanceMetricsEqualizer
             currentScores={currentScores}
             isCustomerTyping={isCustomerTyping}

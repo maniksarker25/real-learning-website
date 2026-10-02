@@ -49,7 +49,7 @@ export function HeroDashboardPreview() {
 
   return (
     <div id="hero-dashboard-showcase" className="w-full flex flex-col items-center text-left text-start">
-      {/* 1. Pill-shaped Segmented Tab Switcher Bar */}
+      {/* Tab Switcher */}
       <div className="inline-flex items-center gap-1 p-1 rounded-full bg-[#18181b] border border-white/10 shadow-2xl backdrop-blur-md mb-4 sm:mb-5 select-none z-10">
         {tabs.map((tab) => {
           const isActive = tab.key === "simulation";
@@ -69,7 +69,7 @@ export function HeroDashboardPreview() {
         })}
       </div>
 
-      {/* 2. macOS Window Frame with Skeleton Dashboard Preview */}
+      {/* Preview Window Frame */}
       <div className="w-full rounded-xl sm:rounded-2xl border border-zinc-800/80 bg-[#121214] shadow-[0_20px_60px_-12px_rgba(0,0,0,0.45)] overflow-hidden text-zinc-100 transition-all duration-300 text-left text-start">
         {/* Top Window Chrome / Titlebar */}
         <div className="h-10 sm:h-11 border-b border-zinc-800/70 bg-[#161619] px-3.5 sm:px-4 flex items-center justify-between select-none text-left text-start">

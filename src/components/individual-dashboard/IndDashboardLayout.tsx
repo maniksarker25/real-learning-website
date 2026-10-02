@@ -263,7 +263,7 @@ export default memo(function IndDashboardLayout() {
               <span className="flex items-center gap-1.5 text-orange-400">
                 <span>Streak</span>
               </span>
-              <span className="text-white font-mono font-bold">7 Days 🔥</span>
+              <span className="text-white font-mono font-bold">7 Days</span>
             </div>
             <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
               <div className="h-full bg-gradient-to-r from-orange-500 to-rose-500 rounded-full w-[75%]" />
