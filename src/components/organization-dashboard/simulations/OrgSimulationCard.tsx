@@ -77,7 +77,7 @@ export const OrgSimulationCard = memo(function OrgSimulationCard({
           </div>
           <div className="w-full h-1.5 bg-stone-100 rounded-full overflow-hidden border border-stone-200/60">
             <div
-              className="h-full bg-gradient-to-r from-orange-500 via-amber-500 to-emerald-500 rounded-full"
+              className="h-full bg-orange-600 rounded-full"
               style={{ width: `${simulation.overallScore}%` }}
             />
           </div>
