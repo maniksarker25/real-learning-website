@@ -266,7 +266,7 @@ export default memo(function IndDashboardLayout() {
               <span className="text-white font-mono font-bold">7 Days</span>
             </div>
             <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
-              <div className="h-full bg-gradient-to-r from-orange-500 to-rose-500 rounded-full w-[75%]" />
+              <div className="h-full bg-orange-500 rounded-full w-[75%]" />
             </div>
             <div className="text-[10px] text-white/40 font-mono text-center">
               Learning Loop Active
