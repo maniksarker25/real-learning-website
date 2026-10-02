@@ -353,7 +353,7 @@ export const IndGoalsScreen = memo(function IndGoalsScreen() {
         {/* Milestone Progress Bar */}
         <div className="w-full h-2 bg-stone-100 rounded-full overflow-hidden border border-stone-200">
           <div
-            className="h-full bg-gradient-to-r from-amber-500 to-orange-500 rounded-full transition-all duration-300"
+            className="h-full bg-orange-600 rounded-full transition-all duration-300"
             style={{ width: `${progressPercent}%` }}
           />
         </div>
