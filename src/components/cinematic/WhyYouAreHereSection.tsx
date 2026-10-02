@@ -1,160 +1,18 @@
 "use client";
 
-import React, { useRef, useEffect, memo } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import React, { memo } from "react";
 import { PatriciaChatExperience } from "@/components/patricia/PatriciaChatExperience";
-
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
-}
+import { useWhyYouAreHereAnimation } from "./useWhyYouAreHereAnimation";
 
 export const WhyYouAreHereSection = memo(function WhyYouAreHereSection() {
-  const containerRef = useRef<HTMLElement>(null);
-  const pinWrapperRef = useRef<HTMLDivElement>(null);
-  const titleBlockRef = useRef<HTMLDivElement>(null);
-  const titleInnerRef = useRef<HTMLDivElement>(null);
-  const underlineRef = useRef<HTMLSpanElement>(null);
-  const chatContainerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (
-      !containerRef.current ||
-      !pinWrapperRef.current ||
-      !titleBlockRef.current ||
-      !titleInnerRef.current ||
-      !chatContainerRef.current
-    )
-      return;
-
-    const ctx = gsap.context(() => {
-      const isMobile = window.innerWidth < 640;
-      const navbarHeight = isMobile ? 54 : 64;
-      const initialPadTop = navbarHeight + (isMobile ? 6 : 14);
-      const initialPadBottom = isMobile ? 8 : 16;
-      const initialPadX = isMobile ? 10 : 24;
-      const initialMarginBottom = isMobile ? 6 : 16;
-
-      // Accurately capture the natural unconstrained title height
-      const titleHeight = titleInnerRef.current?.offsetHeight || (isMobile ? 65 : 110);
-
-      // 1. Initial visual states: spacious, beautifully aligned, zero layout shift
-      gsap.set(pinWrapperRef.current, {
-        backgroundColor: "#fdceb2",
-        paddingTop: `${initialPadTop}px`,
-        paddingBottom: `${initialPadBottom}px`,
-        paddingLeft: `${initialPadX}px`,
-        paddingRight: `${initialPadX}px`,
-      });
-
-      gsap.set(titleBlockRef.current, {
-        height: titleHeight,
-        marginBottom: `${initialMarginBottom}px`,
-        marginTop: 0,
-        opacity: 1,
-      });
-
-      gsap.set(titleInnerRef.current, {
-        y: 0,
-        opacity: 1,
-        scale: 1,
-      });
-
-      if (underlineRef.current) {
-        gsap.set(underlineRef.current, { scaleX: 0 });
-      }
-
-      gsap.set(chatContainerRef.current, {
-        width: "100%",
-        maxWidth: isMobile ? "100%" : "56rem", // max-w-4xl (896px)
-        borderRadius: isMobile ? "14px" : "20px",
-      });
-
-      // 2. Master Scrub Timeline: Smooth expansion directly from initial state to 100% full screen
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: "top top",
-          end: () => `+=${Math.round(window.innerHeight * 1.3)}`,
-          pin: pinWrapperRef.current,
-          scrub: 0.8,
-          invalidateOnRefresh: true,
-          anticipatePin: 1,
-        },
-      });
-
-      // Step A (0 -> 0.15): Underline on "outmoded" draws in
-      if (underlineRef.current) {
-        tl.to(
-          underlineRef.current,
-          {
-            scaleX: 1,
-            duration: 0.15,
-            ease: "power2.out",
-          },
-          0,
-        );
-      }
-
-      // Step B (0.05 -> 0.25): Title content fades out cleanly first
-      tl.to(
-        titleInnerRef.current,
-        {
-          y: -16,
-          opacity: 0,
-          scale: 0.97,
-          duration: 0.2,
-          ease: "power2.inOut",
-        },
-        0.05,
-      );
-
-      // Step C (0.18 -> 0.45): After title fades, smoothly collapse outer height
-      tl.to(
-        titleBlockRef.current,
-        {
-          height: 0,
-          marginBottom: 0,
-          marginTop: 0,
-          duration: 0.27,
-          ease: "power2.inOut",
-        },
-        0.18,
-      );
-
-      // Step D (0.15 -> 0.6): Pin wrapper background darkens and padding goes flush to navbar
-      tl.to(
-        pinWrapperRef.current,
-        {
-          backgroundColor: "#0c0b0a",
-          paddingTop: `${navbarHeight}px`,
-          paddingBottom: "0px",
-          paddingLeft: "0px",
-          paddingRight: "0px",
-          duration: 0.45,
-          ease: "power1.inOut",
-        },
-        0.15,
-      );
-
-      // Step E (0.15 -> 0.65): Chat container expands to full width & flush edges
-      tl.to(
-        chatContainerRef.current,
-        {
-          maxWidth: "100%",
-          borderRadius: "0px",
-          duration: 0.5,
-          ease: "power2.inOut",
-        },
-        0.15,
-      );
-
-      // Step F: Hold at full-screen immersion before unpinning
-      tl.to({}, { duration: 0.25 });
-    }, containerRef);
-
-    return () => ctx.revert();
-  }, []);
+  const {
+    containerRef,
+    pinWrapperRef,
+    titleBlockRef,
+    titleInnerRef,
+    underlineRef,
+    chatContainerRef,
+  } = useWhyYouAreHereAnimation();
 
   return (
     <section
@@ -183,7 +41,7 @@ export const WhyYouAreHereSection = memo(function WhyYouAreHereSection() {
           }}
         />
 
-        {/* 1. TITLE BLOCK FOR THE CHAT: Natural Flow Above Chat - No Overlap & Clean Proportions on Mobile */}
+        {/* Section Headline Block */}
         <div
           ref={titleBlockRef}
           className="relative z-10 w-full max-w-3xl mx-auto px-2 shrink-0 overflow-hidden mb-1.5 sm:mb-4 will-change-[height,margin]"
@@ -200,7 +58,7 @@ export const WhyYouAreHereSection = memo(function WhyYouAreHereSection() {
               </span>
             </div>
 
-            {/* Responsive Bold Headline - Compact & crisp on mobile, bold on desktop */}
+            {/* Responsive Bold Headline */}
             <h2 className="text-xs sm:text-base md:text-xl lg:text-2xl font-black uppercase text-[#0c0b0a] tracking-tight sm:tracking-tighter leading-snug font-sans drop-shadow-sm max-w-2xl mx-auto">
               AI was made to take your jobs. We’re here to keep you from becoming{" "}
               <span className="relative inline-block text-orange-500 will-change-transform drop-shadow-[0_0_24px_rgba(249,115,22,0.35)]">
@@ -216,7 +74,7 @@ export const WhyYouAreHereSection = memo(function WhyYouAreHereSection() {
           </div>
         </div>
 
-        {/* 2. CHAT CONTAINER: Full width on mobile, max-w-4xl on desktop, with fluid flex-1 height */}
+        {/* Chat Experience Container */}
         <div
           ref={chatContainerRef}
           id="patricia-chat-container"
