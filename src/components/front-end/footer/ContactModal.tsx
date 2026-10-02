@@ -103,7 +103,7 @@ export const ContactModal = memo(function ContactModal({
 
                 <button
                   type="submit"
-                  className="w-full py-3 rounded-xl bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white text-xs font-bold transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer"
+                  className="w-full py-3 rounded-xl bg-orange-600 hover:bg-orange-500 text-white text-xs font-bold transition-colors shadow-md flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <Send className="w-3.5 h-3.5" />
                   <span>Send Message</span>
