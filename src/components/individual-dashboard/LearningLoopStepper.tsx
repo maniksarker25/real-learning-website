@@ -156,7 +156,7 @@ export const LearningLoopStepper = memo(function LearningLoopStepper({
           </span>
           <div className="w-16 h-1.5 bg-stone-100 rounded-full overflow-hidden border border-stone-200">
             <div
-              className="h-full bg-gradient-to-r from-orange-500 to-amber-500 transition-all duration-300"
+              className="h-full bg-orange-600 transition-all duration-300"
               style={{
                 width: `${Math.min(
                   100,
