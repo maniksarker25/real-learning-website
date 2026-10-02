@@ -255,7 +255,7 @@ export const RecentSimulationFeedbackModal = memo(
           <div className="pt-2 flex items-center justify-between gap-3 border-t border-stone-200">
             <button
               onClick={handleRetake}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-orange-600 to-amber-600 text-white font-extrabold text-xs hover:opacity-95 transition-opacity cursor-pointer"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs transition-colors cursor-pointer shadow-sm"
             >
               <RotateCcw className="w-3.5 h-3.5" />
               <span>Retake Simulation</span>
