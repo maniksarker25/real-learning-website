@@ -121,7 +121,7 @@ export const OrgAccessModal = memo(function OrgAccessModal({
 
                 <button
                   type="submit"
-                  className="w-full py-3 rounded-xl bg-gradient-to-r from-orange-500 via-rose-500 to-pink-500 hover:opacity-95 text-white text-xs font-bold transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer"
+                  className="w-full py-3 rounded-xl bg-orange-600 hover:bg-orange-500 text-white text-xs font-bold transition-colors shadow-md flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <Building2 className="w-3.5 h-3.5" />
                   <span>Request Organization Access</span>
