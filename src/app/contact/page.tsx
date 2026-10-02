@@ -19,16 +19,9 @@ export default function ContactPage() {
       <Navbar />
 
       <main className="overflow-x-clip">
-        {/* 1. Hero Section */}
         <ContactHero />
-
-        {/* 2. Form & Direct Communication Channels */}
         <ContactFormSection />
-
-        {/* 3. Common Questions & FAQ */}
         <ContactFAQ />
-
-        {/* 4. Global Footer CTA */}
         <FooterCTA />
       </main>
     </div>

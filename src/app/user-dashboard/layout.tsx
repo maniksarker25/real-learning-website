@@ -473,7 +473,7 @@ function UserDashboardLayoutInner({ children }: { children: React.ReactNode }) {
               <span className="flex items-center gap-1.5 text-orange-600 font-semibold">
                 <span>Streak</span>
               </span>
-              <span className="text-stone-900 font-mono font-bold">7 Days 🔥</span>
+              <span className="text-stone-900 font-mono font-bold">7 Days</span>
             </div>
             <div className="w-full h-1.5 bg-stone-100 rounded-full overflow-hidden border border-stone-200/60">
               <div className="h-full bg-gradient-to-r from-orange-500 to-amber-500 rounded-full w-[75%]" />

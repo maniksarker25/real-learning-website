@@ -104,9 +104,7 @@ export default function OrganizationOnboardingPage() {
       {/* Main Container */}
       <div className="max-w-6xl w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-stretch">
         
-        {/* ============================================================ */}
-        {/* LEFT SIDE: Clean Website Visual Showcase (Silky Smooth) */}
-        {/* ============================================================ */}
+        {/* Visual Showcase */}
         <div className="lg:col-span-6 bg-stone-950 text-white rounded-3xl p-6 sm:p-8 lg:p-10 flex flex-col justify-between shadow-[0_12px_40px_-10px_rgba(0,0,0,0.3)] border border-white/[0.06] relative overflow-hidden min-h-[440px] lg:min-h-[540px]">
           
           {/* Top Visual Image Preview */}
@@ -172,9 +170,7 @@ export default function OrganizationOnboardingPage() {
 
         </div>
 
-        {/* ============================================================ */}
-        {/* RIGHT SIDE: Organization Workspace Setup Form */}
-        {/* ============================================================ */}
+        {/* Setup Form */}
         <div className="lg:col-span-6 flex flex-col justify-center px-4 sm:px-8 lg:px-12 py-6">
           <div className="w-full max-w-sm mx-auto space-y-6">
             
