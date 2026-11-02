@@ -15,7 +15,7 @@ export const HeroScrollCue = memo(function HeroScrollCue({
     <div
       ref={scrollCueRef}
       onClick={onScrollToHero}
-      className="absolute top-[calc(100dvh-5rem)] sm:top-[calc(100dvh-6rem)] left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 sm:gap-2.5 cursor-pointer group z-20 select-none"
+      className="absolute bottom-5 sm:bottom-7 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 sm:gap-2.5 cursor-pointer group z-20 select-none"
       role="button"
       aria-label="Scroll to hero section"
     >
@@ -31,7 +31,7 @@ export const HeroScrollCue = memo(function HeroScrollCue({
             fill="none"
             stroke="currentColor"
             strokeWidth="2.5"
-            className="text-[#141210]/20"
+            className="text-white/25"
           />
           <circle
             ref={circleProgressRef}
@@ -45,7 +45,7 @@ export const HeroScrollCue = memo(function HeroScrollCue({
           />
         </svg>
 
-        <div className="absolute inset-0 flex items-center justify-center text-[#141210] group-hover:text-orange-600 transition-colors">
+        <div className="absolute inset-0 flex items-center justify-center text-white group-hover:text-orange-400 transition-colors">
           <svg
             className="w-4 h-4 sm:w-4.5 sm:h-4.5 group-hover:translate-y-0.5 transition-transform duration-200"
             fill="none"
@@ -62,7 +62,7 @@ export const HeroScrollCue = memo(function HeroScrollCue({
         </div>
       </div>
 
-      <span className="text-xs sm:text-sm font-extrabold sm:font-black tracking-[0.28em] sm:tracking-[0.36em] uppercase font-sans text-[#141210] group-hover:text-orange-600 transition-colors antialiased">
+      <span className="text-xs sm:text-sm font-extrabold sm:font-black tracking-[0.28em] sm:tracking-[0.36em] uppercase font-sans text-white/90 group-hover:text-orange-400 transition-colors antialiased [text-shadow:0_2px_12px_rgba(0,0,0,0.8)]">
         Scroll
       </span>
     </div>
