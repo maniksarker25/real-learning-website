@@ -6,6 +6,7 @@ import {
   HeroScrollCue,
   HeroIntroTitle,
   HeroMainContent,
+  HeroVideoBackground,
 } from "./awwwards-hero";
 
 export const GsapAwwwardsHero = memo(function GsapAwwwardsHero() {
@@ -17,6 +18,7 @@ export const GsapAwwwardsHero = memo(function GsapAwwwardsHero() {
     featherImgRef,
     scorchedTextRef,
     scrollCueRef,
+    videoLayerRef,
     realLearningSectionRef,
     headlineRef,
     subtitleRef,
@@ -29,22 +31,15 @@ export const GsapAwwwardsHero = memo(function GsapAwwwardsHero() {
     <div
       ref={containerRef}
       id="hero-top"
-      className="relative w-full bg-[#fdceb2] select-none"
+      className="relative w-full bg-[#0a0d14] select-none"
     >
-      {/* Pinned Viewport Container with top padding for navbar clearance */}
+      {/* Pinned viewport container; the video fills it edge to edge. */}
       <div
         ref={pinSectionRef}
-        className="relative min-h-[70dvh] w-full flex flex-col items-center justify-start bg-[#fdceb2] pt-14 sm:pt-16 md:pt-18 pb-12 sm:pb-16"
+        className="relative min-h-[72dvh] md:min-h-[78dvh] w-full flex flex-col items-center justify-center overflow-hidden bg-[#0a0d14] pt-24 sm:pt-28 pb-20 sm:pb-24"
       >
-        {/* Graph paper grid pattern */}
-        <div
-          className="absolute inset-0 pointer-events-none opacity-40"
-          style={{
-            backgroundImage:
-              "linear-gradient(to right, rgba(0, 0, 0, 0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 1px, transparent 1px)",
-            backgroundSize: "clamp(24px, 4vw, 36px) clamp(24px, 4vw, 36px)",
-          }}
-        />
+        {/* Cinematic video backdrop + legibility scrims */}
+        <HeroVideoBackground videoLayerRef={videoLayerRef} />
 
         {/* Floating "SCORCHED SOULS PRESENTS" Title */}
         <HeroIntroTitle scorchedTextRef={scorchedTextRef} />
@@ -65,6 +60,7 @@ export const GsapAwwwardsHero = memo(function GsapAwwwardsHero() {
           headlineRef={headlineRef}
           subtitleRef={subtitleRef}
           socialProofRef={socialProofRef}
+          onBeginJourney={handleScrollToHero}
         />
       </div>
     </div>
