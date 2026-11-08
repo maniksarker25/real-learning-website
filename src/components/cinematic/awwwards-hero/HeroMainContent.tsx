@@ -10,6 +10,7 @@ interface HeroMainContentProps {
   headlineRef: React.RefObject<HTMLHeadingElement | null>;
   subtitleRef: React.RefObject<HTMLParagraphElement | null>;
   socialProofRef: React.RefObject<HTMLDivElement | null>;
+  onBeginJourney: () => void;
 }
 
 export const HeroMainContent = memo(function HeroMainContent({
@@ -20,12 +21,13 @@ export const HeroMainContent = memo(function HeroMainContent({
   headlineRef,
   subtitleRef,
   socialProofRef,
+  onBeginJourney,
 }: HeroMainContentProps) {
   return (
     <div
       ref={realLearningSectionRef}
       id="real-learning-intro"
-      className="relative z-10 flex flex-col items-stretch px-4 sm:px-6 md:px-8 max-w-7xl mx-auto will-change-transform pointer-events-auto w-full py-1 sm:py-2"
+      className="relative z-10 flex w-full max-w-7xl mx-auto flex-col items-start px-5 sm:px-6 md:px-8 lg:px-12 text-left will-change-transform pointer-events-auto"
     >
       {/* Resizable gliding feather */}
       <HeroFeatherGlider
@@ -34,29 +36,52 @@ export const HeroMainContent = memo(function HeroMainContent({
         featherImgRef={featherImgRef}
       />
 
-      {/* Headline */}
+      {/* Headline — heavy, tight, maximum contrast against the footage */}
       <h1
         ref={headlineRef}
-        style={{ opacity: 0, visibility: "hidden" }}
-        className="opacity-0 text-3xl sm:text-5xl md:text-6xl lg:text-[72px] xl:text-[78px] font-extrabold text-slate-900 tracking-[-0.03em] leading-[1.05] sm:leading-[1.0] font-sans will-change-transform text-left"
+        className="font-sans font-extrabold text-white tracking-[-0.035em] leading-[0.95] max-w-4xl text-left text-[clamp(2.5rem,7vw,5.5rem)] [text-shadow:0_4px_32px_rgba(0,0,0,0.75),0_1px_4px_rgba(0,0,0,0.6)] will-change-transform"
       >
-        Real Learning for <br className="hidden sm:inline" />
-        humans and AI agents
+        Real Learning for
+        <br className="hidden sm:inline" /> humans and AI agents
       </h1>
 
-      {/* Description Paragraph & Social Proof Row */}
-      <div className="w-full mt-6 sm:mt-8 md:mt-10 flex flex-col md:flex-row items-start md:items-end justify-between gap-6 sm:gap-10">
-        <p
-          ref={subtitleRef}
-          style={{ opacity: 0, visibility: "hidden" }}
-          className="opacity-0 text-sm sm:text-base md:text-[17px] text-slate-600 font-normal max-w-lg md:max-w-xl leading-relaxed will-change-transform text-left"
-        >
-          Real Learning gives you the education you deserve so you never become
-          outmoded. Practice high-stakes workplace situations, talk with
-          Patricia, and master your career.
-        </p>
+      {/* Supporting copy */}
+      <p
+        ref={subtitleRef}
+        className="mt-6 sm:mt-7 max-w-xl text-pretty text-sm sm:text-base md:text-[17px] font-medium leading-relaxed text-white/90 [text-shadow:0_2px_16px_rgba(0,0,0,0.8)] will-change-transform text-left"
+      >
+        Practice high-stakes workplace situations, talk with Patricia, and
+        master your career — so you never become outmoded.
+      </p>
 
-        <HeroSocialProof socialProofRef={socialProofRef} />
+      {/* Call to action + social proof */}
+      <div
+        ref={socialProofRef}
+        className="mt-9 sm:mt-11 flex flex-col sm:flex-row sm:items-center items-start gap-7 sm:gap-10 will-change-transform"
+      >
+        <button
+          type="button"
+          onClick={onBeginJourney}
+          className="group inline-flex items-center gap-2.5 cursor-pointer rounded-full bg-white px-7 py-3.5 sm:px-9 sm:py-4 font-sans text-sm sm:text-base font-bold uppercase tracking-[0.12em] text-slate-950 shadow-[0_8px_32px_rgba(0,0,0,0.45)] transition-all duration-300 ease-out hover:bg-orange-500 hover:text-white hover:shadow-[0_12px_40px_rgba(234,88,12,0.5)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+        >
+          Begin Journey
+          <svg
+            className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth="3"
+            aria-hidden="true"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M4 12h16m0 0l-6-6m6 6l-6 6"
+            />
+          </svg>
+        </button>
+
+        <HeroSocialProof />
       </div>
     </div>
   );

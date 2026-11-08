@@ -18,6 +18,7 @@ export function useGsapAwwwardsAnimation() {
   const featherImgRef = useRef<HTMLDivElement>(null);
   const scorchedTextRef = useRef<HTMLDivElement>(null);
   const scrollCueRef = useRef<HTMLDivElement>(null);
+  const videoLayerRef = useRef<HTMLDivElement>(null);
 
   const realLearningSectionRef = useRef<HTMLDivElement>(null);
   const headlineRef = useRef<HTMLHeadingElement>(null);
@@ -49,18 +50,6 @@ export function useGsapAwwwardsAnimation() {
 
     let isRunning = false;
 
-    const scrollToHeroTarget = () => {
-      const targetScroll = Math.round(window.innerHeight * 0.52);
-      if (lenis) {
-        lenis.scrollTo(targetScroll, {
-          duration: 1.5,
-          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        });
-      } else {
-        window.scrollTo({ top: targetScroll, behavior: "smooth" });
-      }
-    };
-
     const startProgress = () => {
       if (isRunning) return;
       isRunning = true;
@@ -78,12 +67,12 @@ export function useGsapAwwwardsAnimation() {
         strokeDashoffset: 0,
         duration: 2,
         ease: "linear",
+        // The ring is an ambient "there's more below" hint only. It no longer
+        // auto-scrolls the page: forcing a jump fought the user and pushed the
+        // hero copy out of view. Scrolling is now entirely user-driven, via
+        // the wheel or by clicking the cue.
         onComplete: () => {
           isRunning = false;
-          const currentY = window.scrollY || document.documentElement.scrollTop;
-          if (currentY <= 5 && !hasUserScrolledRef.current) {
-            scrollToHeroTarget();
-          }
         },
       });
     };
@@ -197,95 +186,30 @@ export function useGsapAwwwardsAnimation() {
       return;
 
     const ctx = gsap.context(() => {
-      const getMetrics = () => {
-        if (!pinSectionRef.current || !featherImgRef.current) {
-          return {
-            deltaX: 0,
-            deltaY: 200,
-            scale: 3.0,
-            scorchedY: 520,
-            scrollCueTop: 720,
-          };
-        }
-        const pinRect = pinSectionRef.current.getBoundingClientRect();
-        const featherRect = featherImgRef.current.getBoundingClientRect();
-
-        const windowW = window.innerWidth;
-        const viewportH = window.innerHeight;
-        const viewportCenterY = viewportH / 2;
-        const viewportCenterX = windowW / 2;
-
-        const featherCenterY =
-          featherRect.top - pinRect.top + featherRect.height / 2;
-        const deltaY = viewportCenterY - featherCenterY;
-
-        const featherCenterX =
-          featherRect.left - pinRect.left + featherRect.width / 2;
-        const deltaX = viewportCenterX - featherCenterX;
-
-        const targetLargeWidth = Math.min(
-          windowW * 0.74,
-          windowW < 640 ? 230 : windowW < 1024 ? 320 : 420,
-        );
-        const restingWidth = featherRect.width || (windowW < 640 ? 80 : 112);
-        const scale = Math.max(1.8, targetLargeWidth / restingWidth);
-
-        const scaledHeight = (featherRect.height || 60) * scale;
-        const scorchedY =
-          viewportCenterY + scaledHeight / 2 + (windowW < 640 ? 16 : 24);
-
-        const scrollCueTop = viewportH - (windowW < 640 ? 76 : 96);
-
-        return { deltaX, deltaY, scale, scorchedY, scrollCueTop };
-      };
-
-      let metrics = getMetrics();
-
-      // Initial visual state
-      gsap.set(pinSectionRef.current, { backgroundColor: "#fdceb2" });
+      // Initial visual state. The hero reads as a finished composition on load
+      // (video backdrop + left-aligned headline), so the feather rests inline
+      // above the headline rather than flying in oversized from the centre.
+      //
+      // The eyebrow and scroll cue are anchored with CSS (top-6 / bottom-5)
+      // against the hero section itself, so nothing here positions them from
+      // window.innerHeight — that broke once the hero stopped being full-height.
       gsap.set(featherImgRef.current, {
-        x: metrics.deltaX,
-        y: metrics.deltaY,
-        scale: metrics.scale,
+        x: 0,
+        y: 0,
+        scale: 1,
         transformOrigin: "center center",
         opacity: 1,
       });
-      gsap.set(scorchedTextRef.current, {
-        top: `${metrics.scorchedY}px`,
-        autoAlpha: 1,
-      });
-      gsap.set(scrollCueRef.current, {
-        top: `${metrics.scrollCueTop}px`,
+      gsap.set([scorchedTextRef.current, scrollCueRef.current], {
         autoAlpha: 1,
         y: 0,
       });
-      gsap.set(headlineRef.current, { autoAlpha: 0, y: 20 });
-      gsap.set(subtitleRef.current, { autoAlpha: 0, y: 16 });
-      gsap.set(socialProofRef.current, { autoAlpha: 0, y: 16 });
 
-      // Re-center on refresh
-      ScrollTrigger.addEventListener("refreshInit", () => {
-        const currentY = window.scrollY || document.documentElement.scrollTop;
-        if (
-          currentY <= 5 &&
-          featherImgRef.current &&
-          scorchedTextRef.current &&
-          scrollCueRef.current
-        ) {
-          metrics = getMetrics();
-          gsap.set(featherImgRef.current, {
-            x: metrics.deltaX,
-            y: metrics.deltaY,
-            scale: metrics.scale,
-          });
-          gsap.set(scorchedTextRef.current, {
-            top: `${metrics.scorchedY}px`,
-          });
-          gsap.set(scrollCueRef.current, {
-            top: `${metrics.scrollCueTop}px`,
-          });
-        }
-      });
+      // Headline block is visible immediately and stays visible.
+      gsap.set(
+        [headlineRef.current, subtitleRef.current, socialProofRef.current],
+        { autoAlpha: 1, y: 0 },
+      );
 
       const entranceTimer = setTimeout(() => {
         isInitialEntranceCompleteRef.current = true;
@@ -300,7 +224,7 @@ export function useGsapAwwwardsAnimation() {
         scrollTrigger: {
           trigger: containerRef.current,
           start: "top top",
-          end: () => `+=${Math.round(window.innerHeight * 0.55)}`,
+          end: () => `+=${Math.round(window.innerHeight * 0.3)}`,
           pin: pinSectionRef.current,
           scrub: 0.8,
           invalidateOnRefresh: true,
@@ -325,60 +249,22 @@ export function useGsapAwwwardsAnimation() {
         0,
       );
 
+      // The headline block stays fully visible for the whole pinned stretch —
+      // it only drifts up slightly, so auto-scroll never blanks the hero.
       tl.to(
-        pinSectionRef.current,
-        {
-          backgroundColor: "#fcfdfd",
-          duration: 1,
-          ease: "power1.inOut",
-        },
+        [headlineRef.current, subtitleRef.current, socialProofRef.current],
+        { y: -24, duration: 1, ease: "none" },
         0,
       );
 
-      tl.to(
-        featherImgRef.current,
-        {
-          x: 0,
-          y: 0,
-          scale: 1,
-          duration: 1,
-          ease: "power1.inOut",
-        },
-        0,
-      );
-
-      tl.to(
-        headlineRef.current,
-        {
-          autoAlpha: 1,
-          y: 0,
-          duration: 0.45,
-          ease: "power2.out",
-        },
-        0.3,
-      );
-
-      tl.to(
-        subtitleRef.current,
-        {
-          autoAlpha: 1,
-          y: 0,
-          duration: 0.4,
-          ease: "power2.out",
-        },
-        0.38,
-      );
-
-      tl.to(
-        socialProofRef.current,
-        {
-          autoAlpha: 1,
-          y: 0,
-          duration: 0.4,
-          ease: "power2.out",
-        },
-        0.38,
-      );
+      // Slow push-in on the footage keeps the pinned section alive.
+      if (videoLayerRef.current) {
+        tl.to(
+          videoLayerRef.current,
+          { scale: 1.08, duration: 1, ease: "none" },
+          0,
+        );
+      }
 
       tl.to({}, { duration: 0.1 });
       return () => clearTimeout(entranceTimer);
@@ -402,7 +288,14 @@ export function useGsapAwwwardsAnimation() {
       });
     }
 
-    const targetScroll = Math.round(window.innerHeight * 0.52);
+    // Scroll just past the hero (section height + its pinned stretch) rather
+    // than a fixed fraction of the viewport, which no longer matches now that
+    // the hero is shorter than the screen.
+    const heroHeight =
+      containerRef.current?.offsetHeight ?? Math.round(window.innerHeight * 0.7);
+    const targetScroll = Math.round(
+      heroHeight + window.innerHeight * 0.3 - window.innerHeight * 0.08,
+    );
     if (lenis) {
       lenis.scrollTo(targetScroll, {
         duration: 1.5,
@@ -421,6 +314,7 @@ export function useGsapAwwwardsAnimation() {
     featherImgRef,
     scorchedTextRef,
     scrollCueRef,
+    videoLayerRef,
     realLearningSectionRef,
     headlineRef,
     subtitleRef,
