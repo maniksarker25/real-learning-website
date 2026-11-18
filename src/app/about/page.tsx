@@ -1,29 +1,24 @@
-import React from "react";
 import type { Metadata } from "next";
-import Navbar from "@/components/front-end/Navbar";
+import CinematicNavbar from "@/components/cinematic/CinematicNavbar";
 import { AboutHero } from "@/components/about/AboutHero";
 import { AboutMission } from "@/components/about/AboutMission";
 import { AboutValues } from "@/components/about/AboutValues";
-import { AboutStory } from "@/components/about/AboutStory";
 import FooterCTA from "@/components/front-end/FooterCTA";
 
 export const metadata: Metadata = {
-  title: "About Us · Real Learning & Patricia AI Life GPS",
+  title: "About | Real Learning",
   description:
-    "Discover how Real Learning and Northstar Labs are transforming career preparation through high-fidelity workplace simulations and personalized AI guidance.",
+    "Real Learning helps people practice real workplace conversations with Patricia, an AI coach who reacts like a real person and gives feedback you can use.",
 };
 
 export default function AboutPage() {
   return (
-    <div className="bg-[#faf9f6] text-stone-900 min-h-screen w-full overflow-x-clip font-sans selection:bg-orange-500 selection:text-white">
-      {/* Top Navbar */}
-      <Navbar />
-
+    <div className="min-h-screen w-full overflow-x-clip bg-[#121212] font-sans text-white selection:bg-orange-500 selection:text-white">
+      <CinematicNavbar />
       <main className="overflow-x-clip">
         <AboutHero />
         <AboutMission />
         <AboutValues />
-        <AboutStory />
         <FooterCTA />
       </main>
     </div>

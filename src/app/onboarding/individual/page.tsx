@@ -1,48 +1,53 @@
 "use client";
 
-import React, { useState, useCallback, useMemo } from "react";
-import { useAccount } from "@/context/AccountContext";
-import { useRouter } from "next/navigation";
+import { useCallback, useMemo, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, ArrowRight, CheckCircle2, Check } from "lucide-react";
-import { ImageConstants } from "@/constant/image.index";
+import { ArrowLeft, ArrowRight, Check } from "lucide-react";
+import { useAccount } from "@/context/AccountContext";
+import { blob, display, NOISE } from "@/components/about/shared";
 
-interface TrackOption {
+type Track = {
   id: string;
   title: string;
-  image: string;
   description: string;
-}
+  plays: string;
+  face: string;
+  blob: string;
+};
 
-const CAREER_TRACKS: TrackOption[] = [
+const CAREER_TRACKS: Track[] = [
   {
     id: "customer-service",
     title: "Customer Service",
-    image: "/images/specialist.jpg",
-    description:
-      "De-escalation, conflict resolution, and customer empathy dialogues.",
+    description: "De-escalation, conflict resolution and customer empathy.",
+    plays: "frustrated customers",
+    face: "angry",
+    blob: blob("#9f1239", "#fb7185", "#f59e0b", "#4c0519"),
   },
   {
     id: "tech-support",
     title: "Technical Support",
-    image: "/images/teck.jpg",
-    description:
-      "System troubleshooting, outage incident calls, and diagnostic workflows.",
+    description: "Troubleshooting, outage calls and step-by-step fixes.",
+    plays: "stressed employees",
+    face: "surprised",
+    blob: blob("#1e40af", "#60a5fa", "#f97316", "#172554"),
   },
   {
     id: "it-specialist",
     title: "IT Specialist",
-    image: "/images/step-career.jpg",
-    description:
-      "Security access, cloud incidents, and internal stakeholder requests.",
+    description: "Security access, cloud incidents and stakeholder requests.",
+    plays: "impatient managers",
+    face: "confused",
+    blob: blob("#4c1d95", "#a78bfa", "#ec4899", "#1e1b4b"),
   },
   {
     id: "healthcare-support",
     title: "Healthcare Support",
-    image: "/images/healthcare.jpg",
-    description:
-      "Patient inquiries, clinical routing, and physician communication.",
+    description: "Patient questions, clinical routing and calm reassurance.",
+    plays: "anxious patients",
+    face: "sad",
+    blob: blob("#0f5f58", "#34d399", "#0ea5e9", "#052e2b"),
   },
 ];
 
@@ -52,21 +57,23 @@ const PRACTICE_PACING = [
   { id: "intensive", label: "Accelerated", time: "45 min/day" },
 ];
 
+const STEPS = ["Career track", "Your profile", "All set"];
+
+const inputCls =
+  "w-full rounded-xl border border-white/[0.08] bg-black/40 px-4 py-3.5 text-base text-white placeholder:text-zinc-500 transition-colors focus:border-orange-500/70 focus:outline-none";
+
 export default function IndividualOnboardingPage() {
   const { loginAsIndividual } = useAccount();
-  const router = useRouter();
 
   const [currentStep, setCurrentStep] = useState<1 | 2 | 3>(1);
-  const [selectedTrackId, setSelectedTrackId] =
-    useState<string>("customer-service");
-  const [name, setName] = useState("Sarah Jenkins");
-  const [email, setEmail] = useState("sarah.jenkins@reallearning.ai");
+  const [selectedTrackId, setSelectedTrackId] = useState<string>("customer-service");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [selectedPacing, setSelectedPacing] = useState("regular");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const selectedTrack = useMemo(
-    () =>
-      CAREER_TRACKS.find((t) => t.id === selectedTrackId) || CAREER_TRACKS[0],
+    () => CAREER_TRACKS.find((t) => t.id === selectedTrackId) || CAREER_TRACKS[0],
     [selectedTrackId],
   );
 
@@ -83,250 +90,292 @@ export default function IndividualOnboardingPage() {
     }, 450);
   }, [loginAsIndividual, name, selectedTrack.title, email]);
 
+  const firstName = (name || "there").split(" ")[0];
+
   return (
-    <main className="min-h-screen bg-orange-50 text-slate-900 font-sans flex flex-col justify-between p-4 sm:p-6 lg:p-10 selection:bg-orange-500 selection:text-white">
-      {/* Header Bar */}
-      <header className="max-w-5xl w-full mx-auto flex items-center justify-between py-2 border-b border-stone-200/60">
+    <main className="flex min-h-dvh flex-col bg-[#121212] px-4 py-5 font-sans text-white selection:bg-orange-500 selection:text-white sm:px-6 lg:px-10">
+      {/* top bar */}
+      <header className="mx-auto flex w-full max-w-5xl items-center justify-between gap-4">
         <Link
-          href="/get-started"
-          className="inline-flex items-center gap-1.5 text-xs font-medium text-stone-500 hover:text-stone-900 transition-colors"
+          href={currentStep === 2 ? "#" : "/get-started"}
+          onClick={(e) => {
+            if (currentStep === 2) {
+              e.preventDefault();
+              setCurrentStep(1);
+            }
+          }}
+          className="inline-flex items-center gap-2 rounded-full border border-white/10 py-2 pl-2.5 pr-4 text-sm text-zinc-300 transition-colors hover:border-white/30 hover:text-white"
         >
-          <ArrowLeft className="w-3.5 h-3.5" />
-          <span>Back</span>
+          <ArrowLeft className="h-4 w-4" />
+          Back
         </Link>
-
-        {/* Brand Logo & Name */}
-        <div className="inline-flex items-center gap-2">
-          <div className="w-7 h-7 rounded-lg bg-white border border-stone-200/80 p-0.5 flex items-center justify-center shadow-[0_1px_4px_rgba(0,0,0,0.02)]">
-            <Image
-              src={ImageConstants.brandLogo.src}
-              alt="Real Learning Logo"
-              width={60}
-              height={60}
-              className="object-contain"
-            />
-          </div>
-          <span className="font-bold text-sm tracking-tight text-stone-900">
-            Real Learning
+        <Link href="/" className="flex items-center gap-2.5" aria-label="Real Learning home">
+          <span className="relative block h-8 w-8 overflow-hidden rounded-lg bg-white">
+            <Image src="/icons/brand-mark.png" alt="" fill sizes="32px" className="object-contain p-0.5" />
           </span>
-        </div>
-
-        {/* Step Indicator */}
-        <div className="text-xs font-medium text-stone-500">
-          Step {currentStep} of 3
-        </div>
+          <span className="hidden text-sm font-semibold tracking-tight sm:inline">Real Learning</span>
+        </Link>
       </header>
 
-      {/* Main Content Area */}
-      <div className="max-w-5xl w-full mx-auto my-auto py-8">
-        {/* Step 1: Select Track */}
-        {currentStep === 1 && (
-          <div className="space-y-6">
-            <div className="text-center max-w-xl mx-auto space-y-1.5">
-              <h1 className="text-2xl sm:text-3xl font-bold text-stone-950 tracking-tight">
-                Select your simulation track
-              </h1>
-              <p className="text-xs text-stone-500">
-                Choose a track to focus your initial workplace simulation
-                scenarios.
-              </p>
+      {/* progress */}
+      <div className="mx-auto mt-8 w-full max-w-5xl">
+        <div className="grid grid-cols-3 gap-2">
+          {STEPS.map((label, i) => (
+            <div key={label}>
+              <span
+                className={`block h-1.5 rounded-full transition-colors duration-300 ${
+                  i < currentStep ? "bg-orange-500" : "bg-white/10"
+                }`}
+              />
+              <span
+                className={`mt-2 block text-xs sm:text-sm ${i + 1 === currentStep ? "text-white" : "text-zinc-500"}`}
+              >
+                {i + 1}. {label}
+              </span>
             </div>
+          ))}
+        </div>
+      </div>
 
-            {/* 4 Clean Visual Track Cards (Silky Smooth Borders) */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-2">
-              {CAREER_TRACKS.map((track) => {
-                const isSelected = selectedTrackId === track.id;
+      <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col py-8 sm:py-10">
+        {/* ---------------- Step 1: track ---------------- */}
+        {currentStep === 1 && (
+          <div className="pt-react-idle">
+            <h1 className={`${display.className} text-3xl uppercase leading-[1.08] tracking-[-0.01em] sm:text-4xl`}>
+              Pick your career track
+            </h1>
+            <p className="mt-3 text-base text-zinc-400 sm:text-lg">
+              Patricia will play the people you&apos;ll meet in this job.
+            </p>
+
+            <div className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2" role="radiogroup" aria-label="Career track">
+              {CAREER_TRACKS.map((t) => {
+                const active = t.id === selectedTrackId;
                 return (
-                  <div
-                    key={track.id}
-                    onClick={() => setSelectedTrackId(track.id)}
-                    className={`relative rounded-2xl overflow-hidden border transition-all cursor-pointer flex flex-col justify-between bg-white text-left ${
-                      isSelected
-                        ? "border-orange-500 shadow-md ring-1 ring-orange-500"
-                        : "border-stone-200/80 hover:border-stone-300 shadow-[0_2px_8px_-2px_rgba(0,0,0,0.03)]"
+                  <button
+                    key={t.id}
+                    type="button"
+                    role="radio"
+                    aria-checked={active}
+                    onClick={() => setSelectedTrackId(t.id)}
+                    className={`group relative isolate flex items-start gap-4 overflow-hidden rounded-2xl border p-5 text-left transition-colors duration-300 sm:p-6 ${
+                      active ? "border-transparent" : "border-white/[0.06] bg-[#181818] hover:border-white/20"
                     }`}
                   >
-                    {/* Top Image Preview */}
-                    <div className="relative w-full h-36 bg-stone-900 overflow-hidden">
-                      <Image
-                        src={track.image}
-                        alt={track.title}
-                        fill
-                        className="object-cover"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-stone-950/70 via-transparent to-transparent" />
-
-                      <div className="absolute top-2.5 right-2.5">
-                        {isSelected && (
-                          <div className="w-5 h-5 rounded-full bg-orange-500 text-white flex items-center justify-center shadow-md">
-                            <Check className="w-3.5 h-3.5 stroke-[3]" />
-                          </div>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Card Body */}
-                    <div className="p-4 flex-1 flex flex-col justify-between space-y-2">
-                      <h3 className="text-sm font-semibold text-stone-900 leading-snug">
-                        {track.title}
-                      </h3>
-                      <p className="text-[11px] text-stone-500 line-clamp-2 leading-relaxed font-normal">
-                        {track.description}
-                      </p>
-                    </div>
-                  </div>
+                    <span
+                      aria-hidden
+                      className={`absolute inset-0 -z-10 transition-opacity duration-500 ${active ? "opacity-100" : "opacity-0"}`}
+                      style={{ background: t.blob }}
+                    />
+                    <span
+                      aria-hidden
+                      className="absolute inset-0 -z-10 opacity-[0.35] mix-blend-soft-light"
+                      style={{ backgroundImage: NOISE, backgroundSize: "220px 220px" }}
+                    />
+                    <span className="relative block h-14 w-14 shrink-0 overflow-hidden rounded-full bg-orange-200 ring-2 ring-white/10">
+                      <Image src={`/images/patricia/${t.face}.png`} alt="" fill sizes="56px" className="object-cover object-top" />
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <span className={`${display.className} block text-lg uppercase leading-[1.15] sm:text-xl`}>
+                        {t.title}
+                      </span>
+                      <span className={`mt-1.5 block text-sm sm:text-[15px] ${active ? "text-white/85" : "text-zinc-400"}`}>
+                        {t.description}
+                      </span>
+                      <span className={`mt-3 block text-sm ${active ? "text-white/75" : "text-zinc-500"}`}>
+                        Patricia plays {t.plays}
+                      </span>
+                    </span>
+                    <span
+                      className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full border transition-colors ${
+                        active ? "border-white bg-white text-black" : "border-white/20"
+                      }`}
+                    >
+                      {active && <Check className="h-3.5 w-3.5" />}
+                    </span>
+                  </button>
                 );
               })}
             </div>
 
-            {/* Step 1 Actions */}
-            <div className="flex items-center justify-end pt-4 border-t border-stone-200/60">
+            <div className="mt-8 flex justify-end">
               <button
                 type="button"
                 onClick={() => setCurrentStep(2)}
-                className="px-6 py-2.5 rounded-xl bg-orange-600 hover:bg-orange-700 text-white font-medium text-xs transition-colors shadow-[0_2px_10px_-2px_rgba(234,88,12,0.3)] cursor-pointer flex items-center gap-2"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-white px-7 py-4 text-base font-medium text-black transition-colors hover:bg-zinc-200 sm:w-auto"
               >
-                <span>Continue</span>
-                <ArrowRight className="w-4 h-4" />
+                Continue
+                <ArrowRight className="h-5 w-5" />
               </button>
             </div>
           </div>
         )}
 
-        {/* Step 2: Profile Setup */}
+        {/* ---------------- Step 2: profile ---------------- */}
         {currentStep === 2 && (
-          <div className="max-w-md mx-auto space-y-6">
-            <div className="text-center space-y-1">
-              <h1 className="text-2xl font-bold text-stone-950 tracking-tight">
-                Learner Profile
+          <div className="pt-react-idle grid grid-cols-1 gap-3 lg:grid-cols-[1.3fr_1fr]">
+            <div className="rounded-[28px] border border-white/[0.06] bg-[#181818] p-6 sm:p-8">
+              <h1 className={`${display.className} text-3xl uppercase leading-[1.08] tracking-[-0.01em] sm:text-4xl`}>
+                Your profile
               </h1>
-              <p className="text-xs text-stone-500">
-                Set your name and daily practice commitment.
-              </p>
-            </div>
+              <p className="mt-3 text-base text-zinc-400">A few details and you&apos;re ready to practice.</p>
 
-            <div className="bg-white border border-stone-200/80 rounded-2xl p-6 sm:p-7 shadow-[0_2px_12px_-3px_rgba(0,0,0,0.04)] space-y-4 text-left">
-              {/* Name */}
-              <div className="space-y-1">
-                <label className="block text-xs font-medium text-stone-700">
-                  Full Name
+              <div className="mt-8 space-y-5">
+                <label className="block">
+                  <span className="mb-2 block text-sm font-medium text-white">Full name</span>
+                  <input
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Your name"
+                    autoComplete="name"
+                    className={inputCls}
+                  />
                 </label>
-                <input
-                  type="text"
-                  required
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="Enter your name"
-                  className="w-full bg-white border border-stone-200/90 rounded-xl px-3.5 py-2.5 text-xs text-stone-900 placeholder-stone-400 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/10 transition-all shadow-[0_1px_4px_rgba(0,0,0,0.02)]"
-                />
-              </div>
+                <label className="block">
+                  <span className="mb-2 block text-sm font-medium text-white">Email</span>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="you@example.com"
+                    autoComplete="email"
+                    className={inputCls}
+                  />
+                </label>
 
-              {/* Email */}
-              <div className="space-y-1">
-                <label className="block text-xs font-medium text-stone-700">
-                  Email Address
-                </label>
-                <input
-                  type="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="name@company.com"
-                  className="w-full bg-white border border-stone-200/90 rounded-xl px-3.5 py-2.5 text-xs text-stone-900 placeholder-stone-400 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/10 transition-all shadow-[0_1px_4px_rgba(0,0,0,0.02)]"
-                />
-              </div>
-
-              {/* Pacing */}
-              <div className="space-y-1.5">
-                <label className="block text-xs font-medium text-stone-700">
-                  Daily Goal
-                </label>
-                <div className="grid grid-cols-3 gap-2">
-                  {PRACTICE_PACING.map((pace) => {
-                    const isSelected = selectedPacing === pace.id;
-                    return (
-                      <div
-                        key={pace.id}
-                        onClick={() => setSelectedPacing(pace.id)}
-                        className={`p-2.5 rounded-xl border text-center transition-all cursor-pointer ${
-                          isSelected
-                            ? "bg-orange-50/80 border-orange-500 ring-1 ring-orange-500"
-                            : "bg-white border-stone-200/80 hover:border-stone-300"
-                        }`}
-                      >
-                        <div className="text-xs font-semibold text-stone-900">
-                          {pace.label}
-                        </div>
-                        <div className="text-[10px] text-orange-600 font-medium mt-0.5">
-                          {pace.time}
-                        </div>
-                      </div>
-                    );
-                  })}
+                <div>
+                  <p className="mb-3 text-sm font-medium text-white">How much do you want to practice?</p>
+                  <div className="grid grid-cols-3 gap-2" role="radiogroup" aria-label="Practice pace">
+                    {PRACTICE_PACING.map((p) => {
+                      const active = p.id === selectedPacing;
+                      return (
+                        <button
+                          key={p.id}
+                          type="button"
+                          role="radio"
+                          aria-checked={active}
+                          onClick={() => setSelectedPacing(p.id)}
+                          className={`rounded-xl border px-3 py-3 text-left transition-colors ${
+                            active
+                              ? "border-orange-500 bg-orange-500 text-black"
+                              : "border-white/[0.08] text-white hover:border-white/25"
+                          }`}
+                        >
+                          <span className="block text-sm font-semibold sm:text-base">{p.label}</span>
+                          <span className={`block text-xs sm:text-sm ${active ? "text-black/70" : "text-zinc-500"}`}>
+                            {p.time}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
 
-              {/* Step 2 Actions */}
-              <div className="pt-2 flex items-center gap-3">
+              <div className="mt-8 flex flex-col-reverse gap-3 sm:flex-row sm:justify-between">
                 <button
                   type="button"
                   onClick={() => setCurrentStep(1)}
-                  className="w-1/3 py-2.5 rounded-xl bg-stone-100 hover:bg-stone-200/80 text-stone-700 font-medium text-xs transition-colors cursor-pointer"
+                  className="inline-flex items-center justify-center gap-2 rounded-full border border-white/15 px-6 py-4 text-base text-white transition-colors hover:border-white/40"
                 >
+                  <ArrowLeft className="h-5 w-5" />
                   Back
                 </button>
                 <button
                   type="button"
                   onClick={handleCompleteSetup}
                   disabled={isSubmitting}
-                  className="w-2/3 py-2.5 rounded-xl bg-orange-600 hover:bg-orange-700 text-white font-medium text-xs transition-colors shadow-[0_2px_10px_-2px_rgba(234,88,12,0.3)] cursor-pointer flex items-center justify-center gap-2 disabled:opacity-50"
+                  className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-7 py-4 text-base font-medium text-black transition-colors hover:bg-zinc-200 disabled:opacity-60"
                 >
-                  {isSubmitting ? "Setting up..." : "Complete Setup"}
-                  <ArrowRight className="w-4 h-4" />
+                  {isSubmitting ? "Creating your account..." : "Create my account"}
+                  {!isSubmitting && <ArrowRight className="h-5 w-5" />}
                 </button>
+              </div>
+            </div>
+
+            {/* summary */}
+            <div className="relative isolate hidden flex-col overflow-hidden rounded-[28px] p-8 lg:flex">
+              <span aria-hidden className="absolute inset-0 -z-20" style={{ background: selectedTrack.blob }} />
+              <span
+                aria-hidden
+                className="absolute inset-0 -z-10 opacity-40 mix-blend-soft-light"
+                style={{ backgroundImage: NOISE, backgroundSize: "220px 220px" }}
+              />
+              <span className="inline-flex items-center gap-2 text-sm font-medium text-white/80">
+                <span className="h-2 w-2 rounded-full border border-white/70" />
+                Your track
+              </span>
+              <p className={`${display.className} mt-4 text-2xl uppercase leading-[1.1]`}>{selectedTrack.title}</p>
+              <p className="mt-2 text-sm text-white/80">Patricia plays {selectedTrack.plays}.</p>
+              <div className="relative mt-auto h-64 w-full">
+                <span className="absolute bottom-0 left-1/2 h-3 w-36 -translate-x-1/2 rounded-[50%] bg-black/30 blur-md" />
+                <div className="pt-idle relative h-full w-full">
+                  <Image
+                    src="/images/patricia/pose-thinking.png"
+                    alt="Patricia"
+                    fill
+                    sizes="220px"
+                    className="object-contain object-bottom"
+                  />
+                </div>
               </div>
             </div>
           </div>
         )}
 
-        {/* Step 3: Confirmation */}
+        {/* ---------------- Step 3: done ---------------- */}
         {currentStep === 3 && (
-          <div className="max-w-sm mx-auto space-y-6">
-            <div className="bg-white border border-stone-200/80 rounded-3xl p-6 text-center space-y-4 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)]">
-              <div className="w-12 h-12 rounded-full bg-emerald-100 border border-emerald-200/80 flex items-center justify-center text-emerald-600 mx-auto">
-                <CheckCircle2 className="w-6 h-6" />
+          <div className="pt-react-idle mx-auto flex w-full max-w-xl flex-1 flex-col items-center justify-center text-center">
+            <div className="relative h-56 w-40 sm:h-64 sm:w-44">
+              <div className="pt-react-bounce pt-idle relative h-full w-full">
+                <Image
+                  src="/images/patricia/pose-thumbs-up.png"
+                  alt="Patricia giving a thumbs up"
+                  fill
+                  priority
+                  sizes="176px"
+                  className="object-contain object-bottom"
+                />
               </div>
+              <span className="pt-fx absolute -right-6 top-0 block h-12 w-12">
+                <span className="pt-fx-float relative block h-full w-full">
+                  <Image src="/images/patricia/fx-sparkles.png" alt="" fill sizes="48px" className="object-contain" />
+                </span>
+              </span>
+            </div>
 
-              <div className="space-y-1">
-                <h2 className="text-xl font-bold text-stone-950">
-                  Ready to Practice!
-                </h2>
-                <p className="text-xs text-stone-500 font-normal">
-                  Your simulation sandbox for{" "}
-                  <strong className="text-stone-900">
-                    {selectedTrack.title}
-                  </strong>{" "}
-                  is active.
-                </p>
-              </div>
+            <h1 className={`${display.className} mt-8 text-3xl uppercase leading-[1.08] tracking-[-0.01em] sm:text-4xl`}>
+              You&apos;re all set, {firstName}!
+            </h1>
+            <p className="mt-3 max-w-md text-base text-zinc-400 sm:text-lg">
+              Your <span className="text-white">{selectedTrack.title}</span> practice space is ready.
+              Patricia is waiting for you.
+            </p>
 
+            <div className="mt-8 flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
               <Link
                 href="/user-dashboard"
-                className="w-full py-2.5 rounded-xl bg-orange-600 hover:bg-orange-700 text-white font-medium text-xs transition-colors shadow-[0_2px_10px_-2px_rgba(234,88,12,0.3)] flex items-center justify-center gap-2"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-orange-500 px-7 py-4 text-base font-semibold text-black transition-colors hover:bg-orange-400"
               >
-                <span>Launch Personal Dashboard</span>
-                <ArrowRight className="w-4 h-4" />
+                Open my dashboard
+                <ArrowRight className="h-5 w-5" />
+              </Link>
+              <Link
+                href="/demo"
+                className="inline-flex items-center justify-center gap-2 rounded-full border border-white/15 px-7 py-4 text-base text-white transition-colors hover:border-white/40"
+              >
+                Try a quick simulation
               </Link>
             </div>
           </div>
         )}
       </div>
 
-      {/* Footer */}
-      <footer className="max-w-5xl w-full mx-auto flex items-center justify-between py-2 border-t border-stone-200/60 text-xs text-stone-500">
-        <span>Real Learning &copy; 2026</span>
-        <Link href="/login" className="hover:text-stone-900 font-medium">
-          Sign in
+      {/* footer */}
+      <footer className="mx-auto flex w-full max-w-5xl items-center justify-between border-t border-white/[0.06] pt-4 text-sm text-zinc-500">
+        <span>© {new Date().getFullYear()} Real Learning</span>
+        <Link href="/login" className="font-medium text-zinc-300 hover:text-white">
+          Log in instead
         </Link>
       </footer>
     </main>

@@ -1,149 +1,100 @@
-"use client";
-
-import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Compass, Target, Activity, ShieldCheck } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
+import { blob, display, NOISE } from "./shared";
+
+const HERO_BLOB = blob("#4c1d95", "#a78bfa", "#f97316", "#1e1b4b");
+
+const MOODS = ["angry", "confused", "normal", "happy"];
 
 export function AboutHero() {
-  const capabilities = [
-    {
-      icon: Target,
-      tag: "SIMULATION ENGINE",
-      title: "Targeted Scenarios",
-      subtitle: "Replicating authentic workplace dilemmas and leadership challenges.",
-      bg: "bg-orange-50/60 border-orange-200/70 text-orange-950",
-      accent: "text-orange-600 bg-orange-100/80",
-    },
-    {
-      icon: Compass,
-      tag: "PATRICIA GPS",
-      title: "Live AI Navigation",
-      subtitle: "Pinpointing where you are and clarifying your immediate next step.",
-      bg: "bg-amber-50/60 border-amber-200/70 text-amber-950",
-      accent: "text-amber-600 bg-amber-100/80",
-    },
-    {
-      icon: Activity,
-      tag: "DIAGNOSTICS",
-      title: "Actionable Telemetry",
-      subtitle: "In-depth insights into conversational tone, empathy, and decision agility.",
-      bg: "bg-stone-50 border-stone-200/80 text-stone-900",
-      accent: "text-stone-700 bg-stone-200/70",
-    },
-    {
-      icon: ShieldCheck,
-      tag: "LEARNING SANDBOX",
-      title: "Zero-Risk Environment",
-      subtitle: "A safe, confidential space to practice without real-world stakes.",
-      bg: "bg-emerald-50/60 border-emerald-200/70 text-emerald-950",
-      accent: "text-emerald-700 bg-emerald-100/80",
-    },
-  ];
-
   return (
-    <section className="relative w-full overflow-hidden bg-[#faf9f6] text-stone-900 pt-28 pb-20 sm:pt-36 sm:pb-24 border-b border-stone-200/80">
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header Content */}
-        <div className="flex flex-col items-center text-center space-y-6 max-w-4xl mx-auto">
+    <section className="w-full bg-[#121212] px-6 pb-16 pt-32 text-white sm:px-10 sm:pb-20 sm:pt-40 lg:px-16">
+      <div className="mx-auto w-full max-w-7xl">
+        <p className="text-sm font-medium text-orange-400">About Real Learning</p>
+        <h1
+          className={`${display.className} mt-4 max-w-5xl text-4xl uppercase leading-[1.05] tracking-[-0.02em] sm:text-6xl lg:text-[76px]`}
+        >
+          Practice real careers before day one
+        </h1>
 
-          {/* Main Title */}
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold uppercase tracking-tight leading-[1.08] text-stone-950 font-sans">
-            Practice real careers{" "}
-            <span className="bg-gradient-to-r from-orange-600 via-amber-600 to-rose-600 bg-clip-text text-transparent">
-              before day one.
-            </span>
-          </h1>
-
-          {/* Subtitle */}
-          <p className="text-base sm:text-xl text-stone-600 font-normal leading-relaxed max-w-xl">
-            High-fidelity workplace simulations guided by Patricia, your personal AI Life GPS.
+        <div className="mt-8 flex flex-col justify-between gap-8 md:flex-row md:items-end">
+          <p className="max-w-xl text-base leading-relaxed text-zinc-400 sm:text-lg">
+            We believe confidence at work comes from practice, not theory. So we
+            built a safe place to rehearse the hard conversations, with an AI
+            coach who reacts like a real person.
           </p>
-
-          {/* Action Buttons */}
-          <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
+          <div className="flex flex-wrap gap-3">
             <Link
               href="/get-started"
-              className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full bg-stone-900 text-white font-bold text-sm hover:bg-stone-800 transition-colors border border-stone-900 cursor-pointer"
+              className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-medium text-black transition-colors hover:bg-zinc-200"
             >
-              <span>Explore Simulations</span>
-              <ArrowRight className="w-4 h-4" />
+              Get started free
+              <ArrowUpRight className="h-4 w-4" />
             </Link>
             <Link
-              href="/#patricia-experience"
-              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-white hover:bg-orange-50 text-stone-800 font-semibold text-sm border border-stone-300 transition-colors cursor-pointer"
+              href="/demo"
+              className="inline-flex items-center gap-2 rounded-full border border-white/15 px-5 py-3 text-sm font-medium text-white transition-colors hover:border-white/40"
             >
-              <span>Talk with Patricia</span>
+              Try the demo
             </Link>
           </div>
         </div>
 
-        {/* Hero Visual Showcase */}
-        <div className="relative mt-14 sm:mt-18 rounded-3xl overflow-hidden border border-stone-200 bg-white p-2 sm:p-3">
-          <div className="relative h-[360px] sm:h-[480px] md:h-[540px] w-full rounded-2xl overflow-hidden">
-            <Image
-              src="/images/about-agency-hero.jpg"
-              alt="Real Learning Innovation Studio"
-              fill
-              className="object-cover object-center"
-              priority
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-stone-950/80 via-stone-950/20 to-transparent" />
+        {/* Visual */}
+        <div className="relative isolate mt-12 overflow-hidden rounded-[28px] sm:mt-16 sm:rounded-[36px]">
+          <span aria-hidden className="absolute inset-0 -z-20" style={{ background: HERO_BLOB }} />
+          <span
+            aria-hidden
+            className="absolute inset-0 -z-10 opacity-40 mix-blend-soft-light"
+            style={{ backgroundImage: NOISE, backgroundSize: "220px 220px" }}
+          />
 
-            {/* Floating Highlight Cards */}
-            <div className="absolute bottom-6 sm:bottom-8 left-6 sm:left-8 right-6 sm:right-8 flex flex-wrap items-center justify-between gap-4">
-              <div className="p-4 sm:p-5 rounded-2xl bg-white/95 backdrop-blur-md border border-stone-200 max-w-sm text-stone-900">
-                <span className="text-[10px] font-mono text-orange-600 font-bold uppercase tracking-wider block mb-0.5">
-                  DELIBERATE PRACTICE
-                </span>
-                <h4 className="text-xs sm:text-sm font-bold text-stone-950">
-                  Zero Theoretical Guesswork
-                </h4>
-                <p className="text-[11px] text-stone-600 mt-0.5">
-                  Step straight into authentic workplace scenarios with immediate feedback.
-                </p>
+          <div className="grid items-end gap-8 px-6 pt-10 sm:px-12 sm:pt-12 lg:grid-cols-[1fr_auto_1fr] lg:px-14">
+            <div className="pb-10 sm:pb-12">
+              <p className={`${display.className} text-xl uppercase leading-[1.15] sm:text-2xl`}>
+                Meet Patricia
+              </p>
+              <p className="mt-2 max-w-xs text-sm leading-relaxed text-white/80 sm:text-base">
+                Your AI practice partner. She plays the customer, the colleague or
+                the patient, and coaches you after.
+              </p>
+            </div>
+
+            <div className="relative mx-auto h-[300px] w-[220px] sm:h-[380px] sm:w-[270px]">
+              <span className="absolute bottom-1 left-1/2 h-3 w-40 -translate-x-1/2 rounded-[50%] bg-black/30 blur-md" />
+              <div className="pt-idle relative h-full w-full">
+                <Image
+                  src="/images/patricia/full-body.png"
+                  alt="Patricia, Real Learning's AI coach"
+                  fill
+                  priority
+                  sizes="270px"
+                  className="object-contain object-bottom"
+                />
               </div>
+            </div>
 
-              <div className="p-4 sm:p-5 rounded-2xl bg-white/95 backdrop-blur-md border border-stone-200 max-w-sm text-stone-900">
-                <span className="text-[10px] font-mono text-emerald-700 font-bold uppercase tracking-wider block mb-0.5">
-                  RISK-FREE REPS
-                </span>
-                <h4 className="text-xs sm:text-sm font-bold text-stone-950">
-                  Psychologically Safe Sandbox
-                </h4>
-                <p className="text-[11px] text-stone-600 mt-0.5">
-                  Practice high-friction situations before facing them in real life.
-                </p>
+            <div className="hidden pb-12 lg:block">
+              <p className="text-right text-sm text-white/80">She reacts to every reply</p>
+              <div className="mt-3 flex justify-end gap-2">
+                {MOODS.map((m) => (
+                  <span
+                    key={m}
+                    className="relative block h-12 w-12 overflow-hidden rounded-xl bg-black/25 ring-1 ring-white/15"
+                  >
+                    <Image
+                      src={`/images/patricia/${m}.png`}
+                      alt={`Patricia ${m}`}
+                      fill
+                      sizes="48px"
+                      className="object-cover object-top"
+                    />
+                  </span>
+                ))}
               </div>
             </div>
           </div>
-        </div>
-
-        {/* Platform Capability Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mt-8 sm:mt-10">
-          {capabilities.map((cap, idx) => {
-            const Icon = cap.icon;
-            return (
-              <div
-                key={idx}
-                className={`p-6 rounded-2xl border ${cap.bg} transition-colors flex flex-col justify-between space-y-4`}
-              >
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-stone-500">
-                      {cap.tag}
-                    </span>
-                  </div>
-                  <h3 className="text-base sm:text-lg font-bold tracking-tight text-stone-950">
-                    {cap.title}
-                  </h3>
-                  <p className="text-xs text-stone-600 leading-relaxed">
-                    {cap.subtitle}
-                  </p>
-                </div>
-              </div>
-            );
-          })}
         </div>
       </div>
     </section>

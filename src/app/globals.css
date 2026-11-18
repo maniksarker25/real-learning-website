@@ -48,10 +48,6 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-@utility max-w-335 {
-  max-width: 335px;
-}
-
 :root {
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0.008 326);
@@ -128,12 +124,12 @@
   html {
     @apply font-sans;
     scroll-padding-top: 5.5rem;
-    overflow-x: hidden;
+    overflow-x: clip;
     max-width: 100%;
   }
   body {
     @apply bg-background text-foreground;
-    overflow-x: hidden;
+    overflow-x: clip;
     max-width: 100%;
   }
 }
@@ -158,3 +154,65 @@ html.custom-feather-cursor-active *::after {
 }
 
 
+
+/* ------------------------------------------------------------------ */
+/* Patricia character motion (demo). Transform/opacity only = cheap.   */
+/* ------------------------------------------------------------------ */
+@keyframes pt-idle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+@keyframes pt-enter {
+  from { opacity: 0; transform: translateY(14px) scale(0.97); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes pt-shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-7px) rotate(-1.5deg); }
+  40% { transform: translateX(7px) rotate(1.5deg); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
+}
+@keyframes pt-bounce {
+  0%, 100% { transform: translateY(0); }
+  30% { transform: translateY(-22px); }
+  55% { transform: translateY(0); }
+  75% { transform: translateY(-8px); }
+}
+@keyframes pt-tilt {
+  0%, 100% { transform: rotate(0); }
+  35% { transform: rotate(-4deg); }
+  70% { transform: rotate(2deg); }
+}
+@keyframes pt-fx-in {
+  0% { opacity: 0; transform: scale(0.3) rotate(-20deg); }
+  60% { opacity: 1; transform: scale(1.15) rotate(8deg); }
+  100% { opacity: 1; transform: scale(1) rotate(0); }
+}
+@keyframes pt-fx-float {
+  0%, 100% { transform: translateY(0) rotate(0); }
+  50% { transform: translateY(-7px) rotate(4deg); }
+}
+
+.pt-idle { animation: pt-idle 3.2s ease-in-out infinite; }
+.pt-react-idle { animation: pt-enter 0.45s ease-out both; }
+.pt-react-shake { animation: pt-enter 0.35s ease-out both, pt-shake 0.55s 0.35s ease-in-out; }
+.pt-react-bounce { animation: pt-enter 0.35s ease-out both, pt-bounce 0.8s 0.35s ease-out; }
+.pt-react-tilt { animation: pt-enter 0.35s ease-out both, pt-tilt 0.9s 0.35s ease-in-out; }
+.pt-fx { animation: pt-fx-in 0.5s 0.15s ease-out both; }
+.pt-fx-float { animation: pt-fx-float 2.4s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .pt-idle, .pt-react-idle, .pt-react-shake, .pt-react-bounce,
+  .pt-react-tilt, .pt-fx, .pt-fx-float { animation: none !important; }
+}
+
+/* Patricia "click here" poke (points toward a button) */
+@keyframes pt-poke {
+  0%, 60%, 100% { transform: translateX(0); }
+  70% { transform: translateX(-7px); }
+  80% { transform: translateX(0); }
+  90% { transform: translateX(-4px); }
+}
+.pt-poke { animation: pt-poke 2.2s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .pt-poke { animation: none !important; } }

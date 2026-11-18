@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Inter, Nunito_Sans } from "next/font/google";
-import "lenis/dist/lenis.css";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { AccountProvider } from "@/context/AccountContext";
@@ -49,7 +48,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={cn(
         "h-full",
         "antialiased",
-        "overflow-x-hidden",
+        "overflow-x-clip",
         "max-w-full",
         geistSans.variable,
         geistMono.variable,
@@ -58,7 +57,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         nunitoSansHeading.variable,
       )}
     >
-      <body className="min-h-full flex flex-col overflow-x-hidden max-w-full">
+      <body className="min-h-full flex flex-col overflow-x-clip max-w-full">
         {/* Global Dark Fade-in Overlay when screen loads */}
         <ScreenFadeIn />
         {/* Custom Feather Cursor across entire website (desktop only, disabled on touch/thumb devices) */}

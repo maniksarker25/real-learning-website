@@ -1,190 +1,213 @@
 "use client";
 
-import React, { useState, useEffect, memo } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ArrowUpRight } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { Unbounded } from "next/font/google";
+import { ArrowUpRight, Menu, X } from "lucide-react";
 import { useAccount } from "@/context/AccountContext";
 
-interface CinematicNavbarProps {
-  onNavigateSection?: (sectionId: string) => void;
+const display = Unbounded({ subsets: ["latin"], weight: ["600"], display: "swap" });
+
+const LINKS = [
+  { label: "Meet Patricia", href: "/#meet-patricia" },
+  { label: "How to start", href: "/#connect-with-us" },
+  { label: "Try the demo", href: "/demo" },
+  { label: "About", href: "/about" },
+  { label: "Contact", href: "/contact" },
+];
+
+function Logo({ onClick }: { onClick?: () => void }) {
+  return (
+    <Link href="/" onClick={onClick} className="flex items-center gap-2.5" aria-label="Real Learning home">
+      <span className="relative block h-9 w-9 overflow-hidden rounded-lg bg-white">
+        <Image src="/icons/brand-mark.png" alt="" fill sizes="36px" className="object-contain p-0.5" priority />
+      </span>
+      <span className="text-[15px] font-semibold tracking-[-0.01em] text-white">
+        Real Learning
+      </span>
+    </Link>
+  );
 }
 
-export const CinematicNavbar = memo(function CinematicNavbar({
-  onNavigateSection,
-}: CinematicNavbarProps) {
+export default function CinematicNavbar() {
+  const pathname = usePathname();
   const { session } = useAccount();
   const [scrolled, setScrolled] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [open, setOpen] = useState(false);
 
+  // Only re-render when crossing the threshold, not on every scroll event
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 40);
-    };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const navTabs = [
-    { label: "Home", id: "hero-top" },
-    { label: "Why Real Learning", id: "why-youre-here" },
-    
-  ];
+  // Lock page scroll + Esc to close while the mobile menu is open
+  useEffect(() => {
+    if (!open) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = prev;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
 
-  const handleTabClick = (e: React.MouseEvent, id: string) => {
-    e.preventDefault();
-    setMobileMenuOpen(false);
-    if (onNavigateSection) {
-      onNavigateSection(id);
-    } else {
-      const el = document.getElementById(id);
-      if (el) {
-        el.scrollIntoView({ behavior: "smooth" });
-      } else if (id === "hero-top") {
-        window.scrollTo({ top: 0, behavior: "smooth" });
+  // Smooth-scroll for on-page sections when already on the home page
+  const handleNav = useCallback(
+    (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+      setOpen(false);
+      if (href.startsWith("/#") && pathname === "/") {
+        const el = document.getElementById(href.slice(2));
+        if (el) {
+          e.preventDefault();
+          el.scrollIntoView({ behavior: "smooth", block: "start" });
+          history.replaceState(null, "", href.slice(1));
+        }
       }
-    }
-  };
+    },
+    [pathname],
+  );
+
+  const dashboardHref =
+    session.accountType === "organization" ? "/organization-dashboard" : "/user-dashboard";
 
   return (
     <>
-      <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          scrolled
-            ? "bg-white/85 backdrop-blur-md border-b border-slate-200/80 py-3 shadow-xs"
-            : "bg-transparent py-5 sm:py-6"
-        }`}
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-          {/* Brand Logo / Minimal Monogram */}
-          <Link
-            href="/"
-            className="group flex items-center gap-2.5 cursor-pointer select-none"
-          >
-            <div className="relative w-7 h-7 sm:w-8 sm:h-8 rounded-lg p-1 flex items-center justify-center bg-black/5 border border-black/10 backdrop-blur-md group-hover:border-orange-600/50 transition-all duration-300">
-              <Image
-                src="/icons/brand-logo.png"
-                alt="Real Learning Logo"
-                width={32}
-                height={32}
-                className="object-contain"
-              />
-            </div>
-            <div className="flex flex-col">
-              <span className="text-xs sm:text-sm font-extrabold tracking-widest uppercase font-sans leading-tight text-slate-900">
-                REAL <span className="text-orange-600">LEARNING</span>
-              </span>
-              <span className="text-[9px] tracking-[0.25em] uppercase font-serif hidden sm:inline-block text-slate-500">
-                by Scorched Souls
-              </span>
-            </div>
-          </Link>
+      <header className="fixed inset-x-0 top-0 z-[80] px-3 pt-3 sm:px-5">
+        <div
+          className={`mx-auto flex h-14 w-full max-w-7xl items-center justify-between rounded-2xl px-3 transition-[background-color,border-color,backdrop-filter] duration-300 sm:h-16 sm:px-4 ${
+            scrolled || open
+              ? "border border-white/[0.08] bg-[#121212]/80 backdrop-blur-xl"
+              : "border border-transparent bg-transparent"
+          }`}
+        >
+          <Logo onClick={() => setOpen(false)} />
 
-          {/* Clean Minimal Desktop Navigation Tabs */}
-          <nav className="hidden md:flex items-center gap-1 p-1 rounded-full bg-slate-900/5 border border-slate-900/10 backdrop-blur-md">
-            {navTabs.map((tab) => (
-              <a
-                key={tab.id}
-                href={`#${tab.id}`}
-                onClick={(e) => handleTabClick(e, tab.id)}
-                className="px-4 py-1.5 rounded-full text-xs font-medium tracking-wide text-slate-700 hover:text-slate-950 hover:bg-black/5 transition-all duration-200 cursor-pointer"
-              >
-                {tab.label}
-              </a>
-            ))}
+          {/* desktop links */}
+          <nav className="hidden items-center gap-1 lg:flex" aria-label="Main">
+            {LINKS.map((l) => {
+              const active = !l.href.startsWith("/#") && pathname === l.href;
+              return (
+                <Link
+                  key={l.href}
+                  href={l.href}
+                  onClick={(e) => handleNav(e, l.href)}
+                  className={`rounded-full px-3.5 py-2 text-sm transition-colors ${
+                    active ? "text-white" : "text-zinc-400 hover:text-white"
+                  }`}
+                >
+                  {l.label}
+                </Link>
+              );
+            })}
           </nav>
 
-          {/* Right Action Buttons */}
-          <div className="hidden md:flex items-center gap-3">
+          {/* actions */}
+          <div className="flex items-center gap-2">
             {session.accountType ? (
               <Link
-                href={
-                  session.accountType === "organization"
-                    ? "/organization-dashboard"
-                    : "/user-dashboard"
-                }
-                className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-orange-600/10 border border-orange-600/30 text-xs font-semibold text-orange-700 hover:bg-orange-600/20 transition-all cursor-pointer"
+                href={dashboardHref}
+                className="hidden items-center gap-1.5 rounded-full bg-white px-4 py-2 text-sm font-medium text-black transition-colors hover:bg-zinc-200 sm:inline-flex"
               >
-                <span>Dashboard</span>
-                <ArrowUpRight className="w-3.5 h-3.5" />
+                Dashboard
+                <ArrowUpRight className="h-4 w-4" />
               </Link>
             ) : (
               <>
                 <Link
                   href="/login"
-                  className="text-xs font-medium px-3 py-1.5 text-slate-700 hover:text-slate-950 transition-colors cursor-pointer"
+                  className="hidden rounded-full px-4 py-2 text-sm text-zinc-300 transition-colors hover:text-white sm:inline-flex"
                 >
-                  Log In
+                  Log in
                 </Link>
                 <Link
                   href="/get-started"
-                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold tracking-wide bg-slate-950 text-white hover:bg-slate-800 transition-all shadow-xs cursor-pointer"
+                  className="hidden items-center gap-1.5 rounded-full bg-white px-4 py-2 text-sm font-medium text-black transition-colors hover:bg-zinc-200 sm:inline-flex"
                 >
-                  <span>Get Started</span>
+                  Get started free
+                  <ArrowUpRight className="h-4 w-4" />
                 </Link>
               </>
             )}
-          </div>
 
-          {/* Mobile Menu Button */}
-          <div className="flex md:hidden items-center gap-2">
             <button
-              onClick={() => setMobileMenuOpen((prev) => !prev)}
-              aria-label="Toggle navigation menu"
-              className="w-10 h-10 rounded-xl border bg-black/5 border-black/10 text-slate-900 hover:bg-black/10 transition-colors flex items-center justify-center cursor-pointer"
+              type="button"
+              onClick={() => setOpen((o) => !o)}
+              aria-label={open ? "Close menu" : "Open menu"}
+              aria-expanded={open}
+              aria-controls="mobile-menu"
+              className="flex h-10 w-10 items-center justify-center rounded-full text-white transition-colors hover:bg-white/[0.08] lg:hidden"
             >
-              {mobileMenuOpen ? (
-                <X className="w-5 h-5" />
-              ) : (
-                <Menu className="w-5 h-5" />
-              )}
+              {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
           </div>
         </div>
       </header>
 
-      {/* Mobile Menu Drawer */}
-      <AnimatePresence>
-        {mobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-x-0 top-[60px] sm:top-[70px] z-50 bg-white/98 backdrop-blur-2xl border-b border-slate-200/90 p-5 md:hidden shadow-2xl flex flex-col gap-3.5"
-          >
-            <div className="flex flex-col gap-1 pb-3 border-b border-slate-200">
-              {navTabs.map((tab) => (
-                <a
-                  key={tab.id}
-                  href={`#${tab.id}`}
-                  onClick={(e) => handleTabClick(e, tab.id)}
-                  className="px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-800 hover:text-slate-950 hover:bg-slate-100 transition-colors cursor-pointer"
+      {/* mobile menu */}
+      <div
+        id="mobile-menu"
+        className={`fixed inset-0 z-[70] bg-[#121212] px-6 pb-8 pt-28 transition-opacity duration-300 lg:hidden ${
+          open ? "opacity-100" : "pointer-events-none opacity-0"
+        }`}
+        aria-hidden={!open}
+      >
+        <nav className="flex h-full flex-col" aria-label="Mobile">
+          <ul className="space-y-1">
+            {LINKS.map((l) => (
+              <li key={l.href}>
+                <Link
+                  href={l.href}
+                  onClick={(e) => handleNav(e, l.href)}
+                  tabIndex={open ? 0 : -1}
+                  className={`${display.className} flex items-center justify-between border-b border-white/[0.06] py-4 text-2xl uppercase text-white`}
                 >
-                  {tab.label}
-                </a>
-              ))}
-            </div>
-            <div className="flex items-center gap-3 pt-1">
+                  {l.label}
+                  <ArrowUpRight className="h-5 w-5 text-zinc-500" />
+                </Link>
+              </li>
+            ))}
+          </ul>
+
+          <div className="mt-auto grid grid-cols-2 gap-2">
+            {session.accountType ? (
               <Link
-                href="/login"
-                onClick={() => setMobileMenuOpen(false)}
-                className="flex-1 text-center py-2.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 hover:text-slate-900 hover:bg-slate-50 transition-colors"
+                href={dashboardHref}
+                onClick={() => setOpen(false)}
+                tabIndex={open ? 0 : -1}
+                className="col-span-2 rounded-full bg-white py-3.5 text-center text-base font-medium text-black"
               >
-                Log In
+                Go to dashboard
               </Link>
-              <Link
-                href="/get-started"
-                onClick={() => setMobileMenuOpen(false)}
-                className="flex-1 text-center py-2.5 rounded-xl bg-slate-950 text-white text-xs font-bold hover:bg-slate-800 transition-colors"
-              >
-                Get Started
-              </Link>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            ) : (
+              <>
+                <Link
+                  href="/login"
+                  onClick={() => setOpen(false)}
+                  tabIndex={open ? 0 : -1}
+                  className="rounded-full border border-white/15 py-3.5 text-center text-base text-white"
+                >
+                  Log in
+                </Link>
+                <Link
+                  href="/get-started"
+                  onClick={() => setOpen(false)}
+                  tabIndex={open ? 0 : -1}
+                  className="rounded-full bg-white py-3.5 text-center text-base font-medium text-black"
+                >
+                  Get started
+                </Link>
+              </>
+            )}
+          </div>
+        </nav>
+      </div>
     </>
   );
-});
+}
