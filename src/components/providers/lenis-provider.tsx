@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, type ReactNode } from "react";
-import { ReactLenis, useLenis } from "lenis/react";
+import { useLenis } from "lenis/react";
 import { usePathname } from "next/navigation";
 
 interface LenisProviderProps {
@@ -10,46 +10,43 @@ interface LenisProviderProps {
 
 /**
  * Handles resetting or managing scroll position on Next.js client-side route transitions.
+ * Uses native browser scrolling (Lenis smooth scrolling is currently disabled).
  */
 function RouteChangeHandler() {
   const pathname = usePathname();
-  const lenis = useLenis();
 
   useEffect(() => {
-    if (!lenis) return;
+    if (typeof window === "undefined") return;
 
-    // If an anchor hash exists on initial load/navigation, scroll to it smoothly
-    if (typeof window !== "undefined" && window.location.hash) {
-      const hash = window.location.hash;
-      if (document.querySelector(hash)) {
-        lenis.scrollTo(hash, { offset: -80, immediate: false });
+    // If an anchor hash exists on initial load/navigation, scroll to it
+    if (window.location.hash) {
+      const el = document.querySelector(window.location.hash);
+      if (el) {
+        const top = el.getBoundingClientRect().top + window.scrollY - 80;
+        window.scrollTo({ top, behavior: "smooth" });
         return;
       }
     }
 
     // Otherwise, ensure new page begins at the top instantly
-    lenis.scrollTo(0, { immediate: true });
-  }, [pathname, lenis]);
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   return null;
 }
 
+/**
+ * Lenis smooth scrolling is disabled for now. To turn it back on, wrap
+ * children in <ReactLenis root options={{ lerp: 0.14, wheelMultiplier: 1.25,
+ * touchMultiplier: 1.8, smoothWheel: true, autoRaf: true, anchors: true }}>
+ * from "lenis/react". Components calling useLenis() fall back to native scroll.
+ */
 export function LenisProvider({ children }: LenisProviderProps) {
   return (
-    <ReactLenis
-      root
-      options={{
-        lerp: 0.14,
-        wheelMultiplier: 1.25,
-        touchMultiplier: 1.8,
-        smoothWheel: true,
-        autoRaf: true,
-        anchors: true,
-      }}
-    >
+    <>
       <RouteChangeHandler />
       {children}
-    </ReactLenis>
+    </>
   );
 }
 

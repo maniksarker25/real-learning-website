@@ -1,264 +1,203 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
-import {
-  CheckCircle2,
-  Mail,
-  ArrowRight,
-  ShieldCheck,
-  MapPin,
-} from "lucide-react";
+import { ArrowRight, RotateCcw } from "lucide-react";
+import { display, NOISE } from "@/components/about/shared";
 
-type CareerTrackType =
-  | "Customer Service"
-  | "Tech Support"
-  | "IT Specialist"
-  | "Healthcare Support"
-  | "Other Career Track";
+const TOPICS = ["I'm a learner", "For my team", "Partnership", "Something else"] as const;
+const TRACKS = ["Customer Service", "Tech Support", "IT Specialist", "Healthcare Support", "Not sure yet"] as const;
+
+const inputCls =
+  "w-full rounded-xl border border-white/[0.08] bg-black/40 px-4 py-3.5 text-base text-white placeholder:text-zinc-500 transition-colors focus:border-orange-500/70 focus:outline-none";
+
+function Chips<T extends string>({
+  options,
+  value,
+  onChange,
+}: {
+  options: readonly T[];
+  value: T;
+  onChange: (v: T) => void;
+}) {
+  return (
+    <div className="flex flex-wrap gap-2">
+      {options.map((o) => (
+        <button
+          key={o}
+          type="button"
+          onClick={() => onChange(o)}
+          aria-pressed={value === o}
+          className={`rounded-full border px-4 py-2 text-sm transition-colors ${
+            value === o
+              ? "border-orange-500 bg-orange-500 font-medium text-black"
+              : "border-white/[0.08] text-zinc-300 hover:border-white/25 hover:text-white"
+          }`}
+        >
+          {o}
+        </button>
+      ))}
+    </div>
+  );
+}
 
 export function ContactFormSection() {
-  const [careerTrack, setCareerTrack] =
-    useState<CareerTrackType>("Customer Service");
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    targetRole: "",
-    message: "",
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
+  const [topic, setTopic] = useState<(typeof TOPICS)[number]>("I'm a learner");
+  const [track, setTrack] = useState<(typeof TRACKS)[number]>("Not sure yet");
+  const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const [sending, setSending] = useState(false);
+  const [sent, setSent] = useState(false);
 
-  const careerTracks: CareerTrackType[] = [
-    "Customer Service",
-    "Tech Support",
-    "IT Specialist",
-    "Healthcare Support",
-  ];
+  const update = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+    setForm((f) => ({ ...f, [k]: e.target.value }));
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const submit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.name || !formData.email || !formData.message) return;
-
-    setIsSubmitting(true);
+    if (!form.name || !form.email || !form.message) return;
+    setSending(true);
+    // TODO: connect to the real contact endpoint (email service / CRM).
     setTimeout(() => {
-      setIsSubmitting(false);
-      setSubmitted(true);
-    }, 400);
+      setSending(false);
+      setSent(true);
+    }, 600);
   };
 
-  const handleReset = () => {
-    setFormData({
-      name: "",
-      email: "",
-      targetRole: "",
-      message: "",
-    });
-    setSubmitted(false);
+  const reset = () => {
+    setForm({ name: "", email: "", message: "" });
+    setSent(false);
   };
 
   return (
     <section
       id="contact-form"
-      className="relative w-full py-20 sm:py-28 bg-white text-stone-900 border-b border-stone-200/80"
+      className="w-full scroll-mt-24 bg-[#121212] px-6 py-12 text-white sm:px-10 sm:py-16 lg:px-16"
     >
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-stretch">
-          {/* Left Column: Form Section */}
-          <div className="lg:col-span-7 space-y-8 flex flex-col justify-between">
-            <div className="space-y-6">
-              {/* Header & Typography */}
-              <div className="space-y-2">
-                <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-stone-950 font-sans">
-                  How can we support your journey?
-                </h2>
+      <div className="mx-auto grid w-full max-w-7xl grid-cols-1 gap-3 lg:grid-cols-[1fr_1.5fr]">
+        {/* Patricia card */}
+        <div className="relative isolate flex min-h-[320px] flex-col overflow-hidden rounded-2xl bg-orange-500 p-6 text-black sm:p-8">
+          <span
+            aria-hidden
+            className="pointer-events-none absolute inset-0 -z-10 opacity-40 mix-blend-soft-light"
+            style={{ backgroundImage: NOISE, backgroundSize: "220px 220px" }}
+          />
+          <span className="inline-flex items-center gap-2 text-sm font-medium text-black/75">
+            <span className="h-2 w-2 rounded-full border border-black/60" />
+            Real Learning team
+          </span>
+          <h2 className={`${display.className} mt-5 text-2xl uppercase leading-[1.1] sm:text-3xl`}>
+            {sent ? "Message received" : "Send us a message"}
+          </h2>
+          <p className="mt-3 max-w-xs text-base leading-relaxed text-black/75">
+            {sent
+              ? "Thanks for reaching out. We'll reply to the email you gave us."
+              : "Tell us a little about you and what you need. A real person will read it."}
+          </p>
 
-                <p className="text-stone-600 text-sm sm:text-base leading-relaxed max-w-xl font-normal">
-                  Select your target career simulation track below. Whether you
-                  need practice guidance, custom cohort scenarios, or technical
-                  support, our team is here to assist.
-                </p>
-              </div>
-
-              {/* Career Track Topic Pills */}
-              <div className="space-y-2.5">
-                <label className="block text-xs font-mono uppercase tracking-wider text-stone-700 font-semibold">
-                  Select Career Track Focus
-                </label>
-                <div className="flex flex-wrap gap-2">
-                  {careerTracks.map((track) => {
-                    const isSelected = careerTrack === track;
-                    return (
-                      <button
-                        key={track}
-                        type="button"
-                        onClick={() => setCareerTrack(track)}
-                        className={`px-4 py-2.5 rounded-xl text-xs font-mono tracking-wide transition-colors cursor-pointer border ${
-                          isSelected
-                            ? "bg-stone-900 text-white border-stone-900 font-bold"
-                            : "bg-[#faf9f6] hover:bg-white text-stone-700 border-stone-200 hover:border-stone-300 font-medium"
-                        }`}
-                      >
-                        {track}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Form Card */}
-              <div className="bg-[#faf9f6] border border-stone-200 rounded-3xl p-6 sm:p-8">
-                {submitted ? (
-                  <div className="py-8 text-center space-y-5">
-                    <div className="w-14 h-14 rounded-2xl bg-emerald-100 border border-emerald-300 flex items-center justify-center text-emerald-700 mx-auto">
-                      <CheckCircle2 className="w-7 h-7" />
-                    </div>
-
-                    <div className="space-y-1.5">
-                      <h3 className="text-2xl font-bold text-stone-950">
-                        Message Dispatched
-                      </h3>
-                      <p className="text-stone-600 text-sm max-w-md mx-auto leading-relaxed">
-                        Thank you,{" "}
-                        <span className="text-stone-950 font-semibold">
-                          {formData.name}
-                        </span>
-                        . We have routed your inquiry regarding the{" "}
-                        <span className="text-orange-700 font-semibold">
-                          {careerTrack}
-                        </span>{" "}
-                        track. Our learning specialists will reply to{" "}
-                        <span className="text-stone-900 font-mono font-medium">
-                          {formData.email}
-                        </span>{" "}
-                        shortly.
-                      </p>
-                    </div>
-
-                    <div className="pt-2">
-                      <button
-                        type="button"
-                        onClick={handleReset}
-                        className="px-6 py-2.5 rounded-full bg-stone-900 hover:bg-stone-800 text-white text-xs font-mono uppercase tracking-wider font-semibold transition-colors cursor-pointer border border-stone-900"
-                      >
-                        Send Another Message
-                      </button>
-                    </div>
-                  </div>
-                ) : (
-                  <form onSubmit={handleSubmit} className="space-y-4">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className="space-y-1.5">
-                        <label className="block text-xs font-mono uppercase tracking-wider text-stone-700 font-semibold">
-                          Full Name <span className="text-orange-600">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          required
-                          value={formData.name}
-                          onChange={(e) =>
-                            setFormData({ ...formData, name: e.target.value })
-                          }
-                          placeholder="e.g. Alex Vance"
-                          className="w-full px-4 py-3 rounded-xl bg-white border border-stone-200 focus:border-stone-900 focus:outline-none text-sm text-stone-900 placeholder:text-stone-400 transition-colors font-sans"
-                        />
-                      </div>
-
-                      <div className="space-y-1.5">
-                        <label className="block text-xs font-mono uppercase tracking-wider text-stone-700 font-semibold">
-                          Email Address{" "}
-                          <span className="text-orange-600">*</span>
-                        </label>
-                        <input
-                          type="email"
-                          required
-                          value={formData.email}
-                          onChange={(e) =>
-                            setFormData({ ...formData, email: e.target.value })
-                          }
-                          placeholder="alex@company.com"
-                          className="w-full px-4 py-3 rounded-xl bg-white border border-stone-200 focus:border-stone-900 focus:outline-none text-sm text-stone-900 placeholder:text-stone-400 transition-colors font-sans"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="space-y-1.5">
-                      <label className="block text-xs font-mono uppercase tracking-wider text-stone-700 font-semibold">
-                        Current or Target Role{" "}
-                        <span className="text-stone-400 font-normal">
-                          (Optional)
-                        </span>
-                      </label>
-                      <input
-                        type="text"
-                        value={formData.targetRole}
-                        onChange={(e) =>
-                          setFormData({
-                            ...formData,
-                            targetRole: e.target.value,
-                          })
-                        }
-                        placeholder="e.g. Support Specialist, IT Associate, or Team Lead"
-                        className="w-full px-4 py-3 rounded-xl bg-white border border-stone-200 focus:border-stone-900 focus:outline-none text-sm text-stone-900 placeholder:text-stone-400 transition-colors font-sans"
-                      />
-                    </div>
-
-                    <div className="space-y-1.5">
-                      <label className="block text-xs font-mono uppercase tracking-wider text-stone-700 font-semibold">
-                        Your Message or Simulation Questions{" "}
-                        <span className="text-orange-600">*</span>
-                      </label>
-                      <textarea
-                        required
-                        rows={4}
-                        value={formData.message}
-                        onChange={(e) =>
-                          setFormData({ ...formData, message: e.target.value })
-                        }
-                        placeholder="Tell us about your learning goals, target roles, team cohort questions, or general inquiry..."
-                        className="w-full px-4 py-3 rounded-xl bg-white border border-stone-200 focus:border-stone-900 focus:outline-none text-sm text-stone-900 placeholder:text-stone-400 transition-colors font-sans resize-y"
-                      />
-                    </div>
-
-                    <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-4">
-                      <div />
-
-                      <button
-                        type="submit"
-                        disabled={isSubmitting}
-                        className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-stone-950 hover:bg-stone-800 text-white font-mono font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-colors cursor-pointer border border-stone-950 disabled:opacity-50"
-                      >
-                        {isSubmitting ? (
-                          <span>Sending Message...</span>
-                        ) : (
-                          <>
-                            <span>Send Message</span>
-                            <ArrowRight className="w-4 h-4" />
-                          </>
-                        )}
-                      </button>
-                    </div>
-                  </form>
-                )}
-              </div>
-            </div>
-          </div>
-
-          {/* Right Column: Visual Showcase Matching Website Aesthetic */}
-          <div className="lg:col-span-5 h-full flex flex-col justify-between">
-            <div className="relative w-full h-[450px] sm:h-[540px] lg:h-full min-h-[460px] rounded-3xl overflow-hidden border border-stone-200 bg-white p-2">
-              <div className="relative w-full h-full rounded-2xl overflow-hidden">
+          <div className="relative mt-auto h-56 w-full sm:h-64">
+            <div key={sent ? "sent" : "idle"} className="pt-react-bounce absolute inset-0">
+              <div className="pt-idle relative h-full w-full">
                 <Image
-                  src="/images/contact-studio.jpg"
-                  alt="Real Learning Innovation Studio & Collaborative Lab"
+                  src={sent ? "/images/patricia/pose-thumbs-up.png" : "/images/patricia/pose-wave.png"}
+                  alt={sent ? "Patricia giving a thumbs up" : "Patricia waving"}
                   fill
-                  className="object-cover object-center"
-                  priority
+                  sizes="240px"
+                  className="object-contain object-bottom"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-stone-950/80 via-stone-950/20 to-transparent" />
               </div>
             </div>
           </div>
+        </div>
+
+        {/* Form card */}
+        <div className="rounded-2xl border border-white/[0.06] bg-[#181818] p-6 sm:p-8">
+          {sent ? (
+            <div className="flex h-full flex-col items-start justify-center gap-5 py-10">
+              <p className={`${display.className} text-2xl uppercase leading-[1.15] sm:text-3xl`}>
+                Thanks, {form.name.split(" ")[0]}!
+              </p>
+              <p className="max-w-md text-base leading-relaxed text-zinc-400">
+                While you wait, why not try a simulation with Patricia?
+              </p>
+              <div className="flex flex-wrap gap-3">
+                <a
+                  href="/demo"
+                  className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-medium text-black transition-colors hover:bg-zinc-200"
+                >
+                  Try the demo
+                  <ArrowRight className="h-4 w-4" />
+                </a>
+                <button
+                  type="button"
+                  onClick={reset}
+                  className="inline-flex items-center gap-2 rounded-full border border-white/15 px-5 py-3 text-sm text-white transition-colors hover:border-white/40"
+                >
+                  <RotateCcw className="h-4 w-4" />
+                  Send another
+                </button>
+              </div>
+            </div>
+          ) : (
+            <form onSubmit={submit} className="space-y-6">
+              <div>
+                <p className="mb-3 text-sm font-medium text-white">What&apos;s this about?</p>
+                <Chips options={TOPICS} value={topic} onChange={setTopic} />
+              </div>
+
+              {(topic === "I'm a learner" || topic === "For my team") && (
+                <div>
+                  <p className="mb-3 text-sm font-medium text-white">Which career track?</p>
+                  <Chips options={TRACKS} value={track} onChange={setTrack} />
+                </div>
+              )}
+
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <label className="block">
+                  <span className="mb-2 block text-sm font-medium text-white">Name</span>
+                  <input
+                    required
+                    value={form.name}
+                    onChange={update("name")}
+                    placeholder="Your name"
+                    autoComplete="name"
+                    className={inputCls}
+                  />
+                </label>
+                <label className="block">
+                  <span className="mb-2 block text-sm font-medium text-white">Email</span>
+                  <input
+                    required
+                    type="email"
+                    value={form.email}
+                    onChange={update("email")}
+                    placeholder="you@example.com"
+                    autoComplete="email"
+                    className={inputCls}
+                  />
+                </label>
+              </div>
+
+              <label className="block">
+                <span className="mb-2 block text-sm font-medium text-white">Message</span>
+                <textarea
+                  required
+                  rows={5}
+                  value={form.message}
+                  onChange={update("message")}
+                  placeholder="How can we help?"
+                  className={`${inputCls} resize-y`}
+                />
+              </label>
+
+              <button
+                type="submit"
+                disabled={sending}
+                className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-orange-500 px-6 py-4 text-base font-semibold text-black transition-colors hover:bg-orange-400 disabled:opacity-60 sm:w-auto"
+              >
+                {sending ? "Sending..." : "Send message"}
+                {!sending && <ArrowRight className="h-5 w-5" />}
+              </button>
+            </form>
+          )}
         </div>
       </div>
     </section>
