@@ -1,120 +1,66 @@
 "use client";
 
-import React, { useState, useCallback, useMemo, memo } from "react";
-import {
-  Target,
-  CheckCircle2,
-  Circle,
-  Plus,
-  Trash2,
-  Calendar,
-  Clock,
-  Flame,
-  Award,
-  TrendingUp,
-  Sparkles,
-  Sliders,
-  Check,
-  AlertCircle,
-} from "lucide-react";
+import { memo, useCallback, useState, type ReactNode } from "react";
+import { Award, Check, CheckCircle2, Circle, Clock, Flame, Plus, Trash2 } from "lucide-react";
 import { useAccount } from "@/context/AccountContext";
 import { useLearningLoop } from "@/context/LearningLoopContext";
 import { cn } from "@/lib/utils";
 import {
-  VictorianCornerFlourish,
-  EngravedSeal,
-  StarburstRosette,
-} from "@/components/ui/DecorativeAssets";
+  Badge,
+  BlobCard,
+  Button,
+  Card,
+  CardHeader,
+  EmptyState,
+  Input,
+  PageHeader,
+  PatriciaPose,
+  ProgressBar,
+  Segmented,
+  Select,
+  Textarea,
+} from "@/components/dashboard/ui";
+
+type Category = "Habit" | "Simulation" | "Class" | "Personal";
 
 interface MilestoneItem {
   id: string;
   title: string;
-  category: "Habit" | "Simulation" | "Class" | "Personal";
+  category: Category;
   targetDate: string;
   completed: boolean;
 }
 
+const CATEGORIES: Category[] = ["Personal", "Simulation", "Class", "Habit"];
+
+const INITIAL_MILESTONES: MilestoneItem[] = [
+  { id: "m-1", title: "Complete 4 simulations with an 88%+ score", category: "Simulation", targetDate: "This week", completed: true },
+  { id: "m-2", title: "Finish Lesson 4: Active listening and calm phrasing", category: "Class", targetDate: "In 3 days", completed: true },
+  { id: "m-3", title: "Score 92%+ on the upset refund request scenario", category: "Simulation", targetDate: "This Sunday", completed: false },
+  { id: "m-4", title: "Keep a 5-day practice streak", category: "Habit", targetDate: "Ongoing", completed: false },
+  { id: "m-5", title: "Pass the final readiness assessment", category: "Personal", targetDate: "Oct 31", completed: false },
+];
+
+const INITIAL_DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day, i) => ({ day, done: i < 3 }));
+
 export const IndGoalsScreen = memo(function IndGoalsScreen() {
   const { session } = useAccount();
+  const { activePath } = useLearningLoop();
+  const pathTitle = activePath?.title || session.goal || "Customer Service";
 
-  let loopContext: ReturnType<typeof useLearningLoop> | null = null;
-  try {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    loopContext = useLearningLoop();
-  } catch {
-    loopContext = null;
-  }
-
-  const activePathTitle =
-    loopContext?.activePath?.title || session.goal || "Customer Service";
-
-  // Target Settings State
-  const [targetScore, setTargetScore] = useState<number>(90);
-  const [targetWeeklyHours, setTargetWeeklyHours] = useState<number>(5);
-  const [targetDateString, setTargetDateString] = useState<string>("2026-10-31");
-  const [studyNote, setStudyNote] = useState<string>(
-    "Focus on active listening & emotional validation before offering technical solutions."
+  const [targetScore, setTargetScore] = useState("90");
+  const [targetHours, setTargetHours] = useState("5");
+  const [studyNote, setStudyNote] = useState(
+    "Focus on active listening and acknowledging feelings before offering a fix.",
   );
-  const [isNoteSaved, setIsNoteSaved] = useState<boolean>(false);
-  const [newGoalText, setNewGoalText] = useState<string>("");
-  const [newGoalCategory, setNewGoalCategory] = useState<
-    "Habit" | "Simulation" | "Class" | "Personal"
-  >("Personal");
-
-  // Milestone action items
-  const [milestones, setMilestones] = useState<MilestoneItem[]>([
-    {
-      id: "m-1",
-      title: "Complete 4 interactive AI simulations with 88%+ score",
-      category: "Simulation",
-      targetDate: "This Week",
-      completed: true,
-    },
-    {
-      id: "m-2",
-      title: "Finish Lesson 4: Active Listening & Non-Confrontational Phrasing",
-      category: "Class",
-      targetDate: "In 3 Days",
-      completed: true,
-    },
-    {
-      id: "m-3",
-      title: "Score 92%+ on Handling Upset Refund Request scenario",
-      category: "Simulation",
-      targetDate: "This Sunday",
-      completed: false,
-    },
-    {
-      id: "m-4",
-      title: "Maintain 5-day continuous learning streak",
-      category: "Habit",
-      targetDate: "Ongoing",
-      completed: false,
-    },
-    {
-      id: "m-5",
-      title: "Pass Final Readiness Capstone Assessment",
-      category: "Personal",
-      targetDate: "Target Horizon",
-      completed: false,
-    },
-  ]);
-
-  // Weekly Practice Days Completed (M T W T F S S)
-  const [weeklyDays, setWeeklyDays] = useState<{ day: string; done: boolean }[]>([
-    { day: "Mon", done: true },
-    { day: "Tue", done: true },
-    { day: "Wed", done: true },
-    { day: "Thu", done: false },
-    { day: "Fri", done: false },
-    { day: "Sat", done: false },
-    { day: "Sun", done: false },
-  ]);
+  const [isNoteSaved, setIsNoteSaved] = useState(false);
+  const [newGoalText, setNewGoalText] = useState("");
+  const [newGoalCategory, setNewGoalCategory] = useState<Category>("Personal");
+  const [milestones, setMilestones] = useState(INITIAL_MILESTONES);
+  const [weeklyDays, setWeeklyDays] = useState(INITIAL_DAYS);
 
   const toggleMilestone = useCallback((id: string) => {
-    setMilestones((prev) =>
-      prev.map((m) => (m.id === id ? { ...m, completed: !m.completed } : m))
-    );
+    setMilestones((prev) => prev.map((m) => (m.id === id ? { ...m, completed: !m.completed } : m)));
   }, []);
 
   const deleteMilestone = useCallback((id: string) => {
@@ -125,25 +71,17 @@ export const IndGoalsScreen = memo(function IndGoalsScreen() {
     (e: React.FormEvent) => {
       e.preventDefault();
       if (!newGoalText.trim()) return;
-
-      const newItem: MilestoneItem = {
-        id: `m-${Date.now()}`,
-        title: newGoalText.trim(),
-        category: newGoalCategory,
-        targetDate: "Upcoming",
-        completed: false,
-      };
-
-      setMilestones((prev) => [newItem, ...prev]);
+      setMilestones((prev) => [
+        { id: `m-${Date.now()}`, title: newGoalText.trim(), category: newGoalCategory, targetDate: "Upcoming", completed: false },
+        ...prev,
+      ]);
       setNewGoalText("");
     },
-    [newGoalText, newGoalCategory]
+    [newGoalText, newGoalCategory],
   );
 
   const toggleDay = useCallback((index: number) => {
-    setWeeklyDays((prev) =>
-      prev.map((d, i) => (i === index ? { ...d, done: !d.done } : d))
-    );
+    setWeeklyDays((prev) => prev.map((d, i) => (i === index ? { ...d, done: !d.done } : d)));
   }, []);
 
   const handleSaveNote = useCallback(() => {
@@ -152,347 +90,194 @@ export const IndGoalsScreen = memo(function IndGoalsScreen() {
   }, []);
 
   const completedCount = milestones.filter((m) => m.completed).length;
-  const progressPercent = Math.round(
-    (completedCount / (milestones.length || 1)) * 100
-  );
-  const activeDaysCount = weeklyDays.filter((d) => d.done).length;
+  const progressPercent = Math.round((completedCount / (milestones.length || 1)) * 100);
+  const activeDays = weeklyDays.filter((d) => d.done).length;
 
   return (
-    <div className="space-y-5">
-      {/* Top Banner */}
-      <div className="bg-white rounded-xl p-4 sm:p-5 border border-stone-200 relative overflow-hidden shadow-sm">
-        <VictorianCornerFlourish
-          position="top-right"
-          className="absolute top-2 right-2 text-stone-300/60 hidden sm:block pointer-events-none"
-        />
-        <EngravedSeal
-          size={90}
-          className="absolute -right-6 -bottom-6 text-stone-900/5 pointer-events-none hidden sm:block"
-        />
+    <div className="space-y-6">
+      <PageHeader
+        eyebrow="Goals"
+        title="Your goals"
+        description="Set your targets, build a weekly habit and check off milestones as you go."
+        actions={<Badge tone="orange">{pathTitle}</Badge>}
+      />
 
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 relative z-10">
-          <div className="flex items-center gap-3.5">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 border border-amber-400 flex items-center justify-center text-white shrink-0 shadow-sm">
-              <Target className="w-5 h-5" />
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <h1 className="text-lg sm:text-xl font-bold text-stone-900 tracking-tight">
-                  Goals & Action Roadmap
-                </h1>
-                <StarburstRosette size={14} className="text-orange-500/70" />
-              </div>
-              <p className="text-xs text-stone-500 mt-0.5">
-                Set personal performance targets, manage weekly habit goals, and track milestone commitments.
-              </p>
-            </div>
-          </div>
+      {/* overall progress */}
+      <BlobCard tone="violet" className="sm:pr-52">
+        <p className="text-sm font-medium text-white/80">Milestones completed</p>
+        <p className="mt-2 text-5xl font-semibold tracking-[-0.02em] tabular-nums">{progressPercent}%</p>
+        <p className="mt-2 text-base text-white/80">
+          {completedCount} of {milestones.length} done. Keep going, you&apos;re on track.
+        </p>
+        <ProgressBar value={progressPercent} className="mt-6 max-w-md bg-white/25" barClassName="bg-white" label="Milestones completed" />
+        <PatriciaPose pose="thumbs-up" className="absolute bottom-0 right-6 hidden h-52 w-36 sm:block" sizes="144px" />
+      </BlobCard>
 
-          <div className="flex items-center gap-2">
-            <span className="text-[10px] font-mono text-stone-500 uppercase font-semibold">
-              Track:
-            </span>
-            <span className="px-2.5 py-1 rounded-full bg-orange-50 border border-orange-200 text-xs font-bold text-orange-900">
-              {activePathTitle}
-            </span>
-          </div>
-        </div>
-      </div>
+      {/* targets */}
+      <div className="grid gap-3 md:grid-cols-3">
+        <TargetCard icon={Award} label="Target score" value={`${targetScore}%`} note="Job ready is 85%+">
+          <Segmented
+            label="Target score"
+            value={targetScore}
+            onChange={setTargetScore}
+            options={["85", "90", "95"].map((v) => ({ value: v, label: `${v}%` }))}
+          />
+        </TargetCard>
 
-      {/* Target Objectives & Habit Tracking Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {/* Target 1: Minimum Score Threshold */}
-        <div className="bg-white p-4 rounded-xl border border-stone-200 shadow-sm space-y-3">
-          <div className="flex items-center justify-between">
-            <span className="text-[10px] font-mono uppercase font-bold text-stone-500 tracking-wider">
-              Target Simulation Score
-            </span>
-            <Award className="w-4 h-4 text-orange-500" />
-          </div>
+        <TargetCard icon={Clock} label="Weekly practice" value={`${targetHours}h`} note={`${Number(targetHours) * 60} minutes a week`}>
+          <Segmented
+            label="Weekly practice hours"
+            value={targetHours}
+            onChange={setTargetHours}
+            options={["3", "5", "8"].map((v) => ({ value: v, label: `${v}h` }))}
+          />
+        </TargetCard>
 
-          <div className="flex items-baseline gap-2">
-            <span className="text-3xl font-black font-mono text-stone-900">
-              {targetScore}%
-            </span>
-            <span className="text-xs text-emerald-700 font-semibold font-mono">
-              (Industry Ready: 85%+)
-            </span>
-          </div>
-
-          <div className="space-y-1.5 pt-1">
-            <label className="text-[11px] font-mono text-stone-500 flex justify-between">
-              <span>Adjust Target Threshold</span>
-              <span className="font-bold text-stone-800">{targetScore}%</span>
-            </label>
-            <div className="grid grid-cols-3 gap-1.5">
-              {[85, 90, 95].map((score) => (
-                <button
-                  key={score}
-                  type="button"
-                  onClick={() => setTargetScore(score)}
-                  className={cn(
-                    "py-1 text-xs font-mono font-bold rounded-lg border transition-colors cursor-pointer",
-                    targetScore === score
-                      ? "bg-stone-900 text-white border-stone-900"
-                      : "bg-[#FAF8F5] text-stone-700 border-stone-200 hover:border-stone-300"
-                  )}
-                >
-                  {score}%
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Target 2: Weekly Practice Commitment */}
-        <div className="bg-white p-4 rounded-xl border border-stone-200 shadow-sm space-y-3">
-          <div className="flex items-center justify-between">
-            <span className="text-[10px] font-mono uppercase font-bold text-stone-500 tracking-wider">
-              Weekly Practice Goal
-            </span>
-            <Clock className="w-4 h-4 text-amber-500" />
-          </div>
-
-          <div className="flex items-baseline gap-2">
-            <span className="text-3xl font-black font-mono text-stone-900">
-              {targetWeeklyHours}h
-            </span>
-            <span className="text-xs text-stone-500 font-mono">
-              / week ({targetWeeklyHours * 60} mins)
-            </span>
-          </div>
-
-          <div className="space-y-1.5 pt-1">
-            <label className="text-[11px] font-mono text-stone-500 flex justify-between">
-              <span>Target Pace</span>
-              <span className="font-bold text-stone-800">{targetWeeklyHours} hrs</span>
-            </label>
-            <div className="grid grid-cols-3 gap-1.5">
-              {[3, 5, 8].map((hours) => (
-                <button
-                  key={hours}
-                  type="button"
-                  onClick={() => setTargetWeeklyHours(hours)}
-                  className={cn(
-                    "py-1 text-xs font-mono font-bold rounded-lg border transition-colors cursor-pointer",
-                    targetWeeklyHours === hours
-                      ? "bg-stone-900 text-white border-stone-900"
-                      : "bg-[#FAF8F5] text-stone-700 border-stone-200 hover:border-stone-300"
-                  )}
-                >
-                  {hours}h/wk
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Target 3: Weekly Practice Habit Days */}
-        <div className="bg-white p-4 rounded-xl border border-stone-200 shadow-sm space-y-3">
-          <div className="flex items-center justify-between">
-            <span className="text-[10px] font-mono uppercase font-bold text-stone-500 tracking-wider">
-              Habit Tracker ({activeDaysCount}/7 Days)
-            </span>
-            <Flame className="w-4 h-4 text-orange-600" />
-          </div>
-
-          <div className="flex items-center justify-between gap-1 pt-1">
-            {weeklyDays.map((item, idx) => (
+        <TargetCard
+          icon={Flame}
+          label="This week"
+          value={`${activeDays}/7`}
+          note={activeDays >= 4 ? "Great pace, you're hitting your target." : "Practice today to keep your streak."}
+        >
+          <div className="grid grid-cols-7 gap-1">
+            {weeklyDays.map((d, i) => (
               <button
-                key={item.day}
+                key={d.day}
                 type="button"
-                onClick={() => toggleDay(idx)}
-                title={`Click to toggle ${item.day}`}
+                onClick={() => toggleDay(i)}
+                aria-pressed={d.done}
+                aria-label={`${d.day}: ${d.done ? "practiced" : "not practiced"}`}
                 className={cn(
-                  "flex-1 py-2 rounded-lg border text-center transition-all cursor-pointer flex flex-col items-center gap-1",
-                  item.done
-                    ? "bg-orange-50 border-orange-300 text-orange-900 font-bold shadow-xs"
-                    : "bg-[#FAF8F5] border-stone-200 text-stone-400 hover:border-stone-300"
+                  "flex flex-col items-center gap-1 rounded-xl py-2 text-xs transition-colors",
+                  d.done ? "bg-orange-500 text-black" : "border border-white/[0.08] text-zinc-500 hover:border-white/25",
                 )}
               >
-                <span className="text-[10px] font-mono font-semibold">{item.day}</span>
-                {item.done ? (
-                  <CheckCircle2 className="w-3.5 h-3.5 text-orange-600" />
-                ) : (
-                  <Circle className="w-3.5 h-3.5 text-stone-300" />
-                )}
+                {d.day.slice(0, 1)}
+                {d.done ? <Check className="h-3.5 w-3.5" /> : <Circle className="h-3.5 w-3.5" />}
               </button>
             ))}
           </div>
-
-          <p className="text-[11px] text-stone-500 font-medium">
-            {activeDaysCount >= 4
-              ? "Excellent pace! You are hitting your consistency target."
-              : "Complete 1 practice session today to keep your streak alive."}
-          </p>
-        </div>
+        </TargetCard>
       </div>
 
-      {/* Action Milestones Checklist & Add Goal Section */}
-      <div className="bg-white rounded-xl p-4 sm:p-5 border border-stone-200 shadow-sm space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-stone-100 pb-3">
-          <div>
-            <div className="flex items-center gap-2">
-              <h2 className="text-sm sm:text-base font-bold text-stone-900">
-                Action Milestones & Learning Targets
-              </h2>
-              <StarburstRosette size={13} className="text-orange-500/70" />
-            </div>
-            <p className="text-xs text-stone-500 mt-0.5">
-              Check off items as you complete them or add personal study commitments.
-            </p>
-          </div>
+      {/* milestones */}
+      <Card>
+        <CardHeader
+          title="Milestones"
+          description="Check items off as you finish them, or add your own."
+          action={<Badge tone="green">{completedCount} done</Badge>}
+        />
 
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-mono font-bold text-orange-700 bg-orange-50 border border-orange-200 px-2.5 py-1 rounded-full">
-              {completedCount} of {milestones.length} Completed ({progressPercent}%)
-            </span>
-          </div>
-        </div>
-
-        {/* Milestone Progress Bar */}
-        <div className="w-full h-2 bg-stone-100 rounded-full overflow-hidden border border-stone-200">
-          <div
-            className="h-full bg-orange-600 rounded-full transition-all duration-300"
-            style={{ width: `${progressPercent}%` }}
+        <form onSubmit={handleAddMilestone} className="flex flex-col gap-2 sm:flex-row">
+          <Input
+            value={newGoalText}
+            onChange={(e) => setNewGoalText(e.target.value)}
+            placeholder="Add a goal, e.g. stay calm with an angry caller"
+            aria-label="New milestone"
+            className="flex-1"
           />
-        </div>
-
-        {/* Add New Custom Milestone Form */}
-        <form
-          onSubmit={handleAddMilestone}
-          className="p-3 rounded-lg bg-[#FAF8F5] border border-stone-200/80 flex flex-col sm:flex-row items-center gap-2"
-        >
-          <div className="relative flex-1 w-full">
-            <input
-              type="text"
-              value={newGoalText}
-              onChange={(e) => setNewGoalText(e.target.value)}
-              placeholder="Add a new goal or milestone (e.g. Master handling hostile tone quiz)..."
-              className="w-full px-3 py-1.5 text-xs bg-white border border-stone-300 rounded-lg text-stone-900 placeholder:text-stone-400 focus:outline-none focus:ring-1 focus:ring-stone-900"
-            />
-          </div>
-
-          <select
+          <Select
             value={newGoalCategory}
-            onChange={(e) =>
-              setNewGoalCategory(
-                e.target.value as "Habit" | "Simulation" | "Class" | "Personal"
-              )
-            }
-            className="px-2.5 py-1.5 text-xs bg-white border border-stone-300 rounded-lg text-stone-700 font-mono focus:outline-none"
+            onChange={(e) => setNewGoalCategory(e.target.value as Category)}
+            aria-label="Category"
+            className="sm:w-40"
           >
-            <option value="Personal">Personal</option>
-            <option value="Simulation">Simulation</option>
-            <option value="Class">Class</option>
-            <option value="Habit">Habit</option>
-          </select>
-
-          <button
-            type="submit"
-            disabled={!newGoalText.trim()}
-            className="w-full sm:w-auto px-3.5 py-1.5 rounded-lg bg-stone-900 hover:bg-stone-800 disabled:opacity-40 text-white text-xs font-semibold transition-colors cursor-pointer flex items-center justify-center gap-1.5 shrink-0"
-          >
-            <Plus className="w-3.5 h-3.5" />
-            <span>Add Target</span>
-          </button>
+            {CATEGORIES.map((c) => (
+              <option key={c} value={c}>
+                {c}
+              </option>
+            ))}
+          </Select>
+          <Button type="submit" variant="white" size="lg" disabled={!newGoalText.trim()}>
+            <Plus className="h-5 w-5" />
+            Add
+          </Button>
         </form>
 
-        {/* Milestones List */}
-        <div className="space-y-2">
-          {milestones.map((m) => (
-            <div
-              key={m.id}
-              className={cn(
-                "p-3 rounded-xl border flex items-center justify-between gap-3 transition-all",
-                m.completed
-                  ? "bg-emerald-50/30 border-emerald-200/80 text-stone-500"
-                  : "bg-white border-stone-200 hover:border-stone-300 text-stone-800"
-              )}
-            >
-              <div className="flex items-center gap-3 min-w-0">
+        {milestones.length === 0 ? (
+          <EmptyState title="No milestones yet" description="Add your first goal above to start tracking it." />
+        ) : (
+          <ul className="mt-5 divide-y divide-white/[0.06]">
+            {milestones.map((m) => (
+              <li key={m.id} className="group flex items-center gap-4 py-4 first:pt-1 last:pb-0">
                 <button
                   type="button"
                   onClick={() => toggleMilestone(m.id)}
-                  className="cursor-pointer text-stone-400 hover:text-stone-700 transition-colors shrink-0"
+                  aria-label={m.completed ? "Mark as not done" : "Mark as done"}
+                  className="shrink-0"
                 >
                   {m.completed ? (
-                    <CheckCircle2 className="w-5 h-5 text-emerald-600" />
+                    <CheckCircle2 className="h-6 w-6 text-emerald-400" />
                   ) : (
-                    <Circle className="w-5 h-5 text-stone-300 hover:text-stone-500" />
+                    <Circle className="h-6 w-6 text-zinc-600 transition-colors hover:text-zinc-300" />
                   )}
                 </button>
-
-                <div className="min-w-0">
-                  <p
-                    className={cn(
-                      "text-xs font-semibold leading-snug",
-                      m.completed
-                        ? "line-through text-stone-400 font-normal"
-                        : "text-stone-900"
-                    )}
-                  >
-                    {m.title}
+                <div className="min-w-0 flex-1">
+                  <p className={cn("text-base", m.completed ? "text-zinc-500 line-through" : "text-white")}>{m.title}</p>
+                  <p className="mt-1 text-sm text-zinc-500">
+                    {m.category} · {m.targetDate}
                   </p>
-                  <div className="flex items-center gap-2 mt-0.5">
-                    <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-stone-100 text-stone-600 border border-stone-200">
-                      {m.category}
-                    </span>
-                    <span className="text-[10px] font-mono text-stone-400">
-                      Due: {m.targetDate}
-                    </span>
-                  </div>
                 </div>
-              </div>
+                <button
+                  type="button"
+                  onClick={() => deleteMilestone(m.id)}
+                  aria-label="Remove milestone"
+                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-zinc-600 transition-colors hover:bg-white/[0.05] hover:text-rose-400"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+      </Card>
 
-              <button
-                type="button"
-                onClick={() => deleteMilestone(m.id)}
-                title="Remove milestone"
-                className="p-1 rounded text-stone-300 hover:text-red-600 transition-colors cursor-pointer shrink-0"
-              >
-                <Trash2 className="w-3.5 h-3.5" />
-              </button>
-            </div>
-          ))}
+      {/* focus note */}
+      <Card>
+        <CardHeader
+          title="Focus note"
+          description="A reminder to yourself for this week's practice."
+          action={isNoteSaved ? <Badge tone="green"><Check className="h-3.5 w-3.5" />Saved</Badge> : undefined}
+        />
+        <Textarea
+          value={studyNote}
+          onChange={(e) => setStudyNote(e.target.value)}
+          rows={3}
+          aria-label="Focus note"
+          placeholder="Write a technique reminder for this week..."
+        />
+        <div className="mt-3 flex justify-end">
+          <Button variant="white" onClick={handleSaveNote}>
+            Save note
+          </Button>
         </div>
-      </div>
-
-      {/* Focus Strategy Note */}
-      <div className="bg-white rounded-xl p-4 sm:p-5 border border-stone-200 shadow-sm space-y-3">
-        <div className="flex items-center justify-between border-b border-stone-100 pb-2.5">
-          <div className="flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-orange-500" />
-            <h3 className="text-xs sm:text-sm font-bold text-stone-900">
-              Personal Study & Technique Focus Note
-            </h3>
-          </div>
-          {isNoteSaved && (
-            <span className="text-[10px] font-mono font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
-              Note Saved
-            </span>
-          )}
-        </div>
-
-        <div className="space-y-2">
-          <textarea
-            value={studyNote}
-            onChange={(e) => setStudyNote(e.target.value)}
-            rows={2}
-            placeholder="Write a technique reminder or personal goal for this week..."
-            className="w-full p-2.5 text-xs bg-[#FAF8F5] border border-stone-200 rounded-lg text-stone-800 placeholder:text-stone-400 focus:outline-none focus:bg-white focus:ring-1 focus:ring-stone-900"
-          />
-          <div className="flex justify-end">
-            <button
-              type="button"
-              onClick={handleSaveNote}
-              className="px-3 py-1.5 rounded-lg bg-stone-900 hover:bg-stone-800 text-white text-xs font-semibold transition-colors cursor-pointer"
-            >
-              Save Strategy Note
-            </button>
-          </div>
-        </div>
-      </div>
+      </Card>
     </div>
   );
 });
+
+function TargetCard({
+  icon: Icon,
+  label,
+  value,
+  note,
+  children,
+}: {
+  icon: typeof Award;
+  label: string;
+  value: string;
+  note: string;
+  children: ReactNode;
+}) {
+  return (
+    <Card className="flex flex-col">
+      <div className="flex items-center justify-between">
+        <span className="text-sm text-zinc-400">{label}</span>
+        <Icon className="h-4 w-4 text-zinc-500" />
+      </div>
+      <p className="mt-4 text-3xl font-semibold tracking-[-0.02em] text-white tabular-nums">{value}</p>
+      <p className="mt-1 text-sm text-zinc-500">{note}</p>
+      <div className="mt-auto pt-5">{children}</div>
+    </Card>
+  );
+}

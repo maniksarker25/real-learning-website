@@ -8,7 +8,6 @@ import React, {
   useEffect,
   useRef,
 } from "react";
-import { useAccount } from "@/context/AccountContext";
 import { useLearningLoop } from "@/context/LearningLoopContext";
 import { cn } from "@/lib/utils";
 import {
@@ -34,15 +33,7 @@ export const IndSimulationsScreen = memo(function IndSimulationsScreen({
   onNavigateToTab,
   activeScenarioTitle,
 }: IndSimulationsScreenProps) {
-  const { session } = useAccount();
-
-  let contextValue: ReturnType<typeof useLearningLoop> | null = null;
-  try {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    contextValue = useLearningLoop();
-  } catch {
-    contextValue = null;
-  }
+  const contextValue: ReturnType<typeof useLearningLoop> | null = useLearningLoop();
 
   const scenarios = DEFAULT_SCENARIOS;
 
@@ -77,7 +68,6 @@ export const IndSimulationsScreen = memo(function IndSimulationsScreen({
   ]);
   const [inputText, setInputText] = useState("");
   const [isSimActive, setIsSimActive] = useState(true);
-  const [isSimCompleted, setIsSimCompleted] = useState(false);
   const [isAiTyping, setIsAiTyping] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
@@ -97,7 +87,6 @@ export const IndSimulationsScreen = memo(function IndSimulationsScreen({
         },
       ]);
       setIsSimActive(true);
-      setIsSimCompleted(false);
       setShowCompletedFeedback(false);
     }
   }, [targetScenario, selectedScenario.id]);
@@ -159,7 +148,6 @@ export const IndSimulationsScreen = memo(function IndSimulationsScreen({
       },
     ]);
     setIsSimActive(true);
-    setIsSimCompleted(false);
     setIsGeneratingFeedback(false);
     setShowCompletedFeedback(false);
     setIsAiTyping(false);
@@ -223,7 +211,6 @@ export const IndSimulationsScreen = memo(function IndSimulationsScreen({
         setIsAiTyping(false);
 
         if (messages.length >= 2) {
-          setIsSimCompleted(true);
         }
       }, 950);
     },
@@ -299,10 +286,10 @@ export const IndSimulationsScreen = memo(function IndSimulationsScreen({
         selectedScenario && (
           <div
             className={cn(
-              "transition-all duration-200 flex flex-col bg-white border border-stone-200 shadow-sm overflow-hidden",
+              "flex flex-col overflow-hidden border border-white/[0.06] bg-[#181818] text-white",
               isFullscreen
-                ? "fixed inset-0 z-50 w-screen h-screen rounded-none p-0 border-none bg-white"
-                : "w-full h-[calc(100vh-9rem)] min-h-[520px] rounded-xl"
+                ? "fixed inset-0 z-[100] h-dvh w-screen rounded-none border-none"
+                : "h-[calc(100dvh-12rem)] min-h-[560px] w-full rounded-3xl"
             )}
           >
             {/* Top Bar Header */}

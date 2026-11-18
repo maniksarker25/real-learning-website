@@ -8,6 +8,7 @@ import { IndClassesScreen } from "./screens/IndClassesScreen";
 import { IndSimulationsScreen } from "./screens/IndSimulationsScreen";
 import { IndFeedbackScreen } from "./screens/IndFeedbackScreen";
 import { CareerPath, LearningLoopStep } from "@/types/individual";
+import { PageHeader } from "@/components/dashboard/ui";
 
 export const UnifiedLearningGPSView = memo(function UnifiedLearningGPSView() {
   const {
@@ -60,6 +61,12 @@ export const UnifiedLearningGPSView = memo(function UnifiedLearningGPSView() {
 
   return (
     <div data-lenis-prevent className="space-y-6">
+      <PageHeader
+        eyebrow="Practice"
+        title="Your learning loop"
+        description="Pick a path, learn the basics, practice with Patricia, then review your feedback."
+      />
+
       {/* Learning Loop GPS Stepper */}
       <LearningLoopStepper
         currentStep={currentStep}
@@ -68,7 +75,7 @@ export const UnifiedLearningGPSView = memo(function UnifiedLearningGPSView() {
       />
 
       {/* Dynamic Step Container */}
-      <div className="transition-all duration-300">
+      <div>
         {currentStep === "pathfinder" && (
           <IndPathfinderScreen
             onSelectPath={handleSelectPath}

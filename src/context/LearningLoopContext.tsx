@@ -6,11 +6,9 @@ import React, {
   useState,
   useCallback,
   useMemo,
-  useEffect,
 } from "react";
 import {
   CareerPath,
-  ClassModule,
   LearningLoopStep,
   SimulationFeedback,
   SkillLevel,

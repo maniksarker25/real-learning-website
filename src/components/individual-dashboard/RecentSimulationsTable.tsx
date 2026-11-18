@@ -1,76 +1,78 @@
 "use client";
 
-import React, { useState, useMemo, memo } from "react";
+import { memo, useMemo, useState } from "react";
+import { Card, EmptyState, SectionTitle } from "@/components/dashboard/ui";
 import {
   RecentSimulationItem,
   RecentSimulationsTableProps,
   getRecentSimulations,
   RecentSimulationsFilterTabs,
   RecentSimulationTableRow,
+  RecentSimulationCard,
   RecentSimulationFeedbackModal,
 } from "./recent-simulations";
 
 export type { RecentSimulationItem };
 
+const COLUMNS = ["Scenario", "Track", "Score", "Date", ""];
+
 export const RecentSimulationsTable = memo(function RecentSimulationsTable({
   onLaunchSimulation,
 }: RecentSimulationsTableProps) {
-  const [selectedSimFeedback, setSelectedSimFeedback] =
-    useState<RecentSimulationItem | null>(null);
+  const [selected, setSelected] = useState<RecentSimulationItem | null>(null);
   const [trackFilter, setTrackFilter] = useState("all");
 
-  const recentSimulations = useMemo(() => getRecentSimulations(), []);
-
-  const filteredSimulations = useMemo(() => {
-    if (trackFilter === "all") return recentSimulations;
-    return recentSimulations.filter((s) => s.careerTrack === trackFilter);
-  }, [recentSimulations, trackFilter]);
+  const all = useMemo(() => getRecentSimulations(), []);
+  const rows = useMemo(
+    () => (trackFilter === "all" ? all : all.filter((s) => s.careerTrack === trackFilter)),
+    [all, trackFilter],
+  );
 
   return (
-    <div className="space-y-3">
-      {/* Filter Tabs */}
-      <RecentSimulationsFilterTabs
-        activeFilter={trackFilter}
-        onSelectFilter={setTrackFilter}
-      />
+    <section>
+      <SectionTitle title="Recent simulations" />
+      <RecentSimulationsFilterTabs activeFilter={trackFilter} onSelectFilter={setTrackFilter} />
 
-      {/* Recent Simulations Table */}
-      <div className="bg-white rounded-xl border border-stone-200 overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs border-collapse">
-            <thead>
-              <tr className="border-b border-stone-200 text-stone-500 font-mono text-[10px] uppercase bg-stone-50/80">
-                <th className="py-3 px-4 font-semibold">SIMULATION SCENARIO</th>
-                <th className="py-3 px-4 font-semibold">CAREER TRACK</th>
-                <th className="py-3 px-4 font-semibold">SCORE</th>
-                <th className="py-3 px-4 font-semibold">DATE & DURATION</th>
-                <th className="py-3 px-4 font-semibold">STATUS</th>
-                <th className="py-3 px-4 font-semibold text-right">
-                  FEEDBACK & ACTION
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-stone-100">
-              {filteredSimulations.map((sim) => (
-                <RecentSimulationTableRow
-                  key={sim.id}
-                  simulation={sim}
-                  onSelectFeedback={setSelectedSimFeedback}
-                />
+      <Card className="mt-4 overflow-hidden p-0 sm:p-0">
+        {rows.length === 0 ? (
+          <EmptyState title="No sessions on this track yet" description="Finish a simulation and it will show up here." />
+        ) : (
+          <>
+            {/* desktop table */}
+            <table className="hidden w-full text-left md:table">
+              <thead>
+                <tr className="border-b border-white/[0.06] text-sm text-zinc-500">
+                  {COLUMNS.map((c) => (
+                    <th key={c || "action"} className="px-5 py-3.5 font-normal">
+                      {c}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-white/[0.06]">
+                {rows.map((sim) => (
+                  <RecentSimulationTableRow key={sim.id} simulation={sim} onSelectFeedback={setSelected} />
+                ))}
+              </tbody>
+            </table>
+
+            {/* mobile cards */}
+            <div className="divide-y divide-white/[0.06] md:hidden">
+              {rows.map((sim) => (
+                <RecentSimulationCard key={sim.id} simulation={sim} onSelectFeedback={setSelected} />
               ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+            </div>
+          </>
+        )}
+      </Card>
 
-      {/* Full Simulation Feedback Modal */}
-      {selectedSimFeedback && (
+      {selected && (
         <RecentSimulationFeedbackModal
-          simulation={selectedSimFeedback}
-          onClose={() => setSelectedSimFeedback(null)}
+          simulation={selected}
+          onClose={() => setSelected(null)}
           onLaunchSimulation={onLaunchSimulation}
         />
       )}
-    </div>
+    </section>
   );
 });

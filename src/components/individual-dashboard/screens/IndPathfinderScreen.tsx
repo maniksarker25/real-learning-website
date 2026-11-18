@@ -1,37 +1,41 @@
 "use client";
 
-import React, { memo, useState, useCallback, useMemo } from "react";
-import {
-  Compass,
-  Sparkles,
-  MapPin,
-  ArrowRight,
-  ShieldCheck,
-  CheckCircle2,
-  TrendingUp,
-  Target,
-  Zap,
-  BookOpen,
-  UserCheck,
-  Award,
-  Loader2,
-} from "lucide-react";
+import React, { memo, useState, useCallback } from "react";
+import { ArrowRight, BookOpen, Check, Loader2, Zap } from "lucide-react";
 import { CareerPath } from "@/types/individual";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { useLearningLoop, DEFAULT_CAREER_PATHS } from "@/context/LearningLoopContext";
-
 import {
-  VictorianCornerFlourish,
-  EngravedSeal,
-  LaurelEmblem,
-  StarburstRosette,
-} from "@/components/ui/DecorativeAssets";
+  BLOBS,
+  Badge,
+  Button,
+  Card,
+  Grain,
+  PatriciaFace,
+  SectionTitle,
+  type BlobTone,
+  type PatriciaFaceName,
+} from "@/components/dashboard/ui";
 
 interface IndPathfinderScreenProps {
   onSelectPath?: (path: CareerPath) => void;
   onStartClass?: (classId: string) => void;
 }
+
+/** Patricia's mood + blob colour per career path (falls back to orange). */
+const PATH_LOOK: Record<string, { face: PatriciaFaceName; tone: BlobTone }> = {
+  "path-cust-service": { face: "angry", tone: "orange" },
+  "path-tech-support": { face: "surprised", tone: "blue" },
+  "path-it-specialist": { face: "confused", tone: "violet" },
+  "path-healthcare-support": { face: "sad", tone: "green" },
+};
+
+const BASELINE = [
+  { label: "Current level", value: "Entry-level specialist", note: "Strong communication base" },
+  { label: "Strongest skill", value: "Empathy and tone", note: "Shown in your baseline" },
+  { label: "Next to grow", value: "Structured troubleshooting", note: "In demand for support roles" },
+];
 
 export const IndPathfinderScreen = memo(function IndPathfinderScreen({
   onSelectPath,
@@ -39,13 +43,7 @@ export const IndPathfinderScreen = memo(function IndPathfinderScreen({
 }: IndPathfinderScreenProps) {
   const router = useRouter();
 
-  let contextValue: ReturnType<typeof useLearningLoop> | null = null;
-  try {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    contextValue = useLearningLoop();
-  } catch {
-    contextValue = null;
-  }
+  const contextValue: ReturnType<typeof useLearningLoop> | null = useLearningLoop();
   const careerPaths: CareerPath[] = DEFAULT_CAREER_PATHS;
 
   const [selectedPath, setSelectedPath] = useState<CareerPath>(careerPaths[0]);
@@ -83,294 +81,179 @@ export const IndPathfinderScreen = memo(function IndPathfinderScreen({
   );
 
   return (
-    <div className="space-y-5">
-      {/* Top GPS Header Banner */}
-      <div className="bg-white rounded-xl p-4 sm:p-5 border border-stone-200 relative overflow-hidden">
-        <VictorianCornerFlourish
-          position="top-right"
-          className="absolute top-2 right-2 text-stone-300/60 hidden sm:block"
+    <div className="space-y-8">
+      {/* 1. where am I */}
+      <section>
+        <SectionTitle title="Where you are now" />
+        <div className="grid gap-3 md:grid-cols-3">
+          {BASELINE.map((b) => (
+            <Card key={b.label} className="p-5">
+              <p className="text-sm text-zinc-500">{b.label}</p>
+              <p className="mt-2 text-lg font-semibold text-white">{b.value}</p>
+              <p className="mt-1 text-sm text-zinc-400">{b.note}</p>
+            </Card>
+          ))}
+        </div>
+      </section>
+
+      {/* 2. career tracks */}
+      <section>
+        <SectionTitle
+          title="Choose a career track"
+          action={<span className="hidden text-sm text-zinc-500 sm:inline">Tap a card, then start</span>}
         />
-
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 relative z-10">
-          <div className="flex items-center gap-3.5">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 border border-amber-400 flex items-center justify-center text-white shrink-0">
-              <Compass className="w-5 h-5" />
-            </div>
-            <div>
-              <h1 className="text-lg sm:text-xl font-bold text-stone-900 tracking-tight">
-                Career Pathfinder
-              </h1>
-              <p className="text-xs text-stone-500 mt-0.5">
-                AI matches your skills to target roles with structured classes and practice simulations.
-              </p>
-            </div>
-          </div>
-
-          <button
-            onClick={() => handleLaunchPath()}
-            disabled={isStarting}
-            className="px-4 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 text-white text-xs font-semibold transition-colors cursor-pointer flex items-center gap-1.5 shrink-0 disabled:opacity-80"
-          >
-            <span>{isStarting ? "Starting..." : "Start Pathway"}</span>
-            {isStarting ? (
-              <Loader2 className="w-3.5 h-3.5 text-white animate-spin" />
-            ) : (
-              <ArrowRight className="w-3.5 h-3.5 text-orange-400" />
-            )}
-          </button>
-        </div>
-      </div>
-
-      {/* Core Question 1: WHERE AM I? */}
-      <div className="bg-white rounded-xl p-4 sm:p-5 border border-stone-200 space-y-3.5 relative overflow-hidden">
-        <div className="flex items-center justify-between border-b border-stone-100 pb-3">
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-lg bg-orange-100 border border-orange-200 flex items-center justify-center text-orange-700">
-              <MapPin className="w-3.5 h-3.5" />
-            </div>
-            <h3 className="text-xs sm:text-sm font-bold text-stone-900 flex items-center gap-1.5">
-              <span>1. Where Am I? (Baseline Profile)</span>
-              <StarburstRosette size={12} className="text-orange-500/70" />
-            </h3>
-          </div>
-          <span className="text-[10px] font-mono font-semibold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
-            AI Evaluated
-          </span>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-          <div className="bg-[#FAF8F5] p-3.5 rounded-lg border border-stone-200 space-y-0.5">
-            <span className="text-[10px] font-mono text-stone-500 uppercase font-semibold">
-              Current Level
-            </span>
-            <div className="text-sm font-bold text-stone-900">
-              Entry-Level Specialist
-            </div>
-            <span className="text-[10px] text-stone-500 block">
-              Strong communication foundation
-            </span>
-          </div>
-
-          <div className="bg-[#FAF8F5] p-3.5 rounded-lg border border-stone-200 space-y-0.5">
-            <span className="text-[10px] font-mono text-stone-500 uppercase font-semibold">
-              Demonstrated Skills
-            </span>
-            <div className="text-sm font-bold text-amber-800">
-              Empathy & Tone Control
-            </div>
-            <span className="text-[10px] text-stone-500 block">
-              Verified in baseline assessment
-            </span>
-          </div>
-
-          <div className="bg-[#FAF8F5] p-3.5 rounded-lg border border-stone-200 space-y-0.5">
-            <span className="text-[10px] font-mono text-stone-500 uppercase font-semibold">
-              Growth Target
-            </span>
-            <div className="text-sm font-bold text-emerald-800">
-              Structured Troubleshooting
-            </div>
-            <span className="text-[10px] text-stone-500 block">
-              High market demand (+24% roles)
-            </span>
-          </div>
-        </div>
-      </div>
-
-      {/* Core Question 2: WHAT PATHS CAN I TAKE? */}
-      <div className="space-y-3">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <h3 className="text-xs sm:text-sm font-bold text-stone-900 flex items-center gap-1.5">
-              <span>2. Career Tracks</span>
-              <LaurelEmblem size={18} className="text-stone-400" />
-            </h3>
-          </div>
-          <span className="text-[10px] font-mono text-stone-500">
-            Select a track below
-          </span>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+        <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4" role="radiogroup" aria-label="Career tracks">
           {careerPaths.map((path) => {
             const isSelected = selectedPath.id === path.id;
-            const isThisPathStarting =
-              isStarting && (startingPathId === path.id || isSelected);
+            const isThisPathStarting = isStarting && (startingPathId === path.id || isSelected);
+            const look = PATH_LOOK[path.id] ?? { face: "happy" as const, tone: "orange" as const };
+            const choose = () => (isSelected ? handleLaunchPath(path) : handleSelectCard(path));
 
             return (
               <div
                 key={path.id}
-                onClick={() => {
-                  if (isSelected) {
-                    handleLaunchPath(path);
-                  } else {
-                    handleSelectCard(path);
+                role="radio"
+                aria-checked={isSelected}
+                tabIndex={0}
+                onClick={choose}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    choose();
                   }
                 }}
                 className={cn(
-                  "p-4 rounded-xl border transition-colors duration-150 cursor-pointer flex flex-col justify-between space-y-3 relative overflow-hidden",
-                  isSelected
-                    ? "bg-amber-50/60 border-amber-300 shadow-sm"
-                    : "bg-white border-stone-200 hover:border-stone-300 hover:bg-stone-50/50"
+                  "relative isolate flex cursor-pointer flex-col overflow-hidden rounded-3xl border p-5 transition-colors",
+                  isSelected ? "border-transparent text-white" : "border-white/[0.06] bg-[#181818] hover:bg-[#1c1c1c]",
                 )}
               >
-                <div className="space-y-2.5">
-                  <div className="flex items-center justify-between">
-                    <span
-                      className={cn(
-                        "text-[10px] font-mono px-2 py-0.5 rounded font-semibold border",
-                        isSelected
-                          ? "text-amber-900 bg-amber-100 border-amber-200"
-                          : "text-stone-600 bg-stone-100 border-stone-200"
-                      )}
-                    >
-                      {path.category}
-                    </span>
-                    <span className="text-xs font-mono font-bold text-emerald-700 flex items-center gap-1">
-                      <Sparkles className="w-3 h-3 text-emerald-600" />
-                      {path.matchScore}% Match
-                    </span>
-                  </div>
+                {isSelected && (
+                  <>
+                    <span aria-hidden className="absolute inset-0 -z-20" style={{ background: BLOBS[look.tone] }} />
+                    <Grain />
+                  </>
+                )}
 
-                  <div>
-                    <h4
-                      className={cn(
-                        "text-sm font-bold transition-colors",
-                        isSelected ? "text-amber-950" : "text-stone-900"
-                      )}
-                    >
-                      {path.title}
-                    </h4>
-                    <p className="text-xs text-stone-500 mt-1 leading-relaxed">
-                      {path.description}
-                    </p>
-                  </div>
-
-                  <div className="space-y-1 pt-2 border-t border-stone-100">
-                    <div className="text-[10px] font-mono text-stone-400 uppercase font-semibold">
-                      Core Skills:
-                    </div>
-                    <div className="flex flex-wrap gap-1">
-                      {path.coreSkills.map((sk) => (
-                        <span
-                          key={sk}
-                          className="text-[10px] px-1.5 py-0.5 rounded bg-stone-100 border border-stone-200 text-stone-700 font-medium"
-                        >
-                          {sk}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
+                <div className="flex items-start justify-between gap-3">
+                  <PatriciaFace face={look.face} size={48} />
+                  {isSelected ? (
+                    <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white text-black">
+                      <Check className="h-3.5 w-3.5" />
+                    </span>
+                  ) : (
+                    <Badge tone="green">{path.matchScore}% match</Badge>
+                  )}
                 </div>
 
-                <div className="flex flex-col gap-2 pt-2.5 border-t border-stone-100">
-                  <div className="flex items-center justify-between text-[10px] font-mono text-stone-500">
-                    <span>Est. Salary:</span>
-                    <span className="text-stone-800 font-semibold">{path.avgSalaryRange}</span>
-                  </div>
+                <p className={cn("mt-5 text-sm", isSelected ? "text-white/75" : "text-zinc-500")}>{path.category}</p>
+                <h3 className="mt-1 text-xl font-semibold tracking-[-0.01em]">{path.title}</h3>
+                <p className={cn("mt-2 text-sm leading-relaxed", isSelected ? "text-white/85" : "text-zinc-400")}>
+                  {path.description}
+                </p>
 
-                  <button
+                <div className="mt-4 flex flex-wrap gap-1.5">
+                  {path.coreSkills.map((sk) => (
+                    <span
+                      key={sk}
+                      className={cn(
+                        "rounded-full px-2.5 py-1 text-xs",
+                        isSelected ? "bg-black/20 text-white" : "bg-white/[0.06] text-zinc-300",
+                      )}
+                    >
+                      {sk}
+                    </span>
+                  ))}
+                </div>
+
+                <div className={cn("mt-auto pt-5", isSelected ? "text-white/75" : "text-zinc-500")}>
+                  <p className="mb-3 flex justify-between gap-2 text-sm">
+                    <span>Typical salary</span>
+                    <span className={isSelected ? "text-white" : "text-zinc-300"}>{path.avgSalaryRange}</span>
+                  </p>
+                  <Button
+                    variant={isSelected ? "white" : "outline"}
+                    className="w-full"
+                    disabled={isStarting}
                     onClick={(e) => {
                       e.stopPropagation();
-                      if (isSelected) {
-                        handleLaunchPath(path);
-                      } else {
-                        handleSelectCard(path);
-                      }
+                      choose();
                     }}
-                    disabled={isStarting}
-                    className={cn(
-                      "w-full h-8 px-3 rounded-lg text-xs font-semibold border transition-colors cursor-pointer flex items-center justify-center gap-1.5 shrink-0 disabled:opacity-80",
-                      isSelected
-                        ? "bg-stone-900 hover:bg-stone-800 text-white border-stone-900"
-                        : "bg-white hover:bg-stone-50 text-stone-700 border-stone-200"
-                    )}
                   >
                     {isThisPathStarting ? (
                       <>
-                        <span>Starting...</span>
-                        <Loader2 className="w-3 h-3 text-white animate-spin" />
+                        Starting
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      </>
+                    ) : isSelected ? (
+                      <>
+                        Start track
+                        <ArrowRight className="h-4 w-4" />
                       </>
                     ) : (
-                      <>
-                        <span>{isSelected ? "Start Track" : "Select Track"}</span>
-                        {isSelected && <ArrowRight className="w-3 h-3 text-orange-400" />}
-                      </>
+                      "Select track"
                     )}
-                  </button>
+                  </Button>
                 </div>
               </div>
             );
           })}
         </div>
-      </div>
+      </section>
 
-      {/* Core Question 3: WHAT SHOULD I LEARN? */}
-      <div className="bg-gradient-to-r from-amber-50/60 via-white to-orange-50/40 rounded-xl p-4 sm:p-5 border border-amber-200/70 space-y-3.5 relative overflow-hidden">
-        <EngravedSeal
-          size={84}
-          className="absolute -right-4 -bottom-4 text-amber-600/15 pointer-events-none hidden sm:block"
-        />
-
-        <div className="flex items-center justify-between border-b border-stone-100 pb-2.5 relative z-10">
-          <div className="flex items-center gap-2">
-            <h3 className="text-xs sm:text-sm font-bold text-stone-900">
-              3. Recommended Starting Pair
-            </h3>
+      {/* 3. what to do first */}
+      <section>
+        <SectionTitle title="Your first two steps" />
+        <Card>
+          <div className="grid gap-3 md:grid-cols-2">
+            <FirstStep
+              icon={BookOpen}
+              step="1. Learn"
+              title="Customer communication and de-escalation"
+              text="Active listening, tone control and positive framing."
+            />
+            <FirstStep
+              icon={Zap}
+              step="2. Practice"
+              title="Handle an upset customer's refund"
+              text="Calm an upset customer in a text chat with Patricia."
+            />
           </div>
-          <span className="text-[10px] font-mono text-amber-800 bg-amber-100/70 border border-amber-200 px-2 py-0.5 rounded font-semibold">
-            Classes + Simulator
-          </span>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 relative z-10">
-          {/* Class recommendation */}
-          <div className="bg-white p-3.5 rounded-lg border border-stone-200 space-y-1.5">
-            <div className="flex items-center gap-1.5 text-[10px] font-bold text-amber-800 uppercase tracking-wider">
-              <BookOpen className="w-3 h-3 text-amber-600" />
-              <span>Step 1: Class (Theory)</span>
-            </div>
-            <h4 className="text-xs sm:text-sm font-bold text-stone-900">
-              Customer Communication & De-escalation
-            </h4>
-            <p className="text-xs text-stone-500 leading-relaxed">
-              Master active listening, tone control, and positive framing.
+          <div className="mt-5 flex flex-col gap-3 border-t border-white/[0.06] pt-5 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-sm text-zinc-400">
+              Selected: <span className="text-white">{selectedPath.title}</span>
             </p>
+            <Button size="lg" onClick={() => handleLaunchPath()} disabled={isStarting}>
+              {isStarting ? "Starting" : "Start the first class"}
+              {isStarting ? <Loader2 className="h-5 w-5 animate-spin" /> : <ArrowRight className="h-5 w-5" />}
+            </Button>
           </div>
-
-          {/* Connected Simulator practice layer */}
-          <div className="bg-white p-3.5 rounded-lg border border-stone-200 space-y-1.5">
-            <div className="flex items-center gap-1.5 text-[10px] font-bold text-orange-800 uppercase tracking-wider">
-              <Zap className="w-3 h-3 text-orange-600" />
-              <span>Step 2: Simulator (Practice)</span>
-            </div>
-            <h4 className="text-xs sm:text-sm font-bold text-stone-900">
-              Handling an Upset Customer Refund
-            </h4>
-            <p className="text-xs text-stone-500 leading-relaxed">
-              De-escalate an upset customer in an interactive AI roleplay simulation.
-            </p>
-          </div>
-        </div>
-
-        <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-stone-100 relative z-10">
-          <div className="text-xs text-stone-500">
-            Ready to begin? Enter your class to start your learning loop.
-          </div>
-          <button
-            onClick={() => handleLaunchPath()}
-            disabled={isStarting}
-            className="w-full sm:w-auto px-4 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 text-white text-xs font-semibold transition-colors cursor-pointer flex items-center justify-center gap-1.5 disabled:opacity-80 shrink-0"
-          >
-            <span>{isStarting ? "Starting..." : "Enter Class & Start Loop"}</span>
-            {isStarting ? (
-              <Loader2 className="w-3.5 h-3.5 text-white animate-spin" />
-            ) : (
-              <ArrowRight className="w-3.5 h-3.5 text-orange-400" />
-            )}
-          </button>
-        </div>
-      </div>
+        </Card>
+      </section>
     </div>
   );
 });
+
+function FirstStep({
+  icon: Icon,
+  step,
+  title,
+  text,
+}: {
+  icon: typeof Zap;
+  step: string;
+  title: string;
+  text: string;
+}) {
+  return (
+    <div className="flex gap-4 rounded-2xl bg-white/[0.03] p-4">
+      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-orange-500/15 text-orange-400">
+        <Icon className="h-5 w-5" />
+      </span>
+      <div>
+        <p className="text-sm text-zinc-500">{step}</p>
+        <p className="mt-0.5 text-base font-medium text-white">{title}</p>
+        <p className="mt-1 text-sm text-zinc-400">{text}</p>
+      </div>
+    </div>
+  );
+}

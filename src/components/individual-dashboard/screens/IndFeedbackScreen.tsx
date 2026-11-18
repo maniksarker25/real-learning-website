@@ -1,46 +1,41 @@
 "use client";
 
 import React, { memo, useCallback } from "react";
-import {
-  MessageSquare,
-  Sparkles,
-  CheckCircle2,
-  AlertCircle,
-  RotateCcw,
-  BookOpen,
-  ArrowRight,
-  ShieldCheck,
-  TrendingUp,
-} from "lucide-react";
+import { ArrowRight, Check, RotateCcw, TrendingUp, Zap, BookOpen, type LucideIcon } from "lucide-react";
 import { SimulationFeedback } from "@/types/individual";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { useLearningLoop } from "@/context/LearningLoopContext";
 import { RecentSimulationsTable } from "../RecentSimulationsTable";
-
 import {
-  VictorianCornerFlourish,
-  EngravedSeal,
-  LaurelEmblem,
-  StarburstRosette,
-} from "@/components/ui/DecorativeAssets";
+  Badge,
+  BlobCard,
+  Button,
+  Card,
+  CardHeader,
+  PageHeader,
+  PatriciaPose,
+  ProgressBar,
+  SectionTitle,
+} from "@/components/dashboard/ui";
 
 interface IndFeedbackScreenProps {
   onNavigateToTab?: (tabId: string) => void;
 }
+
+const SKILL_GROWTH = [
+  { skill: "Active listening", newScore: 92, delta: "+18%" },
+  { skill: "De-escalation", newScore: 94, delta: "+16%" },
+  { skill: "Positive framing", newScore: 95, delta: "+25%" },
+  { skill: "Action agreements", newScore: 89, delta: "+24%" },
+];
 
 export const IndFeedbackScreen = memo(function IndFeedbackScreen({
   onNavigateToTab,
 }: IndFeedbackScreenProps) {
   const router = useRouter();
 
-  let contextValue: ReturnType<typeof useLearningLoop> | null = null;
-  try {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    contextValue = useLearningLoop();
-  } catch {
-    contextValue = null;
-  }
+  const contextValue: ReturnType<typeof useLearningLoop> | null = useLearningLoop();
   const fallbackFeedback: SimulationFeedback = {
     scenarioId: "sim-1",
     scenarioTitle: "Handling an Upset Customer Requesting Immediate Refund",
@@ -123,290 +118,203 @@ export const IndFeedbackScreen = memo(function IndFeedbackScreen({
     }
   }, [contextValue, onNavigateToTab, router]);
 
+  const skills = [
+    { name: "Communication and clarity", score: feedbackData.skillScores.communication },
+    { name: "Empathy and tone", score: feedbackData.skillScores.empathy },
+    { name: "Active listening", score: feedbackData.skillScores.activeListening },
+    { name: "Problem solving", score: feedbackData.skillScores.problemSolving },
+    { name: "Conflict resolution", score: feedbackData.skillScores.conflictResolution },
+  ];
+
   return (
-    <div className="space-y-5">
-      {/* Header Banner */}
-      <div className="bg-white rounded-xl p-4 sm:p-5 border border-stone-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 relative overflow-hidden">
-        <VictorianCornerFlourish
-          position="top-right"
-          className="absolute top-2 right-2 text-stone-300/60 hidden sm:block"
-        />
+    <div className="space-y-6">
+      <PageHeader
+        eyebrow="Step 4 · Feedback"
+        title="How it went"
+        description={feedbackData.scenarioTitle}
+        actions={
+          <Button variant="outline" onClick={handlePracticeAgain}>
+            <RotateCcw className="h-4 w-4" />
+            Practice again
+          </Button>
+        }
+      />
 
-        <div className="relative z-10">
-          <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-amber-100 text-amber-900 border border-amber-200 text-[10px] font-mono font-semibold mb-1">
-            <Sparkles className="w-3 h-3 text-amber-700" />
-            <span>AI PERFORMANCE EVALUATION</span>
-          </div>
-          <h2 className="text-lg font-bold text-stone-900 tracking-tight">
-            Simulation Result & Evaluation
-          </h2>
-          <p className="text-xs text-stone-500 mt-0.5">
-            Scenario: {feedbackData.scenarioTitle}
+      {/* score + skills */}
+      <div className="grid gap-3 lg:grid-cols-12">
+        <BlobCard tone="green" className="flex flex-col lg:col-span-4">
+          <p className="text-sm font-medium text-white/80">Overall score</p>
+          <p className="mt-4 text-6xl font-semibold tracking-[-0.03em] tabular-nums">{feedbackData.overallScore}%</p>
+          <p className="mt-3 inline-flex items-center gap-1.5 text-sm text-white/90">
+            <TrendingUp className="h-4 w-4" />
+            Strong performance
           </p>
-        </div>
+          <PatriciaPose pose="thumbs-up" className="mt-auto h-36 w-24 self-end" sizes="96px" />
+        </BlobCard>
 
-        <button
-          onClick={handlePracticeAgain}
-          className="px-3.5 py-1.5 rounded-lg bg-stone-50 hover:bg-stone-100 border border-stone-200 text-stone-800 text-xs font-semibold transition-colors cursor-pointer flex items-center gap-1.5 shrink-0 relative z-10"
-        >
-          <RotateCcw className="w-3.5 h-3.5 text-orange-600" />
-          <span>Practice Again</span>
-        </button>
-      </div>
-
-      {/* Overall Score & Skill Scores Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
-        {/* Left: Overall Score Card */}
-        <div className="lg:col-span-4 bg-gradient-to-br from-amber-50/70 via-white to-orange-50/50 rounded-xl p-5 border border-amber-200/70 text-center flex flex-col justify-center space-y-2 relative overflow-hidden">
-          <EngravedSeal
-            size={76}
-            className="absolute -right-3 -bottom-3 text-amber-600/15 pointer-events-none"
-          />
-          <span className="text-[10px] font-mono font-semibold uppercase tracking-wider text-stone-500 relative z-10">
-            Overall Simulation Score
-          </span>
-          <div className="text-4xl sm:text-5xl font-black text-stone-900 font-mono tracking-tight relative z-10">
-            {feedbackData.overallScore}%
-          </div>
-          <div className="inline-flex items-center justify-center gap-1 text-[11px] text-emerald-800 font-semibold bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200 mx-auto relative z-10">
-            <TrendingUp className="w-3 h-3 text-emerald-700" />
-            <span>High Performance</span>
-          </div>
-        </div>
-
-        {/* Right: Evaluated Skill Radar Scores */}
-        <div className="lg:col-span-8 bg-white rounded-xl p-5 border border-stone-200 space-y-3">
-          <h3 className="text-xs sm:text-sm font-bold text-stone-900 flex items-center gap-1.5">
-            <ShieldCheck className="w-4 h-4 text-amber-600" />
-            <span>Skill Level Evaluation</span>
-          </h3>
-
-          <div className="space-y-2.5">
-            {[
-              { name: "Communication & Clarity", score: feedbackData.skillScores.communication, color: "bg-orange-500" },
-              { name: "Empathy & Tone", score: feedbackData.skillScores.empathy, color: "bg-emerald-500" },
-              { name: "Active Listening", score: feedbackData.skillScores.activeListening, color: "bg-amber-500" },
-              { name: "Problem Solving", score: feedbackData.skillScores.problemSolving, color: "bg-indigo-500" },
-              { name: "Conflict Resolution", score: feedbackData.skillScores.conflictResolution, color: "bg-rose-500" },
-            ].map((sk) => (
-              <div key={sk.name} className="space-y-1">
-                <div className="flex justify-between text-xs font-medium">
-                  <span className="text-stone-800">{sk.name}</span>
-                  <span className="font-mono text-stone-900 font-bold">{sk.score}%</span>
+        <Card className="lg:col-span-8">
+          <CardHeader title="Skill scores" description="How Patricia rated each skill in this conversation." />
+          <ul className="space-y-4">
+            {skills.map((sk) => (
+              <li key={sk.name}>
+                <div className="mb-2 flex justify-between text-sm">
+                  <span className="text-zinc-300">{sk.name}</span>
+                  <span className="font-medium text-white tabular-nums">{sk.score}%</span>
                 </div>
-                <div className="w-full h-1.5 bg-stone-100 rounded-full overflow-hidden border border-stone-200">
-                  <div
-                    className={cn("h-full rounded-full", sk.color)}
-                    style={{ width: `${sk.score}%` }}
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* What You Did Well vs What to Improve */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* Positive Highlights */}
-        <div className="bg-emerald-50/50 rounded-xl p-4 border border-emerald-200 space-y-2.5">
-          <h3 className="text-xs sm:text-sm font-bold text-emerald-950 flex items-center gap-1.5">
-            <CheckCircle2 className="w-4 h-4 text-emerald-700" />
-            <span>Strengths & Good Practices</span>
-          </h3>
-          <ul className="space-y-2">
-            {feedbackData.positiveHighlights.map((point) => (
-              <li key={point} className="flex items-start gap-2 text-xs text-stone-700 leading-relaxed">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 shrink-0 mt-1.5" />
-                <span>{point}</span>
+                <ProgressBar value={sk.score} label={sk.name} />
               </li>
             ))}
           </ul>
-        </div>
-
-        {/* Improvement Points */}
-        <div className="bg-amber-50/50 rounded-xl p-4 border border-amber-200 space-y-2.5">
-          <h3 className="text-xs sm:text-sm font-bold text-amber-950 flex items-center gap-1.5">
-            <AlertCircle className="w-4 h-4 text-amber-700" />
-            <span>Opportunities for Growth</span>
-          </h3>
-          <ul className="space-y-2">
-            {feedbackData.improvementPoints.map((point) => (
-              <li key={point} className="flex items-start gap-2 text-xs text-stone-700 leading-relaxed">
-                <span className="w-1.5 h-1.5 rounded-full bg-amber-600 shrink-0 mt-1.5" />
-                <span>{point}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
+        </Card>
       </div>
 
-      {/* Important Dialogue Moments Timeline */}
-      <div className="bg-white rounded-xl p-4 sm:p-5 border border-stone-200 space-y-3">
-        <h3 className="text-xs sm:text-sm font-bold text-stone-900 flex items-center gap-1.5">
-          <MessageSquare className="w-4 h-4 text-amber-600" />
-          <span>Key Conversation Moments</span>
-        </h3>
-
-        <div className="space-y-2.5">
-          {feedbackData.keyMoments.map((moment, idx) => (
-            <div
-              key={idx}
-              className={cn(
-                "p-3 rounded-lg border text-xs space-y-0.5 leading-relaxed",
-                moment.quality === "good"
-                  ? "bg-emerald-50/40 border-emerald-200 text-stone-800"
-                  : "bg-amber-50/40 border-amber-200 text-stone-800"
-              )}
-            >
-              <div className="flex items-center justify-between font-mono text-[10px]">
-                <span className="font-bold text-stone-600">Timestamp {moment.timestamp}</span>
-                <span className={moment.quality === "good" ? "text-emerald-800 font-bold" : "text-amber-800 font-bold"}>
-                  {moment.quality === "good" ? "Effective Response" : "Coaching Note"}
-                </span>
-              </div>
-              <p>{moment.note}</p>
-            </div>
-          ))}
-        </div>
+      {/* strengths vs growth */}
+      <div className="grid gap-3 md:grid-cols-2">
+        <PointsCard title="What you did well" tone="good" points={feedbackData.positiveHighlights} />
+        <PointsCard title="What to work on" tone="improve" points={feedbackData.improvementPoints} />
       </div>
 
-      {/* Demonstrated Skill Progress Growth Banner */}
-      <div className="bg-white rounded-xl p-4 sm:p-5 border border-stone-200 space-y-3.5">
-        <div className="flex items-center justify-between border-b border-stone-100 pb-2.5">
-          <div className="flex items-center gap-2">
-            <TrendingUp className="w-4 h-4 text-emerald-700" />
-            <h3 className="text-xs sm:text-sm font-bold text-stone-900">
-              Demonstrated Skill Growth
-            </h3>
-          </div>
-          <span className="text-[10px] font-mono font-semibold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
-            +15.4% Gain
-          </span>
-        </div>
-
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-          {[
-            { skill: "Active Listening", oldScore: 74, newScore: 92, delta: "+18%" },
-            { skill: "De-escalation", oldScore: 78, newScore: 94, delta: "+16%" },
-            { skill: "Positive Framing", oldScore: 70, newScore: 95, delta: "+25%" },
-            { skill: "Action Agreements", oldScore: 65, newScore: 89, delta: "+24%" },
-          ].map((item) => (
-            <div key={item.skill} className="bg-[#FAF8F5] p-3 rounded-lg border border-stone-200 space-y-0.5">
-              <span className="text-[10px] font-mono text-stone-500 uppercase font-semibold">
-                {item.skill}
-              </span>
-              <div className="flex items-baseline justify-between">
-                <span className="text-lg font-black text-stone-900 font-mono">{item.newScore}%</span>
-                <span className="text-[10px] font-mono font-bold text-emerald-700">{item.delta}</span>
-              </div>
-              <div className="w-full h-1 bg-stone-200 rounded-full overflow-hidden mt-1">
-                <div
-                  className="h-full bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full"
-                  style={{ width: `${item.newScore}%` }}
+      {/* key moments */}
+      <Card>
+        <CardHeader title="Key moments" description="Moments in the conversation that made a difference." />
+        <ol className="relative space-y-5 border-l border-white/[0.08] pl-6">
+          {feedbackData.keyMoments.map((moment, idx) => {
+            const good = moment.quality === "good";
+            return (
+              <li key={idx} className="relative">
+                <span
+                  className={cn(
+                    "absolute -left-[31px] top-1 h-3 w-3 rounded-full ring-4 ring-[#181818]",
+                    good ? "bg-emerald-400" : "bg-amber-400",
+                  )}
                 />
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="text-sm text-zinc-500 tabular-nums">{moment.timestamp}</span>
+                  <Badge tone={good ? "green" : "amber"}>{good ? "Effective reply" : "Coaching note"}</Badge>
+                </div>
+                <p className="mt-1.5 text-base leading-relaxed text-zinc-200">{moment.note}</p>
+              </li>
+            );
+          })}
+        </ol>
+      </Card>
+
+      {/* growth */}
+      <section>
+        <SectionTitle title="Skill growth" action={<Badge tone="green">+15.4% overall</Badge>} />
+        <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+          {SKILL_GROWTH.map((item) => (
+            <Card key={item.skill} className="p-5">
+              <p className="text-sm text-zinc-400">{item.skill}</p>
+              <div className="mt-3 flex items-baseline justify-between gap-2">
+                <span className="text-2xl font-semibold tracking-[-0.02em] text-white tabular-nums">{item.newScore}%</span>
+                <span className="text-sm text-emerald-400">{item.delta}</span>
               </div>
-            </div>
+              <ProgressBar value={item.newScore} className="mt-3" barClassName="bg-emerald-400" label={item.skill} />
+            </Card>
           ))}
         </div>
-      </div>
+      </section>
 
-      {/* CORE STEP 6: WHAT SHOULD I DO NEXT? (RL AI Decision Engine) */}
-      <div className="bg-gradient-to-r from-amber-50/60 via-white to-orange-50/40 rounded-xl p-4 sm:p-5 border border-amber-200/70 space-y-4">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-b border-stone-100 pb-3">
-          <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg bg-amber-100 border border-amber-200 flex items-center justify-center text-amber-800">
-              <Sparkles className="w-3.5 h-3.5" />
-            </div>
-            <div>
-              <span className="text-[10px] font-mono font-bold uppercase text-amber-900 tracking-wider">
-                GPS GUIDANCE
-              </span>
-              <h3 className="text-xs sm:text-sm font-bold text-stone-900">
-                Next Recommended Step
-              </h3>
-            </div>
-          </div>
-          <span className="text-[10px] font-mono font-semibold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
-            Mastery Approved (Score: 92%)
-          </span>
+      {/* next step */}
+      <section>
+        <SectionTitle title="What's next" action={<Badge tone="green">Passed · {feedbackData.overallScore}%</Badge>} />
+        <div className="grid gap-3 md:grid-cols-3">
+          <NextStepCard
+            recommended
+            icon={BookOpen}
+            title="Take the next class"
+            text="Advanced technical diagnostics and incident escalations."
+            cta="Start next class"
+            onClick={handleGoToLesson}
+          />
+          <NextStepCard
+            icon={RotateCcw}
+            title="Practice this again"
+            text="Work on your resolution timing and aim for 95% or higher."
+            cta="Retry scenario"
+            onClick={handlePracticeAgain}
+          />
+          <NextStepCard
+            icon={Zap}
+            title="Try a harder scenario"
+            text="A level 2 escalation with several upset stakeholders."
+            cta="Harder scenario"
+            onClick={handleTryHarderSimulation}
+          />
         </div>
+      </section>
 
-        {/* 3 AI Next Step Decision Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-          {/* Card A: Next Class (Recommended) */}
-          <div className="bg-amber-50/80 p-4 rounded-xl border border-amber-300 flex flex-col justify-between space-y-3">
-            <div className="space-y-1.5">
-              <div className="flex items-center justify-between">
-                <span className="text-[10px] font-mono font-bold text-amber-900 bg-amber-200/80 px-1.5 py-0.5 rounded">
-                  RECOMMENDED
-                </span>
-                <span className="text-[10px] font-mono text-emerald-800 font-semibold">Option 1</span>
-              </div>
-              <h4 className="text-sm font-bold text-stone-900">
-                Advance to Next Class
-              </h4>
-              <p className="text-xs text-stone-600">
-                Class: Advanced Technical Diagnostics & Incident Escalations
-              </p>
-            </div>
-            <button
-              onClick={handleGoToLesson}
-              className="w-full py-2 rounded-lg bg-stone-900 hover:bg-stone-800 text-white text-xs font-semibold transition-colors cursor-pointer flex items-center justify-center gap-1.5"
-            >
-              <span>Take Next Class</span>
-              <ArrowRight className="w-3.5 h-3.5 text-orange-400" />
-            </button>
-          </div>
-
-          {/* Card B: Repeat Skill */}
-          <div className="bg-white p-4 rounded-xl border border-stone-200 flex flex-col justify-between space-y-3">
-            <div className="space-y-1.5">
-              <span className="text-[10px] font-mono text-stone-500">Option 2</span>
-              <h4 className="text-sm font-bold text-stone-900">
-                Practice Scenario Again
-              </h4>
-              <p className="text-xs text-stone-500">
-                Improve your resolution timing and target a 95%+ score.
-              </p>
-            </div>
-            <button
-              onClick={handlePracticeAgain}
-              className="w-full py-2 rounded-lg bg-stone-50 hover:bg-stone-100 border border-stone-200 text-stone-700 hover:text-stone-900 text-xs font-semibold transition-colors cursor-pointer flex items-center justify-center gap-1.5"
-            >
-              <RotateCcw className="w-3.5 h-3.5" />
-              <span>Retry Scenario</span>
-            </button>
-          </div>
-
-          {/* Card C: Harder Simulation */}
-          <div className="bg-white p-4 rounded-xl border border-stone-200 flex flex-col justify-between space-y-3">
-            <div className="space-y-1.5">
-              <span className="text-[10px] font-mono text-stone-500">Option 3</span>
-              <h4 className="text-sm font-bold text-stone-900">
-                Try Harder Scenario
-              </h4>
-              <p className="text-xs text-stone-500">
-                Level 2 SLA Escalation with multiple angry stakeholders.
-              </p>
-            </div>
-            <button
-              onClick={handleTryHarderSimulation}
-              className="w-full py-2 rounded-lg bg-stone-50 hover:bg-stone-100 border border-stone-200 text-stone-700 hover:text-stone-900 text-xs font-semibold transition-colors cursor-pointer flex items-center justify-center gap-1.5"
-            >
-              <span>Harder Scenario</span>
-              <ArrowRight className="w-3.5 h-3.5 text-orange-400" />
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Historical Simulation Records Table */}
-      <div className="pt-2">
-        <RecentSimulationsTable
-          onLaunchSimulation={() => router.push("/user-dashboard/simulations")}
-        />
-      </div>
+      <RecentSimulationsTable onLaunchSimulation={() => router.push("/user-dashboard/simulations")} />
     </div>
   );
 });
+
+function PointsCard({ title, tone, points }: { title: string; tone: "good" | "improve"; points: string[] }) {
+  return (
+    <Card>
+      <CardHeader title={title} />
+      <ul className="space-y-3">
+        {points.map((point) => (
+          <li key={point} className="flex items-start gap-3 text-base leading-relaxed text-zinc-300">
+            <span
+              className={cn(
+                "mt-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-full",
+                tone === "good" ? "bg-emerald-500/15 text-emerald-400" : "bg-amber-500/15 text-amber-400",
+              )}
+            >
+              {tone === "good" ? <Check className="h-3 w-3" /> : <ArrowRight className="h-3 w-3" />}
+            </span>
+            {point}
+          </li>
+        ))}
+      </ul>
+    </Card>
+  );
+}
+
+function NextStepCard({
+  icon: Icon,
+  title,
+  text,
+  cta,
+  onClick,
+  recommended,
+}: {
+  icon: LucideIcon;
+  title: string;
+  text: string;
+  cta: string;
+  onClick: () => void;
+  recommended?: boolean;
+}) {
+  const body = (
+    <>
+      <div className="flex items-start justify-between gap-3">
+        <span
+          className={cn(
+            "flex h-11 w-11 items-center justify-center rounded-2xl",
+            recommended ? "bg-white/20 text-white" : "bg-orange-500/15 text-orange-400",
+          )}
+        >
+          <Icon className="h-5 w-5" />
+        </span>
+        {recommended && <span className="rounded-full bg-black/25 px-2.5 py-1 text-xs font-medium">Recommended</span>}
+      </div>
+      <h3 className="mt-5 text-lg font-semibold tracking-[-0.01em]">{title}</h3>
+      <p className={cn("mt-1 text-sm", recommended ? "text-white/80" : "text-zinc-400")}>{text}</p>
+      <Button variant={recommended ? "white" : "outline"} onClick={onClick} className="mt-6 w-full">
+        {cta}
+        <ArrowRight className="h-4 w-4" />
+      </Button>
+    </>
+  );
+
+  return recommended ? (
+    <BlobCard tone="orange" className="flex flex-col p-6 sm:p-6 [&>button]:mt-auto">
+      {body}
+    </BlobCard>
+  ) : (
+    <Card className="flex flex-col [&>button]:mt-auto">{body}</Card>
+  );
+}

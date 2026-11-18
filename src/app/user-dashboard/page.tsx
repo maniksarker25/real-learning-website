@@ -33,7 +33,7 @@ export default function UserDashboardPage() {
   );
 
   const handleLaunchSimulation = useCallback(
-    (_scenarioTitle: string) => {
+    () => {
       launchPracticeSimulator("sim-1");
       setStep("simulator");
       router.push("/user-dashboard/practice");

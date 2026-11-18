@@ -10,7 +10,7 @@ export const GsapAwwwardsHero = memo(function GsapAwwwardsHero() {
     <section
       className="relative w-full bg-black text-white px-6 sm:px-10 lg:px-16 pt-24 sm:pt-28 md:pt-32 pb-20 sm:pb-24 md:pb-28 select-none"
     >
-      {/* Smooth ambient purple light spread across the whole hero */}
+      {/* Soft orange ambient light across the whole hero */}
       <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
         <div
           className="absolute inset-0"

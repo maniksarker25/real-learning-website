@@ -1,5 +1,5 @@
-import React, { memo } from "react";
-import { cn } from "@/lib/utils";
+import { memo } from "react";
+import { Segmented } from "@/components/dashboard/ui";
 
 interface RecentSimulationsFilterTabsProps {
   activeFilter: string;
@@ -7,38 +7,18 @@ interface RecentSimulationsFilterTabsProps {
 }
 
 const FILTER_OPTIONS = [
-  { id: "all", label: "All Tracks" },
-  { id: "Customer Service", label: "Customer Service" },
-  { id: "Tech Support", label: "Tech Support" },
-  { id: "IT Specialist", label: "IT Specialist" },
-  { id: "Healthcare Support", label: "Healthcare Support" },
+  { value: "all", label: "All tracks" },
+  { value: "Customer Service", label: "Customer Service" },
+  { value: "Tech Support", label: "Tech Support" },
+  { value: "IT Specialist", label: "IT Specialist" },
+  { value: "Healthcare Support", label: "Healthcare" },
 ];
 
-export const RecentSimulationsFilterTabs = memo(
-  function RecentSimulationsFilterTabs({
-    activeFilter,
-    onSelectFilter,
-  }: RecentSimulationsFilterTabsProps) {
-    return (
-      <div className="flex flex-wrap items-center gap-1.5">
-        {FILTER_OPTIONS.map((filter) => {
-          const isActive = activeFilter === filter.id;
-          return (
-            <button
-              key={filter.id}
-              onClick={() => onSelectFilter(filter.id)}
-              className={cn(
-                "px-3 py-1 rounded-full text-xs font-medium transition-colors cursor-pointer border",
-                isActive
-                  ? "bg-stone-900 text-white border-stone-900 font-semibold"
-                  : "bg-white text-stone-600 border-stone-200 hover:bg-stone-50 hover:text-stone-900",
-              )}
-            >
-              {filter.label}
-            </button>
-          );
-        })}
-      </div>
-    );
-  },
-);
+export const RecentSimulationsFilterTabs = memo(function RecentSimulationsFilterTabs({
+  activeFilter,
+  onSelectFilter,
+}: RecentSimulationsFilterTabsProps) {
+  return (
+    <Segmented label="Filter by career track" options={FILTER_OPTIONS} value={activeFilter} onChange={onSelectFilter} />
+  );
+});

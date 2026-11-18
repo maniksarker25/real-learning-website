@@ -1,9 +1,22 @@
 "use client";
 
-import React, { memo, useState, useMemo } from "react";
-import { ArrowUpRight, ChevronDown } from "lucide-react";
+import React, { memo, useMemo, useState } from "react";
+import { ArrowUpRight, ChevronDown, UserPlus } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useAccount } from "@/context/AccountContext";
 import { RowActionMenu } from "@/components/ui/RowActionMenu";
+import {
+  Badge,
+  BlobCard,
+  ButtonLink,
+  Card,
+  CardHeader,
+  EmptyState,
+  PageHeader,
+  ProgressBar,
+  Select,
+  StatTile,
+} from "@/components/dashboard/ui";
 
 interface Participant {
   id: number;
@@ -17,395 +30,285 @@ interface Participant {
 }
 
 const TRACK_FILTER_OPTIONS = [
-  { id: "all", label: "All Tracks" },
+  { id: "all", label: "All tracks" },
   { id: "Customer Service", label: "Customer Service" },
   { id: "Tech Support", label: "Tech Support" },
   { id: "IT Specialist", label: "IT Specialist" },
   { id: "Healthcare Support", label: "Healthcare" },
 ] as const;
 
+const METRICS = [
+  { id: "total-participants", label: "Total participants", value: "1,248", change: "+14.2% active learners" },
+  { id: "total-simulations-completed", label: "Simulations completed", value: "3,842", change: "+342 this week" },
+  { id: "simulation-completion", label: "Completion rate", value: "88.5%", change: "+5.2% mastery rate" },
+];
+
+const CAREER_TRACKS = [
+  { id: "customer-service", name: "Customer Service", count: 380, percentage: 38 },
+  { id: "tech-support", name: "Tech Support", count: 290, percentage: 29 },
+  { id: "it-specialist", name: "IT Specialist", count: 210, percentage: 21 },
+  { id: "healthcare-support", name: "Healthcare Support", count: 160, percentage: 16 },
+];
+
+const PARTICIPANTS: Participant[] = [
+  {
+    id: 1,
+    name: "Sarah Jenkins",
+    role: "Senior Agent",
+    avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&auto=format&fit=crop&q=80",
+    track: "Customer Service",
+    status: "Completed",
+    progress: 94,
+    score: "96%",
+  },
+  {
+    id: 2,
+    name: "David Chen",
+    role: "Tier 2 Support",
+    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80",
+    track: "Tech Support",
+    status: "In Progress",
+    progress: 78,
+    score: "88%",
+  },
+  {
+    id: 3,
+    name: "Elena Rostova",
+    role: "Systems Analyst",
+    avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80",
+    track: "IT Specialist",
+    status: "In Progress",
+    progress: 64,
+    score: "85%",
+  },
+  {
+    id: 4,
+    name: "Marcus Vance",
+    role: "Clinical Care",
+    avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&auto=format&fit=crop&q=80",
+    track: "Healthcare Support",
+    status: "Active",
+    progress: 45,
+    score: "79%",
+  },
+  {
+    id: 5,
+    name: "Aisha Khan",
+    role: "Lead Specialist",
+    avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=100&auto=format&fit=crop&q=80",
+    track: "Customer Service",
+    status: "Certified",
+    progress: 98,
+    score: "94%",
+  },
+];
+
+const rowActions = (name: string) => [
+  { id: "view", label: `View ${name}` },
+  { id: "edit", label: "Change track" },
+  { id: "remind", label: "Send reminder" },
+];
+
 export const OrgOverviewScreen = memo(function OrgOverviewScreen() {
+  const { session } = useAccount();
   const [selectedTrack, setSelectedTrack] = useState<string>("all");
 
-  const metrics = [
-    {
-      id: "total-participants",
-      label: "TOTAL PARTICIPANTS",
-      value: "1,248",
-      change: "+14.2% active learners",
-    },
-    {
-      id: "total-simulations-completed",
-      label: "TOTAL SIMULATIONS COMPLETED",
-      value: "3,842",
-      change: "+342 this week",
-    },
-    {
-      id: "simulation-completion",
-      label: "SIMULATION COMPLETION RATE",
-      value: "88.5%",
-      change: "+5.2% mastery rate",
-    },
-  ];
+  const filteredParticipants = useMemo(
+    () => (selectedTrack === "all" ? PARTICIPANTS : PARTICIPANTS.filter((p) => p.track === selectedTrack)),
+    [selectedTrack],
+  );
 
-  const careerTracks = [
-    {
-      id: "customer-service",
-      name: "Customer Service",
-      count: 380,
-      percentage: 38,
-    },
-    {
-      id: "tech-support",
-      name: "Tech Support",
-      count: 290,
-      percentage: 29,
-    },
-    {
-      id: "it-specialist",
-      name: "IT Specialist",
-      count: 210,
-      percentage: 21,
-    },
-    {
-      id: "healthcare-support",
-      name: "Healthcare Support",
-      count: 160,
-      percentage: 16,
-    },
-  ];
-
-  // Table with 5 participant items showing participant progress
-  const participantsProgress: Participant[] = [
-    {
-      id: 1,
-      name: "Sarah Jenkins",
-      role: "Senior Agent",
-      avatar:
-        "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&auto=format&fit=crop&q=80",
-      track: "Customer Service",
-      status: "Completed",
-      progress: 94,
-      score: "96%",
-    },
-    {
-      id: 2,
-      name: "David Chen",
-      role: "Tier 2 Support",
-      avatar:
-        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80",
-      track: "Tech Support",
-      status: "In Progress",
-      progress: 78,
-      score: "88%",
-    },
-    {
-      id: 3,
-      name: "Elena Rostova",
-      role: "Systems Analyst",
-      avatar:
-        "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80",
-      track: "IT Specialist",
-      status: "In Progress",
-      progress: 64,
-      score: "85%",
-    },
-    {
-      id: 4,
-      name: "Marcus Vance",
-      role: "Clinical Care",
-      avatar:
-        "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&auto=format&fit=crop&q=80",
-      track: "Healthcare Support",
-      status: "Active",
-      progress: 45,
-      score: "79%",
-    },
-    {
-      id: 5,
-      name: "Aisha Khan",
-      role: "Lead Specialist",
-      avatar:
-        "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=100&auto=format&fit=crop&q=80",
-      track: "Customer Service",
-      status: "Certified",
-      progress: 98,
-      score: "94%",
-    },
-  ];
-
-  const filteredParticipants = useMemo(() => {
-    if (selectedTrack === "all") return participantsProgress;
-    return participantsProgress.filter((p) => p.track === selectedTrack);
-  }, [selectedTrack, participantsProgress]);
+  const [highlight, ...restMetrics] = METRICS;
 
   return (
-    <div className="space-y-4">
-      {/* 3 Metric Cards (Flat, no shadow) */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
-        {metrics.map((m) => (
-          <div
-            key={m.id}
-            className="bg-white rounded-xl p-4 border border-stone-200 hover:bg-stone-50/50 transition-colors"
-          >
-            <div className="flex items-center justify-between gap-2 mb-1.5">
-              <span className="text-xs font-semibold text-stone-500 uppercase tracking-wider font-mono">
-                {m.label}
-              </span>
-            </div>
-            <div className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight">
-              {m.value}
-            </div>
-            <div className="flex items-center gap-1.5 text-xs text-stone-500 mt-1.5">
-              <ArrowUpRight className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-              <span className="text-stone-600 font-medium">{m.change}</span>
-            </div>
-          </div>
+    <div className="space-y-6">
+      <PageHeader
+        eyebrow="Overview"
+        title={session.orgName || "Your team"}
+        description="How your people are practicing, by track and by person."
+        actions={
+          <ButtonLink href="/organization-dashboard/members" variant="white">
+            <UserPlus className="h-4 w-4" />
+            Manage members
+          </ButtonLink>
+        }
+      />
+
+      {/* metrics: first one is the highlight */}
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+        <BlobCard tone="orange" className="p-5 sm:p-5">
+          <p className="text-sm text-white/80">{highlight.label}</p>
+          <p className="mt-4 text-3xl font-semibold tracking-[-0.02em] tabular-nums">{highlight.value}</p>
+          <p className="mt-1 flex items-center gap-1 text-sm text-white/80">
+            <ArrowUpRight className="h-4 w-4" />
+            {highlight.change}
+          </p>
+        </BlobCard>
+        {restMetrics.map((m) => (
+          <StatTile key={m.id} label={m.label} value={m.value} note={m.change} noteTone="positive" />
         ))}
       </div>
 
-      {/* 2 Grid Columns (Flat, no shadow) */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
-        {/* Left: Career Track Participation */}
-        <div className="lg:col-span-5 bg-white rounded-xl p-4 border border-stone-200 space-y-3">
-          <div className="flex items-center justify-between border-b border-stone-100 pb-2.5">
-            <h3 className="text-sm font-bold text-stone-900">
-              Career Track Participation
-            </h3>
-            <span className="text-xs font-mono font-medium text-orange-800 bg-orange-50 px-2 py-0.5 rounded border border-orange-200">
-              4 Tracks
-            </span>
-          </div>
-
+      <div className="grid grid-cols-1 gap-3 lg:grid-cols-12">
+        {/* career track participation */}
+        <Card className="lg:col-span-5">
+          <CardHeader
+            title="Career tracks"
+            description="Tap a track to filter the table."
+            action={<Badge tone="orange">{CAREER_TRACKS.length} tracks</Badge>}
+          />
           <div className="space-y-2">
-            {careerTracks.map((track) => (
-              <div
-                key={track.id}
-                onClick={() =>
-                  setSelectedTrack((prev) =>
-                    prev === track.name ? "all" : track.name,
-                  )
-                }
-                className={cn(
-                  "p-2.5 rounded-md border transition-colors cursor-pointer",
-                  selectedTrack === track.name
-                    ? "bg-orange-50/70 border-orange-300"
-                    : "bg-[#FCFAF6] hover:bg-stone-100/70 border-stone-200/80",
-                )}
-              >
-                <div className="flex items-center justify-between gap-2 mb-1.5">
-                  <span className="text-xs font-semibold text-stone-900 truncate">
-                    {track.name}
-                  </span>
-                  <div className="text-right shrink-0">
-                    <span className="text-xs font-bold text-stone-900">
-                      {track.count}
-                    </span>
-                    <span className="ml-1.5 text-xs font-mono text-orange-600 font-bold">
-                      {track.percentage}%
-                    </span>
-                  </div>
-                </div>
-                <div className="w-full h-1 bg-stone-200/70 rounded-full overflow-hidden">
-                  <div
-                    className="h-full rounded-full transition-all duration-500 bg-black"
-                    style={{ width: `${track.percentage}%` }}
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Right: Participant Progress Table */}
-        <div className="lg:col-span-7 bg-white rounded-xl p-4 border border-stone-200 space-y-3 overflow-hidden">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-stone-100 pb-2.5">
-            <div>
-              <h3 className="text-sm font-bold text-stone-900">
-                Participant Progress
-              </h3>
-              <p className="text-xs text-stone-500 mt-0.5">
-                Showing {filteredParticipants.length} of{" "}
-                {participantsProgress.length} participants
-              </p>
-            </div>
-
-            {/* Track Dropdown Filter */}
-            <div className="relative shrink-0">
-              <select
-                value={selectedTrack}
-                onChange={(e) => setSelectedTrack(e.target.value)}
-                aria-label="Filter by career track"
-                className="appearance-none bg-stone-50/80 hover:bg-stone-100 border border-stone-200 rounded-md pl-3 pr-7 py-1.5 text-xs font-medium text-stone-700 focus:outline-none focus:border-stone-400 transition-colors cursor-pointer"
-              >
-                {TRACK_FILTER_OPTIONS.map((opt) => (
-                  <option key={opt.id} value={opt.id} className="bg-white text-stone-900">
-                    {opt.label}
-                  </option>
-                ))}
-              </select>
-              <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-stone-400 pointer-events-none" />
-            </div>
-          </div>
-          {/* MOBILE VIEW: Clean, Responsive Card List (Visible on screens < md) */}
-          <div className="md:hidden divide-y divide-stone-100 -mx-4 -mb-4">
-            {filteredParticipants.length === 0 ? (
-              <div className="text-center text-stone-400 text-xs py-8 px-4 leading-normal">
-                No participants found.
-              </div>
-            ) : (
-              filteredParticipants.map((p) => (
-                <div
-                  key={p.id}
-                  className="p-4 space-y-3 hover:bg-stone-50/60 transition-colors"
+            {CAREER_TRACKS.map((track) => {
+              const active = selectedTrack === track.name;
+              return (
+                <button
+                  key={track.id}
+                  type="button"
+                  aria-pressed={active}
+                  onClick={() => setSelectedTrack((prev) => (prev === track.name ? "all" : track.name))}
+                  className={cn(
+                    "w-full rounded-2xl border p-4 text-left transition-colors",
+                    active ? "border-orange-500/60 bg-orange-500/10" : "border-white/[0.06] hover:bg-white/[0.03]",
+                  )}
                 >
-                  {/* Participant Avatar + Name & Actions */}
-                  <div className="flex items-center justify-between gap-2.5">
-                    <div className="flex items-center gap-2.5 min-w-0">
-                      <img
-                        src={p.avatar}
-                        alt={p.name}
-                        className="w-9 h-9 rounded-full object-cover border border-stone-200 shrink-0"
-                      />
-                      <div className="min-w-0">
-                        <div className="text-sm font-semibold text-stone-900 truncate">
-                          {p.name}
-                        </div>
-                        <div className="text-xs text-stone-400 font-mono truncate">
-                          {p.role}
-                        </div>
-                      </div>
-                    </div>
-
-                    <RowActionMenu
-                      buttonAriaLabel={`Actions for ${p.name}`}
-                      theme="light"
-                      align="right"
-                      items={[
-                        { id: "view", label: `View ${p.name}` },
-                        { id: "edit", label: "Change Track" },
-                        { id: "remind", label: "Send Reminder" },
-                      ]}
-                    />
-                  </div>
-
-                  {/* Track Badge & Score */}
-                  <div className="flex items-center justify-between gap-2 text-xs">
-                    <span className="inline-flex items-center px-2.5 py-1 rounded font-mono text-stone-700 bg-stone-100 border border-stone-200">
-                      {p.track}
+                  <div className="mb-3 flex items-center justify-between gap-2">
+                    <span className="truncate text-base font-medium text-white">{track.name}</span>
+                    <span className="shrink-0 text-sm text-zinc-400">
+                      <span className="text-white">{track.count}</span> · {track.percentage}%
                     </span>
-                    <div className="flex items-center gap-1.5 font-mono">
-                      <span className="text-stone-400 text-xs">Score:</span>
-                      <span className="font-bold text-xs text-stone-900 bg-stone-100 px-2.5 py-0.5 rounded border border-stone-200">
-                        {p.score}
-                      </span>
-                    </div>
                   </div>
-
-                  {/* Progress Bar */}
-                  <div className="space-y-1.5 pt-0.5">
-                    <div className="flex items-center justify-between text-xs text-stone-600 font-mono">
-                      <span>Curriculum Progress</span>
-                      <span className="font-bold text-stone-800">{p.progress}%</span>
-                    </div>
-                    <div className="w-full h-1.5 bg-stone-100 rounded-full overflow-hidden border border-stone-200/60">
-                      <div
-                        className="h-full bg-stone-900 rounded-full"
-                        style={{ width: `${p.progress}%` }}
-                      />
-                    </div>
-                  </div>
-                </div>
-              ))
-            )}
+                  <ProgressBar value={track.percentage} label={`${track.name} share`} />
+                </button>
+              );
+            })}
           </div>
+        </Card>
 
-          {/* DESKTOP VIEW: Comfortable Breathing Space Table (Visible on md and above) */}
-          <div className="hidden md:block overflow-x-auto">
-            <table className="w-full text-left text-xs leading-normal border-collapse">
-              <thead>
-                <tr className="border-b border-stone-200 text-stone-400 font-mono text-xs uppercase tracking-wider h-10">
-                  <th className="px-3.5 py-2.5 font-semibold leading-normal">
-                    Participant
-                  </th>
-                  <th className="px-3.5 py-2.5 font-semibold leading-normal">
-                    Track
-                  </th>
-                  <th className="px-3.5 py-2.5 font-semibold leading-normal">
-                    Progress
-                  </th>
-                  <th className="px-3.5 py-2.5 font-semibold text-right leading-normal">
-                    Score
-                  </th>
-                  <th className="px-2 py-2.5 font-semibold text-center w-8">
-                    <span className="sr-only">Actions</span>
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
+        {/* participant progress */}
+        <Card className="overflow-hidden lg:col-span-7">
+          <CardHeader
+            title="Participant progress"
+            description={`Showing ${filteredParticipants.length} of ${PARTICIPANTS.length} participants`}
+            action={
+              <div className="relative w-full sm:w-48">
+                <Select
+                  value={selectedTrack}
+                  onChange={(e) => setSelectedTrack(e.target.value)}
+                  aria-label="Filter by career track"
+                  className="h-10 py-0 text-sm"
+                >
+                  {TRACK_FILTER_OPTIONS.map((opt) => (
+                    <option key={opt.id} value={opt.id}>
+                      {opt.label}
+                    </option>
+                  ))}
+                </Select>
+                <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-500" />
+              </div>
+            }
+          />
+
+          {filteredParticipants.length === 0 ? (
+            <EmptyState title="No participants found" description="Try another track." />
+          ) : (
+            <>
+              {/* mobile: stacked cards */}
+              <ul className="-mx-5 divide-y divide-white/[0.06] md:hidden">
                 {filteredParticipants.map((p) => (
-                  <tr
-                    key={p.id}
-                    className="h-12 border-b border-stone-100 last:border-0 hover:bg-stone-50/70 transition-colors"
-                  >
-                    {/* Participant: Avatar + Name */}
-                    <td className="px-3.5 py-3 whitespace-nowrap align-middle">
-                      <div className="flex items-center gap-2.5">
-                        <img
-                          src={p.avatar}
-                          alt={p.name}
-                          className="w-7 h-7 rounded-full object-cover border border-stone-200 shrink-0"
-                        />
-                        <span className="text-sm font-semibold text-stone-900 leading-normal">
-                          {p.name}
-                        </span>
-                      </div>
-                    </td>
-
-                    <td className="px-3.5 py-3 whitespace-nowrap align-middle">
-                      <span className="inline-flex items-center px-2.5 py-1 rounded text-xs font-mono text-stone-700 bg-stone-100 border border-stone-200 leading-normal">
-                        {p.track}
-                      </span>
-                    </td>
-
-                    <td className="px-3.5 py-3 whitespace-nowrap align-middle w-32">
-                      <div className="flex items-center gap-2">
-                        <div className="w-16 h-1.5 bg-stone-100 rounded-full overflow-hidden border border-stone-200/60">
-                          <div
-                            className="h-full bg-black rounded-full"
-                            style={{ width: `${p.progress}%` }}
-                          />
-                        </div>
-                        <span className="font-mono text-xs text-stone-700 font-bold leading-normal">
-                          {p.progress}%
-                        </span>
-                      </div>
-                    </td>
-
-                    <td className="px-3.5 py-3 text-right whitespace-nowrap align-middle">
-                      <span className="font-mono font-bold text-xs text-stone-900 bg-stone-100 px-2.5 py-1 rounded border border-stone-200 leading-normal inline-block">
-                        {p.score}
-                      </span>
-                    </td>
-
-                    <td className="px-1 py-3 text-center whitespace-nowrap align-middle">
+                  <li key={p.id} className="space-y-3 px-5 py-4">
+                    <div className="flex items-center justify-between gap-3">
+                      <ParticipantName p={p} />
                       <RowActionMenu
                         buttonAriaLabel={`Actions for ${p.name}`}
-                        theme="light"
-                        items={[
-                          { id: "view", label: `View ${p.name}` },
-                          { id: "edit", label: "Change Track" },
-                          { id: "remind", label: "Send Reminder" },
-                        ]}
+                        theme="dark"
+                        align="right"
+                        buttonClassName="h-9 w-9 rounded-full"
+                        items={rowActions(p.name)}
                       />
-                    </td>
-                  </tr>
+                    </div>
+                    <div className="flex items-center justify-between gap-2">
+                      <Badge>{p.track}</Badge>
+                      <span className="text-sm text-zinc-400">
+                        Score <span className="font-medium text-white">{p.score}</span>
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <ProgressBar value={p.progress} label={`${p.name} progress`} />
+                      <span className="w-10 shrink-0 text-right text-sm text-zinc-300 tabular-nums">{p.progress}%</span>
+                    </div>
+                  </li>
                 ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
+              </ul>
+
+              {/* desktop: table */}
+              <div className="-mx-6 hidden overflow-x-auto md:block">
+                <table className="w-full border-collapse text-left text-sm">
+                  <thead>
+                    <tr className="border-b border-white/[0.06] text-zinc-500">
+                      <th className="px-6 py-3 font-medium">Participant</th>
+                      <th className="px-3 py-3 font-medium">Track</th>
+                      <th className="px-3 py-3 font-medium">Progress</th>
+                      <th className="px-3 py-3 text-right font-medium">Score</th>
+                      <th className="w-12 px-6 py-3">
+                        <span className="sr-only">Actions</span>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredParticipants.map((p) => (
+                      <tr
+                        key={p.id}
+                        className="border-b border-white/[0.04] transition-colors last:border-0 hover:bg-white/[0.02]"
+                      >
+                        <td className="whitespace-nowrap px-6 py-3.5">
+                          <ParticipantName p={p} small />
+                        </td>
+                        <td className="whitespace-nowrap px-3 py-3.5">
+                          <Badge>{p.track}</Badge>
+                        </td>
+                        <td className="w-40 whitespace-nowrap px-3 py-3.5">
+                          <div className="flex items-center gap-2.5">
+                            <ProgressBar value={p.progress} className="w-20" label={`${p.name} progress`} />
+                            <span className="text-zinc-300 tabular-nums">{p.progress}%</span>
+                          </div>
+                        </td>
+                        <td className="whitespace-nowrap px-3 py-3.5 text-right font-medium text-white tabular-nums">
+                          {p.score}
+                        </td>
+                        <td className="px-6 py-3.5 text-right">
+                          <RowActionMenu
+                            buttonAriaLabel={`Actions for ${p.name}`}
+                            theme="dark"
+                            buttonClassName="h-8 w-8 rounded-full"
+                            items={rowActions(p.name)}
+                          />
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </>
+          )}
+        </Card>
       </div>
     </div>
   );
 });
+
+function ParticipantName({ p, small }: { p: Participant; small?: boolean }) {
+  return (
+    <div className="flex min-w-0 items-center gap-3">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={p.avatar}
+        alt=""
+        className={cn("shrink-0 rounded-full object-cover", small ? "h-8 w-8" : "h-10 w-10")}
+      />
+      <div className="min-w-0">
+        <p className="truncate text-base font-medium text-white">{p.name}</p>
+        {!small && <p className="truncate text-sm text-zinc-500">{p.role}</p>}
+      </div>
+    </div>
+  );
+}

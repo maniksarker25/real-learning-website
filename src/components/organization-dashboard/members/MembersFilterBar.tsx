@@ -1,8 +1,9 @@
 "use client";
 
-import React, { memo } from "react";
-import { Search, ChevronDown } from "lucide-react";
-import { TRACK_FILTER_OPTIONS, STATUS_FILTER_OPTIONS } from "./types";
+import { memo } from "react";
+import { ChevronDown, Search } from "lucide-react";
+import { Input, Select } from "@/components/dashboard/ui";
+import { STATUS_FILTER_OPTIONS, TRACK_FILTER_OPTIONS } from "./types";
 
 interface MembersFilterBarProps {
   totalCount: number;
@@ -16,6 +17,36 @@ interface MembersFilterBarProps {
   onResetFilters: () => void;
 }
 
+function FilterSelect({
+  label,
+  value,
+  onChange,
+  options,
+}: {
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  options: readonly { id: string; label: string }[];
+}) {
+  return (
+    <div className="relative flex-1 sm:flex-none">
+      <Select
+        aria-label={label}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className="h-11 py-0 text-sm sm:w-44"
+      >
+        {options.map((o) => (
+          <option key={o.id} value={o.id}>
+            {o.label}
+          </option>
+        ))}
+      </Select>
+      <ChevronDown className="pointer-events-none absolute right-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-500" />
+    </div>
+  );
+}
+
 export const MembersFilterBar = memo(function MembersFilterBar({
   totalCount,
   filteredCount,
@@ -27,82 +58,42 @@ export const MembersFilterBar = memo(function MembersFilterBar({
   onStatusChange,
   onResetFilters,
 }: MembersFilterBarProps) {
-  const isFiltered =
-    selectedTrack !== "all" || selectedStatusFilter !== "all" || searchTerm.trim() !== "";
+  const isFiltered = selectedTrack !== "all" || selectedStatusFilter !== "all" || searchTerm.trim() !== "";
 
   return (
-    <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b border-stone-100 pb-3">
+    <div className="mb-5 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
       <div>
-        <h3 className="text-sm font-bold text-stone-900">
-          Participant Members
-        </h3>
-        <p className="text-xs text-stone-500 mt-0.5">
-          Showing {filteredCount} of {totalCount} participants
+        <h2 className="text-lg font-semibold tracking-[-0.01em] text-white">All members</h2>
+        <p className="mt-1 text-sm text-zinc-400">
+          Showing {filteredCount} of {totalCount}
         </p>
       </div>
 
-      <div className="flex flex-col sm:flex-row sm:items-center gap-2 w-full lg:w-auto">
-        {/* Search Input */}
-        <div className="relative w-full sm:w-56">
-          <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-stone-400 pointer-events-none" />
-          <input
-            type="text"
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+        <div className="relative sm:w-64">
+          <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-500" />
+          <Input
+            type="search"
             value={searchTerm}
             onChange={(e) => onSearchChange(e.target.value)}
-            placeholder="Search by name or email..."
-            className="w-full bg-stone-50/80 border border-stone-200 rounded-md pl-8 pr-3 py-1.5 text-xs text-stone-900 placeholder-stone-400 focus:outline-none focus:border-stone-400 transition-colors"
+            placeholder="Search name or email"
+            aria-label="Search members"
+            className="h-11 py-0 pl-10 text-sm"
           />
         </div>
-
-        <div className="flex items-center gap-2 w-full sm:w-auto">
-          {/* Track Dropdown Filter */}
-          <div className="relative flex-1 sm:flex-initial">
-            <select
-              value={selectedTrack}
-              onChange={(e) => onTrackChange(e.target.value)}
-              aria-label="Filter by career track"
-              className="w-full sm:w-auto appearance-none bg-stone-50/80 hover:bg-stone-100 border border-stone-200 rounded-md pl-3 pr-7 py-1.5 text-xs font-medium text-stone-700 focus:outline-none focus:border-stone-400 transition-colors cursor-pointer"
-            >
-              {TRACK_FILTER_OPTIONS.map((opt) => (
-                <option
-                  key={opt.id}
-                  value={opt.id}
-                  className="bg-white text-stone-900"
-                >
-                  {opt.label}
-                </option>
-              ))}
-            </select>
-            <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-stone-400 pointer-events-none" />
-          </div>
-
-          {/* Status Dropdown Filter */}
-          <div className="relative flex-1 sm:flex-initial">
-            <select
-              value={selectedStatusFilter}
-              onChange={(e) => onStatusChange(e.target.value)}
-              aria-label="Filter by status"
-              className="w-full sm:w-auto appearance-none bg-stone-50/80 hover:bg-stone-100 border border-stone-200 rounded-md pl-3 pr-7 py-1.5 text-xs font-medium text-stone-700 focus:outline-none focus:border-stone-400 transition-colors cursor-pointer"
-            >
-              {STATUS_FILTER_OPTIONS.map((opt) => (
-                <option
-                  key={opt.id}
-                  value={opt.id}
-                  className="bg-white text-stone-900"
-                >
-                  {opt.label}
-                </option>
-              ))}
-            </select>
-            <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-stone-400 pointer-events-none" />
-          </div>
-
-          {/* Reset Filter Button */}
+        <div className="flex items-center gap-2">
+          <FilterSelect label="Filter by track" value={selectedTrack} onChange={onTrackChange} options={TRACK_FILTER_OPTIONS} />
+          <FilterSelect
+            label="Filter by status"
+            value={selectedStatusFilter}
+            onChange={onStatusChange}
+            options={STATUS_FILTER_OPTIONS}
+          />
           {isFiltered && (
             <button
               type="button"
               onClick={onResetFilters}
-              className="text-xs text-stone-500 hover:text-stone-900 font-medium underline underline-offset-2 transition-colors px-1 shrink-0 cursor-pointer"
+              className="shrink-0 px-2 text-sm text-zinc-400 underline-offset-4 transition-colors hover:text-white hover:underline"
             >
               Reset
             </button>

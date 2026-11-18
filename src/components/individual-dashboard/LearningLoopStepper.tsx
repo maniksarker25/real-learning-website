@@ -1,17 +1,7 @@
 "use client";
 
 import React, { memo, useCallback } from "react";
-import {
-  Compass,
-  BookOpen,
-  Zap,
-  MessageSquare,
-  BarChart3,
-  ArrowRight,
-  CheckCircle2,
-  Sparkles,
-  Lock,
-} from "lucide-react";
+import { BookOpen, Check, Compass, Lock, MessageSquare, Zap } from "lucide-react";
 import { LearningLoopStep } from "@/types/individual";
 import { cn } from "@/lib/utils";
 import { useLearningLoop } from "@/context/LearningLoopContext";
@@ -29,39 +19,34 @@ const STEPS: {
   subLabel: string;
   route: string;
   icon: React.ElementType;
-  bgImage: string;
 }[] = [
   {
     id: "pathfinder",
-    label: "Pathfinder",
-    subLabel: "Where Am I? & Paths",
+    label: "Pick a path",
+    subLabel: "Where you are",
     route: "/user-dashboard/pathfinder",
     icon: Compass,
-    bgImage: "/bg1.jfif",
   },
   {
     id: "class",
-    label: "Class",
-    subLabel: "Learn Fundamentals",
+    label: "Learn",
+    subLabel: "Short lessons",
     route: "/user-dashboard/classes",
     icon: BookOpen,
-    bgImage: "/bg2.jfif",
   },
   {
     id: "simulator",
-    label: "Simulator",
-    subLabel: "Practice Layer",
+    label: "Practice",
+    subLabel: "Chat with Patricia",
     route: "/user-dashboard/simulations",
     icon: Zap,
-    bgImage: "/bg3.avif",
   },
   {
     id: "feedback",
-    label: "AI Feedback",
-    subLabel: "Performance Breakdown",
+    label: "Feedback",
+    subLabel: "What to improve",
     route: "/user-dashboard/feedback",
     icon: MessageSquare,
-    bgImage: "/bg4.avif",
   },
 ];
 
@@ -74,13 +59,7 @@ export const LearningLoopStepper = memo(function LearningLoopStepper({
   const pathname = usePathname();
 
   // Try consuming LearningLoopContext if available
-  let contextValue: ReturnType<typeof useLearningLoop> | null = null;
-  try {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    contextValue = useLearningLoop();
-  } catch {
-    contextValue = null;
-  }
+  const contextValue: ReturnType<typeof useLearningLoop> | null = useLearningLoop();
 
   // Derive active step from contextValue or route
   const derivedStepFromRoute: LearningLoopStep | null = React.useMemo(() => {
@@ -136,183 +115,60 @@ export const LearningLoopStepper = memo(function LearningLoopStepper({
   );
 
   return (
-    <div className="bg-white border border-stone-200 rounded-xl p-3.5 sm:p-4 space-y-3 shadow-sm">
-      {/* Top Banner Context */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-b border-stone-100 pb-2.5">
-        <div className="flex items-center gap-2">
-          <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-xs font-bold uppercase tracking-wider text-stone-900">
-              Learning GPS Loop
-            </span>
-            <span className="text-[10px] font-mono font-semibold text-amber-900 bg-amber-100/70 border border-amber-200 px-2 py-0.5 rounded">
-              Path: {activePathTitle}
-            </span>
-          </div>
-        </div>
-
-        <div className="text-[10px] font-mono text-stone-500 flex items-center gap-2">
-          <span>
-            Step {Math.max(1, currentStepIndex + 1)} of {STEPS.length}
-          </span>
-          <div className="w-16 h-1.5 bg-stone-100 rounded-full overflow-hidden border border-stone-200">
-            <div
-              className="h-full bg-orange-600 transition-all duration-300"
-              style={{
-                width: `${Math.min(
-                  100,
-                  ((Math.max(0, currentStepIndex) + 1) / STEPS.length) * 100
-                )}%`,
-              }}
-            />
-          </div>
-        </div>
+    <div className="rounded-3xl border border-white/[0.06] bg-[#181818] p-4 sm:p-5">
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-2 px-1">
+        <p className="text-sm text-zinc-400">
+          Path: <span className="font-medium text-white">{activePathTitle}</span>
+        </p>
+        <p className="text-sm text-zinc-500">
+          Step {currentStepIndex + 1} of {STEPS.length}
+        </p>
       </div>
 
-      {/* Stepper Flow Cards with bg assets */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+      <ol className="grid grid-cols-2 gap-2 sm:grid-cols-4">
         {STEPS.map((step, idx) => {
           const Icon = step.icon;
           const isCurrent = activeStep === step.id;
-
-          // A step is considered passed if it's before the current active step, or marked completed in context
+          // Passed = before the current step, or marked completed in context
           const isPassed =
             idx < currentStepIndex ||
-            (contextValue
-              ? contextValue.isStepCompleted(step.id) && !isCurrent
-              : false);
-
-          const isDeactive = !isCurrent && !isPassed;
+            (contextValue ? contextValue.isStepCompleted(step.id) && !isCurrent : false);
+          const isLocked = !isCurrent && !isPassed;
 
           return (
-            <button
-              key={step.id}
-              onClick={() => !isDeactive && handleStepClick(step, idx)}
-              disabled={isDeactive}
-              title={
-                isDeactive
-                  ? `Locked: Complete Step ${idx} first`
-                  : step.label
-              }
-              className={cn(
-                "relative overflow-hidden rounded-xl border text-left p-3.5 select-none flex flex-col justify-between min-h-[96px] w-full transition-colors",
-                isCurrent
-                  ? "border-orange-500 ring-2 ring-orange-400/30 cursor-pointer"
-                  : isPassed
-                  ? "border-emerald-300/90 hover:border-emerald-400 cursor-pointer"
-                  : "border-stone-200/90 bg-stone-100/90 opacity-60 cursor-not-allowed"
-              )}
-            >
-              {/* Background Image Layer covering 100% full card */}
-              <div
+            <li key={step.id}>
+              <button
+                type="button"
+                onClick={() => !isLocked && handleStepClick(step, idx)}
+                disabled={isLocked}
+                aria-current={isCurrent ? "step" : undefined}
+                title={isLocked ? `Locked: finish step ${idx} first` : step.label}
                 className={cn(
-                  "absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat pointer-events-none",
-                  isDeactive && "grayscale opacity-10"
+                  "flex w-full items-center gap-3 rounded-2xl p-3 text-left transition-colors",
+                  isCurrent && "bg-orange-500 text-black",
+                  isPassed && "bg-white/[0.04] text-white hover:bg-white/[0.07]",
+                  isLocked && "cursor-not-allowed text-zinc-600",
                 )}
-                style={{ backgroundImage: `url('${step.bgImage}')` }}
-              />
-
-              {/* Solid / Tint Overlay Layer */}
-              <div
-                className={cn(
-                  "absolute inset-0 w-full h-full pointer-events-none",
-                  isCurrent
-                    ? "bg-gradient-to-br from-orange-50/85 via-white/75 to-amber-50/65 backdrop-blur-[0.5px]"
-                    : isPassed
-                    ? "bg-gradient-to-br from-emerald-50/80 via-white/75 to-[#FAF8F5]/65 backdrop-blur-[0.5px]"
-                    : "bg-stone-100/90 backdrop-blur-[1px]"
-                )}
-              />
-
-              {/* Content Row 1: Icon + Status Pill */}
-              <div className="relative z-10 flex items-center justify-between w-full">
-                <div
-                  className={cn(
-                    "w-7 h-7 rounded-lg flex items-center justify-center shrink-0 transition-colors",
-                    isCurrent
-                      ? "bg-gradient-to-r from-amber-500 to-orange-600 text-white shadow-xs"
-                      : isPassed
-                      ? "bg-emerald-100 text-emerald-700 border border-emerald-300"
-                      : "bg-stone-200 text-stone-400 border border-stone-300/70"
-                  )}
-                >
-                  {isPassed ? (
-                    <CheckCircle2 className="w-4 h-4 text-emerald-700" />
-                  ) : isDeactive ? (
-                    <Lock className="w-3.5 h-3.5 text-stone-400" />
-                  ) : (
-                    <Icon className="w-3.5 h-3.5" />
-                  )}
-                </div>
-
+              >
                 <span
                   className={cn(
-                    "text-[9px] font-mono font-bold px-1.5 py-0.5 rounded flex items-center gap-1 shrink-0",
-                    isCurrent
-                      ? "bg-orange-100 text-orange-900 border border-orange-300"
-                      : isPassed
-                      ? "bg-emerald-100 text-emerald-800 border border-emerald-200"
-                      : "bg-stone-200/80 text-stone-400 border border-stone-300/60"
+                    "flex h-9 w-9 shrink-0 items-center justify-center rounded-xl",
+                    isCurrent ? "bg-black/15" : isPassed ? "bg-orange-500/15 text-orange-400" : "bg-white/[0.04]",
                   )}
                 >
-                  {isDeactive ? (
-                    <>
-                      <Lock className="w-2.5 h-2.5" />
-                      #{idx + 1}
-                    </>
-                  ) : isPassed ? (
-                    <>
-                      <CheckCircle2 className="w-2.5 h-2.5" />
-                      #{idx + 1}
-                    </>
-                  ) : (
-                    `#${idx + 1} ACTIVE`
-                  )}
+                  {isPassed ? <Check className="h-4 w-4" /> : isLocked ? <Lock className="h-4 w-4" /> : <Icon className="h-4 w-4" />}
                 </span>
-              </div>
-
-              {/* Content Row 2: Step Labels */}
-              <div className="relative z-10 pt-1">
-                <div
-                  className={cn(
-                    "text-xs font-bold leading-tight",
-                    isCurrent
-                      ? "text-stone-950 font-black"
-                      : isPassed
-                      ? "text-stone-900"
-                      : "text-stone-400"
-                  )}
-                >
-                  {step.label}
-                </div>
-                <div
-                  className={cn(
-                    "text-[10px] truncate mt-0.5 font-sans",
-                    isCurrent
-                      ? "text-stone-600 font-medium"
-                      : isPassed
-                      ? "text-emerald-800 font-medium"
-                      : "text-stone-400"
-                  )}
-                >
-                  {isDeactive ? "Locked step" : step.subLabel}
-                </div>
-              </div>
-
-              {/* Step Connection Indicator */}
-              {idx < STEPS.length - 1 && (
-                <div
-                  className={cn(
-                    "hidden lg:block absolute -right-2 top-1/2 -translate-y-1/2 z-20 text-[10px] font-mono",
-                    isPassed ? "text-emerald-500 font-bold" : "text-stone-300"
-                  )}
-                >
-                  ➔
-                </div>
-              )}
-            </button>
+                <span className="min-w-0">
+                  <span className="block truncate text-sm font-medium">{step.label}</span>
+                  <span className={cn("block truncate text-sm", isCurrent ? "text-black/65" : "text-zinc-500")}>
+                    {isLocked ? "Locked" : step.subLabel}
+                  </span>
+                </span>
+              </button>
+            </li>
           );
         })}
-      </div>
+      </ol>
     </div>
   );
 });
