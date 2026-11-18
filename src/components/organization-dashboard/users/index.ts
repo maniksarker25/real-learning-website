@@ -6,3 +6,4 @@ export * from "./UserTableRow";
 export * from "./UserDetailsModal";
 export * from "./InviteUserModal";
 export * from "./TransferOwnershipModal";
+export * from "./UserBadges";

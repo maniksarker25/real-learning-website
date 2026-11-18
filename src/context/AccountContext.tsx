@@ -144,18 +144,15 @@ export function AccountProvider({ children }: { children: React.ReactNode }) {
     }
     return defaultSession;
   });
-  const [isInitialized, setIsInitialized] = useState(true);
 
   // Sync state changes to localStorage
   useEffect(() => {
-    if (isInitialized) {
-      try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(session));
-      } catch {
-        // Ignore storage errors
-      }
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(session));
+    } catch {
+      // Ignore storage errors
     }
-  }, [session, isInitialized]);
+  }, [session]);
 
   const loginAsIndividual = useCallback(
     ({ name, goal, email, avatarUrl }: { name: string; goal?: string; email?: string; avatarUrl?: string }) => {

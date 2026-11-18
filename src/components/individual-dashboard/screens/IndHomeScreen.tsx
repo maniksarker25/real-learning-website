@@ -1,275 +1,152 @@
 "use client";
 
-import React, { memo, useCallback } from "react";
-import {
-  BookOpen,
-  Zap,
-  CheckCircle2,
-  Award,
-  ArrowRight,
-  Sparkles,
-  TrendingUp,
-  Clock,
-  Play,
-  RotateCcw,
-  Compass,
-} from "lucide-react";
+import { memo } from "react";
+import { ArrowRight, BookOpen, CheckCircle2, MessageSquare, Target, TrendingUp, Zap } from "lucide-react";
 import { useAccount } from "@/context/AccountContext";
 import { useLearningLoop } from "@/context/LearningLoopContext";
 import { cn } from "@/lib/utils";
-
-import { RecentSimulationsTable } from "../RecentSimulationsTable";
 import {
-  VictorianCornerFlourish,
-  EngravedSeal,
-  LaurelEmblem,
-  StarburstRosette,
-} from "@/components/ui/DecorativeAssets";
+  BlobCard,
+  Button,
+  Card,
+  PageHeader,
+  PatriciaPose,
+  StatGrid,
+  StatTile,
+} from "@/components/dashboard/ui";
+import { RecentSimulationsTable } from "../RecentSimulationsTable";
 
 interface IndHomeScreenProps {
   onNavigateToTab: (tabId: string) => void;
   onLaunchSimulation?: (scenarioTitle: string) => void;
 }
 
-export const IndHomeScreen = memo(function IndHomeScreen({
-  onNavigateToTab,
-  onLaunchSimulation,
-}: IndHomeScreenProps) {
+/** The four stages of the learning loop, in order. */
+const STAGES = [
+  { step: "pathfinder", tab: "pathfinder", label: "Pick a path" },
+  { step: "class", tab: "classes", label: "Learn" },
+  { step: "simulator", tab: "simulations", label: "Practice" },
+  { step: "feedback", tab: "feedback", label: "Feedback" },
+] as const;
+
+export const IndHomeScreen = memo(function IndHomeScreen({ onNavigateToTab, onLaunchSimulation }: IndHomeScreenProps) {
   const { session } = useAccount();
+  const { activePath, currentStep } = useLearningLoop();
 
-  let contextValue: ReturnType<typeof useLearningLoop> | null = null;
-  try {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    contextValue = useLearningLoop();
-  } catch {
-    contextValue = null;
-  }
+  const firstName = (session.name || "Sarah Jenkins").split(" ")[0];
+  const pathTitle = activePath?.title || "Technical Support Specialist";
+  // skill_progress / next_step are not listed, they belong to the feedback stage
+  const found = STAGES.findIndex((s) => s.step === currentStep);
+  const activeIndex = found === -1 ? 3 : found;
+  const current = STAGES[activeIndex];
 
-  const activePathTitle =
-    contextValue?.activePath?.title || "Technical Support Specialist";
-  const currentStep = contextValue?.currentStep || "class";
-
-  const currentStepTab =
-    currentStep === "pathfinder"
-      ? "pathfinder"
-      : currentStep === "class"
-      ? "classes"
-      : currentStep === "simulator"
-      ? "simulations"
-      : "feedback";
-
-  const currentStepLabel =
-    currentStep === "pathfinder"
-      ? "1. Discovery"
-      : currentStep === "class"
-      ? "2. Class"
-      : currentStep === "simulator"
-      ? "3. Simulator"
-      : "4. AI Feedback";
-
-  const handleContinueClass = useCallback(() => {
-    onNavigateToTab("classes");
-  }, [onNavigateToTab]);
-
-  const handleStartSim = useCallback(() => {
-    if (onLaunchSimulation) {
-      onLaunchSimulation(
-        "Handling an Upset Customer Requesting Immediate Refund",
-      );
-    }
+  const startSimulation = () => {
+    onLaunchSimulation?.("Handling an Upset Customer Requesting Immediate Refund");
     onNavigateToTab("simulations");
-  }, [onNavigateToTab, onLaunchSimulation]);
+  };
 
   return (
-    <div className="space-y-5">
-      {/* Top Welcome Banner */}
-      <div className="bg-white rounded-xl p-4 sm:p-5 border border-stone-200 relative overflow-hidden">
-        {/* Subtle decorative corner flourish */}
-        <VictorianCornerFlourish
-          position="top-right"
-          className="absolute top-2 right-2 text-stone-300/60 hidden sm:block"
-        />
+    <div className="space-y-6">
+      <PageHeader
+        eyebrow="Home"
+        title={`Welcome back, ${firstName}`}
+        description={`Goal: ${session.goal || "Customer Service"}. Learn, practice with Patricia, then review your feedback.`}
+        actions={
+          <Button variant="outline" onClick={() => onNavigateToTab("goals")}>
+            <Target className="h-4 w-4" />
+            My goals
+          </Button>
+        }
+      />
 
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 relative z-10">
-          <div className="flex items-center gap-3.5">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-stone-100 to-stone-200 border border-stone-300/80 flex items-center justify-center text-amber-700 shrink-0">
-              <LaurelEmblem size={24} className="text-amber-700" />
-            </div>
-            <div>
-              <h1 className="text-lg sm:text-xl font-bold text-stone-900 tracking-tight">
-                Welcome back, {session.name || "Sarah Jenkins"}
-              </h1>
-              <p className="text-xs text-stone-500 mt-0.5 flex items-center gap-1.5 flex-wrap">
-                <span>Goal: <strong className="text-stone-800 font-semibold">{session.goal || "Customer Service"}</strong></span>
-                <span className="text-stone-300">·</span>
-                <span className="text-stone-600">Learn → Practice → Feedback</span>
+      {/* continue card */}
+      <BlobCard tone="orange" className="sm:pr-56">
+        <p className="text-sm font-medium text-white/80">Continue where you left off</p>
+        <h2 className="mt-2 text-2xl font-semibold tracking-[-0.01em] sm:text-3xl">{pathTitle}</h2>
+
+        <ol className="mt-6 grid max-w-xl grid-cols-4 gap-2">
+          {STAGES.map((s, i) => (
+            <li key={s.step}>
+              <div className={cn("h-1 rounded-full", i <= activeIndex ? "bg-white" : "bg-white/25")} />
+              <p className={cn("mt-2 text-xs sm:text-sm", i === activeIndex ? "font-medium text-white" : "text-white/60")}>
+                {s.label}
               </p>
-            </div>
-          </div>
+            </li>
+          ))}
+        </ol>
 
-          <button
-            onClick={() => onNavigateToTab("goals")}
-            className="px-3.5 py-1.5 rounded-lg bg-stone-50 hover:bg-stone-100 border border-stone-200 text-xs font-semibold text-stone-700 hover:text-stone-900 transition-colors cursor-pointer shrink-0"
+        <div className="mt-7 flex flex-wrap gap-2">
+          <Button variant="white" size="lg" onClick={() => onNavigateToTab(current.tab)}>
+            Continue: {current.label}
+            <ArrowRight className="h-5 w-5" />
+          </Button>
+          <Button
+            size="lg"
+            onClick={() => onNavigateToTab("pathfinder")}
+            className="border border-white/30 bg-transparent text-white hover:bg-white/10"
           >
-            Goal Roadmap
-          </button>
+            Change path
+          </Button>
         </div>
-      </div>
 
-      {/* AI Pathfinder GPS Status Banner */}
-      <div className="bg-gradient-to-r from-amber-50/70 via-white to-orange-50/50 rounded-xl p-3.5 sm:p-4 border border-amber-200/70 relative overflow-hidden">
-        {/* Engraved Seal Watermark Asset */}
-        <EngravedSeal
-          size={84}
-          className="absolute -right-4 -bottom-4 text-amber-600/15 pointer-events-none hidden sm:block"
+        <PatriciaPose pose="pointing" className="absolute bottom-0 right-6 hidden h-60 w-44 -scale-x-100 sm:block" sizes="176px" />
+      </BlobCard>
+
+      <StatGrid>
+        <StatTile label="Classes" value="3" note="1 in progress" icon={BookOpen} />
+        <StatTile label="Simulations" value="5" note="3 completed" icon={Zap} />
+        <StatTile label="Quiz average" value="92.5%" note="Your best yet" icon={CheckCircle2} noteTone="positive" />
+        <StatTile label="Simulation average" value="89%" note="+14.2% this month" icon={TrendingUp} noteTone="positive" />
+      </StatGrid>
+
+      {/* quick actions */}
+      <div className="grid gap-3 sm:grid-cols-2">
+        <QuickAction
+          icon={Zap}
+          title="Start a simulation"
+          text="Handle an upset customer asking for a refund."
+          onClick={startSimulation}
         />
-        <VictorianCornerFlourish
-          position="top-left"
-          className="absolute top-1.5 left-1.5 text-amber-300/40 hidden sm:block"
+        <QuickAction
+          icon={MessageSquare}
+          title="Review feedback"
+          text="See what Patricia noticed in your last session."
+          onClick={() => onNavigateToTab("feedback")}
         />
-
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 relative z-10">
-          <div className="flex items-center gap-3">
-            <div>
-              <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-xs font-semibold text-stone-900">
-                  {activePathTitle}
-                </span>
-              </div>
-              <p className="text-xs text-stone-500 mt-0.5">
-                Stage: <strong className="text-stone-800 font-semibold">{currentStepLabel}</strong> · Complete lesson to unlock simulation practice.
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2 shrink-0 w-full sm:w-auto justify-end">
-            <button
-              onClick={() => onNavigateToTab("pathfinder")}
-              className="px-3 py-1.5 rounded-lg bg-white hover:bg-stone-50 text-stone-700 hover:text-stone-950 border border-stone-200 text-xs font-medium transition-colors cursor-pointer"
-            >
-              Change
-            </button>
-            <button
-              onClick={() => onNavigateToTab(currentStepTab)}
-              className="px-3.5 py-1.5 rounded-lg bg-stone-900 text-white hover:bg-stone-800 text-xs font-medium transition-colors cursor-pointer flex items-center gap-1.5"
-            >
-              <span>Continue</span>
-              <ArrowRight className="w-3.5 h-3.5 text-orange-400" />
-            </button>
-          </div>
-        </div>
       </div>
 
-      {/* Progress Summary Metrics */}
-      <div className="bg-white rounded-xl p-4 sm:p-5 border border-stone-200 space-y-3.5 relative overflow-hidden">
-        <div className="flex items-center justify-between border-b border-stone-100 pb-3">
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-lg bg-orange-100 border border-orange-200 flex items-center justify-center text-orange-700">
-              <TrendingUp className="w-3.5 h-3.5" />
-            </div>
-            <h3 className="text-xs sm:text-sm font-bold text-stone-900 flex items-center gap-1.5">
-              <span>Progress & Metrics</span>
-              <StarburstRosette size={13} className="text-orange-500/70" />
-            </h3>
-          </div>
-          <span className="text-[10px] font-mono font-semibold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
-            +14.2% this month
-          </span>
-        </div>
-
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          {/* Metric 1 */}
-          <div className="group relative overflow-hidden rounded-xl border border-stone-200/80 p-3.5 transition-all duration-300">
-            <div
-              className="absolute inset-0 bg-cover bg-center transition-transform duration-500 ease-out"
-              style={{ backgroundImage: "url('/bg1.jfif')" }}
-            />
-            <div className="absolute inset-0 bg-gradient-to-br from-white/90 via-[#FAF8F5]/85 to-white/75 backdrop-blur-[0.5px]" />
-            <div className="relative z-10 space-y-0.5">
-              <span className="text-[10px] font-mono text-stone-600 uppercase font-bold tracking-wider">
-                Classes
-              </span>
-              <div className="text-xl sm:text-2xl font-black text-stone-900 font-mono tracking-tight">
-                3
-              </div>
-              <span className="text-[10px] text-stone-600 font-medium block">
-                1 in progress
-              </span>
-            </div>
-          </div>
-
-          {/* Metric 2 */}
-          <div className="group relative overflow-hidden rounded-xl border border-stone-200/80 p-3.5 transition-all duration-300">
-            <div
-              className="absolute inset-0 bg-cover bg-center transition-transform duration-500 ease-out"
-              style={{ backgroundImage: "url('/bg2.jfif')" }}
-            />
-            <div className="absolute inset-0 bg-gradient-to-br from-white/90 via-[#FAF8F5]/85 to-white/75 backdrop-blur-[0.5px]" />
-            <div className="relative z-10 space-y-0.5">
-              <span className="text-[10px] font-mono text-stone-600 uppercase font-bold tracking-wider">
-                Simulations
-              </span>
-              <div className="text-xl sm:text-2xl font-black text-stone-900 font-mono tracking-tight">
-                5
-              </div>
-              <span className="text-[10px] text-stone-600 font-medium block">
-                3 completed
-              </span>
-            </div>
-          </div>
-
-          {/* Metric 3 */}
-          <div className="group relative overflow-hidden rounded-xl border border-stone-200/80 p-3.5 hover:border-emerald-200 transition-all duration-300">
-            <div
-              className="absolute inset-0 bg-cover bg-center transition-transform duration-500 ease-out"
-              style={{ backgroundImage: "url('/bg3.avif')" }}
-            />
-            <div className="absolute inset-0 bg-gradient-to-br from-white/90 via-[#FAF8F5]/85 to-white/75 backdrop-blur-[0.5px]" />
-            <div className="relative z-10 space-y-0.5">
-              <div className="flex items-center justify-between">
-                <span className="text-[10px] font-mono text-stone-600 uppercase font-bold tracking-wider">
-                  Quiz Avg
-                </span>
-                <StarburstRosette size={11} className="text-emerald-600/70" />
-              </div>
-              <div className="text-xl sm:text-2xl font-black text-stone-900 font-mono tracking-tight">
-                92.5%
-              </div>
-              <span className="text-[10px] text-emerald-700 font-semibold block">
-                High score
-              </span>
-            </div>
-          </div>
-
-          {/* Metric 4 */}
-          <div className="group relative overflow-hidden rounded-xl border border-stone-200/80 p-3.5 hover:border-orange-200 transition-all duration-300">
-            <div
-              className="absolute inset-0 bg-cover bg-center transition-transform duration-500 ease-out"
-              style={{ backgroundImage: "url('/bg4.avif')" }}
-            />
-            <div className="absolute inset-0 bg-gradient-to-br from-white/90 via-[#FAF8F5]/85 to-white/75 backdrop-blur-[0.5px]" />
-            <div className="relative z-10 space-y-0.5">
-              <div className="flex items-center justify-between">
-                <span className="text-[10px] font-mono text-stone-600 uppercase font-bold tracking-wider">
-                  Simulation Avg
-                </span>
-                <StarburstRosette size={11} className="text-orange-600/70" />
-              </div>
-              <div className="text-xl sm:text-2xl font-black text-stone-900 font-mono tracking-tight">
-                89.0%
-              </div>
-              <span className="text-[10px] text-orange-700 font-semibold block">
-                Top tier
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-
-
-      {/* RECENT COMPLETED SIMULATIONS TABLE WITH IN-DEPTH FEEDBACK MODAL */}
       <RecentSimulationsTable onLaunchSimulation={onLaunchSimulation} />
     </div>
   );
 });
+
+function QuickAction({
+  icon: Icon,
+  title,
+  text,
+  onClick,
+}: {
+  icon: typeof Zap;
+  title: string;
+  text: string;
+  onClick: () => void;
+}) {
+  return (
+    <Card as="article" className="p-0">
+      <button
+        type="button"
+        onClick={onClick}
+        className="group flex w-full items-center gap-4 rounded-3xl p-5 text-left transition-colors hover:bg-white/[0.03]"
+      >
+        <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-orange-500/15 text-orange-400">
+          <Icon className="h-5 w-5" />
+        </span>
+        <span className="min-w-0 flex-1">
+          <span className="block text-base font-medium text-white">{title}</span>
+          <span className="block text-sm text-zinc-500">{text}</span>
+        </span>
+        <ArrowRight className="h-5 w-5 shrink-0 text-zinc-600 transition-colors group-hover:text-white" />
+      </button>
+    </Card>
+  );
+}

@@ -1,16 +1,9 @@
 "use client";
 
-import React, { memo } from "react";
-import {
-  Bot,
-  Clock,
-  MessageSquare,
-  Maximize2,
-  Minimize2,
-  RefreshCw,
-  X,
-} from "lucide-react";
+import { memo } from "react";
+import { Clock, Maximize2, MessageSquare, Minimize2, RefreshCw, X, type LucideIcon } from "lucide-react";
 import { SimulationScenario } from "@/types/individual";
+import { Badge, PatriciaFace } from "@/components/dashboard/ui";
 
 interface SimulationPlayerHeaderProps {
   scenario: SimulationScenario;
@@ -20,6 +13,20 @@ interface SimulationPlayerHeaderProps {
   onToggleFullscreen: () => void;
   onReset: () => void;
   onClose: () => void;
+}
+
+function IconButton({ icon: Icon, label, onClick }: { icon: LucideIcon; label: string; onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label={label}
+      title={label}
+      className="flex h-9 w-9 items-center justify-center rounded-full text-zinc-400 transition-colors hover:bg-white/[0.06] hover:text-white"
+    >
+      <Icon className="h-4 w-4" />
+    </button>
+  );
 }
 
 export const SimulationPlayerHeader = memo(function SimulationPlayerHeader({
@@ -32,96 +39,54 @@ export const SimulationPlayerHeader = memo(function SimulationPlayerHeader({
   onClose,
 }: SimulationPlayerHeaderProps) {
   return (
-    <>
-      <div className="px-4 py-3 bg-[#FCFAF6] border-b border-stone-200 flex flex-wrap items-center justify-between gap-3 shrink-0">
-        {/* Left Character Info */}
-        <div className="flex items-center gap-3 min-w-0">
-          <div className="relative shrink-0">
-            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center text-white font-bold text-xs shadow-xs">
-              <Bot className="w-4 h-4 text-white" />
-            </div>
-            <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-white" />
-          </div>
+    <div className="shrink-0 border-b border-white/[0.06]">
+      <div className="flex items-center justify-between gap-3 px-4 py-3 sm:px-6">
+        <div className="flex min-w-0 items-center gap-3">
+          <span className="relative">
+            <PatriciaFace face="normal" size={40} />
+            <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-[#181818] bg-emerald-500" />
+          </span>
           <div className="min-w-0">
-            <div className="flex items-center gap-2 flex-wrap">
-              <h3 className="text-xs sm:text-sm font-bold text-stone-900 truncate">
-                {scenario.characterName}
-              </h3>
-              <span className="text-[10px] font-mono font-semibold text-amber-900 bg-amber-100 px-2 py-0.5 rounded border border-amber-200 shrink-0">
-                {scenario.characterRole}
-              </span>
-              <span className="text-[10px] font-mono text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 shrink-0">
-                {scenario.difficulty}
-              </span>
+            <div className="flex flex-wrap items-center gap-2">
+              <h3 className="truncate text-base font-semibold text-white">{scenario.characterName}</h3>
+              <Badge className="hidden sm:inline-flex">{scenario.characterRole}</Badge>
             </div>
-            <p className="text-[11px] text-stone-500 truncate mt-0.5">
-              {scenario.title}
-            </p>
+            <p className="truncate text-sm text-zinc-500">{scenario.title}</p>
           </div>
         </div>
 
-        {/* Center Timer & Turns */}
-        <div className="hidden md:flex items-center gap-3 text-xs font-mono text-stone-600 bg-stone-100/80 px-3 py-1 rounded-full border border-stone-200">
-          <div className="flex items-center gap-1.5 text-stone-800 font-bold">
-            <Clock className="w-3.5 h-3.5 text-orange-600" />
-            <span>{formattedTime}</span>
+        <div className="flex shrink-0 items-center gap-1">
+          <div className="mr-2 hidden items-center gap-4 text-sm text-zinc-400 md:flex">
+            <span className="flex items-center gap-1.5 tabular-nums">
+              <Clock className="h-4 w-4 text-zinc-500" />
+              {formattedTime}
+            </span>
+            <span className="flex items-center gap-1.5">
+              <MessageSquare className="h-4 w-4 text-zinc-500" />
+              {turnCount} {turnCount === 1 ? "reply" : "replies"}
+            </span>
           </div>
-          <span className="text-stone-300">|</span>
-          <div className="flex items-center gap-1.5">
-            <MessageSquare className="w-3.5 h-3.5 text-stone-500" />
-            <span>{turnCount} Turns</span>
-          </div>
-        </div>
-
-        {/* Right Actions */}
-        <div className="flex items-center gap-1.5 shrink-0">
-          <button
-            type="button"
+          <IconButton
+            icon={isFullscreen ? Minimize2 : Maximize2}
+            label={isFullscreen ? "Exit full screen" : "Full screen"}
             onClick={onToggleFullscreen}
-            className="p-1.5 rounded-lg bg-stone-100 hover:bg-stone-200 text-stone-700 hover:text-stone-950 border border-stone-200 transition-colors cursor-pointer text-xs"
-            title={isFullscreen ? "Exit Fullscreen" : "Full Screen"}
-          >
-            {isFullscreen ? (
-              <Minimize2 className="w-3.5 h-3.5" />
-            ) : (
-              <Maximize2 className="w-3.5 h-3.5" />
-            )}
-          </button>
-
-          <button
-            type="button"
-            onClick={onReset}
-            className="p-1.5 rounded-lg bg-stone-100 hover:bg-stone-200 text-stone-700 hover:text-stone-950 border border-stone-200 transition-colors cursor-pointer text-xs"
-            title="Reset Simulation"
-          >
-            <RefreshCw className="w-3.5 h-3.5" />
-          </button>
-
-          <button
-            type="button"
-            onClick={onClose}
-            className="p-1.5 rounded-lg bg-stone-100 hover:bg-rose-50 text-stone-700 hover:text-rose-700 border border-stone-200 hover:border-rose-200 transition-colors cursor-pointer text-xs"
-            title="Close"
-          >
-            <X className="w-3.5 h-3.5" />
-          </button>
+          />
+          <IconButton icon={RefreshCw} label="Restart simulation" onClick={onReset} />
+          <IconButton icon={X} label="Close" onClick={onClose} />
         </div>
       </div>
 
-      {/* Skills Tested Bar */}
-      <div className="px-4 py-1.5 bg-[#FAF8F5] border-b border-stone-200 flex items-center gap-2 overflow-x-auto text-[10px] shrink-0 no-scrollbar">
-        <span className="text-stone-500 font-mono font-semibold shrink-0">
-          Skills Tested:
-        </span>
+      <div className="no-scrollbar flex items-center gap-2 overflow-x-auto px-4 pb-3 sm:px-6">
+        <span className="shrink-0 text-sm text-zinc-500">Skills tested</span>
+        <Badge tone="neutral" className="shrink-0">
+          {scenario.difficulty}
+        </Badge>
         {scenario.expectedSkills.map((sk) => (
-          <span
-            key={sk}
-            className="px-2 py-0.5 rounded bg-white border border-stone-200 text-stone-700 font-mono whitespace-nowrap shrink-0"
-          >
+          <Badge key={sk} tone="orange" className="shrink-0">
             {sk}
-          </span>
+          </Badge>
         ))}
       </div>
-    </>
+    </div>
   );
 });

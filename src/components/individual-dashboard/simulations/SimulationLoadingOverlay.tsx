@@ -1,86 +1,49 @@
 "use client";
 
-import React, { memo } from "react";
-import { Sparkles, CheckCircle2, Loader2 } from "lucide-react";
+import { memo } from "react";
+import { Check, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Card, PatriciaPose } from "@/components/dashboard/ui";
 
 interface SimulationLoadingOverlayProps {
   feedbackStage: number;
 }
 
+const STAGES = ["Reading your replies", "Scoring empathy and problem solving", "Writing your coaching tips"];
+
 export const SimulationLoadingOverlay = memo(function SimulationLoadingOverlay({
   feedbackStage,
 }: SimulationLoadingOverlayProps) {
   return (
-    <div className="bg-white rounded-xl p-8 sm:p-10 border border-amber-200 text-center space-y-5 max-w-lg mx-auto my-6">
-      <div className="w-14 h-14 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-700 mx-auto">
-        <Sparkles
-          className="w-7 h-7 animate-spin"
-          style={{ animationDuration: "3s" }}
-        />
-      </div>
+    <Card className="mx-auto my-6 max-w-lg text-center">
+      <PatriciaPose pose="thinking" className="mx-auto h-32 w-24" sizes="96px" />
+      <h3 className="mt-5 text-xl font-semibold tracking-[-0.01em] text-white">Preparing your feedback</h3>
+      <p className="mt-1 text-sm text-zinc-400">Patricia is reviewing how the conversation went.</p>
 
-      <div className="space-y-1">
-        <h3 className="text-lg font-bold text-stone-900">
-          Analyzing Simulation Performance...
-        </h3>
-        <p className="text-xs text-stone-500 max-w-sm mx-auto leading-relaxed">
-          Evaluating dialogue cadence, empathy, and coaching rubrics.
-        </p>
-      </div>
-
-      {/* Step-by-Step Stages */}
-      <div className="bg-[#FAF8F5] rounded-xl p-4 border border-stone-200 space-y-2.5 text-left max-w-md mx-auto text-xs">
-        <div
-          className={cn(
-            "flex items-center gap-2 transition-colors",
-            feedbackStage >= 1
-              ? "text-emerald-800 font-semibold"
-              : "text-stone-400"
-          )}
-        >
-          {feedbackStage > 1 ? (
-            <CheckCircle2 className="w-4 h-4 text-emerald-700 shrink-0" />
-          ) : (
-            <Loader2 className="w-4 h-4 animate-spin text-amber-600 shrink-0" />
-          )}
-          <span>Transcribing conversation turns & tone...</span>
-        </div>
-
-        <div
-          className={cn(
-            "flex items-center gap-2 transition-colors",
-            feedbackStage >= 2
-              ? "text-emerald-800 font-semibold"
-              : "text-stone-400"
-          )}
-        >
-          {feedbackStage > 2 ? (
-            <CheckCircle2 className="w-4 h-4 text-emerald-700 shrink-0" />
-          ) : feedbackStage === 2 ? (
-            <Loader2 className="w-4 h-4 animate-spin text-amber-600 shrink-0" />
-          ) : (
-            <div className="w-4 h-4 rounded-full border border-stone-300 shrink-0" />
-          )}
-          <span>Scoring Empathy & Conflict Resolution...</span>
-        </div>
-
-        <div
-          className={cn(
-            "flex items-center gap-2 transition-colors",
-            feedbackStage >= 3
-              ? "text-emerald-800 font-semibold"
-              : "text-stone-400"
-          )}
-        >
-          {feedbackStage === 3 ? (
-            <Loader2 className="w-4 h-4 animate-spin text-amber-600 shrink-0" />
-          ) : (
-            <div className="w-4 h-4 rounded-full border border-stone-300 shrink-0" />
-          )}
-          <span>Synthesizing coaching takeaways...</span>
-        </div>
-      </div>
-    </div>
+      <ol className="mx-auto mt-6 max-w-sm space-y-3 text-left" aria-live="polite">
+        {STAGES.map((label, i) => {
+          const step = i + 1;
+          const done = feedbackStage > step;
+          const active = feedbackStage === step;
+          return (
+            <li key={label} className={cn("flex items-center gap-3 text-sm", done || active ? "text-white" : "text-zinc-600")}>
+              <span
+                className={cn(
+                  "flex h-6 w-6 shrink-0 items-center justify-center rounded-full",
+                  done ? "bg-orange-500 text-black" : "border border-white/10",
+                )}
+              >
+                {done ? (
+                  <Check className="h-3.5 w-3.5" />
+                ) : active ? (
+                  <Loader2 className="h-3.5 w-3.5 animate-spin text-orange-400" />
+                ) : null}
+              </span>
+              {label}
+            </li>
+          );
+        })}
+      </ol>
+    </Card>
   );
 });

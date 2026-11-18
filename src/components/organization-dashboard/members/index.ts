@@ -7,3 +7,4 @@ export * from "./MemberTableRow";
 export * from "./MemberMobileCard";
 export * from "./MemberDetailsModal";
 export * from "./InviteMemberModal";
+export * from "./MemberParts";

@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState, useCallback, useMemo, memo } from "react";
-import { CheckCircle2 } from "lucide-react";
+import { useState, useCallback, useMemo, memo } from "react";
+import { Card, EmptyState, Toast } from "@/components/dashboard/ui";
 import {
   MemberUserItem,
   getInitialMembers,
@@ -82,27 +82,22 @@ export const OrgMembersScreen = memo(function OrgMembersScreen() {
     setSearchTerm("");
   }, []);
 
+  const remind = useCallback((name: string) => showToast(`Reminder sent to ${name}`), [showToast]);
+  const rowProps = {
+    onViewDetails: setSelectedUserDetails,
+    onSendReminder: remind,
+    onRemoveMember: handleRemoveMember,
+  };
+
   return (
-    <div className="space-y-4">
-      {/* Toast Notification */}
-      {toastMessage && (
-        <div className="fixed top-20 right-6 z-50 bg-stone-900 text-white text-xs font-bold px-4 py-2.5 rounded-lg border border-stone-800 flex items-center gap-2 animate-in fade-in slide-in-from-top-2">
-          <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-          <span>{toastMessage}</span>
-        </div>
-      )}
+    <div className="space-y-6">
+      <Toast message={toastMessage} />
 
-      {/* Screen Header */}
-      <MembersHeader
-        onOpenInviteModal={() => setIsInviteModalOpen(true)}
-      />
+      <MembersHeader onOpenInviteModal={() => setIsInviteModalOpen(true)} />
 
-      {/* Stats Cards */}
       <MembersStatsCards totalMembersCount={members.length} />
 
-      {/* Members Table & Card List Container */}
-      <div className="bg-white rounded-xl p-4 border border-stone-200 space-y-3 overflow-hidden">
-        {/* Filter and Search Bar */}
+      <Card>
         <MembersFilterBar
           totalCount={members.length}
           filteredCount={filteredMembers.length}
@@ -115,82 +110,43 @@ export const OrgMembersScreen = memo(function OrgMembersScreen() {
           onResetFilters={handleResetFilters}
         />
 
-        {/* Mobile View: Card List (< md) */}
-        <div className="md:hidden divide-y divide-stone-100 -mx-4 -mb-4">
-          {filteredMembers.length === 0 ? (
-            <div className="text-center text-stone-400 text-xs py-8 px-4 leading-normal">
-              No members found matching current filter.
+        {filteredMembers.length === 0 ? (
+          <EmptyState title="No members found" description="Try a different name, track or status." />
+        ) : (
+          <>
+            {/* mobile: cards */}
+            <div className="space-y-2 md:hidden">
+              {filteredMembers.map((member) => (
+                <MemberMobileCard key={member.id} member={member} {...rowProps} />
+              ))}
             </div>
-          ) : (
-            filteredMembers.map((member) => (
-              <MemberMobileCard
-                key={member.id}
-                member={member}
-                onViewDetails={setSelectedUserDetails}
-                onSendReminder={(name) =>
-                  showToast(`Reminder sent to ${name}`)
-                }
-                onRemoveMember={handleRemoveMember}
-              />
-            ))
-          )}
-        </div>
 
-        {/* Desktop View: Table (>= md) */}
-        <div className="hidden md:block overflow-x-auto">
-          <table className="w-full text-left text-xs leading-normal border-collapse">
-            <thead>
-              <tr className="border-b border-stone-200 text-stone-400 font-mono text-xs uppercase tracking-wider h-10">
-                <th className="px-2.5 lg:px-3.5 py-2.5 font-semibold leading-normal">
-                  Participant
-                </th>
-                <th className="px-2.5 lg:px-3.5 py-2.5 font-semibold leading-normal">
-                  Track
-                </th>
-                <th className="px-2.5 lg:px-3.5 py-2.5 font-semibold leading-normal">
-                  Classes
-                </th>
-                <th className="px-2.5 lg:px-3.5 py-2.5 font-semibold leading-normal">
-                  Progress
-                </th>
-                <th className="px-2.5 lg:px-3.5 py-2.5 font-semibold text-right leading-normal">
-                  Score
-                </th>
-                <th className="px-2.5 lg:px-3.5 py-2.5 font-semibold leading-normal">
-                  Status
-                </th>
-                <th className="px-1.5 lg:px-2 py-2.5 font-semibold text-center w-8">
-                  <span className="sr-only">Actions</span>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredMembers.length === 0 ? (
-                <tr className="h-12">
-                  <td
-                    colSpan={7}
-                    className="text-center text-stone-400 text-xs py-8 leading-normal"
-                  >
-                    No members found matching current filter.
-                  </td>
-                </tr>
-              ) : (
-                filteredMembers.map((member) => (
-                  <MemberTableRow
-                    key={member.id}
-                    member={member}
-                    onViewDetails={setSelectedUserDetails}
-                    onSendReminder={(name) =>
-                      showToast(`Reminder sent to ${name}`)
-                    }
-                    onRemoveMember={handleRemoveMember}
-                  />
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
-      </div>
+            {/* desktop: table */}
+            <div className="-mx-1 hidden overflow-x-auto md:block">
+              <table className="w-full text-left">
+                <thead>
+                  <tr className="border-b border-white/[0.06] text-sm text-zinc-500">
+                    <th className="py-3 pl-1 pr-4 font-normal">Member</th>
+                    <th className="px-4 py-3 font-normal">Track</th>
+                    <th className="px-4 py-3 font-normal">Classes</th>
+                    <th className="px-4 py-3 font-normal">Progress</th>
+                    <th className="px-4 py-3 text-right font-normal">Score</th>
+                    <th className="px-4 py-3 font-normal">Status</th>
+                    <th className="w-10 py-3">
+                      <span className="sr-only">Actions</span>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredMembers.map((member) => (
+                    <MemberTableRow key={member.id} member={member} {...rowProps} />
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
+        )}
+      </Card>
 
       {/* Modals */}
       <MemberDetailsModal

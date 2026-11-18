@@ -1,174 +1,98 @@
 "use client";
 
-import React, { memo } from "react";
-import { X, ShieldCheck, BookOpen } from "lucide-react";
-import { MemberUserItem } from "./types";
+import { memo } from "react";
+import { Badge, BlobCard, Button, Modal, ProgressBar } from "@/components/dashboard/ui";
+import { MemberAvatar, MemberStatusBadge } from "./MemberParts";
+import type { MemberUserItem } from "./types";
 
 interface MemberDetailsModalProps {
   member: MemberUserItem | null;
   onClose: () => void;
 }
 
-export const MemberDetailsModal = memo(function MemberDetailsModal({
-  member,
-  onClose,
-}: MemberDetailsModalProps) {
+export const MemberDetailsModal = memo(function MemberDetailsModal({ member, onClose }: MemberDetailsModalProps) {
   if (!member) return null;
 
+  const skills = member.skillsBreakdown
+    ? [
+        { label: "Communication", value: member.skillsBreakdown.communication },
+        { label: "De-escalation", value: member.skillsBreakdown.deEscalation },
+        { label: "Troubleshooting", value: member.skillsBreakdown.diagnostics },
+        { label: "Empathy", value: member.skillsBreakdown.empathy },
+      ]
+    : [];
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-900/40 backdrop-blur-xs overflow-y-auto">
-      <div className="relative w-full max-w-2xl bg-white border border-stone-200 rounded-xl p-6 sm:p-7 space-y-5 text-left max-h-[90vh] overflow-y-auto">
-        <button
-          type="button"
-          onClick={onClose}
-          className="absolute top-4 right-4 p-2 rounded-md bg-stone-100 hover:bg-stone-200 text-stone-500 hover:text-stone-900 cursor-pointer transition-colors"
-        >
-          <X className="w-4 h-4" />
-        </button>
-
-        {/* Header with Avatar & Details */}
-        <div className="flex items-center gap-3.5 border-b border-stone-100 pb-4">
-          <img
-            src={member.avatar}
-            alt={member.name}
-            className="w-12 h-12 rounded-full object-cover border border-stone-200 shrink-0"
-          />
-          <div>
-            <div className="flex items-center gap-2">
-              <h3 className="text-base font-bold text-stone-900 leading-tight">
-                {member.name}
-              </h3>
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono text-stone-700 bg-stone-100 border border-stone-200">
-                {member.track}
-              </span>
-            </div>
-            <div className="text-xs text-stone-500 font-mono mt-0.5">
-              {member.email}
-            </div>
+    <Modal
+      open
+      onClose={onClose}
+      title={
+      <div className="flex items-center gap-4">
+        <MemberAvatar member={member} size={56} />
+        <div className="min-w-0">
+          <span className="block truncate text-xl font-semibold tracking-[-0.01em] text-white">{member.name}</span>
+          <p className="truncate text-sm text-zinc-500">{member.email}</p>
+          <div className="mt-2 flex flex-wrap gap-1.5">
+            <MemberStatusBadge status={member.status} />
+            <Badge>{member.track}</Badge>
           </div>
-        </div>
-
-        {/* Overall Score & Skill Competencies Breakdown */}
-        <div className="grid grid-cols-1 sm:grid-cols-12 gap-3.5">
-          <div className="sm:col-span-4 bg-stone-50 rounded-xl p-4 border border-stone-200 text-center flex flex-col justify-center space-y-1">
-            <span className="text-[10px] font-mono uppercase text-stone-500 font-bold">
-              OVERALL SCORE
-            </span>
-            <div className="text-3xl font-extrabold text-stone-900 font-mono">
-              {member.score}
-            </div>
-            <span className="text-[10px] text-emerald-800 font-bold">
-              Evaluated via Simulations
-            </span>
-          </div>
-
-          <div className="sm:col-span-8 bg-stone-50/60 rounded-xl p-4 border border-stone-200 space-y-2.5">
-            <span className="text-xs font-bold text-stone-900 flex items-center gap-1.5">
-              <ShieldCheck className="w-4 h-4 text-orange-600" />
-              <span>Evaluated Skill Competencies</span>
-            </span>
-
-            {member.skillsBreakdown && (
-              <div className="space-y-2 text-xs">
-                <div>
-                  <div className="flex justify-between text-[11px] font-mono text-stone-600 font-medium">
-                    <span>Communication Tone</span>
-                    <span className="text-orange-600 font-bold">
-                      {member.skillsBreakdown.communication}%
-                    </span>
-                  </div>
-                  <div className="w-full h-1.5 bg-stone-200/80 rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-orange-500 rounded-full"
-                      style={{
-                        width: `${member.skillsBreakdown.communication}%`,
-                      }}
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <div className="flex justify-between text-[11px] font-mono text-stone-600 font-medium">
-                    <span>De-escalation & Conflict</span>
-                    <span className="text-emerald-700 font-bold">
-                      {member.skillsBreakdown.deEscalation}%
-                    </span>
-                  </div>
-                  <div className="w-full h-1.5 bg-stone-200/80 rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-emerald-500 rounded-full"
-                      style={{
-                        width: `${member.skillsBreakdown.deEscalation}%`,
-                      }}
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <div className="flex justify-between text-[11px] font-mono text-stone-600 font-medium">
-                    <span>Technical Triage & Diagnostics</span>
-                    <span className="text-purple-700 font-bold">
-                      {member.skillsBreakdown.diagnostics}%
-                    </span>
-                  </div>
-                  <div className="w-full h-1.5 bg-stone-200/80 rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-purple-500 rounded-full"
-                      style={{
-                        width: `${member.skillsBreakdown.diagnostics}%`,
-                      }}
-                    />
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Completed Classes & Simulations History */}
-        <div className="space-y-2.5">
-          <h4 className="text-xs font-bold text-stone-900 flex items-center gap-1.5">
-            <BookOpen className="w-4 h-4 text-orange-600" />
-            <span>Completed Classes & Simulation History</span>
-          </h4>
-
-          <div className="space-y-2">
-            {member.completedClassesHistory &&
-            member.completedClassesHistory.length > 0 ? (
-              member.completedClassesHistory.map((item) => (
-                <div
-                  key={item.title}
-                  className="p-3 rounded-lg bg-stone-50 border border-stone-200 flex items-center justify-between text-xs"
-                >
-                  <div>
-                    <div className="font-bold text-stone-900">{item.title}</div>
-                    <div className="text-[10px] text-stone-500 font-mono mt-0.5">
-                      Completed: {item.date}
-                    </div>
-                  </div>
-                  <span className="font-mono font-bold text-xs text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
-                    Score: {item.score}
-                  </span>
-                </div>
-              ))
-            ) : (
-              <div className="p-3 text-xs text-stone-500 text-center bg-stone-50 rounded-lg border border-stone-200">
-                No completed simulations yet.
-              </div>
-            )}
-          </div>
-        </div>
-
-        <div className="pt-2 flex justify-end">
-          <button
-            type="button"
-            onClick={onClose}
-            className="px-4 py-2 rounded-md bg-stone-900 text-white font-medium text-xs hover:bg-stone-800 transition-colors cursor-pointer"
-          >
-            Close Details
-          </button>
         </div>
       </div>
-    </div>
+      }
+    >
+      {/* score + skills */}
+      <div className="grid gap-3 sm:grid-cols-5">
+        <BlobCard tone="green" className="p-5 sm:col-span-2 sm:p-6">
+          <p className="text-sm text-white/80">Overall score</p>
+          <p className="mt-2 text-4xl font-semibold tracking-[-0.02em] tabular-nums">{member.score}</p>
+          <p className="mt-1 text-sm text-white/75">From simulations</p>
+        </BlobCard>
+
+        <div className="rounded-3xl border border-white/[0.06] bg-black/20 p-5 sm:col-span-3">
+          <p className="text-sm font-medium text-white">Skills</p>
+          {skills.length > 0 ? (
+            <ul className="mt-4 space-y-3.5">
+              {skills.map((s) => (
+                <li key={s.label}>
+                  <div className="mb-1.5 flex justify-between text-sm">
+                    <span className="text-zinc-400">{s.label}</span>
+                    <span className="font-medium text-white tabular-nums">{s.value}%</span>
+                  </div>
+                  <ProgressBar value={s.value} label={s.label} />
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="mt-3 text-sm text-zinc-500">No skill data yet.</p>
+          )}
+        </div>
+      </div>
+
+      {/* history */}
+      <h3 className="mb-3 mt-7 text-base font-medium text-white">Completed classes</h3>
+      {member.completedClassesHistory && member.completedClassesHistory.length > 0 ? (
+        <ul className="divide-y divide-white/[0.06] rounded-2xl border border-white/[0.06]">
+          {member.completedClassesHistory.map((item) => (
+            <li key={item.title} className="flex items-center justify-between gap-3 px-4 py-3.5">
+              <div className="min-w-0">
+                <p className="truncate text-sm font-medium text-white">{item.title}</p>
+                <p className="text-sm text-zinc-500">{item.date}</p>
+              </div>
+              <Badge tone="green">{item.score}</Badge>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p className="rounded-2xl border border-white/[0.06] px-4 py-6 text-center text-sm text-zinc-500">
+          No completed classes yet.
+        </p>
+      )}
+
+      <div className="mt-7 flex justify-end">
+        <Button variant="white" onClick={onClose}>
+          Close
+        </Button>
+      </div>
+    </Modal>
   );
 });

@@ -1,86 +1,75 @@
 "use client";
 
 import React, { memo } from "react";
-import { BarChart2, TrendingUp, Award, Zap, CheckCircle2 } from "lucide-react";
+import { CheckCircle2, TrendingUp, Zap } from "lucide-react";
+import {
+  BlobCard,
+  Card,
+  CardHeader,
+  PageHeader,
+  PatriciaPose,
+  ProgressBar,
+  StatTile,
+} from "@/components/dashboard/ui";
+
+const SKILLS = [
+  { skill: "De-escalation and professional tone", score: 94 },
+  { skill: "Technical accuracy and diagnostics", score: 88 },
+  { skill: "Empathetic communication", score: 91 },
+  { skill: "Time to resolution", score: 84 },
+];
 
 export const OrgAnalyticsScreen = memo(function OrgAnalyticsScreen() {
+  const top = SKILLS.reduce((a, b) => (b.score > a.score ? b : a));
+
   return (
     <div className="space-y-6">
-      {/* Top Banner */}
-      <div className="bg-white rounded-2xl p-5 border border-stone-200 shadow-sm space-y-1">
-        <h2 className="text-xl font-bold text-stone-900 flex items-center gap-2">
-          <BarChart2 className="w-5 h-5 text-orange-600" />
-          <span>Organization Analytics & Skill Assessment</span>
-        </h2>
-        <p className="text-xs text-stone-500">
-          Track real-time AI scoring accuracy, weekly simulation volume, and career mastery metrics across your teams.
-        </p>
+      <PageHeader
+        eyebrow="Analytics"
+        title="Team skills"
+        description="Simulation scores, weekly volume and skill mastery across your teams."
+      />
+
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+        <StatTile
+          label="Average simulation score"
+          value="88.5%"
+          note="+4.2% vs last month"
+          noteTone="positive"
+          icon={TrendingUp}
+        />
+        <StatTile label="Simulations completed" value="3,420" note="342 this week" icon={Zap} />
+        <StatTile
+          label="Skill mastery rate"
+          value="92.1%"
+          note="Passed on the first try"
+          noteTone="positive"
+          icon={CheckCircle2}
+        />
       </div>
 
-      {/* Analytics Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="bg-white rounded-2xl p-5 border border-stone-200 shadow-sm space-y-2">
-          <span className="text-[11px] font-bold text-stone-500 uppercase tracking-wider font-mono">
-            AVG SIMULATION SCORE
-          </span>
-          <div className="text-3xl font-extrabold text-stone-900 font-mono">88.5%</div>
-          <div className="text-xs text-emerald-700 font-medium flex items-center gap-1">
-            <TrendingUp className="w-3.5 h-3.5" />
-            <span>+4.2% improvement vs last month</span>
-          </div>
-        </div>
+      <div className="grid grid-cols-1 gap-3 lg:grid-cols-12">
+        <Card className="lg:col-span-8">
+          <CardHeader title="Skill scores" description="How Patricia scores your team on each skill." />
+          <ul className="space-y-5">
+            {SKILLS.map((item) => (
+              <li key={item.skill}>
+                <div className="mb-2 flex items-center justify-between gap-3">
+                  <span className="text-base text-white">{item.skill}</span>
+                  <span className="text-sm font-medium text-zinc-300 tabular-nums">{item.score}%</span>
+                </div>
+                <ProgressBar value={item.score} label={item.skill} />
+              </li>
+            ))}
+          </ul>
+        </Card>
 
-        <div className="bg-white rounded-2xl p-5 border border-stone-200 shadow-sm space-y-2">
-          <span className="text-[11px] font-bold text-stone-500 uppercase tracking-wider font-mono">
-            SIMULATIONS COMPLETED
-          </span>
-          <div className="text-3xl font-extrabold text-stone-900 font-mono">3,420</div>
-          <div className="text-xs text-orange-700 font-medium flex items-center gap-1">
-            <Zap className="w-3.5 h-3.5 text-orange-600" />
-            <span>342 scenarios completed this week</span>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-2xl p-5 border border-stone-200 shadow-sm space-y-2">
-          <span className="text-[11px] font-bold text-stone-500 uppercase tracking-wider font-mono">
-            SKILL MASTERY RATE
-          </span>
-          <div className="text-3xl font-extrabold text-stone-900 font-mono">92.1%</div>
-          <div className="text-xs text-emerald-700 font-medium flex items-center gap-1">
-            <CheckCircle2 className="w-3.5 h-3.5" />
-            <span>Passed AI evaluation on 1st try</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Detailed Skill Competency Breakdown */}
-      <div className="bg-white rounded-2xl p-5 border border-stone-200 shadow-sm space-y-4">
-        <h3 className="text-sm font-bold text-stone-900 flex items-center gap-2">
-          <Award className="w-4 h-4 text-orange-600" />
-          <span>Core AI Evaluation Criteria & Soft Skills Scoring</span>
-        </h3>
-
-        <div className="space-y-3">
-          {[
-            { skill: "De-escalation & Professional Tone", score: 94, color: "bg-orange-500" },
-            { skill: "Technical Accuracy & Diagnostics", score: 88, color: "bg-emerald-500" },
-            { skill: "Empathetic Communication", score: 91, color: "bg-rose-500" },
-            { skill: "Time-to-Resolution Efficiency", score: 84, color: "bg-purple-500" },
-          ].map((item) => (
-            <div key={item.skill} className="bg-[#FCFAF6] p-3.5 rounded-xl border border-stone-200 space-y-2">
-              <div className="flex items-center justify-between text-xs">
-                <span className="font-bold text-stone-900">{item.skill}</span>
-                <span className="font-mono text-orange-700 font-bold">{item.score}%</span>
-              </div>
-              <div className="w-full h-2 bg-stone-200/80 rounded-full overflow-hidden">
-                <div
-                  className={`h-full rounded-full ${item.color}`}
-                  style={{ width: `${item.score}%` }}
-                />
-              </div>
-            </div>
-          ))}
-        </div>
+        <BlobCard tone="green" className="flex min-h-64 flex-col lg:col-span-4">
+          <p className="text-sm text-white/80">Strongest skill</p>
+          <p className="mt-2 max-w-[14rem] text-2xl font-semibold leading-tight tracking-[-0.01em]">{top.skill}</p>
+          <p className="mt-auto text-5xl font-semibold tracking-[-0.02em] tabular-nums">{top.score}%</p>
+          <PatriciaPose pose="thumbs-up" className="absolute bottom-0 right-4 h-40 w-28" sizes="112px" />
+        </BlobCard>
       </div>
     </div>
   );

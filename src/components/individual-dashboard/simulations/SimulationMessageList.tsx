@@ -1,9 +1,9 @@
 "use client";
 
-import React, { memo, RefObject } from "react";
-import { User, Bot } from "lucide-react";
+import { memo, RefObject } from "react";
 import { cn } from "@/lib/utils";
 import { ChatMessage, SimulationScenario } from "@/types/individual";
+import { PatriciaFace } from "@/components/dashboard/ui";
 
 interface SimulationMessageListProps {
   messages: ChatMessage[];
@@ -12,6 +12,7 @@ interface SimulationMessageListProps {
   messagesEndRef: RefObject<HTMLDivElement | null>;
 }
 
+/** Chat transcript: Patricia on the left (grey bubble), learner on the right (orange bubble). */
 export const SimulationMessageList = memo(function SimulationMessageList({
   messages,
   scenario,
@@ -19,80 +20,45 @@ export const SimulationMessageList = memo(function SimulationMessageList({
   messagesEndRef,
 }: SimulationMessageListProps) {
   return (
-    <div
-      data-lenis-prevent
-      className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-3 bg-[#FBF9F5] min-h-0"
-    >
-      {messages.map((m) => (
-        <div
-          key={m.id}
-          className={cn(
-            "flex items-start gap-2.5 max-w-[85%] sm:max-w-[75%] md:max-w-[65%] text-xs sm:text-sm",
-            m.sender === "user" ? "ml-auto flex-row-reverse" : ""
-          )}
-        >
-          {/* Avatar */}
-          <div
-            className={cn(
-              "w-7 h-7 rounded-full flex items-center justify-center font-bold text-[10px] shrink-0 border",
-              m.sender === "user"
-                ? "bg-stone-900 text-white border-stone-900"
-                : "bg-white text-stone-700 border-stone-200"
-            )}
-          >
-            {m.sender === "user" ? (
-              <User className="w-3.5 h-3.5" />
-            ) : (
-              <Bot className="w-3.5 h-3.5 text-amber-700" />
-            )}
-          </div>
-
-          {/* Message Bubble Body */}
-          <div
-            className={cn(
-              "p-3.5 rounded-xl leading-relaxed font-sans space-y-1",
-              m.sender === "user"
-                ? "bg-stone-900 text-white rounded-tr-xs"
-                : "bg-white text-stone-900 border border-stone-200 rounded-tl-xs shadow-xs"
-            )}
-          >
-            <div className="flex items-center justify-between gap-3 text-[10px] opacity-60 font-mono">
-              <span className="font-semibold">
-                {m.sender === "user" ? "You" : scenario.characterName}
+    <div data-lenis-prevent className="min-h-0 flex-1 space-y-5 overflow-y-auto px-4 py-6 sm:px-6">
+      {messages.map((m) => {
+        const mine = m.sender === "user";
+        return (
+          <div key={m.id} className={cn("flex items-end gap-2.5", mine && "justify-end")}>
+            {!mine && <PatriciaFace face="normal" size={32} />}
+            <div className={cn("flex max-w-[82%] flex-col gap-1 sm:max-w-[70%]", mine && "items-end")}>
+              <span className="px-1 text-sm text-zinc-500">
+                {mine ? "You" : scenario.characterName} · {m.timestamp}
               </span>
-              <span>{m.timestamp}</span>
+              <p
+                className={cn(
+                  "whitespace-pre-wrap rounded-2xl px-4 py-3 text-base leading-relaxed sm:px-5",
+                  mine ? "rounded-br-sm bg-orange-500 text-black" : "rounded-bl-sm bg-white/[0.06] text-zinc-100",
+                )}
+              >
+                {m.text}
+              </p>
             </div>
-            <p className="text-xs sm:text-sm whitespace-pre-wrap">{m.text}</p>
           </div>
-        </div>
-      ))}
+        );
+      })}
 
-      {/* Typing Indicator */}
       {isAiTyping && (
-        <div className="flex items-start gap-2.5 max-w-md text-xs">
-          <div className="w-7 h-7 rounded-full bg-white border border-stone-200 flex items-center justify-center text-amber-700 shrink-0">
-            <Bot className="w-3.5 h-3.5" />
-          </div>
-          <div className="px-3.5 py-2.5 rounded-xl rounded-tl-xs bg-white border border-stone-200 text-stone-600 flex items-center gap-2 shadow-xs">
-            <span className="text-xs text-stone-700 font-medium">
-              {scenario.characterName} is replying
-            </span>
-            <div className="flex items-center gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-stone-400 animate-bounce" />
+        <div className="flex items-end gap-2.5" aria-live="polite">
+          <PatriciaFace face="thinking" size={32} />
+          <div className="flex items-center gap-1.5 rounded-2xl rounded-bl-sm bg-white/[0.06] px-5 py-4">
+            <span className="sr-only">{scenario.characterName} is typing</span>
+            {[0, 0.15, 0.3].map((d) => (
               <span
-                className="w-1.5 h-1.5 rounded-full bg-stone-400 animate-bounce"
-                style={{ animationDelay: "0.15s" }}
+                key={d}
+                className="h-2 w-2 animate-bounce rounded-full bg-zinc-400"
+                style={{ animationDelay: `${d}s` }}
               />
-              <span
-                className="w-1.5 h-1.5 rounded-full bg-stone-400 animate-bounce"
-                style={{ animationDelay: "0.3s" }}
-              />
-            </div>
+            ))}
           </div>
         </div>
       )}
 
-      {/* Scroll Anchor */}
       <div ref={messagesEndRef} />
     </div>
   );

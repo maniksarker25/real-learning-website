@@ -1,9 +1,8 @@
 "use client";
 
 import React, { useState, useCallback, useMemo, memo, useEffect } from "react";
-import { FileText, HelpCircle } from "lucide-react";
 import { useAccount } from "@/context/AccountContext";
-import { cn } from "@/lib/utils";
+import { Badge, Segmented } from "@/components/dashboard/ui";
 import {
   IndClassesScreenProps,
   getSampleClasses,
@@ -110,51 +109,26 @@ export const IndClassesScreen = memo(function IndClassesScreen({
   }
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
       <ClassesHeader
         onLaunchPracticeSimulator={onLaunchPracticeSimulator}
       />
 
-      {/* Main Class Card & Reader Frame */}
-      <div className="bg-white rounded-xl border border-stone-200 overflow-hidden">
-        {/* Class Title Bar */}
-        <div className="p-4 sm:p-5 border-b border-stone-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-stone-50/50">
+      <div className="overflow-hidden rounded-3xl border border-white/[0.06] bg-[#181818]">
+        <div className="flex flex-col gap-4 border-b border-white/[0.06] p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
           <div>
-            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-amber-100/70 text-amber-900 border border-amber-200">
-              {currentClass.category}
-            </span>
-            <h3 className="text-base sm:text-lg font-bold text-stone-900 mt-1">
-              {currentClass.title}
-            </h3>
+            <Badge tone="orange">{currentClass.category}</Badge>
+            <h3 className="mt-3 text-xl font-semibold tracking-[-0.01em] text-white sm:text-2xl">{currentClass.title}</h3>
           </div>
-
-          {/* Sub Tab Switcher: Lessons vs Quiz */}
-          <div className="flex items-center gap-1 bg-white p-1 rounded-lg border border-stone-200 shrink-0">
-            <button
-              onClick={() => setActiveTab("lessons")}
-              className={cn(
-                "px-3 py-1.5 rounded text-xs font-semibold transition-colors cursor-pointer flex items-center gap-1.5",
-                activeTab === "lessons"
-                  ? "bg-stone-900 text-white font-bold"
-                  : "text-stone-600 hover:text-stone-950",
-              )}
-            >
-              <FileText className="w-3.5 h-3.5" />
-              <span>Lessons ({currentClass.lessons.length})</span>
-            </button>
-            <button
-              onClick={() => setActiveTab("quiz")}
-              className={cn(
-                "px-3 py-1.5 rounded text-xs font-semibold transition-colors cursor-pointer flex items-center gap-1.5",
-                activeTab === "quiz"
-                  ? "bg-stone-900 text-white font-bold"
-                  : "text-stone-600 hover:text-stone-950",
-              )}
-            >
-              <HelpCircle className="w-3.5 h-3.5" />
-              <span>Quiz ({currentClass.quiz.length} Qs)</span>
-            </button>
-          </div>
+          <Segmented
+            label="Class sections"
+            value={activeTab}
+            onChange={setActiveTab}
+            options={[
+              { value: "lessons", label: `Lessons (${currentClass.lessons.length})` },
+              { value: "quiz", label: `Quiz (${currentClass.quiz.length})` },
+            ]}
+          />
         </div>
 
         {/* Tab 1: Lesson Reader */}

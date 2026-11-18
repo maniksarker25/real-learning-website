@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState, useMemo, memo } from "react";
+import { useState, useMemo, memo } from "react";
+import { EmptyState } from "@/components/dashboard/ui";
 import {
   CompletedSimulationItem,
   getCompletedSimulations,
@@ -43,15 +44,17 @@ export const OrgSimulationsScreen = memo(function OrgSimulationsScreen() {
         totalCount={completedSimulations.length}
       />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-        {filteredSimulations.map((sim) => (
-          <OrgSimulationCard
-            key={sim.id}
-            simulation={sim}
-            onViewTranscript={setSelectedSimulationDetails}
-          />
-        ))}
-      </div>
+      {filteredSimulations.length === 0 ? (
+        <div className="rounded-3xl border border-white/[0.06] bg-[#181818]">
+          <EmptyState title="No simulations found" description="Try another track or search term." />
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+          {filteredSimulations.map((sim) => (
+            <OrgSimulationCard key={sim.id} simulation={sim} onViewTranscript={setSelectedSimulationDetails} />
+          ))}
+        </div>
+      )}
 
       {selectedSimulationDetails && (
         <OrgSimulationTranscriptModal

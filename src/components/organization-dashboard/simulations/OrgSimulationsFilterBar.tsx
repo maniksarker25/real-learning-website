@@ -1,6 +1,6 @@
-import React, { memo } from "react";
+import { memo } from "react";
 import { Search } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Input, Segmented } from "@/components/dashboard/ui";
 
 interface OrgSimulationsFilterBarProps {
   selectedTrackFilter: string;
@@ -11,11 +11,10 @@ interface OrgSimulationsFilterBarProps {
 }
 
 const TRACK_TABS = [
-  { id: "all", label: "All Simulations" },
-  { id: "Customer Service", label: "Customer Service" },
-  { id: "Tech Support", label: "Tech Support" },
-  { id: "IT Specialist", label: "IT Specialist" },
-  { id: "Healthcare Support", label: "Healthcare Support" },
+  { value: "Customer Service", label: "Customer Service" },
+  { value: "Tech Support", label: "Tech Support" },
+  { value: "IT Specialist", label: "IT Specialist" },
+  { value: "Healthcare Support", label: "Healthcare" },
 ];
 
 export const OrgSimulationsFilterBar = memo(function OrgSimulationsFilterBar({
@@ -25,42 +24,26 @@ export const OrgSimulationsFilterBar = memo(function OrgSimulationsFilterBar({
   onSearchChange,
   totalCount,
 }: OrgSimulationsFilterBarProps) {
+  const options = [{ value: "all", label: `All (${totalCount})` }, ...TRACK_TABS];
+
   return (
-    <div className="space-y-3">
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
-        <div className="flex items-center gap-2 overflow-x-auto w-full sm:w-auto pb-1">
-          {TRACK_TABS.map((tab) => {
-            const label =
-              tab.id === "all" ? `${tab.label} (${totalCount})` : tab.label;
-            const isSelected = selectedTrackFilter === tab.id;
-
-            return (
-              <button
-                key={tab.id}
-                onClick={() => onSelectTrackFilter(tab.id)}
-                className={cn(
-                  "px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer border",
-                  isSelected
-                    ? "bg-stone-900 border-stone-900 text-white font-bold shadow-xs"
-                    : "bg-white border-stone-200 text-stone-600 hover:text-stone-900 hover:bg-stone-50 shadow-xs",
-                )}
-              >
-                {label}
-              </button>
-            );
-          })}
-        </div>
-
-        <div className="relative w-full sm:w-72 shrink-0">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400" />
-          <input
-            type="text"
-            value={searchTerm}
-            onChange={(e) => onSearchChange(e.target.value)}
-            placeholder="Search by member or scenario..."
-            className="w-full bg-white border border-stone-200 rounded-xl pl-10 pr-4 py-2 text-xs text-stone-900 placeholder-stone-400 focus:outline-none focus:border-orange-500 transition-colors"
-          />
-        </div>
+    <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+      <Segmented
+        label="Filter by career track"
+        options={options}
+        value={selectedTrackFilter}
+        onChange={onSelectTrackFilter}
+      />
+      <div className="relative w-full lg:w-72">
+        <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-500" />
+        <Input
+          type="search"
+          value={searchTerm}
+          onChange={(e) => onSearchChange(e.target.value)}
+          placeholder="Search member or scenario"
+          aria-label="Search simulations"
+          className="py-2.5 pl-10 text-sm"
+        />
       </div>
     </div>
   );

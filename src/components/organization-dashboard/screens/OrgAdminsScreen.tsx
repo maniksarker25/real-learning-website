@@ -1,20 +1,23 @@
 "use client";
 
 import React, { useState, useCallback, useMemo, memo } from "react";
-import {
-  Shield,
-  Crown,
-  Search,
-  UserPlus,
-  Filter,
-  CheckCircle2,
-  Mail,
-  X,
-  ShieldCheck,
-} from "lucide-react";
-import { cn } from "@/lib/utils";
+import { CheckCircle2, Crown, ShieldCheck, UserPlus, X } from "lucide-react";
 import { useAccount } from "@/context/AccountContext";
 import { OrgRole } from "@/types/account";
+import {
+  Badge,
+  Button,
+  ButtonLink,
+  Card,
+  EmptyState,
+  Field,
+  Input,
+  Modal,
+  PageHeader,
+  Select,
+  Toast,
+} from "@/components/dashboard/ui";
+import { RoleBadge, SearchInput, StatusBadge, thClass } from "../users";
 
 interface AdminUserItem {
   id: string;
@@ -36,13 +39,11 @@ export const OrgAdminsScreen = memo(function OrgAdminsScreen() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedStatusFilter, setSelectedStatusFilter] = useState("all");
 
-  // Invite Modal state
+  // Invite modal state
   const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
   const [inviteName, setInviteName] = useState("");
   const [inviteEmail, setInviteEmail] = useState("");
-  const [inviteDepartment, setInviteDepartment] = useState(
-    "Operations & Training",
-  );
+  const [inviteDepartment, setInviteDepartment] = useState("Operations & Training");
   const [inviteSuccess, setInviteSuccess] = useState(false);
 
   // Toast feedback
@@ -57,8 +58,7 @@ export const OrgAdminsScreen = memo(function OrgAdminsScreen() {
       id: "u-owner",
       name: session.name || "Hosain Ali (You)",
       email: session.email || "hosain.owner@acmecorp.com",
-      avatar:
-        "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80",
+      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80",
       role: "owner",
       title: "Founder & Organization Owner",
       department: "Executive Leadership",
@@ -69,8 +69,7 @@ export const OrgAdminsScreen = memo(function OrgAdminsScreen() {
       id: "u-admin-1",
       name: "Marcus Vance",
       email: "marcus.admin@acmecorp.com",
-      avatar:
-        "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&auto=format&fit=crop&q=80",
+      avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&auto=format&fit=crop&q=80",
       role: "admin",
       title: "L&D Training Director",
       department: "Human Resources / L&D",
@@ -81,8 +80,7 @@ export const OrgAdminsScreen = memo(function OrgAdminsScreen() {
       id: "u-admin-2",
       name: "Sophia Martinez",
       email: "sophia.m@acmecorp.com",
-      avatar:
-        "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=100&auto=format&fit=crop&q=80",
+      avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=100&auto=format&fit=crop&q=80",
       role: "admin",
       title: "Customer Success Team Lead",
       department: "Support & Enablement",
@@ -92,13 +90,13 @@ export const OrgAdminsScreen = memo(function OrgAdminsScreen() {
   ]);
 
   const filteredAdmins = useMemo(() => {
+    const q = searchTerm.toLowerCase();
     return admins.filter((admin) => {
       const matchesSearch =
-        admin.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        admin.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        admin.department.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesStatus =
-        selectedStatusFilter === "all" || admin.status === selectedStatusFilter;
+        admin.name.toLowerCase().includes(q) ||
+        admin.email.toLowerCase().includes(q) ||
+        admin.department.toLowerCase().includes(q);
+      const matchesStatus = selectedStatusFilter === "all" || admin.status === selectedStatusFilter;
       return matchesSearch && matchesStatus;
     });
   }, [admins, searchTerm, selectedStatusFilter]);
@@ -118,8 +116,7 @@ export const OrgAdminsScreen = memo(function OrgAdminsScreen() {
         id: `u-admin-${Date.now()}`,
         name: inviteName,
         email: inviteEmail,
-        avatar:
-          "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&auto=format&fit=crop&q=80",
+        avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&auto=format&fit=crop&q=80",
         role: "admin",
         title: "Training Administrator",
         department: inviteDepartment,
@@ -142,344 +139,195 @@ export const OrgAdminsScreen = memo(function OrgAdminsScreen() {
 
   if (!isOwner) {
     return (
-      <div className="bg-white rounded-3xl p-8 sm:p-10 border border-stone-200 text-center space-y-4 max-w-lg mx-auto my-12 shadow-sm">
-        <div className="w-14 h-14 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-600 mx-auto">
-          <Crown className="w-7 h-7" />
-        </div>
-        <div className="space-y-1">
-          <h3 className="text-lg font-bold text-stone-900">
-            Owner Managed Section
-          </h3>
-          <p className="text-xs text-stone-500 leading-relaxed max-w-sm mx-auto">
-            Only the Organization Owner can manage Administrator accounts. As an
-            Organization Admin, you have full access to manage team Members,
-            view completed Simulations, and monitor Progress.
-          </p>
-        </div>
-        <div className="pt-2">
-          <a
-            href="/organization-dashboard/members"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-stone-900 text-white font-bold text-xs hover:bg-stone-800 transition-colors shadow-sm"
-          >
-            <span>Go to Members Management &rarr;</span>
-          </a>
-        </div>
-      </div>
+      <Card className="mx-auto my-8 max-w-lg text-center sm:p-10">
+        <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-500/15 text-amber-300">
+          <Crown className="h-7 w-7" />
+        </span>
+        <h1 className="mt-5 text-xl font-semibold text-white">Only the owner manages admins</h1>
+        <p className="mx-auto mt-2 max-w-sm text-base text-zinc-400">
+          As an admin you can still manage members, review simulations and follow team progress.
+        </p>
+        <ButtonLink href="/organization-dashboard/members" variant="white" className="mt-6">
+          Go to members
+        </ButtonLink>
+      </Card>
     );
   }
 
   return (
     <div className="space-y-6">
-      {/* Toast Notification */}
-      {toastMessage && (
-        <div className="fixed top-20 right-6 z-50 bg-stone-900 text-white text-xs font-bold px-4 py-3 rounded-2xl shadow-xl flex items-center gap-2 animate-in fade-in slide-in-from-top-2 border border-stone-800">
-          <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-          <span>{toastMessage}</span>
-        </div>
-      )}
+      <Toast message={toastMessage} />
 
-      {/* Top Banner */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white rounded-2xl p-5 border border-stone-200 shadow-sm">
-        <div>
-          <div className="flex items-center gap-2 mb-1">
-            <span
-              className={cn(
-                "inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider border",
-                isOwner
-                  ? "bg-amber-50 text-amber-800 border-amber-200"
-                  : "bg-blue-50 text-blue-800 border-blue-200",
-              )}
-            >
-              {isOwner ? (
-                <>
-                  <Crown className="w-3 h-3 text-amber-600" />
-                  <span>Owner View</span>
-                </>
-              ) : (
-                <>
-                  <Shield className="w-3 h-3 text-blue-600" />
-                  <span>Admin View</span>
-                </>
-              )}
-            </span>
-          </div>
-          <h2 className="text-xl font-bold text-stone-900 flex items-center gap-2">
-            <Shield className="w-5 h-5 text-blue-600" />
-            <span>Organization Administrators</span>
-          </h2>
-          <p className="text-xs text-stone-500 mt-0.5">
-            {isOwner
-              ? "Manage organization administrators, invite team leads, and oversee leadership staff."
-              : "View the active organization administrators and team leads."}
-          </p>
-        </div>
+      <PageHeader
+        eyebrow="Owner view"
+        title="Administrators"
+        description="Invite team leads and manage who can run your workspace."
+        actions={
+          <Button onClick={() => setIsInviteModalOpen(true)}>
+            <UserPlus className="h-4 w-4" />
+            Invite admin
+          </Button>
+        }
+      />
 
-        {isOwner && (
-          <button
-            onClick={() => setIsInviteModalOpen(true)}
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-stone-900 text-white font-bold text-xs hover:bg-stone-800 transition-colors shadow-sm cursor-pointer shrink-0"
-          >
-            <UserPlus className="w-4 h-4 text-orange-400" />
-            <span>Invite New Admin</span>
-          </button>
-        )}
+      <div className="grid gap-2 sm:grid-cols-[1fr_200px]">
+        <SearchInput value={searchTerm} onChange={setSearchTerm} placeholder="Search by name, email or department" />
+        <Select
+          value={selectedStatusFilter}
+          onChange={(e) => setSelectedStatusFilter(e.target.value)}
+          aria-label="Filter by status"
+        >
+          <option value="all">All statuses</option>
+          <option value="Active">Active</option>
+          <option value="Pending">Pending invite</option>
+          <option value="Suspended">Suspended</option>
+        </Select>
       </div>
 
-      {/* Search & Filter Controls */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-[#FCFAF6] p-3 rounded-2xl border border-stone-200">
-        <div className="relative max-w-sm w-full">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400" />
-          <input
-            type="text"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Search admins by name, email, or department..."
-            className="w-full bg-white border border-stone-200 rounded-xl pl-9 pr-4 py-2 text-xs text-stone-900 placeholder-stone-400 focus:outline-none focus:border-orange-500 transition-colors"
-          />
-        </div>
-
-        <div className="flex items-center gap-2 w-full sm:w-auto">
-          <Filter className="w-4 h-4 text-stone-400 shrink-0" />
-          <select
-            value={selectedStatusFilter}
-            onChange={(e) => setSelectedStatusFilter(e.target.value)}
-            className="w-full sm:w-auto bg-white border border-stone-200 rounded-xl px-3 py-2 text-xs text-stone-800 focus:outline-none focus:border-orange-500 transition-colors font-medium"
-          >
-            <option value="all">All Statuses</option>
-            <option value="Active">Active</option>
-            <option value="Pending">Pending Invite</option>
-            <option value="Suspended">Suspended</option>
-          </select>
-        </div>
-      </div>
-
-      {/* Admins Table */}
-      <div className="bg-white rounded-2xl border border-stone-200 shadow-sm overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs border-collapse">
-            <thead>
-              <tr className="border-b border-stone-200 text-stone-400 font-mono text-[10px] uppercase bg-stone-50/70">
-                <th className="py-3 px-4 font-semibold">ADMINISTRATOR</th>
-                <th className="py-3 px-4 font-semibold">ROLE</th>
-                <th className="py-3 px-4 font-semibold">DEPARTMENT</th>
-                <th className="py-3 px-4 font-semibold">ADDED DATE</th>
-                <th className="py-3 px-4 font-semibold">STATUS</th>
-                {isOwner && (
-                  <th className="py-3 px-4 font-semibold text-right">MANAGE</th>
-                )}
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-stone-100">
-              {filteredAdmins.map((admin) => {
-                const isOwnerRow = admin.role === "owner";
-                const isCurrentSelf = admin.id === "u-owner";
-
-                return (
-                  <tr
-                    key={admin.id}
-                    className="hover:bg-stone-50/70 transition-colors"
-                  >
-                    {/* Administrator Name & Avatar */}
-                    <td className="py-3.5 px-4 whitespace-nowrap">
-                      <div className="flex items-center gap-3">
-                        <img
-                          src={admin.avatar}
-                          alt={admin.name}
-                          className="w-9 h-9 rounded-full object-cover border border-stone-200 shrink-0"
-                        />
-                        <div>
-                          <div className="font-bold text-stone-900 text-xs flex items-center gap-1.5">
-                            <span>{admin.name}</span>
-                            {isCurrentSelf && (
-                              <span className="text-[9px] bg-stone-100 text-stone-600 border border-stone-200 px-1.5 py-0.2 rounded font-mono font-bold">
-                                You
-                              </span>
-                            )}
-                          </div>
-                          <div className="text-[11px] text-stone-500 font-mono">
-                            {admin.email}
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-
-                    {/* Role Badge */}
-                    <td className="py-3.5 px-4 whitespace-nowrap">
-                      {isOwnerRow ? (
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-amber-50 text-amber-800 border border-amber-200">
-                          <Crown className="w-3 h-3 text-amber-600" />
-                          <span>Owner</span>
-                        </span>
-                      ) : (
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-blue-50 text-blue-800 border border-blue-200">
-                          <Shield className="w-3 h-3 text-blue-600" />
-                          <span>Admin</span>
-                        </span>
-                      )}
-                    </td>
-
-                    {/* Department / Title */}
-                    <td className="py-3.5 px-4 whitespace-nowrap">
-                      <div className="text-stone-900 font-semibold">
-                        {admin.department}
-                      </div>
-                      <div className="text-[10px] text-stone-500">
-                        {admin.title}
-                      </div>
-                    </td>
-
-                    {/* Added Date */}
-                    <td className="py-3.5 px-4 text-stone-500 font-mono whitespace-nowrap">
-                      {admin.addedDate}
-                    </td>
-
-                    {/* Status */}
-                    <td className="py-3.5 px-4 whitespace-nowrap">
-                      <span
-                        className={cn(
-                          "inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold border font-mono",
-                          admin.status === "Active"
-                            ? "bg-emerald-50 text-emerald-800 border-emerald-200"
-                            : admin.status === "Suspended"
-                              ? "bg-rose-50 text-rose-800 border-rose-200"
-                              : "bg-amber-50 text-amber-800 border-amber-200",
-                        )}
-                      >
-                        <span className="w-1.5 h-1.5 rounded-full bg-current" />
-                        {admin.status}
-                      </span>
-                    </td>
-
-                    {/* Actions (Owner on Admin rows) */}
-                    {isOwner && (
-                      <td className="py-3.5 px-4 text-right whitespace-nowrap">
-                        <div className="inline-flex items-center gap-1.5 justify-end">
-                          {!isOwnerRow ? (
-                            <button
-                              onClick={() =>
-                                handleRemoveAdmin(admin.id, admin.name)
-                              }
-                              className="inline-flex items-center gap-1 text-xs text-rose-600 hover:text-rose-700 bg-rose-50 hover:bg-rose-100 border border-rose-200 px-3 py-1.5 rounded-full font-bold transition-colors cursor-pointer"
-                              title="Remove admin from organization"
-                            >
-                              <X className="w-3.5 h-3.5" />
-                              <span>Remove</span>
-                            </button>
-                          ) : (
-                            <span className="text-[10px] text-amber-800 font-mono font-bold px-2.5 py-1 bg-amber-50 rounded-full border border-amber-200">
-                              Protected Owner
-                            </span>
-                          )}
-                        </div>
-                      </td>
-                    )}
+      <Card className="overflow-hidden p-0 sm:p-0">
+        {filteredAdmins.length === 0 ? (
+          <EmptyState title="No admins found" description="Try a different search or filter." />
+        ) : (
+          <>
+            {/* desktop table */}
+            <div className="hidden overflow-x-auto md:block">
+              <table className="w-full border-collapse">
+                <thead className="border-b border-white/[0.06]">
+                  <tr>
+                    <th className={thClass}>Administrator</th>
+                    <th className={thClass}>Role</th>
+                    <th className={thClass}>Department</th>
+                    <th className={thClass}>Added</th>
+                    <th className={thClass}>Status</th>
+                    <th className={`${thClass} text-right`}>Manage</th>
                   </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      {/* INVITE NEW ADMIN MODAL */}
-      {isInviteModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-900/50 backdrop-blur-sm">
-          <div className="relative w-full max-w-md bg-white border border-stone-200 rounded-3xl p-6 sm:p-7 shadow-2xl space-y-5 text-left">
-            <button
-              onClick={() => setIsInviteModalOpen(false)}
-              className="absolute top-4 right-4 p-2 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-500 hover:text-stone-900 cursor-pointer transition-colors"
-            >
-              <X className="w-4 h-4" />
-            </button>
-
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-600">
-                <Shield className="w-5 h-5" />
-              </div>
-              <div>
-                <h3 className="text-lg font-bold text-stone-900">
-                  Invite Organization Admin
-                </h3>
-                <p className="text-xs text-stone-500">
-                  Admins can invite members, assign simulations, and view
-                  progress.
-                </p>
-              </div>
+                </thead>
+                <tbody className="divide-y divide-white/[0.06]">
+                  {filteredAdmins.map((admin) => (
+                    <tr key={admin.id} className="transition-colors hover:bg-white/[0.02]">
+                      <td className="px-5 py-4">
+                        <AdminIdentity admin={admin} />
+                      </td>
+                      <td className="whitespace-nowrap px-5 py-4">
+                        <RoleBadge role={admin.role} />
+                      </td>
+                      <td className="px-5 py-4">
+                        <p className="text-sm text-white">{admin.department}</p>
+                        <p className="text-sm text-zinc-500">{admin.title}</p>
+                      </td>
+                      <td className="whitespace-nowrap px-5 py-4 text-sm text-zinc-400">{admin.addedDate}</td>
+                      <td className="whitespace-nowrap px-5 py-4">
+                        <StatusBadge status={admin.status} />
+                      </td>
+                      <td className="px-5 py-4 text-right">
+                        <AdminAction admin={admin} onRemove={handleRemoveAdmin} />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
 
-            {inviteSuccess ? (
-              <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-5 text-center space-y-2">
-                <CheckCircle2 className="w-8 h-8 text-emerald-600 mx-auto" />
-                <div className="text-sm font-bold text-stone-900">
-                  Admin Invite Sent!
+            {/* mobile cards */}
+            <div className="divide-y divide-white/[0.06] md:hidden">
+              {filteredAdmins.map((admin) => (
+                <div key={admin.id} className="space-y-4 p-5">
+                  <AdminIdentity admin={admin} />
+                  <div className="flex flex-wrap gap-2">
+                    <RoleBadge role={admin.role} />
+                    <StatusBadge status={admin.status} />
+                  </div>
+                  <div className="text-sm">
+                    <p className="text-white">{admin.department}</p>
+                    <p className="text-zinc-500">
+                      {admin.title} · Added {admin.addedDate}
+                    </p>
+                  </div>
+                  <AdminAction admin={admin} onRemove={handleRemoveAdmin} />
                 </div>
-                <p className="text-xs text-stone-600">
-                  {inviteName} has been invited with Administrator privileges.
-                </p>
-              </div>
-            ) : (
-              <form onSubmit={handleInviteSubmit} className="space-y-4">
-                <div>
-                  <label className="block text-xs font-semibold text-stone-700 mb-1">
-                    Admin Full Name
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={inviteName}
-                    onChange={(e) => setInviteName(e.target.value)}
-                    placeholder="e.g. Rachel Adams"
-                    className="w-full bg-stone-50 border border-stone-200 rounded-xl px-4 py-2.5 text-xs text-stone-900 placeholder-stone-400 focus:bg-white focus:outline-none focus:border-orange-500"
-                  />
-                </div>
+              ))}
+            </div>
+          </>
+        )}
+      </Card>
 
-                <div>
-                  <label className="block text-xs font-semibold text-stone-700 mb-1">
-                    Work Email Address
-                  </label>
-                  <input
-                    type="email"
-                    required
-                    value={inviteEmail}
-                    onChange={(e) => setInviteEmail(e.target.value)}
-                    placeholder="rachel.adams@acmecorp.com"
-                    className="w-full bg-stone-50 border border-stone-200 rounded-xl px-4 py-2.5 text-xs text-stone-900 placeholder-stone-400 focus:bg-white focus:outline-none focus:border-orange-500"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-semibold text-stone-700 mb-1">
-                    Department / Team Area
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={inviteDepartment}
-                    onChange={(e) => setInviteDepartment(e.target.value)}
-                    placeholder="e.g. Operations & Support"
-                    className="w-full bg-stone-50 border border-stone-200 rounded-xl px-4 py-2.5 text-xs text-stone-900 placeholder-stone-400 focus:bg-white focus:outline-none focus:border-orange-500"
-                  />
-                </div>
-
-                <div className="p-3 rounded-xl bg-blue-50 border border-blue-200 text-[11px] text-blue-900 flex items-start gap-2">
-                  <ShieldCheck className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
-                  <span>
-                    Admins can manage members and assign simulations. Billing
-                    and seats remain Owner-controlled.
-                  </span>
-                </div>
-
-                <button
-                  type="submit"
-                  className="w-full py-3 rounded-full bg-orange-600 hover:bg-orange-700 text-white text-xs font-bold transition-colors shadow-sm cursor-pointer mt-2"
-                >
-                  Send Admin Invitation
-                </button>
-              </form>
-            )}
+      <Modal
+        open={isInviteModalOpen}
+        onClose={() => setIsInviteModalOpen(false)}
+        title="Invite an admin"
+        className="max-w-lg"
+      >
+        {inviteSuccess ? (
+          <div className="py-6 text-center">
+            <CheckCircle2 className="mx-auto h-10 w-10 text-emerald-400" />
+            <p className="mt-3 text-lg font-medium text-white">Invite sent</p>
+            <p className="mt-1 text-sm text-zinc-400">{inviteName} was invited as an admin.</p>
           </div>
-        </div>
-      )}
+        ) : (
+          <form onSubmit={handleInviteSubmit} className="space-y-5">
+            <Field label="Full name">
+              <Input
+                required
+                value={inviteName}
+                onChange={(e) => setInviteName(e.target.value)}
+                placeholder="e.g. Rachel Adams"
+              />
+            </Field>
+            <Field label="Work email">
+              <Input
+                type="email"
+                required
+                value={inviteEmail}
+                onChange={(e) => setInviteEmail(e.target.value)}
+                placeholder="rachel@company.com"
+              />
+            </Field>
+            <Field label="Department">
+              <Input
+                required
+                value={inviteDepartment}
+                onChange={(e) => setInviteDepartment(e.target.value)}
+                placeholder="e.g. Operations & Support"
+              />
+            </Field>
+            <div className="flex gap-3 rounded-2xl bg-sky-500/10 p-4">
+              <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-sky-300" />
+              <p className="text-sm leading-relaxed text-zinc-300">
+                Admins can manage members and assign simulations. Billing and seats stay with the owner.
+              </p>
+            </div>
+            <Button type="submit" variant="white" size="lg" className="w-full">
+              Send admin invite
+            </Button>
+          </form>
+        )}
+      </Modal>
     </div>
   );
 });
+
+function AdminIdentity({ admin }: { admin: AdminUserItem }) {
+  return (
+    <div className="flex min-w-0 items-center gap-3">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={admin.avatar} alt="" className="h-10 w-10 shrink-0 rounded-full object-cover" />
+      <div className="min-w-0">
+        <p className="flex items-center gap-2 truncate text-base font-medium text-white">
+          {admin.name}
+          {admin.id === "u-owner" && <Badge className="px-2 py-0.5">You</Badge>}
+        </p>
+        <p className="truncate text-sm text-zinc-500">{admin.email}</p>
+      </div>
+    </div>
+  );
+}
+
+function AdminAction({ admin, onRemove }: { admin: AdminUserItem; onRemove: (id: string, name: string) => void }) {
+  if (admin.role === "owner") return <span className="text-sm text-zinc-500">Protected</span>;
+  return (
+    <Button size="sm" variant="danger" onClick={() => onRemove(admin.id, admin.name)}>
+      <X className="h-4 w-4" />
+      Remove
+    </Button>
+  );
+}

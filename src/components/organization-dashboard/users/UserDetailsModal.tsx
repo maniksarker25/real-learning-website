@@ -1,189 +1,92 @@
 "use client";
 
-import React, { memo } from "react";
-import { X, ShieldCheck, BookOpen } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { UserItem } from "./types";
+import { memo } from "react";
+import { Badge, BlobCard, Modal, ProgressBar } from "@/components/dashboard/ui";
+import { RoleBadge } from "./UserBadges";
+import type { UserItem } from "./types";
 
 interface UserDetailsModalProps {
   user: UserItem | null;
   onClose: () => void;
 }
 
-export const UserDetailsModal = memo(function UserDetailsModal({
-  user,
-  onClose,
-}: UserDetailsModalProps) {
+export const UserDetailsModal = memo(function UserDetailsModal({ user, onClose }: UserDetailsModalProps) {
   if (!user) return null;
 
+  const skills = user.skillsBreakdown
+    ? [
+        { label: "Communication", value: user.skillsBreakdown.communication },
+        { label: "De-escalation", value: user.skillsBreakdown.deEscalation },
+        { label: "Diagnostics", value: user.skillsBreakdown.diagnostics },
+        { label: "Empathy", value: user.skillsBreakdown.empathy },
+      ]
+    : [];
+  const history = user.completedClassesHistory || [];
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-900/50 backdrop-blur-sm overflow-y-auto">
-      <div className="relative w-full max-w-2xl bg-white border border-stone-200 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6 text-left max-h-[90vh] overflow-y-auto">
-        <button
-          onClick={onClose}
-          className="absolute top-5 right-5 p-2 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-500 hover:text-stone-900 cursor-pointer transition-colors"
-        >
-          <X className="w-5 h-5" />
-        </button>
-
-        {/* Profile Header */}
-        <div className="flex items-center gap-4 border-b border-stone-100 pb-5">
-          <img
-            src={user.avatar}
-            alt={user.name}
-            className="w-14 h-14 rounded-2xl object-cover border-2 border-stone-200 shadow-sm shrink-0"
-          />
-          <div>
-            <div className="flex items-center gap-2">
-              <h3 className="text-xl font-extrabold text-stone-900">
-                {user.name}
-              </h3>
-              <span
-                className={cn(
-                  "px-2.5 py-0.5 rounded-full text-[10px] font-bold border font-mono",
-                  user.role === "owner"
-                    ? "bg-amber-50 text-amber-800 border-amber-200"
-                    : user.role === "admin"
-                    ? "bg-blue-50 text-blue-800 border-blue-200"
-                    : "bg-stone-100 text-stone-700 border-stone-200"
-                )}
-              >
-                {user.role.toUpperCase()}
-              </span>
-              <span
-                className={cn(
-                  "px-2.5 py-0.5 rounded-full text-[10px] font-bold border font-mono",
-                  user.trackColor
-                )}
-              >
-                {user.track}
-              </span>
-            </div>
-            <div className="text-xs text-stone-500 font-mono mt-0.5">
-              {user.email}
+    <Modal open onClose={onClose} title="Member details">
+      <div className="space-y-6">
+        <div className="flex items-center gap-4">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={user.avatar} alt="" className="h-14 w-14 shrink-0 rounded-full object-cover" />
+          <div className="min-w-0">
+            <p className="truncate text-lg font-semibold text-white">{user.name}</p>
+            <p className="truncate text-sm text-zinc-500">{user.email}</p>
+            <div className="mt-2 flex flex-wrap gap-2">
+              <RoleBadge role={user.role} />
+              <Badge>{user.track}</Badge>
             </div>
           </div>
         </div>
 
-        {/* Overall Score & Competencies */}
-        <div className="grid grid-cols-1 sm:grid-cols-12 gap-4">
-          <div className="sm:col-span-4 bg-gradient-to-br from-orange-50 via-amber-50 to-orange-50/50 rounded-2xl p-4 border border-orange-200 text-center flex flex-col justify-center space-y-1">
-            <span className="text-[10px] font-mono uppercase text-stone-500 font-bold">
-              OVERALL SCORE
-            </span>
-            <div className="text-4xl font-extrabold text-stone-900 font-mono">
-              {user.score}
-            </div>
-            <span className="text-[10px] text-emerald-700 font-bold">
-              Evaluated via Simulations
-            </span>
-          </div>
+        <div className="grid gap-3 sm:grid-cols-[200px_1fr]">
+          <BlobCard tone="orange" className="flex flex-col justify-center p-5 sm:p-5">
+            <p className="text-sm text-white/80">Overall score</p>
+            <p className="mt-1 text-4xl font-semibold tracking-[-0.02em] tabular-nums">{user.score}</p>
+            <p className="mt-1 text-sm text-white/80">From simulations</p>
+          </BlobCard>
 
-          <div className="sm:col-span-8 bg-[#FCFAF6] rounded-2xl p-4 border border-stone-200 space-y-2.5">
-            <span className="text-xs font-bold text-stone-900 flex items-center gap-1.5">
-              <ShieldCheck className="w-4 h-4 text-orange-600" />
-              <span>Evaluated Skill Competencies</span>
-            </span>
-
-            {user.skillsBreakdown && (
-              <div className="space-y-2 text-xs">
-                <div>
-                  <div className="flex justify-between text-[11px] font-mono text-stone-600 font-medium">
-                    <span>Communication Tone</span>
-                    <span className="text-orange-600 font-bold">
-                      {user.skillsBreakdown.communication}%
-                    </span>
-                  </div>
-                  <div className="w-full h-1.5 bg-stone-200/80 rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-orange-500 rounded-full"
-                      style={{
-                        width: `${user.skillsBreakdown.communication}%`,
-                      }}
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <div className="flex justify-between text-[11px] font-mono text-stone-600 font-medium">
-                    <span>De-escalation & Conflict</span>
-                    <span className="text-emerald-700 font-bold">
-                      {user.skillsBreakdown.deEscalation}%
-                    </span>
-                  </div>
-                  <div className="w-full h-1.5 bg-stone-200/80 rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-emerald-500 rounded-full"
-                      style={{
-                        width: `${user.skillsBreakdown.deEscalation}%`,
-                      }}
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <div className="flex justify-between text-[11px] font-mono text-stone-600 font-medium">
-                    <span>Technical Triage & Diagnostics</span>
-                    <span className="text-purple-700 font-bold">
-                      {user.skillsBreakdown.diagnostics}%
-                    </span>
-                  </div>
-                  <div className="w-full h-1.5 bg-stone-200/80 rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-purple-500 rounded-full"
-                      style={{
-                        width: `${user.skillsBreakdown.diagnostics}%`,
-                      }}
-                    />
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Completed Classes & Simulations History */}
-        <div className="space-y-3">
-          <h4 className="text-xs font-bold text-stone-900 flex items-center gap-1.5">
-            <BookOpen className="w-4 h-4 text-orange-600" />
-            <span>Completed Classes & Simulation History</span>
-          </h4>
-
-          <div className="space-y-2">
-            {user.completedClassesHistory && user.completedClassesHistory.length > 0 ? (
-              user.completedClassesHistory.map((item) => (
-                <div
-                  key={item.title}
-                  className="p-3.5 rounded-xl bg-white border border-stone-200 flex items-center justify-between text-xs shadow-xs"
-                >
-                  <div>
-                    <div className="font-bold text-stone-900">{item.title}</div>
-                    <div className="text-[10px] text-stone-500 font-mono mt-0.5">
-                      Completed: {item.date}
+          <div className="rounded-3xl border border-white/[0.06] bg-black/20 p-5">
+            <p className="text-sm font-medium text-white">Skills</p>
+            {skills.length ? (
+              <ul className="mt-4 space-y-3.5">
+                {skills.map((s) => (
+                  <li key={s.label}>
+                    <div className="mb-1.5 flex justify-between text-sm">
+                      <span className="text-zinc-400">{s.label}</span>
+                      <span className="text-white tabular-nums">{s.value}%</span>
                     </div>
-                  </div>
-                  <span className="font-mono font-bold text-xs text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded border border-emerald-200">
-                    Score: {item.score}
-                  </span>
-                </div>
-              ))
+                    <ProgressBar value={s.value} label={s.label} />
+                  </li>
+                ))}
+              </ul>
             ) : (
-              <div className="p-4 text-xs text-stone-500 text-center bg-stone-50 rounded-xl border border-stone-200">
-                No completed simulations yet.
-              </div>
+              <p className="mt-3 text-sm text-zinc-500">No skill data yet.</p>
             )}
           </div>
         </div>
 
-        <div className="pt-2 flex justify-end">
-          <button
-            onClick={onClose}
-            className="px-5 py-2.5 rounded-full bg-stone-900 text-white font-bold text-xs hover:bg-stone-800 transition-colors cursor-pointer shadow-sm"
-          >
-            Close Profile Details
-          </button>
+        <div>
+          <p className="mb-3 text-sm font-medium text-white">Completed classes & simulations</p>
+          {history.length ? (
+            <ul className="divide-y divide-white/[0.06] rounded-2xl border border-white/[0.06]">
+              {history.map((item) => (
+                <li key={item.title} className="flex items-center justify-between gap-4 p-4">
+                  <div className="min-w-0">
+                    <p className="truncate text-base text-white">{item.title}</p>
+                    <p className="text-sm text-zinc-500">{item.date}</p>
+                  </div>
+                  <Badge tone="green">{item.score}</Badge>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="rounded-2xl border border-white/[0.06] p-5 text-center text-sm text-zinc-500">
+              No completed simulations yet.
+            </p>
+          )}
         </div>
       </div>
-    </div>
+    </Modal>
   );
 });
